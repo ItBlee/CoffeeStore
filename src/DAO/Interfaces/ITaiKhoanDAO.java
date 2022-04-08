@@ -1,4 +1,7 @@
 package DAO.Interfaces;
 
-public interface ITaiKhoanDAO {
+import DTO.TaiKhoanDTO;
+
+public interface ITaiKhoanDAO extends IDAO<TaiKhoanDTO> {
+    boolean isAdmin();
 }

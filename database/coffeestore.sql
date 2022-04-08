@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 03, 2022 at 12:55 PM
+-- Generation Time: Apr 05, 2022 at 06:21 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -73,7 +73,7 @@ CREATE TABLE `hoadon` (
   `MaHD` int(10) UNSIGNED NOT NULL,
   `MaKH` int(10) UNSIGNED NOT NULL,
   `MaNV` int(10) UNSIGNED NOT NULL,
-  `NgayLap` datetime NOT NULL DEFAULT current_timestamp(),
+  `NgayLap` timestamp NOT NULL DEFAULT current_timestamp(),
   `TongTien` int(10) NOT NULL,
   `TienKhuyenMai` int(10) NOT NULL,
   `TienThanhToan` int(10) NOT NULL
@@ -104,8 +104,8 @@ CREATE TABLE `khuyenmai` (
   `MaKM` int(10) UNSIGNED NOT NULL,
   `TieuDe` varchar(100) NOT NULL,
   `NoiDung` text NOT NULL,
-  `NgayBD` datetime NOT NULL,
-  `NgayKT` datetime NOT NULL
+  `NgayBD` timestamp NULL DEFAULT NULL,
+  `NgayKT` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -163,7 +163,7 @@ CREATE TABLE `phieunhap` (
   `MaPN` int(10) UNSIGNED NOT NULL,
   `MaNCC` int(10) UNSIGNED NOT NULL,
   `MaNV` int(10) UNSIGNED NOT NULL,
-  `NgayTao` datetime NOT NULL DEFAULT current_timestamp(),
+  `NgayTao` timestamp NOT NULL DEFAULT current_timestamp(),
   `TongTien` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -196,7 +196,7 @@ CREATE TABLE `taikhoan` (
   `MaTK` int(10) UNSIGNED NOT NULL,
   `TenDangNhap` varchar(20) NOT NULL,
   `MatKhau` varchar(20) NOT NULL,
-  `NgayTao` datetime NOT NULL DEFAULT current_timestamp(),
+  `NgayTao` timestamp NOT NULL DEFAULT current_timestamp(),
   `NguoiTao` int(10) UNSIGNED NOT NULL,
   `ChucVu` varchar(100) NOT NULL,
   `TinhTrang` tinyint(1) NOT NULL
@@ -207,7 +207,7 @@ CREATE TABLE `taikhoan` (
 --
 
 INSERT INTO `taikhoan` (`MaTK`, `TenDangNhap`, `MatKhau`, `NgayTao`, `NguoiTao`, `ChucVu`, `TinhTrang`) VALUES
-(1, 'admin', 'admin', '2022-04-03 17:42:55', 1, 'admin', 1);
+(1, 'admin', 'admin', '2022-04-03 10:42:55', 1, 'admin', 1);
 
 --
 -- Indexes for dumped tables

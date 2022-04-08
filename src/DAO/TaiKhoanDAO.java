@@ -1,4 +1,4 @@
 package DAO;
 
-public class TaiKhoanDAO {
+public class TaiKhoanDAO{
 }
