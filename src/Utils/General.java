@@ -1,6 +1,7 @@
 package Utils;
 
+import DTO.TaiKhoanDTO;
+
 public class General {
-    public static String CURRENT_USER = "";
-    public static String CURRENT_ROLE = "";
+    public static TaiKhoanDTO CURRENT_USER = null;
 }

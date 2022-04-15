@@ -69,4 +69,17 @@ public class TaiKhoanDTO {
     public void setTinhTrang(int tinhTrang) {
         this.TinhTrang = tinhTrang;
     }
+
+    @Override
+    public String toString() {
+        return "TaiKhoanDTO{" +
+                "MaTK=" + MaTK +
+                ", TenDangNhap='" + TenDangNhap + '\'' +
+                ", MatKhau='" + MatKhau + '\'' +
+                ", NgayTao=" + NgayTao +
+                ", NguoiTao=" + NguoiTao +
+                ", ChucVu='" + ChucVu + '\'' +
+                ", TinhTrang=" + TinhTrang +
+                '}';
+    }
 }

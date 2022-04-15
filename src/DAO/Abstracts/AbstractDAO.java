@@ -1,6 +1,6 @@
 package DAO.Abstracts;
 
-import DAO.Interfaces.IDAO;
+import DAO.Interfaces.IAbstractDAO;
 import Mapper.Interfaces.IRowMapper;
 import Utils.MyDBConnection;
 
@@ -8,12 +8,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractDAO<T> implements IDAO<T> {
+public abstract class AbstractDAO<T> implements IAbstractDAO<T> {
     protected MyDBConnection DBConnect;
     protected ResultSet resultSet;
 
     protected AbstractDAO() {
-        this.DBConnect = new MyDBConnection("localhost", "root", "", "coffeestore");
+        this.DBConnect = new MyDBConnection("localhost", "root","", "coffeestore");
     }
 
     @Override
@@ -24,27 +24,23 @@ public abstract class AbstractDAO<T> implements IDAO<T> {
             while (resultSet.next()) {
                 results.add(rowMapper.mapRow(resultSet));
             }
-            return results;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             closeConnection();
         }
-        return null;
+        return results;
     }
 
     @Override
     public boolean update(String sql, Object... parameters) {
         try {
             int affectedRows ;
-            DBConnect.setAutoCommit(false);
             affectedRows = DBConnect.executeUpdate(sql, parameters);
-            DBConnect.commit();
             return affectedRows > 0;
         } catch (Exception e) {
             e.printStackTrace();
-            if (DBConnect.isClosed())
-                DBConnect.rollback();
+            DBConnect.rollback();
         } finally {
             closeConnection();
         }
@@ -55,16 +51,14 @@ public abstract class AbstractDAO<T> implements IDAO<T> {
     public Integer insert(String sql, Object... parameters) {
         try {
             Integer id = null;
-            DBConnect.setAutoCommit(false);
             resultSet =  DBConnect.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS, parameters);
             if (resultSet.next()) {
                 id = resultSet.getInt(1);
             }
-            DBConnect.commit();
             return id;
         } catch (Exception e) {
-            if (DBConnect.isClosed())
-                DBConnect.rollback();
+            e.printStackTrace();
+            DBConnect.rollback();
         } finally {
             closeConnection();
         }
