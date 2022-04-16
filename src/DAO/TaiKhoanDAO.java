@@ -1,31 +1,24 @@
 package DAO;
 
 import DAO.Abstracts.AbstractDAO;
+import DAO.Interfaces.IDAO;
 import DAO.Interfaces.ITaiKhoanDAO;
 import DTO.TaiKhoanDTO;
 import Mapper.TaiKhoanMapper;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class TaiKhoanDAO extends AbstractDAO<TaiKhoanDTO> implements ITaiKhoanDAO {
+public class TaiKhoanDAO extends AbstractDAO<TaiKhoanDTO> implements IDAO<TaiKhoanDTO>, ITaiKhoanDAO {
     @Override
-    public List<TaiKhoanDTO> findAll() {
+    public ArrayList<TaiKhoanDTO> findAll() {
         String sql = "SELECT * FROM taikhoan";
-        return  query(sql, new TaiKhoanMapper());
+        return query(sql, new TaiKhoanMapper());
     }
 
     @Override
     public TaiKhoanDTO findByID(int id) {
         String sql = "SELECT * FROM taikhoan WHERE MaTK = ?";
-        List<TaiKhoanDTO> result = query(sql, new TaiKhoanMapper(), id);
-        return result.isEmpty() ? null : result.get(0);
-    }
-
-    @Override
-    public TaiKhoanDTO findByTenDangNhapAndMatKhauAndTinhTrang(String TenDangNhap, String MatKhau, int TinhTrang) {
-        String sql = "SELECT * FROM taikhoan"
-                + " WHERE TenDangNhap = ? AND MatKhau = ? AND TinhTrang = ?";
-        List<TaiKhoanDTO> result = query(sql, new TaiKhoanMapper(), TenDangNhap, MatKhau, TinhTrang);
+        ArrayList<TaiKhoanDTO> result = query(sql, new TaiKhoanMapper(), id);
         return result.isEmpty() ? null : result.get(0);
     }
 
@@ -52,11 +45,5 @@ public class TaiKhoanDAO extends AbstractDAO<TaiKhoanDTO> implements ITaiKhoanDA
         String sql = "DELETE FROM taikhoan"
                 + " WHERE MaTK = ?";
         return update(sql, id);
-    }
-
-    @Override
-    public int count() {
-        String sql = "SELECT count(*) FROM taikhoan";
-        return count(sql);
     }
 }

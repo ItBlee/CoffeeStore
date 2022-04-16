@@ -2,10 +2,9 @@ package DAO.Interfaces;
 
 import DTO.TaiKhoanDTO;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public interface ITaiKhoanDAO extends IDAO<TaiKhoanDTO>{
-    List<TaiKhoanDTO> findAll();
+public interface ITaiKhoanDAO extends IDAO<TaiKhoanDTO> {
+    ArrayList<TaiKhoanDTO> findAll();
     TaiKhoanDTO findByID(int id);
-    TaiKhoanDTO findByTenDangNhapAndMatKhauAndTinhTrang(String TenDangNhap, String MatKhau, int TinhTrang);
 }

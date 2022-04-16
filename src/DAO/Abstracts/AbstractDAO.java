@@ -6,28 +6,27 @@ import Utils.MyDBConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
+
+import static Utils.SystemConstant.*;
 
 public abstract class AbstractDAO<T> implements IAbstractDAO<T> {
     protected MyDBConnection DBConnect;
-    protected ResultSet resultSet;
 
     protected AbstractDAO() {
-        this.DBConnect = new MyDBConnection("localhost", "root","", "coffeestore");
+        this.DBConnect = new MyDBConnection(DB_HOST, DB_NAME, DB_USERNAME, DB_PASSWORD);
     }
 
     @Override
-    public List<T> query(String sql, IRowMapper<T> rowMapper, Object... parameters) {
-        List<T> results = new ArrayList<>();
+    public ArrayList<T> query(String sql, IRowMapper<T> rowMapper, Object... parameters) {
+        ArrayList<T> results = new ArrayList<T>();
         try {
-            resultSet = DBConnect.executeQuery(sql, parameters);
-            while (resultSet.next()) {
+            ResultSet resultSet = DBConnect.executeQuery(sql, parameters);
+            while (resultSet.next())
                 results.add(rowMapper.mapRow(resultSet));
-            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            closeConnection();
+            closeDBConnection();
         }
         return results;
     }
@@ -42,51 +41,46 @@ public abstract class AbstractDAO<T> implements IAbstractDAO<T> {
             e.printStackTrace();
             DBConnect.rollback();
         } finally {
-            closeConnection();
+            closeDBConnection();
         }
         return false;
     }
 
     @Override
     public Integer insert(String sql, Object... parameters) {
+        Integer id = null;
         try {
-            Integer id = null;
-            resultSet =  DBConnect.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS, parameters);
-            if (resultSet.next()) {
+            ResultSet resultSet =  DBConnect.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS, parameters);
+            if (resultSet.next())
                 id = resultSet.getInt(1);
-            }
-            return id;
         } catch (Exception e) {
             e.printStackTrace();
             DBConnect.rollback();
         } finally {
-            closeConnection();
+            closeDBConnection();
         }
-        return null;
+        return id;
     }
 
     @Override
     public int count(String sql, Object... parameters) {
         int count = 0;
         try {
-            resultSet = DBConnect.executeQuery(sql, parameters);
-            while (resultSet.next()) {
+            ResultSet resultSet = DBConnect.executeQuery(sql, parameters);
+            while (resultSet.next())
                 count = resultSet.getInt(1);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            closeConnection();
+            closeDBConnection();
         }
         return count;
     }
 
-    private void closeConnection() {
+    private void closeDBConnection() {
         try {
-            DBConnect.Close();
-            if (resultSet != null)
-                resultSet = null;
-        } catch (Exception e) {
+            DBConnect.close();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
