@@ -7,7 +7,7 @@ import Utils.MyDBConnection;
 import java.sql.*;
 import java.util.ArrayList;
 
-import static Utils.SystemConstant.*;
+import static Utils.General.*;
 
 public abstract class AbstractDAO<T> implements IAbstractDAO<T> {
     protected MyDBConnection DBConnect;
