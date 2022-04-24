@@ -1,20 +1,21 @@
 package DTO;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class TaiKhoanDTO {
-    private int MaTK;
+    private Integer MaTK;
     private String TenDangNhap;
     private String MatKhau;
     private Timestamp NgayTao;
-    private int NguoiTao;
+    private Integer NguoiTao;
     private String ChucVu;
-    private int TinhTrang;
+    private Integer TinhTrang;
 
     public TaiKhoanDTO() {
     }
 
-    public int getMaTK() {
+    public Integer getMaTK() {
         return this.MaTK;
     }
 
@@ -46,7 +47,7 @@ public class TaiKhoanDTO {
         this.NgayTao = ngayTao;
     }
 
-    public int getNguoiTao() {
+    public Integer getNguoiTao() {
         return this.NguoiTao;
     }
 
@@ -62,8 +63,8 @@ public class TaiKhoanDTO {
         this.ChucVu = chucVu;
     }
 
-    public int getTinhTrang() {
-        return this.TinhTrang;
+    public Integer getTinhTrang() {
+        return Objects.requireNonNullElse(this.TinhTrang, 1);
     }
 
     public void setTinhTrang(int tinhTrang) {

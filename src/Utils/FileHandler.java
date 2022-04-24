@@ -1,12 +1,35 @@
 package Utils;
 
+import Mapper.Interfaces.IExcelRowMapper;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Properties;
 
 import static Utils.SystemConstant.*;
 
 public class FileHandler {
-    public static void saveConfig() throws IOException {
+    /**
+     * Mở Dialog để người dùng chọn file muốn thao tác
+     * @param path đường dẫn mặc định khi mở.
+     * @return String - đường dẫn File, trả về NULL nếu hủy/thoát Dialog
+     */
+    public static String showFileChooser(String path) {
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xls", "xlsx", "xlsm");
+        JFileChooser fileChooser = new JFileChooser(path);
+        fileChooser.setDialogTitle("Chọn file");
+        fileChooser.setFileFilter(filter);
+        if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+            return fileChooser.getSelectedFile().getAbsolutePath();
+        return null;
+    }
+
+    public static void exportConfig() throws IOException {
         OutputStream output = new FileOutputStream(CONFIG_FILE_URL);
         Properties prop = new Properties();
 
@@ -25,7 +48,7 @@ public class FileHandler {
         output.close();
     }
 
-    public static void loadConfig() throws IOException {
+    public static void importConfig() throws IOException {
         InputStream input = new FileInputStream(CONFIG_FILE_URL);
         Properties prop = new Properties();
         prop.load(input);
@@ -47,5 +70,79 @@ public class FileHandler {
             General.DB_USERNAME = dbUsername;
         if (!dbPassword.isBlank())
             General.DB_PASSWORD = dbPassword;
+    }
+
+    public static <E> void exportExcel(String filePath, ArrayList<E> list, IExcelRowMapper<E> mapper) throws IOException {
+        Workbook workbook = new HSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Sheet 1");
+        int rowIndex = 0;
+
+        // Write header
+        mapper.mapExcelHeader(sheet, rowIndex);
+
+        // Write data
+        rowIndex++;
+        for (E ele : list) {
+            // Create row
+            Row row = sheet.createRow(rowIndex);
+            // Write data on row
+            mapper.mapExcelBody(ele, row);
+            rowIndex++;
+        }
+
+        // Auto resize column width
+        int numberOfColumn = sheet.getRow(0).getPhysicalNumberOfCells();
+        for (int columnIndex = 0; columnIndex < numberOfColumn; columnIndex++) {
+            sheet.autoSizeColumn(columnIndex);
+        }
+
+        File file = new File(filePath);
+        file.getParentFile().mkdirs();
+        file.createNewFile();
+        try (OutputStream os = new FileOutputStream(file)) {
+            workbook.write(os);
+            workbook.close();
+        }
+    }
+
+    public static <E> ArrayList<E> importExcel(String filePath, IExcelRowMapper<E> mapper) throws IOException {
+        ArrayList<E> list = new ArrayList<E>();
+        // Get file
+        InputStream inputStream = new FileInputStream(filePath);
+
+        // Get workbook
+        Workbook workbook = new HSSFWorkbook(inputStream);
+
+        // Get sheet
+        Sheet sheet = workbook.getSheetAt(0);
+
+        // Get all rows
+        DataFormatter dataFormatter = new DataFormatter();
+        for (Row nextRow : sheet) {
+            if (nextRow.getRowNum() == 0) {
+                // Ignore header
+                continue;
+            }
+
+            // Get all cells
+            Iterator<Cell> cellIterator = nextRow.cellIterator();
+
+            E dto = null;
+            // Read cells and set value for book object
+            while (cellIterator.hasNext()) {
+                //Read cell
+                Cell cell = cellIterator.next();
+                String cellValue = dataFormatter.formatCellValue(cell);
+                // Set value for book object
+                int columnIndex = cell.getColumnIndex();
+                dto = mapper.mapExcelToDto(dto, columnIndex, cellValue);
+            }
+            if (dto != null)
+                list.add(dto);
+        }
+        workbook.close();
+        inputStream.close();
+
+        return list;
     }
 }

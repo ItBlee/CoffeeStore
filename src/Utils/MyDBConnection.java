@@ -48,7 +48,9 @@ public class MyDBConnection {
             for (int i = 0; i < parameters.length; i++) {
                 Object parameter = parameters[i];
                 int index = i + 1;
-                if (parameter instanceof String) {
+                if (parameter == null) {
+                    statement.setNull(index, Types.NULL);
+                } else if (parameter instanceof String) {
                     statement.setString(index, (String) parameter);
                 } else if (parameter instanceof Integer) {
                     statement.setInt(index, (Integer) parameter);

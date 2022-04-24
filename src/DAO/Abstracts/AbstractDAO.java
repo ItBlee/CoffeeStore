@@ -2,18 +2,17 @@ package DAO.Abstracts;
 
 import DAO.Interfaces.IAbstractDAO;
 import Mapper.Interfaces.IRowMapper;
+import Utils.General;
 import Utils.MyDBConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-import static Utils.General.*;
-
 public abstract class AbstractDAO<T> implements IAbstractDAO<T> {
     protected MyDBConnection DBConnect;
 
     protected AbstractDAO() {
-        this.DBConnect = new MyDBConnection(DB_HOST, DB_NAME, DB_USERNAME, DB_PASSWORD);
+        this.DBConnect = new MyDBConnection(General.DB_HOST, General.DB_NAME, General.DB_USERNAME, General.DB_PASSWORD);
     }
 
     @Override

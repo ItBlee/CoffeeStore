@@ -25,10 +25,10 @@ public class TaiKhoanDAO extends AbstractDAO<TaiKhoanDTO> implements IDAO<TaiKho
     @Override
     public Integer save(TaiKhoanDTO taiKhoan) {
         String sql = "INSERT INTO taikhoan"
-                + "(TenDangNhap, MatKhau, NguoiTao, ChucVu, TinhTrang)"
-                + "VALUES(?, ?, ?, ?, ?)";
-        return insert(sql, taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau(),
-                    taiKhoan.getNguoiTao(), taiKhoan.getChucVu(), taiKhoan.getTinhTrang());
+                + "(MaTK, TenDangNhap, MatKhau, NgayTao, NguoiTao, ChucVu, TinhTrang)"
+                + "VALUES(?, ?, ?, ?, ?, ?, ?)";
+        return insert(sql, taiKhoan.getMaTK(), taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau(),
+                taiKhoan.getNgayTao(), taiKhoan.getNguoiTao(), taiKhoan.getChucVu(), taiKhoan.getTinhTrang());
     }
 
     @Override
