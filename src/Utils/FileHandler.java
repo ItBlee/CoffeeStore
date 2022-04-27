@@ -20,7 +20,7 @@ public class FileHandler {
      * @return String - đường dẫn File, trả về NULL nếu hủy/thoát Dialog
      */
     public static String showFileChooser(String path) {
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xls", "xlsx", "xlsm");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xls");
         JFileChooser fileChooser = new JFileChooser(path);
         fileChooser.setDialogTitle("Chọn file");
         fileChooser.setFileFilter(filter);
@@ -29,30 +29,36 @@ public class FileHandler {
         return null;
     }
 
-    public static void exportConfig() throws IOException {
-        OutputStream output = new FileOutputStream(CONFIG_FILE_URL);
-        Properties prop = new Properties();
+    public static void exportConfig() {
+        try {
+            OutputStream output = new FileOutputStream(CONFIG_FILE_URL);
+            Properties prop = new Properties();
 
-        if (General.USER_IS_REMEMBER) {
-            prop.setProperty(CONFIG_PROP_USER_USERNAME, General.USER_USERNAME);
-            prop.setProperty(CONFIG_PROP_USER_PASSWORD, General.USER_PASSWORD);
-            prop.setProperty(CONFIG_PROP_USER_REMEMBER, String.valueOf(General.USER_IS_REMEMBER));
-        }
-        prop.setProperty(CONFIG_PROP_DB_HOST, General.DB_HOST);
-        prop.setProperty(CONFIG_PROP_DB_NAME, General.DB_NAME);
-        prop.setProperty(CONFIG_PROP_DB_USERNAME, General.DB_USERNAME);
-        if (!General.DB_PASSWORD.isBlank())
-            prop.setProperty(CONFIG_PROP_DB_PASSWORD, General.DB_PASSWORD);
+            if (General.USER_IS_REMEMBER) {
+                prop.setProperty(CONFIG_PROP_USER_USERNAME, General.USER_USERNAME);
+                prop.setProperty(CONFIG_PROP_USER_PASSWORD, General.USER_PASSWORD);
+                prop.setProperty(CONFIG_PROP_USER_REMEMBER, String.valueOf(General.USER_IS_REMEMBER));
+            }
+            prop.setProperty(CONFIG_PROP_DB_HOST, General.DB_HOST);
+            prop.setProperty(CONFIG_PROP_DB_NAME, General.DB_NAME);
+            prop.setProperty(CONFIG_PROP_DB_USERNAME, General.DB_USERNAME);
+            if (!General.DB_PASSWORD.isBlank())
+                prop.setProperty(CONFIG_PROP_DB_PASSWORD, General.DB_PASSWORD);
 
-        prop.store(output, "Coffee Store App Config File");
-        output.close();
+            prop.store(output, "Coffee Store App Config File");
+            output.close();
+        } catch (IOException ignored) {}
     }
 
-    public static void importConfig() throws IOException {
-        InputStream input = new FileInputStream(CONFIG_FILE_URL);
+    public static void importConfig() {
         Properties prop = new Properties();
-        prop.load(input);
-        input.close();
+        try {
+            InputStream input = new FileInputStream(CONFIG_FILE_URL);
+            prop.load(input);
+            input.close();
+        } catch (IOException e) {
+            return;
+        }
 
         General.USER_USERNAME = prop.getProperty(CONFIG_PROP_USER_USERNAME);
         General.USER_PASSWORD = prop.getProperty(CONFIG_PROP_USER_PASSWORD);
@@ -72,30 +78,23 @@ public class FileHandler {
             General.DB_PASSWORD = dbPassword;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static <E> void exportExcel(String filePath, ArrayList<E> list, IExcelRowMapper<E> mapper) throws IOException {
         Workbook workbook = new HSSFWorkbook();
         Sheet sheet = workbook.createSheet("Sheet 1");
+
         int rowIndex = 0;
-
-        // Write header
         mapper.mapExcelHeader(sheet, rowIndex);
-
-        // Write data
         rowIndex++;
         for (E ele : list) {
-            // Create row
             Row row = sheet.createRow(rowIndex);
-            // Write data on row
             mapper.mapExcelBody(ele, row);
             rowIndex++;
         }
-
-        // Auto resize column width
         int numberOfColumn = sheet.getRow(0).getPhysicalNumberOfCells();
         for (int columnIndex = 0; columnIndex < numberOfColumn; columnIndex++) {
             sheet.autoSizeColumn(columnIndex);
         }
-
         File file = new File(filePath);
         file.getParentFile().mkdirs();
         file.createNewFile();
@@ -107,33 +106,20 @@ public class FileHandler {
 
     public static <E> ArrayList<E> importExcel(String filePath, IExcelRowMapper<E> mapper) throws IOException {
         ArrayList<E> list = new ArrayList<E>();
-        // Get file
         InputStream inputStream = new FileInputStream(filePath);
-
-        // Get workbook
         Workbook workbook = new HSSFWorkbook(inputStream);
-
-        // Get sheet
         Sheet sheet = workbook.getSheetAt(0);
 
-        // Get all rows
         DataFormatter dataFormatter = new DataFormatter();
         for (Row nextRow : sheet) {
             if (nextRow.getRowNum() == 0) {
-                // Ignore header
                 continue;
             }
-
-            // Get all cells
             Iterator<Cell> cellIterator = nextRow.cellIterator();
-
             E dto = null;
-            // Read cells and set value for book object
             while (cellIterator.hasNext()) {
-                //Read cell
                 Cell cell = cellIterator.next();
                 String cellValue = dataFormatter.formatCellValue(cell);
-                // Set value for book object
                 int columnIndex = cell.getColumnIndex();
                 dto = mapper.mapExcelToDto(dto, columnIndex, cellValue);
             }
@@ -142,7 +128,6 @@ public class FileHandler {
         }
         workbook.close();
         inputStream.close();
-
         return list;
     }
 }

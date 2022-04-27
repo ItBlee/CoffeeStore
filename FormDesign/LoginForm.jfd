@@ -1,0 +1,192 @@
+JFDML JFormDesigner: "7.0.5.0.404" Java: "15.0.1" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+			name: "this"
+			"$locationPolicy": 1
+			"$sizePolicy": 1
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "lbTrasition"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/ezgif.com-gif-maker.gif" )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"width": 1080
+				"height": 575
+				"x": 0
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+				name: "loginPanel"
+				"opaque": false
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "btnExit"
+					"icon": new com.jformdesigner.model.SwingIcon( 1, "D:\\Microsoft Visual Studio\\Projects\\CoffeeStore\\images\\components\\close-w.png" )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"x": 1045
+					"y": 10
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "btnMinimize"
+					"icon": new com.jformdesigner.model.SwingIcon( 1, "D:\\Microsoft Visual Studio\\Projects\\CoffeeStore\\images\\components\\minimize-w.png" )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 32
+					"height": 32
+					"x": 1010
+					"y": 5
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "lbUsername"
+					"text": "Tên Đăng nhập"
+					"foreground": sfield java.awt.Color white
+					"font": &Font0 new java.awt.Font( "Segoe UI Black", 0, 14 )
+					"labelFor": new FormReference( "txtUsername" )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"x": 695
+					"y": 255
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "lbPassword"
+					"text": "Mật khẩu"
+					"foreground": sfield java.awt.Color white
+					"font": #Font0
+					"labelFor": new FormReference( "txtPassword" )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 106
+					"height": 19
+					"x": 695
+					"y": 325
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "lbLogo"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/logo-small.png" )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"x": 775
+					"y": 65
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label1"
+					"icon": new com.jformdesigner.model.SwingIcon( 1, "D:\\Microsoft Visual Studio\\Projects\\CoffeeStore\\images\\components\\eye-w.png" )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"x": 1000
+					"y": 350
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "lbTitleSince"
+					"text": "SINCE"
+					"foreground": sfield java.awt.Color white
+					"font": new java.awt.Font( "Papyrus", 0, 13 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 81
+					"height": 36
+					"x": 572
+					"y": 141
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "lbTitleYear"
+					"text": "1999"
+					"foreground": sfield java.awt.Color white
+					"font": new java.awt.Font( "Segoe UI Black", 1, 20 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 97
+					"height": 36
+					"x": 635
+					"y": 140
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "lbTitleFirst"
+					"text": "THE CROSSING"
+					"foreground": sfield java.awt.Color white
+					"font": new java.awt.Font( "Papyrus", 0, 17 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 218
+					"height": 36
+					"x": 454
+					"y": 106
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "lbTitleSecond"
+					"text": "COFFEE"
+					"foreground": sfield java.awt.Color white
+					"font": new java.awt.Font( "Segoe UI Black", 1, 26 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"x": 633
+					"y": 105
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "btnLogin"
+					"text": "Đăng Nhập"
+					"background": sfield java.awt.Color white
+					"font": new java.awt.Font( "Segoe UI Black", 1, 16 )
+					"focusPainted": false
+					"borderPainted": false
+					"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+					"foreground": new java.awt.Color( 22, 22, 22, 255 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"x": 775
+					"y": 450
+					"width": 160
+					"height": 45
+				} )
+				add( new FormComponent( "javax.swing.JPasswordField" ) {
+					name: "txtPassword"
+					"border": new javax.swing.border.EmptyBorder( 0, 10, 0, 25 )
+					"text": "sadasdsdasdasdas"
+					"foreground": sfield java.awt.Color lightGray
+					"background": new java.awt.Color( 22, 22, 22, 255 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"x": 680
+					"y": 335
+					"width": 350
+					"height": 45
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "txtUsername"
+					"background": new java.awt.Color( 22, 22, 22, 255 )
+					"border": new javax.swing.border.EmptyBorder( 0, 10, 0, 25 )
+					"text": "Nhập tài khoản"
+					"foreground": sfield java.awt.Color lightGray
+					"font": new java.awt.Font( "Segoe UI Black", 0, 14 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"x": 680
+					"y": 265
+					"width": 350
+					"height": 45
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "cbRemember"
+					"text": "Duy trì đăng nhập"
+					"contentAreaFilled": false
+					"foreground": sfield java.awt.Color white
+					"font": new java.awt.Font( "Segoe UI Black", 0, 14 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"x": 680
+					"y": 390
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+					name: "panel1"
+					"background": new java.awt.Color( 37, 37, 37, 255 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"x": 630
+					"y": 0
+					"width": 450
+					"height": 575
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 0
+				"y": 0
+				"width": 1080
+				"height": 575
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "lbBackground"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/background2.gif" )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": -70
+				"y": -30
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 120, 50 )
+			"size": new java.awt.Dimension( 1080, 605 )
+		} )
+	}
+}

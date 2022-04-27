@@ -1,15 +1,19 @@
 package GUI;
 
-import com.formdev.flatlaf.FlatIntelliJLaf;
+import Utils.FileHandler;
+import com.formdev.flatlaf.FlatDarkLaf;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Main {
-    public static void main(String[] args) {
-        FlatIntelliJLaf.setup();
+    public static JFrame frame;
 
-        JFrame frame = new JFrame();
+    public static void main(String[] args) {
+        FlatDarkLaf.setup();
+        FileHandler.importConfig();
+
+        frame = new LoginForm();
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
