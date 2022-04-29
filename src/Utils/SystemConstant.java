@@ -20,4 +20,8 @@ public class SystemConstant {
     public static final String CONFIG_PROP_DB_NAME = "DB.name";
     public static final String CONFIG_PROP_DB_USERNAME = "DB.username";
     public static final String CONFIG_PROP_DB_PASSWORD = "DB.password";
+    public static final String CONFIG_PROP_THEME_NAME = "THEME.NAME";
+
+    //Theme
+    public static final String DEFAULT_THEME_NAME = "Dark Flat";
 }

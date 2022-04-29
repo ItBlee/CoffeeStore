@@ -44,10 +44,11 @@ public class FileHandler {
             prop.setProperty(CONFIG_PROP_DB_USERNAME, General.DB_USERNAME);
             if (!General.DB_PASSWORD.isBlank())
                 prop.setProperty(CONFIG_PROP_DB_PASSWORD, General.DB_PASSWORD);
+            prop.setProperty(CONFIG_PROP_THEME_NAME, General.THEME_INFO_NAME);
 
             prop.store(output, "Coffee Store App Config File");
             output.close();
-        } catch (IOException ignored) {}
+        } catch (Exception ignored) {}
     }
 
     public static void importConfig() {
@@ -56,7 +57,7 @@ public class FileHandler {
             InputStream input = new FileInputStream(CONFIG_FILE_URL);
             prop.load(input);
             input.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             return;
         }
 
@@ -68,14 +69,18 @@ public class FileHandler {
         String dbName = prop.getProperty(CONFIG_PROP_DB_NAME);
         String dbUsername = prop.getProperty(CONFIG_PROP_DB_USERNAME);
         String dbPassword = prop.getProperty(CONFIG_PROP_DB_PASSWORD);
-        if (!dbHost.isBlank())
+        if (dbHost != null && !dbHost.isBlank())
             General.DB_HOST = dbHost;
-        if (!dbName.isBlank())
+        if (dbName != null && !dbName.isBlank())
             General.DB_NAME = dbName;
-        if (!dbUsername.isBlank())
+        if (dbUsername != null && !dbUsername.isBlank())
             General.DB_USERNAME = dbUsername;
-        if (!dbPassword.isBlank())
+        if (dbPassword != null && !dbPassword.isBlank())
             General.DB_PASSWORD = dbPassword;
+
+        String themeName = prop.getProperty(CONFIG_PROP_THEME_NAME);
+        if (Themes.isExist(themeName))
+            General.THEME_INFO_NAME = themeName;
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

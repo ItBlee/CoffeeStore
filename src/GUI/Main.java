@@ -1,23 +1,23 @@
 package GUI;
 
 import Utils.FileHandler;
-import com.formdev.flatlaf.FlatDarkLaf;
+import Utils.General;
+import Utils.Themes;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Main {
-    public static JFrame frame;
-
     public static void main(String[] args) {
-        FlatDarkLaf.setup();
+        Themes.setupThemeByName(General.THEME_INFO_NAME);
         FileHandler.importConfig();
 
-        frame = new LoginForm();
+        JFrame frame = new FormLogin();
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 frame.setVisible(true);
+                frame.requestFocusInWindow();
             }
         });
     }

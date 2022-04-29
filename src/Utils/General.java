@@ -16,4 +16,7 @@ public class General {
     public static String DB_NAME = DEFAULT_DB_NAME;
     public static String DB_USERNAME = DEFAULT_DB_USERNAME;
     public static String DB_PASSWORD = DEFAULT_DB_PASSWORD;
+
+    //Themes
+    public static String THEME_INFO_NAME = DEFAULT_THEME_NAME;
 }

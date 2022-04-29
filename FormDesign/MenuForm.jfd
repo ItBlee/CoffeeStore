@@ -9,6 +9,13 @@ new FormModel {
 			"resizable": false
 			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/logo.png" )
 			"title": "THE CROSSING COFFE MANAGER"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/transition2.gif" )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 0
+				"y": 0
+			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 				name: "mainPanel"
 				"background": new java.awt.Color( 37, 37, 37, 255 )
@@ -33,10 +40,11 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "btnHoaDon"
-					"background": sfield java.awt.Color white
+					"background": sfield java.awt.Color lightGray
 					"focusPainted": false
 					"icon": new com.jformdesigner.model.SwingIcon( 0, "/HD.png" )
 					"toolTipText": "Quản lý hóa đơn"
+					"border": new javax.swing.border.MatteBorder( 1, 1, 1, 1, sfield java.awt.Color black )
 					"borderPainted": false
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 25
@@ -165,7 +173,7 @@ new FormModel {
 					"borderPainted": false
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 113
-					"y": 725
+					"y": 755
 					"height": 48
 					"width": 48
 				} )
@@ -180,7 +188,7 @@ new FormModel {
 					"width": 48
 					"height": 48
 					"x": 43
-					"y": 725
+					"y": 755
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "btnSetting"
@@ -193,22 +201,22 @@ new FormModel {
 					"width": 48
 					"height": 48
 					"x": 183
-					"y": 725
+					"y": 755
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 31
-				"y": 65
-				"width": 280
-				"height": 800
+				"x": 20
+				"y": 54
+				"width": 291
+				"height": 821
 			} )
-			add( new FormContainer( "javax.swing.JLayeredPane", new FormLayoutManager( class javax.swing.JLayeredPane ) ) {
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
 				name: "formPanel"
 				"background": new java.awt.Color( 45, 48, 53, 255 )
 				"opaque": true
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 20
+				"x": 305
 				"y": 54
-				"width": 1155
+				"width": 870
 				"height": 821
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
@@ -234,7 +242,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "lbTitle"
-					"text": "THE CROSSING COFFE MANAGER"
+					"text": "THE CROSSING COFFEE MANAGER"
 					"font": new java.awt.Font( "Segoe UI Black", 1, 22 )
 					"foreground": sfield java.awt.Color white
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
@@ -246,14 +254,6 @@ new FormModel {
 				"y": 0
 				"width": 1200
 				"height": 900
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label1"
-				"icon": new com.jformdesigner.model.SwingIcon( 0, "/ezgif.com-gif-maker.png" )
-				"visible": false
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 0
-				"y": 0
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 65, 35 )
