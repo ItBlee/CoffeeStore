@@ -5,6 +5,8 @@ import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.Font;
 import java.io.*;
 import java.util.ArrayList;
@@ -141,5 +143,17 @@ public class FileHandler {
         workbook.close();
         inputStream.close();
         return list;
+    }
+
+    public static ImageIcon createImageIcon(String path, int width, int height) {
+        ImageIcon icon = new ImageIcon(path);
+        if (icon.getIconHeight() != height || icon.getIconWidth() != width) {
+            int scaleMode = Image.SCALE_SMOOTH;
+            if (path.contains(".gif"))
+                scaleMode = Image.SCALE_DEFAULT;
+            Image scale = icon.getImage().getScaledInstance(width, height, scaleMode);
+            icon = new ImageIcon(scale);
+        }
+        return icon;
     }
 }

@@ -3,11 +3,13 @@ package GUI;
 import GUI.Form.*;
 import GUI.components.JChooserDialog;
 import GUI.components.JMovableJFrame;
-import GUI.components.MenuItem;
+import GUI.components.Category;
 import Utils.FileHandler;
 import Utils.General;
 import Utils.Themes;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes.FlatIJLookAndFeelInfo;
+
+import static Utils.FileHandler.createImageIcon;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -17,7 +19,7 @@ import javax.swing.border.*;
 
 public class FrameLayout extends JMovableJFrame {
 	private boolean isLocked = false;
-	private ArrayList<MenuItem> menu = null;
+	private ArrayList<Category> categories = null;
 	private FlatIJLookAndFeelInfo currentTheme;
 	private Font currentFont;
 	private JPanel currentPanel;
@@ -27,8 +29,8 @@ public class FrameLayout extends JMovableJFrame {
 		initMenuButton();
 		initComponents();
 		initTheme();
-		setSelectedButton(menu.get(0).getButton());
-		setFormPanel(menu.get(0).getForm());
+		setSelectedButton(categories.get(0).getButton());
+		setFormPanel(categories.get(0).getForm());
 	}
 
 	private void initFrame() {
@@ -48,89 +50,89 @@ public class FrameLayout extends JMovableJFrame {
 	}
 
 	private void initMenuButton() {
-		if (menu == null)
-			menu = new ArrayList<MenuItem>();
+		if (categories == null)
+			categories = new ArrayList<Category>();
 
-		MenuItem itemHoaDon = new MenuItem();
+		Category itemHoaDon = new Category();
 		itemHoaDon.setCode("HD");
 		itemHoaDon.setToolTipText("Hóa đơn");
 		itemHoaDon.setKeyBlind(KeyEvent.VK_1);
 		itemHoaDon.setIcon("images/components/HD.png");
 		itemHoaDon.setIconHover("images/components/HD-hover.gif");
 		itemHoaDon.setForm(new FormHoaDon());
-		menu.add(itemHoaDon);
+		categories.add(itemHoaDon);
 
-		MenuItem itemSanPham = new MenuItem();
+		Category itemSanPham = new Category();
 		itemSanPham.setCode("SP");
 		itemSanPham.setToolTipText("Sản phẩm");
 		itemSanPham.setKeyBlind(KeyEvent.VK_2);
 		itemSanPham.setIcon("images/components/SP.png");
 		itemSanPham.setIconHover("images/components/SP-hover.gif");
 		itemSanPham.setForm(new FormSanPham());
-		menu.add(itemSanPham);
+		categories.add(itemSanPham);
 
-		MenuItem itemPhieuNhap = new MenuItem();
+		Category itemPhieuNhap = new Category();
 		itemPhieuNhap.setCode("PN");
 		itemPhieuNhap.setToolTipText("Phiếu nhập");
 		itemPhieuNhap.setKeyBlind(KeyEvent.VK_3);
 		itemPhieuNhap.setIcon("images/components/PN.png");
 		itemPhieuNhap.setIconHover("images/components/PN-hover.gif");
 		itemPhieuNhap.setForm(new FormPhieuNhap());
-		menu.add(itemPhieuNhap);
+		categories.add(itemPhieuNhap);
 
-		MenuItem itemNCC = new MenuItem();
+		Category itemNCC = new Category();
 		itemNCC.setCode("NCC");
 		itemNCC.setToolTipText("Nguồn cung");
 		itemNCC.setKeyBlind(KeyEvent.VK_4);
 		itemNCC.setIcon("images/components/NCC.png");
 		itemNCC.setIconHover("images/components/NCC-hover.gif");
 		itemNCC.setForm(new FormNCC());
-		menu.add(itemNCC);
+		categories.add(itemNCC);
 
-		MenuItem itemKhachHang = new MenuItem();
+		Category itemKhachHang = new Category();
 		itemKhachHang.setCode("KH");
 		itemKhachHang.setToolTipText("Khách hàng");
 		itemKhachHang.setKeyBlind(KeyEvent.VK_5);
 		itemKhachHang.setIcon("images/components/KH.png");
 		itemKhachHang.setIconHover("images/components/KH-hover.gif");
 		itemKhachHang.setForm(new FormKhachHang());
-		menu.add(itemKhachHang);
+		categories.add(itemKhachHang);
 
-		MenuItem itemKhuyenMai = new MenuItem();
+		Category itemKhuyenMai = new Category();
 		itemKhuyenMai.setCode("KM");
 		itemKhuyenMai.setToolTipText("Khuyến mãi");
 		itemKhuyenMai.setKeyBlind(KeyEvent.VK_6);
 		itemKhuyenMai.setIcon("images/components/KM.png");
 		itemKhuyenMai.setIconHover("images/components/KM-hover.gif");
 		itemKhuyenMai.setForm(new FormKhuyenMai());
-		menu.add(itemKhuyenMai);
+		categories.add(itemKhuyenMai);
 
-		MenuItem itemThongKe = new MenuItem();
+		Category itemThongKe = new Category();
 		itemThongKe.setCode("TK");
 		itemThongKe.setToolTipText("Thống kê");
 		itemThongKe.setKeyBlind(KeyEvent.VK_7);
 		itemThongKe.setIcon("images/components/TK.png");
 		itemThongKe.setIconHover("images/components/TK-hover.gif");
 		itemThongKe.setForm(new FormThongKe());
-		menu.add(itemThongKe);
+		categories.add(itemThongKe);
 
-		MenuItem itemExcel = new MenuItem();
+		Category itemExcel = new Category();
 		itemExcel.setCode("excel");
 		itemExcel.setToolTipText("Xuất/Nhập");
 		itemExcel.setKeyBlind(KeyEvent.VK_8);
 		itemExcel.setIcon("images/components/excel.png");
 		itemExcel.setIconHover("images/components/excel-hover.gif");
 		itemExcel.setForm(new FormExcel());
-		menu.add(itemExcel);
+		categories.add(itemExcel);
 
-		MenuItem itemTaiKhoan = new MenuItem();
+		Category itemTaiKhoan = new Category();
 		itemTaiKhoan.setCode("NV");
 		itemTaiKhoan.setToolTipText("Tài khoản");
 		itemTaiKhoan.setKeyBlind(KeyEvent.VK_9);
 		itemTaiKhoan.setIcon("images/components/NV.png");
 		itemTaiKhoan.setIconHover("images/components/NV-hover.gif");
 		itemTaiKhoan.setForm(new FormTaiKhoan());
-		menu.add(itemTaiKhoan);
+		categories.add(itemTaiKhoan);
 	}
 
 	private void initComponents() {
@@ -332,8 +334,8 @@ public class FrameLayout extends JMovableJFrame {
 			});
 
 			//---- btnMenu ----
-			int currentY = MenuItem.START_Y;
-			for (MenuItem item : menu) {
+			int currentY = Category.START_Y;
+			for (Category item : categories) {
 				JButton btn = new JButton();
 				btn.setIcon(item.getIcon());
 				btn.setToolTipText(item.getToolTipText());
@@ -343,7 +345,7 @@ public class FrameLayout extends JMovableJFrame {
 				btn.setFocusPainted(false);
 				btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 				menuPanel.add(btn);
-				btn.setBounds(MenuItem.DEFAULT_X, currentY, MenuItem.ITEM_BUTTON_SIZE, MenuItem.ITEM_BUTTON_SIZE);
+				btn.setBounds(Category.DEFAULT_X, currentY, Category.ITEM_BUTTON_SIZE, Category.ITEM_BUTTON_SIZE);
 				setButtonKeyBlind(btn, item.getKeyBlind());
 				btn.addActionListener(new ActionListener() {
 					@Override
@@ -364,22 +366,22 @@ public class FrameLayout extends JMovableJFrame {
 					}
 				});
 				item.setButton(btn);
-				currentY += MenuItem.ITEM_BUTTON_SIZE;
+				currentY += Category.ITEM_BUTTON_SIZE;
 			}
-			menu.get(0).getButton().setBorder(new MatteBorder(5, 5, 0, 0, UIManager.getColor("Button.disabledBackground")));
-			menu.get(menu.size()-1).getButton().setBorder(new MatteBorder(0, 5, 5, 0, UIManager.getColor("Button.disabledBackground")));
+			categories.get(0).getButton().setBorder(new MatteBorder(5, 5, 0, 0, UIManager.getColor("Button.disabledBackground")));
+			categories.get(categories.size()-1).getButton().setBorder(new MatteBorder(0, 5, 5, 0, UIManager.getColor("Button.disabledBackground")));
 
-			int miniBtnSize = 40;
-
+			int miniBtnSize = 48;
 			//---- btnContact ----
+			int btnContactSize = 40;
 			btnContact = new JButton();
 			btnContact.setToolTipText("Liên hệ");
-			btnContact.setIcon(createImageIcon("images/components/cup.png" , miniBtnSize, miniBtnSize));
+			btnContact.setIcon(createImageIcon("images/components/cup.png" , btnContactSize, btnContactSize));
 			btnContact.setBackground(Color.white);
 			btnContact.setContentAreaFilled(false);
 			btnContact.setBorderPainted(false);
 			menuPanel.add(btnContact);
-			btnContact.setBounds(20, 760, miniBtnSize+8, miniBtnSize+8);
+			btnContact.setBounds(20, 760, miniBtnSize, miniBtnSize);
 			btnContact.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -390,25 +392,26 @@ public class FrameLayout extends JMovableJFrame {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					btnContact.setContentAreaFilled(true);
-					btnContact.setIcon(createImageIcon("images/components/contact-hover.gif" , miniBtnSize, miniBtnSize));
+					btnContact.setIcon(createImageIcon("images/components/contact-hover.gif" , btnContactSize-4, btnContactSize-4));
 				}
 				@Override
 				public void mouseExited(MouseEvent e) {
 					btnContact.setContentAreaFilled(false);
-					btnContact.setIcon(createImageIcon("images/components/cup.png" , miniBtnSize, miniBtnSize));
+					btnContact.setIcon(createImageIcon("images/components/cup.png" , btnContactSize, btnContactSize));
 				}
 			});
 
 			//---- btnLogout ----
+			int btnLogoutSize = 16;
 			btnLogout = new JButton();
 			btnLogout.setToolTipText("Đăng xuất");
-			btnLogout.setIcon(createImageIcon("images/components/logout.png" , miniBtnSize, miniBtnSize));
+			btnLogout.setIcon(createImageIcon("images/components/logout.png" , btnLogoutSize, btnLogoutSize));
 			btnLogout.setBackground(Color.white);
 			btnLogout.setContentAreaFilled(false);
 			btnLogout.setBorderPainted(false);
 			btnLogout.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			menuPanel.add(btnLogout);
-			btnLogout.setBounds(btnContact.getX() + 50, 760, miniBtnSize+8, miniBtnSize+8);
+			btnLogout.setBounds(btnContact.getX() + 50, 760, miniBtnSize, miniBtnSize);
 			btnLogout.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -419,25 +422,26 @@ public class FrameLayout extends JMovableJFrame {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					btnLogout.setContentAreaFilled(true);
-					btnLogout.setIcon(createImageIcon("images/components/logout-hover.png" , miniBtnSize, miniBtnSize));
+					btnLogout.setIcon(createImageIcon("images/components/logout-hover.png" , btnLogoutSize, btnLogoutSize));
 				}
 				@Override
 				public void mouseExited(MouseEvent e) {
 					btnLogout.setContentAreaFilled(false);
-					btnLogout.setIcon(createImageIcon("images/components/logout.png" , miniBtnSize, miniBtnSize));
+					btnLogout.setIcon(createImageIcon("images/components/logout.png" , btnLogoutSize, btnLogoutSize));
 				}
 			});
 
 			//---- btnSetting ----
+			int btnSettingSize = 16;
 			btnSetting = new JButton();
 			btnSetting.setToolTipText("Cài đặt");
-			btnSetting.setIcon(createImageIcon("images/components/setting.png" , miniBtnSize, miniBtnSize));
+			btnSetting.setIcon(createImageIcon("images/components/setting.png" , btnSettingSize, btnSettingSize));
 			btnSetting.setBackground(Color.white);
 			btnSetting.setContentAreaFilled(false);
 			btnSetting.setBorderPainted(false);
 			btnSetting.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			menuPanel.add(btnSetting);
-			btnSetting.setBounds(btnLogout.getX() + 50, 760, miniBtnSize+8, miniBtnSize+8);
+			btnSetting.setBounds(btnLogout.getX() + 50, 760, miniBtnSize, miniBtnSize);
 			btnSetting.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -448,13 +452,13 @@ public class FrameLayout extends JMovableJFrame {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					btnSetting.setContentAreaFilled(true);
-					btnSetting.setIcon(createImageIcon("images/components/setting-hover.gif" , miniBtnSize, miniBtnSize));
+					btnSetting.setIcon(createImageIcon("images/components/setting-hover.gif" , btnSettingSize*2, btnSettingSize*2));
 				}
 				@Override
 				public void mouseExited(MouseEvent e) {
 					if (!settingPanel.isVisible()) {
 						btnSetting.setContentAreaFilled(false);
-						btnSetting.setIcon(createImageIcon("images/components/setting.png" , miniBtnSize, miniBtnSize));
+						btnSetting.setIcon(createImageIcon("images/components/setting.png" , btnSettingSize, btnSettingSize));
 					}
 				}
 			});
@@ -476,7 +480,7 @@ public class FrameLayout extends JMovableJFrame {
 			lbWaterDropPanel.setBounds(-3, 190, lbWaterWeight, lbWaterHeight);
 		}
 		contentPane.add(menuPanel);
-		menuPanel.setBounds(0, formLayoutPanel.getY()-5, 185, formLayoutPanel.getHeight());
+		menuPanel.setBounds(0, formLayoutPanel.getY()-5, 185, formLayoutPanel.getHeight()+5);
 
 		JPanel topBorderFormLayoutPanel = new JPanel();
 		topBorderFormLayoutPanel.setBackground(UIManager.getColor("Button.disabledBackground"));
@@ -495,7 +499,7 @@ public class FrameLayout extends JMovableJFrame {
 			btnExit.setIcon(createImageIcon("images/components/exit-w.png", btnExitSize, btnExitSize));
 			btnExit.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			backgroundPanel.add(btnExit);
-			btnExit.setBounds(1045, 10, btnExitSize, btnExitSize);
+			btnExit.setBounds(1160, 15, btnExitSize, btnExitSize);
 			btnExit.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -509,7 +513,7 @@ public class FrameLayout extends JMovableJFrame {
 			btnMinimize.setIcon(createImageIcon("images/components/minimize-w.png", btnMinimizeSize, btnMinimizeSize));
 			btnMinimize.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			backgroundPanel.add(btnMinimize);
-			btnMinimize.setBounds(1010, 5, btnMinimizeSize + 8, btnMinimizeSize + 8);
+			btnMinimize.setBounds(1125, 10, btnMinimizeSize + 8, btnMinimizeSize + 8);
 			btnMinimize.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -652,7 +656,7 @@ public class FrameLayout extends JMovableJFrame {
 	}
 
 	private void setVisibleMenuButton(boolean isVisible) {
-		for (MenuItem item : menu) {
+		for (Category item : categories) {
 			if (item.getButton() != null)
 				item.getButton().setVisible(isVisible);
 		}
@@ -676,15 +680,6 @@ public class FrameLayout extends JMovableJFrame {
 	private void setFormFont(Font font) {
 		for (Component c : currentPanel.getComponents())
 			c.setFont(font);
-	}
-
-	private ImageIcon createImageIcon(String path, int width, int height) {
-		ImageIcon icon = new ImageIcon(path);
-		if (icon.getIconHeight() != height || icon.getIconWidth() != width) {
-			Image scale = icon.getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT);
-			icon = new ImageIcon(scale);
-		}
-		return icon;
 	}
 
 	private void animatedSwapSelectedButton(JButton enableBtn, JButton disableBtn) {
@@ -735,7 +730,7 @@ public class FrameLayout extends JMovableJFrame {
 						}
 						currentPanel.setBounds(0, 0, 1000, formLayoutPanel.getHeight());
 					}
-					Thread.sleep(2430);
+					Thread.sleep(2000);
 				} catch (InterruptedException ignored) {}
 				//remove intro panel after finish
 				menuPanel.setVisible(true);

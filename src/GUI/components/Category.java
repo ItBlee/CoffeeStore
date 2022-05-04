@@ -1,9 +1,9 @@
 package GUI.components;
 
 import javax.swing.*;
-import java.awt.*;
+import static Utils.FileHandler.createImageIcon;
 
-public class MenuItem {
+public class Category {
     public static final int ICON_SIZE = 36;
     public static final int ITEM_BUTTON_SIZE = 70;
     public static final int DEFAULT_X = 110;
@@ -16,7 +16,7 @@ public class MenuItem {
     private int keyBlind;
     private JPanel form;
 
-    public MenuItem() {
+    public Category() {
     }
 
     public String getCode() {
@@ -48,7 +48,7 @@ public class MenuItem {
     }
 
     public void setIcon(String imagePath) {
-        this.icon = createImageIcon(imagePath);
+        this.icon = createImageIcon(imagePath, ICON_SIZE, ICON_SIZE);
     }
 
     public ImageIcon getIconHover() {
@@ -56,7 +56,7 @@ public class MenuItem {
     }
 
     public void setIconHover(String imgHoverPath) {
-        this.iconHover = createImageIcon(imgHoverPath);
+        this.iconHover = createImageIcon(imgHoverPath, ICON_SIZE, ICON_SIZE);
     }
 
     public int getKeyBlind() {
@@ -73,14 +73,5 @@ public class MenuItem {
 
     public void setForm(JPanel form) {
         this.form = form;
-    }
-
-    private ImageIcon createImageIcon(String path) {
-        ImageIcon icon = new ImageIcon(path);
-        if (icon.getIconHeight() != MenuItem.ICON_SIZE || icon.getIconWidth() != MenuItem.ICON_SIZE) {
-            Image scale = icon.getImage().getScaledInstance(MenuItem.ICON_SIZE, MenuItem.ICON_SIZE, Image.SCALE_DEFAULT);
-            icon = new ImageIcon(scale);
-        }
-        return icon;
     }
 }

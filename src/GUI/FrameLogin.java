@@ -6,6 +6,8 @@ import Utils.FileHandler;
 import Utils.General;
 import Utils.Validator;
 
+import static Utils.FileHandler.createImageIcon;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -360,15 +362,6 @@ public class FrameLogin extends JFrame {
 		txtUsername.setEnabled(isEnable);
 		txtPassword.setEnabled(isEnable);
 		cbRemember.setEnabled(isEnable);
-	}
-
-	private ImageIcon createImageIcon(String path, int width, int height) {
-		ImageIcon icon = new ImageIcon(path);
-		if (icon.getIconHeight() != height || icon.getIconWidth() != width) {
-			Image scale = icon.getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT);
-			icon = new ImageIcon(scale);
-		}
-		return icon;
 	}
 
 	private void animatedSubmit() {
