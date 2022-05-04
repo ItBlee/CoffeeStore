@@ -6,7 +6,8 @@ import GUI.components.JMovableJFrame;
 import GUI.components.Category;
 import Utils.FileHandler;
 import Utils.General;
-import Utils.Themes;
+import GUI.components.Themes;
+import com.apple.eawt.Application;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes.FlatIJLookAndFeelInfo;
 
 import static Utils.FileHandler.createImageIcon;
@@ -39,8 +40,9 @@ public class FrameLayout extends JMovableJFrame {
 		setUndecorated(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-		setIconImage(new ImageIcon("images/logo.png").getImage());
 		setTitle("THE CROSSING COFFEE MANAGER");
+		setIconImage(new ImageIcon("images/logo.png").getImage());
+		Application.getApplication().setDockIconImage(new ImageIcon("images/logo.png").getImage());
 	}
 
 	private void initTheme() {
@@ -718,17 +720,17 @@ public class FrameLayout extends JMovableJFrame {
 			@Override
 			public void run() {
 				try {
-					currentPanel.setBounds(0, 0, 1000, 0);
+					currentPanel.setBounds(0, 0, formLayoutPanel.getWidth(), 0);
 					menuPanel.setVisible(false);
 					Thread.sleep(1300);
 					remove(coverIntroPanel);
 					//animated form appear
 					{
 						while (currentPanel.getHeight() < menuPanel.getHeight()) {
-							currentPanel.setBounds(0, 0, 1000, currentPanel.getHeight() + 3);
+							currentPanel.setBounds(0, 0, formLayoutPanel.getWidth(), currentPanel.getHeight() + 3);
 							Thread.sleep(1);
 						}
-						currentPanel.setBounds(0, 0, 1000, formLayoutPanel.getHeight());
+						currentPanel.setBounds(0, 0, formLayoutPanel.getWidth(), formLayoutPanel.getHeight());
 					}
 					Thread.sleep(2000);
 				} catch (InterruptedException ignored) {}

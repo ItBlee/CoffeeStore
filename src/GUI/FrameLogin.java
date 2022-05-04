@@ -5,6 +5,7 @@ import BUS.TaiKhoanBUS;
 import Utils.FileHandler;
 import Utils.General;
 import Utils.Validator;
+import com.apple.eawt.Application;
 
 import static Utils.FileHandler.createImageIcon;
 
@@ -29,8 +30,9 @@ public class FrameLogin extends JFrame {
 		setUndecorated(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-		setIconImage(new ImageIcon("images/logo.png").getImage());
 		setTitle("THE CROSSING COFFEE MANAGER");
+		setIconImage(new ImageIcon("images/logo.png").getImage());
+		Application.getApplication().setDockIconImage(new ImageIcon("images/logo.png").getImage());
 	}
 
 	private void initComponents() {

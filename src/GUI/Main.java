@@ -1,7 +1,7 @@
 package GUI;
 
 import Utils.FileHandler;
-import Utils.Themes;
+import GUI.components.Themes;
 import com.formdev.flatlaf.FlatDarkLaf;
 
 import javax.swing.*;
