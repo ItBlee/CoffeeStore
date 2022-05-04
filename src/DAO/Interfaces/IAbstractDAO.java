@@ -1,6 +1,6 @@
 package DAO.Interfaces;
 
-import Mapper.Interfaces.IRowMapper;
+import DAO.Mapper.Interfaces.IRowMapper;
 
 import java.io.Serializable;
 import java.util.ArrayList;

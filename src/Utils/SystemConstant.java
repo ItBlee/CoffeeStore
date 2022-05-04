@@ -21,7 +21,12 @@ public class SystemConstant {
     public static final String CONFIG_PROP_DB_USERNAME = "DB.username";
     public static final String CONFIG_PROP_DB_PASSWORD = "DB.password";
     public static final String CONFIG_PROP_THEME_NAME = "THEME.NAME";
+    public static final String CONFIG_PROP_THEME_FONT_NAME = "THEME.FONT.NAME";
+    public static final String CONFIG_PROP_THEME_FONT_TYPE = "THEME.FONT.STYLE";
+    public static final String CONFIG_PROP_THEME_FONT_SIZE = "THEME.FONT.SIZE";
 
     //Theme
     public static final String DEFAULT_THEME_NAME = "Dark Flat";
+    public static final String DEFAULT_THEME_CLASS = "com.formdev.flatlaf.intellijthemes.FlatDarkFlatIJTheme";
+    public static final boolean DEFAULT_THEME_DARK_MODE = true;
 }

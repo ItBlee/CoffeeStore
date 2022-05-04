@@ -1,11 +1,11 @@
 package Utils;
 
-import Mapper.Interfaces.IExcelRowMapper;
+import DAO.Mapper.Interfaces.IExcelRowMapper;
+import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.Font;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,21 +14,6 @@ import java.util.Properties;
 import static Utils.SystemConstant.*;
 
 public class FileHandler {
-    /**
-     * Mở Dialog để người dùng chọn file muốn thao tác
-     * @param path đường dẫn mặc định khi mở.
-     * @return String - đường dẫn File, trả về NULL nếu hủy/thoát Dialog
-     */
-    public static String showFileChooser(String path) {
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xls");
-        JFileChooser fileChooser = new JFileChooser(path);
-        fileChooser.setDialogTitle("Chọn file");
-        fileChooser.setFileFilter(filter);
-        if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-            return fileChooser.getSelectedFile().getAbsolutePath();
-        return null;
-    }
-
     public static void exportConfig() {
         try {
             OutputStream output = new FileOutputStream(CONFIG_FILE_URL);
@@ -44,7 +29,12 @@ public class FileHandler {
             prop.setProperty(CONFIG_PROP_DB_USERNAME, General.DB_USERNAME);
             if (!General.DB_PASSWORD.isBlank())
                 prop.setProperty(CONFIG_PROP_DB_PASSWORD, General.DB_PASSWORD);
-            prop.setProperty(CONFIG_PROP_THEME_NAME, General.THEME_INFO_NAME);
+            prop.setProperty(CONFIG_PROP_THEME_NAME, General.THEME_INFO.getName());
+            if (General.THEME_FONT != null) {
+                prop.setProperty(CONFIG_PROP_THEME_FONT_NAME, General.THEME_FONT.getName());
+                prop.setProperty(CONFIG_PROP_THEME_FONT_TYPE, String.valueOf(General.THEME_FONT.getStyle()));
+                prop.setProperty(CONFIG_PROP_THEME_FONT_SIZE, String.valueOf(General.THEME_FONT.getSize()));
+            }
 
             prop.store(output, "Coffee Store App Config File");
             output.close();
@@ -79,8 +69,25 @@ public class FileHandler {
             General.DB_PASSWORD = dbPassword;
 
         String themeName = prop.getProperty(CONFIG_PROP_THEME_NAME);
-        if (Themes.isExist(themeName))
-            General.THEME_INFO_NAME = themeName;
+        FlatAllIJThemes.FlatIJLookAndFeelInfo theme = Themes.getThemeInfoByName(themeName);
+        if (theme != null)
+            General.THEME_INFO = theme;
+
+        String fontName = prop.getProperty(CONFIG_PROP_THEME_FONT_NAME);
+        if (fontName != null && !fontName.isBlank()) {
+            int fontStyle, fontSize;
+            try {
+                fontStyle = Integer.parseInt(prop.getProperty(CONFIG_PROP_THEME_FONT_TYPE));
+            } catch (NumberFormatException e) {
+                fontStyle = Font.PLAIN;
+            }
+            try {
+                fontSize = Integer.parseInt(prop.getProperty(CONFIG_PROP_THEME_FONT_SIZE));
+            } catch (NumberFormatException e) {
+                fontSize = 14;
+            }
+            General.THEME_FONT = new java.awt.Font(fontName, fontStyle, fontSize);
+        }
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

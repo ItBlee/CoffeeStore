@@ -1,7 +1,7 @@
 package DAO.Abstracts;
 
 import DAO.Interfaces.IAbstractDAO;
-import Mapper.Interfaces.IRowMapper;
+import DAO.Mapper.Interfaces.IRowMapper;
 import Utils.General;
 import Utils.MyDBConnection;
 
