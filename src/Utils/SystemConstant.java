@@ -16,10 +16,11 @@ public class SystemConstant {
     public static final String CONFIG_PROP_DB_NAME = "DB.name";
     public static final String CONFIG_PROP_DB_USERNAME = "DB.username";
     public static final String CONFIG_PROP_DB_PASSWORD = "DB.password";
-    public static final String CONFIG_PROP_THEME_NAME = "THEME.NAME";
-    public static final String CONFIG_PROP_THEME_FONT_NAME = "THEME.FONT.NAME";
-    public static final String CONFIG_PROP_THEME_FONT_TYPE = "THEME.FONT.STYLE";
-    public static final String CONFIG_PROP_THEME_FONT_SIZE = "THEME.FONT.SIZE";
+    public static final String CONFIG_PROP_THEME_NAME = "THEME.name";
+    public static final String CONFIG_PROP_THEME_FONT_NAME = "THEME.FONT.name";
+    public static final String CONFIG_PROP_THEME_FONT_STYLE = "THEME.FONT.style";
+    public static final String CONFIG_PROP_THEME_FONT_SIZE = "THEME.FONT.size";
+    public static final String CONFIG_PROP_LANGUAGE_CODE = "LANGUAGE.code";
 
     //Theme
     public static final String DEFAULT_THEME_NAME = "Dark Flat";

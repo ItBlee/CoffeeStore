@@ -1,7 +1,8 @@
 package Utils;
 
 import DAO.Mapper.Interfaces.IExcelRowMapper;
-import GUI.components.Themes;
+import GUI.components.Language;
+import GUI.components.Theme;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
@@ -10,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.Font;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
@@ -19,7 +21,7 @@ import static Utils.SystemConstant.*;
 public class FileHandler {
     public static void exportConfig() {
         try {
-            OutputStream output = new FileOutputStream(CONFIG_FILE_URL);
+            OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(CONFIG_FILE_URL), StandardCharsets.UTF_8);
             Properties prop = new Properties();
 
             if (General.USER_IS_REMEMBER) {
@@ -32,12 +34,14 @@ public class FileHandler {
             prop.setProperty(CONFIG_PROP_DB_USERNAME, General.DB_USERNAME);
             if (!General.DB_PASSWORD.isBlank())
                 prop.setProperty(CONFIG_PROP_DB_PASSWORD, General.DB_PASSWORD);
-            prop.setProperty(CONFIG_PROP_THEME_NAME, General.THEME_INFO.getName());
-            if (General.THEME_FONT != null) {
-                prop.setProperty(CONFIG_PROP_THEME_FONT_NAME, General.THEME_FONT.getName());
-                prop.setProperty(CONFIG_PROP_THEME_FONT_TYPE, String.valueOf(General.THEME_FONT.getStyle()));
-                prop.setProperty(CONFIG_PROP_THEME_FONT_SIZE, String.valueOf(General.THEME_FONT.getSize()));
+            prop.setProperty(CONFIG_PROP_THEME_NAME, Theme.getSystemThemeInfo().getName());
+            if (Theme.getSystemThemeFont() != null) {
+                prop.setProperty(CONFIG_PROP_THEME_FONT_NAME, Theme.getSystemThemeFont().getName());
+                prop.setProperty(CONFIG_PROP_THEME_FONT_STYLE, String.valueOf(Theme.getSystemThemeFont().getStyle()));
+                prop.setProperty(CONFIG_PROP_THEME_FONT_SIZE, String.valueOf(Theme.getSystemThemeFont().getSize()));
             }
+            if (Language.getSystemLanguage() != null)
+                prop.setProperty(CONFIG_PROP_LANGUAGE_CODE, Language.getSystemLanguage().getDisplayName());
 
             prop.store(output, "Coffee Store App Config File");
             output.close();
@@ -47,7 +51,7 @@ public class FileHandler {
     public static void importConfig() {
         Properties prop = new Properties();
         try {
-            InputStream input = new FileInputStream(CONFIG_FILE_URL);
+            InputStreamReader input = new InputStreamReader(new FileInputStream(CONFIG_FILE_URL), StandardCharsets.UTF_8);
             prop.load(input);
             input.close();
         } catch (Exception e) {
@@ -72,15 +76,15 @@ public class FileHandler {
             General.DB_PASSWORD = dbPassword;
 
         String themeName = prop.getProperty(CONFIG_PROP_THEME_NAME);
-        FlatAllIJThemes.FlatIJLookAndFeelInfo theme = Themes.getThemeInfoByName(themeName);
+        FlatAllIJThemes.FlatIJLookAndFeelInfo theme = Theme.getThemeInfoByName(themeName);
         if (theme != null)
-            General.THEME_INFO = theme;
+            Theme.setSystemThemeInfo(theme);
 
         String fontName = prop.getProperty(CONFIG_PROP_THEME_FONT_NAME);
         if (fontName != null && !fontName.isBlank()) {
             int fontStyle, fontSize;
             try {
-                fontStyle = Integer.parseInt(prop.getProperty(CONFIG_PROP_THEME_FONT_TYPE));
+                fontStyle = Integer.parseInt(prop.getProperty(CONFIG_PROP_THEME_FONT_STYLE));
             } catch (NumberFormatException e) {
                 fontStyle = Font.PLAIN;
             }
@@ -89,8 +93,11 @@ public class FileHandler {
             } catch (NumberFormatException e) {
                 fontSize = 14;
             }
-            General.THEME_FONT = new java.awt.Font(fontName, fontStyle, fontSize);
+            Theme.setSystemThemeFont(new java.awt.Font(fontName, fontStyle, fontSize));
         }
+        String languageCode = prop.getProperty(CONFIG_PROP_LANGUAGE_CODE);
+        if (languageCode != null)
+            Language.setSystemLanguage(Language.getLanguageByDisplayName(languageCode));
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -144,6 +151,18 @@ public class FileHandler {
         workbook.close();
         inputStream.close();
         return list;
+    }
+
+    public static Properties getLanguageProperties(String language) {
+        Properties prop = new Properties();
+        try {
+            InputStreamReader input = new InputStreamReader(new FileInputStream("languages/" + language + ".language"), StandardCharsets.UTF_8);
+            prop.load(input);
+            input.close();
+            return prop;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static ImageIcon createImageIcon(String path, int width, int height) {

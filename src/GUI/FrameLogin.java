@@ -2,10 +2,10 @@ package GUI;
 
 import BUS.Interfaces.ITaiKhoanBUS;
 import BUS.TaiKhoanBUS;
+import GUI.components.Language;
 import Utils.FileHandler;
 import Utils.General;
 import Utils.Validator;
-import com.apple.eawt.Application;
 
 import static Utils.FileHandler.createImageIcon;
 
@@ -32,7 +32,6 @@ public class FrameLogin extends JFrame {
 		setResizable(false);
 		setTitle("THE CROSSING COFFEE MANAGER");
 		setIconImage(new ImageIcon("images/logo.png").getImage());
-		Application.getApplication().setDockIconImage(new ImageIcon("images/logo.png").getImage());
 	}
 
 	private void initComponents() {
@@ -51,7 +50,7 @@ public class FrameLogin extends JFrame {
 			loginPanel.add(lbTransition);
 
 			//---- lbUsername ----
-			JLabel lbUsername = new JLabel("Tên đăng nhập");
+			JLabel lbUsername = new JLabel(Language.LOGIN_LABEL_USERNAME);
 			lbUsername.setForeground(Color.white);
 			lbUsername.setFont(new Font("Segoe UI Black", Font.PLAIN, 14));
 			lbUsername.setLabelFor(txtUsername);
@@ -59,7 +58,7 @@ public class FrameLogin extends JFrame {
 			lbUsername.setBounds(695, 255, 106, 19);
 
 			//---- lbPassword ----
-			JLabel lbPassword = new JLabel("Mật khẩu");
+			JLabel lbPassword = new JLabel(Language.LOGIN_LABEL_PASSWORD);
 			lbPassword.setForeground(Color.white);
 			lbPassword.setFont(new Font("Segoe UI Black", Font.PLAIN, 14));
 			lbPassword.setLabelFor(txtPassword);
@@ -117,7 +116,7 @@ public class FrameLogin extends JFrame {
 			lbTitleSecond.setBounds(new Rectangle(new Point(633, 105), lbTitleSecond.getPreferredSize()));
 
 			//---- btnLogin ----
-			btnLogin = new JButton("Đăng Nhập");
+			btnLogin = new JButton(Language.LOGIN_BUTTON_TEXT);
 			btnLogin.setBackground(Color.white);
 			btnLogin.setFont(new Font("Segoe UI Black", Font.BOLD, 16));
 			btnLogin.setFocusPainted(false);
@@ -155,7 +154,7 @@ public class FrameLogin extends JFrame {
 				txtPassword.setText(General.USER_PASSWORD);
 				txtPassword.setForeground(Color.white);
 			} else {
-				txtPassword.setText("Nhập mật khẩu");
+				txtPassword.setText(Language.LOGIN_PASSWORD_PLACEHOLDER);
 				txtPassword.setForeground(Color.darkGray);
 			}
 			txtPassword.setBorder(new EmptyBorder(0, 10, 0, 25));
@@ -169,7 +168,7 @@ public class FrameLogin extends JFrame {
 					txtPassword.setBorder(BorderFactory.createCompoundBorder(
 							new EmptyBorder(0, 10, 0, 25),
 							new MatteBorder(0,0,2,0, Color.white)));
-					if (String.valueOf(txtPassword.getPassword()).equals("Nhập mật khẩu")) {
+					if (String.valueOf(txtPassword.getPassword()).equals(Language.LOGIN_PASSWORD_PLACEHOLDER)) {
 						txtPassword.setText("");
 						txtPassword.setForeground(Color.white);
 					}
@@ -179,7 +178,7 @@ public class FrameLogin extends JFrame {
 					txtPassword.setBorder(new EmptyBorder(0, 10, 0, 25));
 					if (String.valueOf(txtPassword.getPassword()).isEmpty()) {
 						txtPassword.setForeground(Color.darkGray);
-						txtPassword.setText("Nhập mật khẩu");
+						txtPassword.setText(Language.LOGIN_PASSWORD_PLACEHOLDER);
 					}
 				}
 			});
@@ -190,7 +189,7 @@ public class FrameLogin extends JFrame {
 				txtUsername.setText(General.USER_USERNAME);
 				txtUsername.setForeground(Color.white);
 			} else {
-				txtUsername.setText("Nhập tài khoản");
+				txtUsername.setText(Language.LOGIN_USERNAME_PLACEHOLDER);
 				txtUsername.setForeground(Color.darkGray);
 			}
 			txtUsername.setBorder(new EmptyBorder(0, 10, 0, 25));
@@ -204,7 +203,7 @@ public class FrameLogin extends JFrame {
 					txtUsername.setBorder(BorderFactory.createCompoundBorder(
 							new EmptyBorder(0, 10, 0, 25),
 							new MatteBorder(0,0,2,0, Color.white)));
-					if (txtUsername.getText().equals("Nhập tài khoản")) {
+					if (txtUsername.getText().equals(Language.LOGIN_USERNAME_PLACEHOLDER)) {
 						txtUsername.setText("");
 						txtUsername.setForeground(Color.white);
 					}
@@ -214,13 +213,13 @@ public class FrameLogin extends JFrame {
 					txtUsername.setBorder(new EmptyBorder(0, 10, 0, 25));
 					if (txtUsername.getText().isEmpty()) {
 						txtUsername.setForeground(Color.darkGray);
-						txtUsername.setText("Nhập tài khoản");
+						txtUsername.setText(Language.LOGIN_USERNAME_PLACEHOLDER);
 					}
 				}
 			});
 
 			//---- cbRemember ----
-			cbRemember = new JCheckBox(" Duy trì đăng nhập");
+			cbRemember = new JCheckBox(" " + Language.LOGIN_CHECKBOX_REMEMBER_ME);
 			cbRemember.setSelected(General.USER_IS_REMEMBER);
 			cbRemember.setContentAreaFilled(false);
 			cbRemember.setForeground(Color.white);
@@ -311,12 +310,12 @@ public class FrameLogin extends JFrame {
 					String username = txtUsername.getText();
 					String password = String.valueOf(txtPassword.getPassword());
 					if (!Validator.isValidUsername(username) || !Validator.isValidPassword(password))
-						throw new Exception("Tài khoản hoặc Mật khẩu không hợp lệ !");
+						throw new Exception(Language.LOGIN_INVALID_INPUT);
 					if (taiKhoanBUS.login(username, password)) {
 						Thread.sleep(1000);
 						loginSuccess(username, password);
 					} else
-						throw new Exception("Không thể đăng nhập !");
+						throw new Exception(Language.LOGIN_ERROR);
 				} catch (Exception e) {
 					e.printStackTrace();
 					loginFail(e.getMessage());
@@ -348,7 +347,7 @@ public class FrameLogin extends JFrame {
 	private void loginFail(String message) {
 		isLogging = false;
 		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-		btnLogin.setText("Đăng Nhập");
+		btnLogin.setText(Language.LOGIN_BUTTON_TEXT);
 		txtUsername.setBorder(BorderFactory.createCompoundBorder(
 				new EmptyBorder(0, 10, 0, 25),
 				new MatteBorder(0,0,2,0, new Color(235, 64, 52))));
@@ -356,7 +355,7 @@ public class FrameLogin extends JFrame {
 				new EmptyBorder(0, 10, 0, 25),
 				new MatteBorder(0,0,2,0, new Color(235, 64, 52))));
 		setEnableForm(true);
-		JOptionPane.showMessageDialog(getContentPane(), message, "Đăng nhập thất bại", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(getContentPane(), message, Language.LOGIN_ERROR, JOptionPane.ERROR_MESSAGE);
 	}
 
 	private void setEnableForm(boolean isEnable) {
@@ -409,7 +408,7 @@ public class FrameLogin extends JFrame {
 					}
 				});
 				try {
-					Thread.sleep(200);
+					Thread.sleep(400);
 					dispose();
 					frame.requestFocusInWindow();
 				} catch (InterruptedException ignored) {}

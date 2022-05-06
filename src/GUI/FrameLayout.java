@@ -1,13 +1,9 @@
 package GUI;
 
 import GUI.Form.*;
-import GUI.components.JChooserDialog;
-import GUI.components.JMovableJFrame;
-import GUI.components.Category;
+import GUI.components.*;
 import Utils.FileHandler;
 import Utils.General;
-import GUI.components.Themes;
-import com.apple.eawt.Application;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes.FlatIJLookAndFeelInfo;
 
 import static Utils.FileHandler.createImageIcon;
@@ -23,15 +19,20 @@ public class FrameLayout extends JMovableJFrame {
 	private ArrayList<Category> categories = null;
 	private FlatIJLookAndFeelInfo currentTheme;
 	private Font currentFont;
-	private JPanel currentPanel;
+	private Language currentLanguage;
+	private Category currentItem;
+	private boolean isDisplayIntro = true;
 
 	public FrameLayout() {
 		initFrame();
 		initMenuButton();
+		this.currentItem = categories.get(0);
+		this.currentTheme = Theme.getSystemThemeInfo();
+		this.currentFont = Theme.getSystemThemeFont();
+		this.currentLanguage = Language.getSystemLanguage();
 		initComponents();
 		initTheme();
-		setSelectedButton(categories.get(0).getButton());
-		setFormPanel(categories.get(0).getForm());
+		currentItem.getButton().doClick();
 	}
 
 	private void initFrame() {
@@ -42,98 +43,98 @@ public class FrameLayout extends JMovableJFrame {
 		setResizable(false);
 		setTitle("THE CROSSING COFFEE MANAGER");
 		setIconImage(new ImageIcon("images/logo.png").getImage());
-		Application.getApplication().setDockIconImage(new ImageIcon("images/logo.png").getImage());
 	}
 
 	private void initTheme() {
-		Themes.setupThemeByInfo(General.THEME_INFO);
-		this.currentTheme = General.THEME_INFO;
-		this.currentFont = General.THEME_FONT;
+		Theme.setupThemeByInfo(Theme.getSystemThemeInfo());
+		setFormFont(Theme.getSystemThemeFont());
 	}
 
 	private void initMenuButton() {
-		if (categories == null)
-			categories = new ArrayList<Category>();
+		categories = new ArrayList<Category>();
 
 		Category itemHoaDon = new Category();
 		itemHoaDon.setCode("HD");
-		itemHoaDon.setToolTipText("Hóa đơn");
+		itemHoaDon.setToolTipText(Language.LAYOUT_BUTTON_HD);
 		itemHoaDon.setKeyBlind(KeyEvent.VK_1);
 		itemHoaDon.setIcon("images/components/HD.png");
 		itemHoaDon.setIconHover("images/components/HD-hover.gif");
-		itemHoaDon.setForm(new FormHoaDon());
+		itemHoaDon.setFormClassName(FormHoaDon.class.getName());
 		categories.add(itemHoaDon);
 
 		Category itemSanPham = new Category();
 		itemSanPham.setCode("SP");
-		itemSanPham.setToolTipText("Sản phẩm");
+		itemSanPham.setToolTipText(Language.LAYOUT_BUTTON_SP);
 		itemSanPham.setKeyBlind(KeyEvent.VK_2);
 		itemSanPham.setIcon("images/components/SP.png");
 		itemSanPham.setIconHover("images/components/SP-hover.gif");
-		itemSanPham.setForm(new FormSanPham());
+		itemSanPham.setFormClassName(FormSanPham.class.getName());
 		categories.add(itemSanPham);
 
 		Category itemPhieuNhap = new Category();
 		itemPhieuNhap.setCode("PN");
-		itemPhieuNhap.setToolTipText("Phiếu nhập");
+		itemPhieuNhap.setToolTipText(Language.LAYOUT_BUTTON_PN);
 		itemPhieuNhap.setKeyBlind(KeyEvent.VK_3);
 		itemPhieuNhap.setIcon("images/components/PN.png");
 		itemPhieuNhap.setIconHover("images/components/PN-hover.gif");
-		itemPhieuNhap.setForm(new FormPhieuNhap());
+		itemPhieuNhap.setFormClassName(FormPhieuNhap.class.getName());
 		categories.add(itemPhieuNhap);
 
 		Category itemNCC = new Category();
 		itemNCC.setCode("NCC");
-		itemNCC.setToolTipText("Nguồn cung");
+		itemNCC.setToolTipText(Language.LAYOUT_BUTTON_NCC);
 		itemNCC.setKeyBlind(KeyEvent.VK_4);
 		itemNCC.setIcon("images/components/NCC.png");
 		itemNCC.setIconHover("images/components/NCC-hover.gif");
-		itemNCC.setForm(new FormNCC());
+		itemNCC.setFormClassName(FormNCC.class.getName());
 		categories.add(itemNCC);
 
 		Category itemKhachHang = new Category();
 		itemKhachHang.setCode("KH");
-		itemKhachHang.setToolTipText("Khách hàng");
+		itemKhachHang.setToolTipText(Language.LAYOUT_BUTTON_KH);
 		itemKhachHang.setKeyBlind(KeyEvent.VK_5);
 		itemKhachHang.setIcon("images/components/KH.png");
 		itemKhachHang.setIconHover("images/components/KH-hover.gif");
-		itemKhachHang.setForm(new FormKhachHang());
+		itemKhachHang.setFormClassName(FormKhachHang.class.getName());
 		categories.add(itemKhachHang);
 
 		Category itemKhuyenMai = new Category();
 		itemKhuyenMai.setCode("KM");
-		itemKhuyenMai.setToolTipText("Khuyến mãi");
+		itemKhuyenMai.setToolTipText(Language.LAYOUT_BUTTON_KM);
 		itemKhuyenMai.setKeyBlind(KeyEvent.VK_6);
 		itemKhuyenMai.setIcon("images/components/KM.png");
 		itemKhuyenMai.setIconHover("images/components/KM-hover.gif");
-		itemKhuyenMai.setForm(new FormKhuyenMai());
+		itemKhuyenMai.setFormClassName(FormKhuyenMai.class.getName());
 		categories.add(itemKhuyenMai);
 
 		Category itemThongKe = new Category();
 		itemThongKe.setCode("TK");
-		itemThongKe.setToolTipText("Thống kê");
+		itemThongKe.setToolTipText(Language.LAYOUT_BUTTON_TK);
 		itemThongKe.setKeyBlind(KeyEvent.VK_7);
 		itemThongKe.setIcon("images/components/TK.png");
 		itemThongKe.setIconHover("images/components/TK-hover.gif");
-		itemThongKe.setForm(new FormThongKe());
+		itemThongKe.setFormClassName(FormThongKe.class.getName());
+
 		categories.add(itemThongKe);
 
 		Category itemExcel = new Category();
 		itemExcel.setCode("excel");
-		itemExcel.setToolTipText("Xuất/Nhập");
+		itemExcel.setToolTipText(Language.LAYOUT_BUTTON_EXCEL);
 		itemExcel.setKeyBlind(KeyEvent.VK_8);
 		itemExcel.setIcon("images/components/excel.png");
 		itemExcel.setIconHover("images/components/excel-hover.gif");
-		itemExcel.setForm(new FormExcel());
+		itemExcel.setFormClassName(FormExcel.class.getName());
 		categories.add(itemExcel);
 
+		if (!General.CURRENT_USER.getChucVu().equals("admin"))
+			return;
 		Category itemTaiKhoan = new Category();
 		itemTaiKhoan.setCode("NV");
-		itemTaiKhoan.setToolTipText("Tài khoản");
+		itemTaiKhoan.setToolTipText(Language.LAYOUT_BUTTON_NV);
 		itemTaiKhoan.setKeyBlind(KeyEvent.VK_9);
 		itemTaiKhoan.setIcon("images/components/NV.png");
 		itemTaiKhoan.setIconHover("images/components/NV-hover.gif");
-		itemTaiKhoan.setForm(new FormTaiKhoan());
+		itemTaiKhoan.setFormClassName(FormTaiKhoan.class.getName());
 		categories.add(itemTaiKhoan);
 	}
 
@@ -149,20 +150,21 @@ public class FrameLayout extends JMovableJFrame {
 		contentPane.add(formLayoutPanel);
 		formLayoutPanel.setBounds(185, 58, 1000, 817);
 
-		//======== lbIntro ========
-		int introWidth = getWidth();
-		int introHeight = getHeight();
-		lbIntro = new JLabel();
-		lbIntro.setIcon(createImageIcon("images/components/layout_intro.gif", introWidth, introHeight));
-		contentPane.add(lbIntro);
-		lbIntro.setBounds(0,0, introWidth, introHeight);
+		if (isDisplayIntro) {
+			//======== lbIntro ========
+			int introWidth = getWidth();
+			int introHeight = getHeight();
+			lbIntro = new JLabel();
+			lbIntro.setIcon(createImageIcon("images/components/layout_intro.gif", introWidth, introHeight));
+			contentPane.add(lbIntro);
+			lbIntro.setBounds(0, 0, introWidth, introHeight);
 
-		//======== coverIntroPanel ========
-		coverIntroPanel = new JPanel();
-		coverIntroPanel.setBackground(new Color(37, 37, 37));
-		contentPane.add(coverIntroPanel);
-		coverIntroPanel.setBounds(lbIntro.getBounds());
-
+			//======== coverIntroPanel ========
+			coverIntroPanel = new JPanel();
+			coverIntroPanel.setBackground(new Color(37, 37, 37));
+			contentPane.add(coverIntroPanel);
+			coverIntroPanel.setBounds(lbIntro.getBounds());
+		}
 		//======== mainPanel ========
 		menuPanel = new JPanel();
 		{
@@ -177,26 +179,26 @@ public class FrameLayout extends JMovableJFrame {
 				settingPanel.setLayout(null);
 				settingPanel.setVisible(false);
 
-				JLabel lbSettingTitle = new JLabel("CÀI ĐẶT");
+				JLabel lbSettingTitle = new JLabel(Language.LAYOUT_SETTING_TITLE);
 				lbSettingTitle.setHorizontalAlignment(SwingConstants.CENTER);
 				lbSettingTitle.setForeground(Color.white);
 				lbSettingTitle.setFont(new Font("Segoe UI Black", Font.BOLD, 16));
 				settingPanel.add(lbSettingTitle);
 				lbSettingTitle.setBounds(5, 10, 170, 20);
 
-				JLabel lbThemeChooser = new JLabel("Giao diện: ");
+				JLabel lbThemeChooser = new JLabel(Language.LAYOUT_LABEL_THEME_CHOOSER);
 				lbThemeChooser.setForeground(Color.white);
 				lbThemeChooser.setFont(new Font("Segoe UI Black", Font.PLAIN, 14));
 				settingPanel.add(lbThemeChooser);
 				lbThemeChooser.setBounds(5, 70, 170, 20);
 
-				FlatIJLookAndFeelInfo[] themeInfoList = Themes.getThemeInfoList();
+				FlatIJLookAndFeelInfo[] themeInfoList = Theme.getThemeInfoList();
 				String[] themeList = new String[themeInfoList.length];
 				for (int i = 0; i < themeInfoList.length; i++)
 					themeList[i] = themeInfoList[i].getName();
 
 				cbThemeChooser = new JComboBox<String>(themeList);
-				cbThemeChooser.setSelectedIndex(Themes.getIndexOfTheme(General.THEME_INFO));
+				cbThemeChooser.setSelectedIndex(Theme.getIndexOf(currentTheme));
 				cbThemeChooser.addItemListener(new ItemListener() {
 					@Override
 					public void itemStateChanged(ItemEvent e) {
@@ -207,13 +209,38 @@ public class FrameLayout extends JMovableJFrame {
 				settingPanel.add(cbThemeChooser);
 				cbThemeChooser.setBounds(5, 100, 170 , 30);
 
-				JLabel lbFontChooser = new JLabel("Kiểu chữ: ");
+				JLabel lbLanguageChooser = new JLabel(Language.LAYOUT_LABEL_LANGUAGE_CHOOSER);
+				lbLanguageChooser.setForeground(Color.white);
+				lbLanguageChooser.setFont(new Font("Segoe UI Black", Font.PLAIN, 14));
+				settingPanel.add(lbLanguageChooser);
+				lbLanguageChooser.setBounds(5, 160, 170, 20);
+
+				ArrayList<Language> languageList = Language.getLanguageList();
+				String[] languageNameList = new String[languageList.size()];
+				int index = 0;
+				for (Language language : languageList) {
+					languageNameList[index] = language.getName();
+					index++;
+				}
+
+				cbLanguageChooser = new JComboBox<String>(languageNameList);
+				cbLanguageChooser.setSelectedItem(currentLanguage.getName());
+				cbLanguageChooser.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						onSelectedItemCBLanguageChooser((languageNameList[cbLanguageChooser.getSelectedIndex()]));
+					}
+				});
+				settingPanel.add(cbLanguageChooser);
+				cbLanguageChooser.setBounds(5, 190, 170 , 30);
+
+				JLabel lbFontChooser = new JLabel(Language.LAYOUT_LABEL_FONT_CHOOSER);
 				lbFontChooser.setForeground(Color.white);
 				lbFontChooser.setFont(new Font("Segoe UI Black", Font.PLAIN, 14));
 				settingPanel.add(lbFontChooser);
-				lbFontChooser.setBounds(5, 160, 170, 20);
+				lbFontChooser.setBounds(5, 250, 170, 20);
 
-				JButton btnFontChooser = new JButton("BẢNG CHỮ");
+				JButton btnFontChooser = new JButton(Language.LAYOUT_BUTTON_FONT_CHOOSER);
 				btnFontChooser.setFocusPainted(false);
 				btnFontChooser.setBackground(new Color(37,37,37));
 				btnFontChooser.setForeground(Color.white);
@@ -225,9 +252,9 @@ public class FrameLayout extends JMovableJFrame {
 					}
 				});
 				settingPanel.add(btnFontChooser);
-				btnFontChooser.setBounds(5, 190, 170, 40);
+				btnFontChooser.setBounds(5, 280, 170, 40);
 
-				JButton btnSaveSetting = new JButton("LƯU THAY ĐỔI");
+				JButton btnSaveSetting = new JButton(Language.LAYOUT_SETTING_SAVE);
 				btnSaveSetting.setFocusPainted(false);
 				btnSaveSetting.setBackground(Color.white);
 				btnSaveSetting.setForeground(new Color(37,37,37));
@@ -241,19 +268,19 @@ public class FrameLayout extends JMovableJFrame {
 				settingPanel.add(btnSaveSetting);
 				btnSaveSetting.setBounds(5, 520, 170, 40);
 
-				JButton btnBackSetting = new JButton("HỦY THAY ĐỔI");
-				btnBackSetting.setFocusPainted(false);
-				btnBackSetting.setBackground(UIManager.getColor("Button.disabledBackground"));
-				btnBackSetting.setForeground(Color.white);
-				btnBackSetting.setFont(new Font("Segoe UI Black", Font.BOLD, 14));
-				btnBackSetting.addActionListener(new ActionListener() {
+				JButton btnCancelSetting = new JButton(Language.LAYOUT_SETTING_SAVE_CANCEL);
+				btnCancelSetting.setFocusPainted(false);
+				btnCancelSetting.setBackground(UIManager.getColor("Button.disabledBackground"));
+				btnCancelSetting.setForeground(Color.white);
+				btnCancelSetting.setFont(new Font("Segoe UI Black", Font.BOLD, 14));
+				btnCancelSetting.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						onClickBtnBackSetting();
+						onClickBtnCancelSetting();
 					}
 				});
-				settingPanel.add(btnBackSetting);
-				btnBackSetting.setBounds(5, 575, 170, 40);
+				settingPanel.add(btnCancelSetting);
+				btnCancelSetting.setBounds(5, 575, 170, 40);
 			}
 			menuPanel.add(settingPanel);
 			settingPanel.setBounds(0, 120, 180, 640);
@@ -265,14 +292,14 @@ public class FrameLayout extends JMovableJFrame {
 				infoPanel.setLayout(null);
 				infoPanel.setVisible(false);
 
-				JLabel lbInfoTitle = new JLabel("THÔNG TIN");
+				JLabel lbInfoTitle = new JLabel(Language.LAYOUT_INFO_TITLE);
 				lbInfoTitle.setHorizontalAlignment(SwingConstants.CENTER);
 				lbInfoTitle.setForeground(Color.white);
 				lbInfoTitle.setFont(new Font("Segoe UI Black", Font.BOLD, 16));
 				infoPanel.add(lbInfoTitle);
 				lbInfoTitle.setBounds(5, 10, 170, 20);
 
-				JTextArea info = new JTextArea("a");
+				JTextArea info = new JTextArea();
 				info.setText("Mã NV: NV1" + "\n\n" +
 						"Mã TK: TK1" + "\n\n" +
 						"Họ tên: Trần Long Tuấn Vũ" + "\n\n" +
@@ -293,7 +320,7 @@ public class FrameLayout extends JMovableJFrame {
 				infoPanel.add(info);
 				info.setBounds(0, 65, 170, 500);
 
-				JButton btnBackInfo = new JButton("QUAY LẠI");
+				JButton btnBackInfo = new JButton(Language.LAYOUT_BUTTON_INFO_BACK);
 				btnBackInfo.setFocusPainted(false);
 				btnBackInfo.setBackground(Color.white);
 				btnBackInfo.setForeground(new Color(37,37,37));
@@ -352,6 +379,8 @@ public class FrameLayout extends JMovableJFrame {
 				btn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						if (isLocked)
+							return;
 						setSelectedButton(btn);
 						setFormPanel(item.getForm());
 					}
@@ -377,7 +406,7 @@ public class FrameLayout extends JMovableJFrame {
 			//---- btnContact ----
 			int btnContactSize = 40;
 			btnContact = new JButton();
-			btnContact.setToolTipText("Liên hệ");
+			btnContact.setToolTipText(Language.LAYOUT_LABEL_CONTACT_TOOL_TIP_TEXT);
 			btnContact.setIcon(createImageIcon("images/components/cup.png" , btnContactSize, btnContactSize));
 			btnContact.setBackground(Color.white);
 			btnContact.setContentAreaFilled(false);
@@ -406,7 +435,7 @@ public class FrameLayout extends JMovableJFrame {
 			//---- btnLogout ----
 			int btnLogoutSize = 16;
 			btnLogout = new JButton();
-			btnLogout.setToolTipText("Đăng xuất");
+			btnLogout.setToolTipText(Language.LAYOUT_LABEL_LOGOUT_TOOL_TIP_TEXT);
 			btnLogout.setIcon(createImageIcon("images/components/logout.png" , btnLogoutSize, btnLogoutSize));
 			btnLogout.setBackground(Color.white);
 			btnLogout.setContentAreaFilled(false);
@@ -436,7 +465,7 @@ public class FrameLayout extends JMovableJFrame {
 			//---- btnSetting ----
 			int btnSettingSize = 16;
 			btnSetting = new JButton();
-			btnSetting.setToolTipText("Cài đặt");
+			btnSetting.setToolTipText(Language.LAYOUT_LABEL_SETTING_TOOL_TIP_TEXT);
 			btnSetting.setIcon(createImageIcon("images/components/setting.png" , btnSettingSize, btnSettingSize));
 			btnSetting.setBackground(Color.white);
 			btnSetting.setContentAreaFilled(false);
@@ -538,7 +567,8 @@ public class FrameLayout extends JMovableJFrame {
 	@Override
 	public void setVisible(boolean b) {
 		super.setVisible(b);
-		animatedIntro();
+		if (isDisplayIntro)
+			animatedIntro();
 	}
 
 	private void onClickBtnExit() {
@@ -551,23 +581,26 @@ public class FrameLayout extends JMovableJFrame {
 	}
 
 	private void onClickBtnLogout() {
-		int confirm = JOptionPane.showConfirmDialog(getContentPane(), "Bạn muốn đăng xuất ?", "Đăng xuất", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		int confirm = JOptionPane.showConfirmDialog(getContentPane(), Language.LAYOUT_MESSAGE_LOGOUT, Language.LAYOUT_LABEL_LOGOUT_TOOL_TIP_TEXT, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (confirm == JOptionPane.YES_OPTION) {
 			General.CURRENT_USER = null;
-			dispose();
+			FileHandler.importConfig();
+			Language.setup();
+			Theme.setupDefault();
 			JFrame frame = new FrameLogin();
 			EventQueue.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					frame.setVisible(true);
 					frame.requestFocusInWindow();
+					dispose();
 				}
 			});
 		}
 	}
 
 	private void onClickBtnContact() {
-		JOptionPane.showMessageDialog(getContentPane(), "Liên hệ", "Kỹ thuật viên: Nguyễn Văn A\nSĐT: 0913222222", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(getContentPane(), Language.LAYOUT_MESSAGE_CONTACT, Language.LAYOUT_LABEL_CONTACT_TOOL_TIP_TEXT, JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void onClickBtnSetting() {
@@ -588,30 +621,42 @@ public class FrameLayout extends JMovableJFrame {
 		setVisibleMenuButton(!settingPanel.isVisible());
 	}
 
-	private void onClickBtnFontChooser() {
-		Font newFont = JChooserDialog.showFontChooser(this);
-		if (newFont != null) {
-			currentFont = newFont;
-			setFormFont(currentFont);
-		}
-	}
-
 	private void onClickBtnSaveSetting() {
-		int save = JOptionPane.showConfirmDialog(getContentPane(), "Bạn có chắc muốn lưu thay đổi ?", "Cài đặt", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		int save = JOptionPane.showConfirmDialog(getContentPane(), Language.LAYOUT_MESSAGE_SETTING_QUESTION, Language.LAYOUT_LABEL_SETTING_TOOL_TIP_TEXT, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (save == JOptionPane.OK_OPTION) {
-			General.THEME_INFO = currentTheme;
-			General.THEME_FONT = currentFont;
+			Language.setSystemLanguage(currentLanguage);
+			Theme.setSystemThemeInfo(currentTheme);
+			Theme.setSystemThemeFont(currentFont);
 			FileHandler.exportConfig();
-			JOptionPane.showMessageDialog(getContentPane(), "Hoàn thành", "Đã lưu cài đặt !", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(getContentPane(), Language.LAYOUT_SETTING_FINISH_TITLE, Language.LAYOUT_MESSAGE_SETTING_FINISH, JOptionPane.INFORMATION_MESSAGE);
 		}
 		btnSetting.doClick();
 	}
 
-	private void onClickBtnBackSetting() {
-		setFormFont(General.THEME_FONT);
-		Themes.setupThemeByInfo(General.THEME_INFO);
-		cbThemeChooser.setSelectedIndex(Themes.getIndexOfTheme(General.THEME_INFO));
-		btnSetting.doClick();
+	private void onClickBtnCancelSetting() {
+		final int FONT_FLAG = 1;
+		final int THEME_FLAG = 3;
+		final int LANGUAGE_FLAG = 5;
+		int repaintLevel = 0;
+
+		if (!currentFont.equals(Theme.getSystemThemeFont())) {
+			currentFont = Theme.getSystemThemeFont();
+			repaintLevel += FONT_FLAG;
+		}
+		if (!currentTheme.getName().equals(Theme.getSystemThemeInfo().getName())) {
+			currentTheme = Theme.getSystemThemeInfo();
+			Theme.setupThemeByInfo(Theme.getSystemThemeInfo());
+			repaintLevel += THEME_FLAG;
+		}
+		if (!currentLanguage.getDisplayName().equals(Language.getSystemLanguage().getDisplayName())) {
+			currentLanguage = Language.getSystemLanguage();
+			Language.importLanguage(Language.getSystemLanguage());
+			repaintLevel += LANGUAGE_FLAG;
+		}
+
+		if (repaintLevel >= LANGUAGE_FLAG)
+			repaintFrame();
+		else repaintAllForm();
 	}
 
 	private void onClickLBAvatar() {
@@ -621,14 +666,41 @@ public class FrameLayout extends JMovableJFrame {
 		setVisibleMenuButton(!infoPanel.isVisible());
 	}
 
+	private void onClickBtnFontChooser() {
+		Font newFont = JChooserDialog.showFontChooser(FrameLayout.this);
+		if (newFont != null) {
+			currentFont = newFont;
+			setFormFont(currentFont);
+		}
+	}
+
 	private void onSelectedItemCBThemeChooser(FlatIJLookAndFeelInfo themeInfo) {
-		if (themeInfo == null)
+		if (themeInfo == null || currentTheme.getName().equals(themeInfo.getName()))
 			return;
 		currentTheme = themeInfo;
-		Themes.setupThemeByInfo(currentTheme);
+		Theme.setupThemeByInfo(currentTheme);
+		repaintAllForm();
+	}
+
+	@SuppressWarnings("BusyWait")
+	private void onSelectedItemCBLanguageChooser(String languageName) {
+		if (languageName == null || languageName.isBlank())
+			return;
+		Language language = Language.getLanguageByName(languageName);
+		if (language == null || language.getDisplayName().equals(currentLanguage.getDisplayName()))
+			return;
+		currentLanguage = language;
+		Language.importLanguage(currentLanguage);
+		repaintFrame();
 		try {
-			setFormPanel(currentPanel.getClass().getConstructor().newInstance());
-		} catch (Exception ignored) {}
+			while (true) {
+				Thread.sleep(200);
+				if (isEnabled()) {
+					btnSetting.doClick();
+					break;
+				}
+			}
+		} catch (InterruptedException ignored) {}
 	}
 
 	private void setButtonKeyBlind(JButton btn, int key) {
@@ -646,15 +718,13 @@ public class FrameLayout extends JMovableJFrame {
 	}
 
 	private void setSelectedButton(JButton btn) {
-		if (isLocked)
-			return;
-		JButton oldSelectedBtn = null;
+		ArrayList<JButton> oldBtnList = new ArrayList<JButton>();
 		for (Component c : menuPanel.getComponents())
-			if (c instanceof JButton && c != btn && !c.isEnabled()) {
-				oldSelectedBtn = ((JButton) c);
+			if (c instanceof JButton && c != btn && (!c.isEnabled() || c.getWidth() > Category.ITEM_BUTTON_SIZE)) {
+				oldBtnList.add((JButton) c);
 				break;
 			}
-		animatedSwapSelectedButton(btn, oldSelectedBtn);
+		animatedSwapSelectedButton(btn, oldBtnList);
 	}
 
 	private void setVisibleMenuButton(boolean isVisible) {
@@ -665,35 +735,82 @@ public class FrameLayout extends JMovableJFrame {
 	}
 
 	private void setFormPanel(JPanel newPanel) {
-		if (isLocked)
-			return;
-		if (currentPanel != null)
-			formLayoutPanel.remove(currentPanel);
-		currentPanel = newPanel;
-		currentPanel.setOpaque(true);
-		currentPanel.setBounds(0, 0, formLayoutPanel.getWidth(), formLayoutPanel.getHeight());
-		formLayoutPanel.add(currentPanel);
+		formLayoutPanel.removeAll();
+		for (Category item : categories)
+			if (item.getFormClassName().equals(newPanel.getClass().getName()))
+				currentItem = item;
+		currentItem.getForm().setOpaque(true);
+		currentItem.getForm().setBounds(0, 0, formLayoutPanel.getWidth(), formLayoutPanel.getHeight());
+		formLayoutPanel.add(currentItem.getForm());
 		formLayoutPanel.revalidate();
 		formLayoutPanel.repaint();
-		if (currentFont != null)
-			setFormFont(currentFont);
+	}
+
+	private void changeFont(Component component, Font font) {
+		component.setFont(font);
+		if (component instanceof Container)
+			for (Component child : ((Container) component).getComponents())
+				changeFont(child, font);
 	}
 
 	private void setFormFont(Font font) {
-		for (Component c : currentPanel.getComponents())
-			c.setFont(font);
+		changeFont(currentItem.getForm(), font);
+		for (Category item : categories)
+			changeFont(item.getForm(), font);
 	}
 
-	private void animatedSwapSelectedButton(JButton enableBtn, JButton disableBtn) {
+	private void repaintAllForm() {
+		for (Category item : categories)
+			if (item.getRootForm() != null)
+				item.renewForm();
+		setFormPanel(currentItem.getForm());
+		setFormFont(currentFont);
+	}
+
+	private void repaintFrame() {
+		setEnabled(false);
+		setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				isDisplayIntro = false;
+				initMenuButton();
+				for (Category item : categories)
+					if (item.getCode().equals(currentItem.getCode())) {
+						currentItem = item;
+						break;
+					}
+				getContentPane().removeAll();
+				revalidate();
+				repaint();
+				Theme.setupDefault();
+				initComponents();
+				Theme.setupThemeByInfo(currentTheme);
+				setFormFont(currentFont);
+				setSelectedButton(currentItem.getButton());
+				setFormPanel(currentItem.getForm());
+				revalidate();
+				repaint();
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				setEnabled(true);
+			}
+		}).start();
+	}
+
+	private void animatedSwapSelectedButton(JButton enableBtn, ArrayList<JButton> disableBtnList) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if (isLocked)
+					return;
 				isLocked = true;
 				lbWaterDropPanel.setVisible(false);
 				enableBtn.setEnabled(false);
-				if (disableBtn != null) {
-					disableBtn.setEnabled(true);
-					disableBtn.setText("");
+				for (JButton disableBtn : disableBtnList) {
+					if (disableBtn != null) {
+						disableBtn.setEnabled(true);
+						disableBtn.setText("");
+					}
 				}
 				int time = 0;
 				int pixelEachTime = 1;
@@ -702,7 +819,8 @@ public class FrameLayout extends JMovableJFrame {
 					try {
 						Thread.sleep(3);
 						enableBtn.setBounds(enableBtn.getX() - pixelEachTime, enableBtn.getY(), enableBtn.getWidth() + pixelEachTime, enableBtn.getHeight());
-						disableBtn.setBounds(disableBtn.getX() + pixelEachTime, disableBtn.getY(), disableBtn.getWidth() - pixelEachTime, disableBtn.getHeight());
+						for (JButton disableBtn : disableBtnList)
+							disableBtn.setBounds(disableBtn.getX() + pixelEachTime, disableBtn.getY(), disableBtn.getWidth() - pixelEachTime, disableBtn.getHeight());
 					} catch (Exception ignored) {}
 					time += 1;
 				}
@@ -720,17 +838,17 @@ public class FrameLayout extends JMovableJFrame {
 			@Override
 			public void run() {
 				try {
-					currentPanel.setBounds(0, 0, formLayoutPanel.getWidth(), 0);
+					currentItem.getForm().setBounds(0, 0, formLayoutPanel.getWidth(), 0);
 					menuPanel.setVisible(false);
 					Thread.sleep(1300);
 					remove(coverIntroPanel);
 					//animated form appear
 					{
-						while (currentPanel.getHeight() < menuPanel.getHeight()) {
-							currentPanel.setBounds(0, 0, formLayoutPanel.getWidth(), currentPanel.getHeight() + 3);
+						while (currentItem.getForm().getHeight() < menuPanel.getHeight()) {
+							currentItem.getForm().setBounds(0, 0, formLayoutPanel.getWidth(), currentItem.getForm().getHeight() + 3);
 							Thread.sleep(1);
 						}
-						currentPanel.setBounds(0, 0, formLayoutPanel.getWidth(), formLayoutPanel.getHeight());
+						currentItem.getForm().setBounds(0, 0, formLayoutPanel.getWidth(), formLayoutPanel.getHeight());
 					}
 					Thread.sleep(2000);
 				} catch (InterruptedException ignored) {}
@@ -760,4 +878,5 @@ public class FrameLayout extends JMovableJFrame {
 	private JPanel coverIntroPanel;
 
 	private JComboBox<String> cbThemeChooser;
+	private JComboBox<String> cbLanguageChooser;
 }

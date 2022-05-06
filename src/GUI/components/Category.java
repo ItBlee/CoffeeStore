@@ -1,6 +1,7 @@
 package GUI.components;
 
 import javax.swing.*;
+
 import static Utils.FileHandler.createImageIcon;
 
 public class Category {
@@ -15,6 +16,7 @@ public class Category {
     private ImageIcon iconHover;
     private int keyBlind;
     private JPanel form;
+    private String formClassName;
 
     public Category() {
     }
@@ -67,11 +69,41 @@ public class Category {
         this.keyBlind = keyBlind;
     }
 
+    public JPanel renewForm() {
+        if (form == null)
+            return null;
+        try {
+            form = form.getClass().getConstructor().newInstance();
+        } catch (Exception ignored) {}
+        return form;
+    }
+
+    public JPanel getRootForm() {
+        return form;
+    }
+
     public JPanel getForm() {
+        if (form == null && formClassName != null) {
+            try {
+                form = (JPanel) Class.forName(formClassName).getConstructor().newInstance();
+            } catch (Exception ignored) {}
+        }
         return form;
     }
 
     public void setForm(JPanel form) {
         this.form = form;
+        this.formClassName = this.form.getClass().getName();
+    }
+
+    public String getFormClassName() {
+        if (form != null)
+            return form.getClass().getName();
+        return formClassName;
+    }
+
+    public void setFormClassName(String formClassName) {
+        if (form == null || formClassName.equals(form.getClass().getName()))
+            this.formClassName = formClassName;
     }
 }

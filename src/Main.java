@@ -1,8 +1,7 @@
-package GUI;
-
+import GUI.FrameLogin;
+import GUI.components.Language;
 import Utils.FileHandler;
-import GUI.components.Themes;
-import com.formdev.flatlaf.FlatDarkLaf;
+import GUI.components.Theme;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +9,9 @@ import java.awt.*;
 public class Main {
     public static void main(String[] args) {
         FileHandler.importConfig();
-        FlatDarkLaf.setup();
-        Themes.setupComponentStyle();
+        Language.setup();
+        Theme.setupDefault();
+        Theme.setupComponentStyle();
 
         JFrame frame = new FrameLogin();
         EventQueue.invokeLater(new Runnable() {

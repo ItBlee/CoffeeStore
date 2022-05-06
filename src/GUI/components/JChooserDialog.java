@@ -15,7 +15,7 @@ public class JChooserDialog {
     public static String showFileChooser(String path) {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xls");
         JFileChooser fileChooser = new JFileChooser(path);
-        fileChooser.setDialogTitle("Chọn file");
+        fileChooser.setDialogTitle(Language.DIALOG_FILE_TITLE);
         fileChooser.setFileFilter(filter);
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
             return fileChooser.getSelectedFile().getAbsolutePath();
@@ -27,7 +27,8 @@ public class JChooserDialog {
      * @return Font
      */
     public static Font showFontChooser(Frame parent) {
-        FontDialog dialog = new FontDialog(parent, "Chọn kiểu chữ", true);
+        FontDialog dialog = new FontDialog(parent, Language.DIALOG_FONT_TITLE, true);
+        dialog.setLocationRelativeTo(null);
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.setVisible(true);
         if (!dialog.isCancelSelected())
