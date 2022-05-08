@@ -28,3 +28,12 @@ replay_pid*
 *.iml
 /.idea/
 /out/
+*.properties
+build/classes/.netbeans_automatic_build
+build/classes/.netbeans_update_resources
+build/classes/BUS/Business Logic Layer
+build/classes/DAO/Data Access Object - Data Access Layer
+build/classes/DTO/Data Tranfer Object
+build/classes/GUI/Presentation Layer
+*.mf
+
