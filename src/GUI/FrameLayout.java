@@ -14,14 +14,15 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.*;
 
-public class FrameLayout extends JMovableJFrame {
+public class FrameLayout extends MovableJFrame {
 	private boolean isLocked = false;
+	private boolean isDisplayIntro = true;
 	private ArrayList<Category> categories = null;
-	private FlatIJLookAndFeelInfo currentTheme;
+
+	private Category currentItem;
 	private Font currentFont;
 	private Language currentLanguage;
-	private Category currentItem;
-	private boolean isDisplayIntro = true;
+	private FlatIJLookAndFeelInfo currentTheme;
 
 	public FrameLayout() {
 		initFrame();
@@ -42,7 +43,7 @@ public class FrameLayout extends JMovableJFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		setTitle("THE CROSSING COFFEE MANAGER");
-		setIconImage(new ImageIcon("images/logo.png").getImage());
+		setIconImage(new ImageIcon("bin/images/logo.png").getImage());
 	}
 
 	private void initTheme() {
@@ -57,8 +58,8 @@ public class FrameLayout extends JMovableJFrame {
 		itemHoaDon.setCode("HD");
 		itemHoaDon.setToolTipText(Language.LAYOUT_BUTTON_HD);
 		itemHoaDon.setKeyBlind(KeyEvent.VK_1);
-		itemHoaDon.setIcon("images/components/HD.png");
-		itemHoaDon.setIconHover("images/components/HD-hover.gif");
+		itemHoaDon.setIcon("bin/images/components/HD.png");
+		itemHoaDon.setIconHover("bin/images/components/HD-hover.gif");
 		itemHoaDon.setFormClassName(FormHoaDon.class.getName());
 		categories.add(itemHoaDon);
 
@@ -66,8 +67,8 @@ public class FrameLayout extends JMovableJFrame {
 		itemSanPham.setCode("SP");
 		itemSanPham.setToolTipText(Language.LAYOUT_BUTTON_SP);
 		itemSanPham.setKeyBlind(KeyEvent.VK_2);
-		itemSanPham.setIcon("images/components/SP.png");
-		itemSanPham.setIconHover("images/components/SP-hover.gif");
+		itemSanPham.setIcon("bin/images/components/SP.png");
+		itemSanPham.setIconHover("bin/images/components/SP-hover.gif");
 		itemSanPham.setFormClassName(FormSanPham.class.getName());
 		categories.add(itemSanPham);
 
@@ -75,8 +76,8 @@ public class FrameLayout extends JMovableJFrame {
 		itemPhieuNhap.setCode("PN");
 		itemPhieuNhap.setToolTipText(Language.LAYOUT_BUTTON_PN);
 		itemPhieuNhap.setKeyBlind(KeyEvent.VK_3);
-		itemPhieuNhap.setIcon("images/components/PN.png");
-		itemPhieuNhap.setIconHover("images/components/PN-hover.gif");
+		itemPhieuNhap.setIcon("bin/images/components/PN.png");
+		itemPhieuNhap.setIconHover("bin/images/components/PN-hover.gif");
 		itemPhieuNhap.setFormClassName(FormPhieuNhap.class.getName());
 		categories.add(itemPhieuNhap);
 
@@ -84,8 +85,8 @@ public class FrameLayout extends JMovableJFrame {
 		itemNCC.setCode("NCC");
 		itemNCC.setToolTipText(Language.LAYOUT_BUTTON_NCC);
 		itemNCC.setKeyBlind(KeyEvent.VK_4);
-		itemNCC.setIcon("images/components/NCC.png");
-		itemNCC.setIconHover("images/components/NCC-hover.gif");
+		itemNCC.setIcon("bin/images/components/NCC.png");
+		itemNCC.setIconHover("bin/images/components/NCC-hover.gif");
 		itemNCC.setFormClassName(FormNCC.class.getName());
 		categories.add(itemNCC);
 
@@ -93,8 +94,8 @@ public class FrameLayout extends JMovableJFrame {
 		itemKhachHang.setCode("KH");
 		itemKhachHang.setToolTipText(Language.LAYOUT_BUTTON_KH);
 		itemKhachHang.setKeyBlind(KeyEvent.VK_5);
-		itemKhachHang.setIcon("images/components/KH.png");
-		itemKhachHang.setIconHover("images/components/KH-hover.gif");
+		itemKhachHang.setIcon("bin/images/components/KH.png");
+		itemKhachHang.setIconHover("bin/images/components/KH-hover.gif");
 		itemKhachHang.setFormClassName(FormKhachHang.class.getName());
 		categories.add(itemKhachHang);
 
@@ -102,8 +103,8 @@ public class FrameLayout extends JMovableJFrame {
 		itemKhuyenMai.setCode("KM");
 		itemKhuyenMai.setToolTipText(Language.LAYOUT_BUTTON_KM);
 		itemKhuyenMai.setKeyBlind(KeyEvent.VK_6);
-		itemKhuyenMai.setIcon("images/components/KM.png");
-		itemKhuyenMai.setIconHover("images/components/KM-hover.gif");
+		itemKhuyenMai.setIcon("bin/images/components/KM.png");
+		itemKhuyenMai.setIconHover("bin/images/components/KM-hover.gif");
 		itemKhuyenMai.setFormClassName(FormKhuyenMai.class.getName());
 		categories.add(itemKhuyenMai);
 
@@ -111,31 +112,31 @@ public class FrameLayout extends JMovableJFrame {
 		itemThongKe.setCode("TK");
 		itemThongKe.setToolTipText(Language.LAYOUT_BUTTON_TK);
 		itemThongKe.setKeyBlind(KeyEvent.VK_7);
-		itemThongKe.setIcon("images/components/TK.png");
-		itemThongKe.setIconHover("images/components/TK-hover.gif");
+		itemThongKe.setIcon("bin/images/components/TK.png");
+		itemThongKe.setIconHover("bin/images/components/TK-hover.gif");
 		itemThongKe.setFormClassName(FormThongKe.class.getName());
-
 		categories.add(itemThongKe);
 
 		Category itemExcel = new Category();
 		itemExcel.setCode("excel");
 		itemExcel.setToolTipText(Language.LAYOUT_BUTTON_EXCEL);
 		itemExcel.setKeyBlind(KeyEvent.VK_8);
-		itemExcel.setIcon("images/components/excel.png");
-		itemExcel.setIconHover("images/components/excel-hover.gif");
+		itemExcel.setIcon("bin/images/components/excel.png");
+		itemExcel.setIconHover("bin/images/components/excel-hover.gif");
 		itemExcel.setFormClassName(FormExcel.class.getName());
 		categories.add(itemExcel);
 
-		if (!General.CURRENT_USER.getChucVu().equals("admin"))
-			return;
-		Category itemTaiKhoan = new Category();
-		itemTaiKhoan.setCode("NV");
-		itemTaiKhoan.setToolTipText(Language.LAYOUT_BUTTON_NV);
-		itemTaiKhoan.setKeyBlind(KeyEvent.VK_9);
-		itemTaiKhoan.setIcon("images/components/NV.png");
-		itemTaiKhoan.setIconHover("images/components/NV-hover.gif");
-		itemTaiKhoan.setFormClassName(FormTaiKhoan.class.getName());
-		categories.add(itemTaiKhoan);
+		//if (General.CURRENT_USER.getChucVu().equals("admin"))
+		{
+			Category itemTaiKhoan = new Category();
+			itemTaiKhoan.setCode("NV");
+			itemTaiKhoan.setToolTipText(Language.LAYOUT_BUTTON_NV);
+			itemTaiKhoan.setKeyBlind(KeyEvent.VK_9);
+			itemTaiKhoan.setIcon("bin/images/components/NV.png");
+			itemTaiKhoan.setIconHover("bin/images/components/NV-hover.gif");
+			itemTaiKhoan.setFormClassName(FormTaiKhoan.class.getName());
+			categories.add(itemTaiKhoan);
+		}
 	}
 
 	private void initComponents() {
@@ -155,7 +156,7 @@ public class FrameLayout extends JMovableJFrame {
 			int introWidth = getWidth();
 			int introHeight = getHeight();
 			lbIntro = new JLabel();
-			lbIntro.setIcon(createImageIcon("images/components/layout_intro.gif", introWidth, introHeight));
+			lbIntro.setIcon(createImageIcon("bin/images/components/layout_intro.gif", introWidth, introHeight));
 			contentPane.add(lbIntro);
 			lbIntro.setBounds(0, 0, introWidth, introHeight);
 
@@ -169,7 +170,7 @@ public class FrameLayout extends JMovableJFrame {
 		menuPanel = new JPanel();
 		{
 			menuPanel.setBackground(new Color(37, 37, 37));
-			menuPanel.setBorder(new MatteBorder(0, 0, 0, 5, UIManager.getColor("Button.disabledBackground")));
+			menuPanel.setBorder(new MatteBorder(0, 0, 0, 5, new Color(60,63,65)));
 			menuPanel.setLayout(null);
 
 			//---- settingPanel ----
@@ -270,7 +271,7 @@ public class FrameLayout extends JMovableJFrame {
 
 				JButton btnCancelSetting = new JButton(Language.LAYOUT_SETTING_SAVE_CANCEL);
 				btnCancelSetting.setFocusPainted(false);
-				btnCancelSetting.setBackground(UIManager.getColor("Button.disabledBackground"));
+				btnCancelSetting.setBackground(new Color(60,63,65));
 				btnCancelSetting.setForeground(Color.white);
 				btnCancelSetting.setFont(new Font("Segoe UI Black", Font.BOLD, 14));
 				btnCancelSetting.addActionListener(new ActionListener() {
@@ -340,7 +341,7 @@ public class FrameLayout extends JMovableJFrame {
 			//---- lbAvatar ----
 			int avatarSize = 128;
 			lbAvatar = new JLabel();
-			lbAvatar.setIcon(createImageIcon("images/components/avatar-holder.png", avatarSize, avatarSize));
+			lbAvatar.setIcon(createImageIcon("bin/images/components/avatar-holder.png", avatarSize, avatarSize));
 			lbAvatar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			menuPanel.add(lbAvatar);
 			lbAvatar.setBounds(30, 0, avatarSize, avatarSize);
@@ -352,29 +353,30 @@ public class FrameLayout extends JMovableJFrame {
 
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					lbAvatar.setIcon(createImageIcon("images/components/avatar-holder-hover.gif", avatarSize, avatarSize));
+					lbAvatar.setIcon(createImageIcon("bin/images/components/avatar-holder-hover.gif", avatarSize, avatarSize));
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
 					if (!infoPanel.isVisible())
-						lbAvatar.setIcon(createImageIcon("images/components/avatar-holder.png", avatarSize, avatarSize));
+						lbAvatar.setIcon(createImageIcon("bin/images/components/avatar-holder.png", avatarSize, avatarSize));
 				}
 			});
 
 			//---- btnMenu ----
-			int currentY = Category.START_Y;
+			int currentY = 120;
+			int defaultX = 110;
 			for (Category item : categories) {
 				JButton btn = new JButton();
 				btn.setIcon(item.getIcon());
 				btn.setToolTipText(item.getToolTipText());
 				btn.setBackground(Color.white);
-				btn.setBorder(new MatteBorder(0, 5, 0, 0, UIManager.getColor("Button.disabledBackground")));
+				btn.setBorder(new MatteBorder(0, 5, 0, 0, new Color(60, 63, 65)));
 				btn.setFont(new Font("Segoe UI Black", Font.BOLD, 14));
 				btn.setFocusPainted(false);
 				btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 				menuPanel.add(btn);
-				btn.setBounds(Category.DEFAULT_X, currentY, Category.ITEM_BUTTON_SIZE, Category.ITEM_BUTTON_SIZE);
+				btn.setBounds(defaultX, currentY, Category.ITEM_BUTTON_SIZE, Category.ITEM_BUTTON_SIZE);
 				setButtonKeyBlind(btn, item.getKeyBlind());
 				btn.addActionListener(new ActionListener() {
 					@Override
@@ -399,15 +401,15 @@ public class FrameLayout extends JMovableJFrame {
 				item.setButton(btn);
 				currentY += Category.ITEM_BUTTON_SIZE;
 			}
-			categories.get(0).getButton().setBorder(new MatteBorder(5, 5, 0, 0, UIManager.getColor("Button.disabledBackground")));
-			categories.get(categories.size()-1).getButton().setBorder(new MatteBorder(0, 5, 5, 0, UIManager.getColor("Button.disabledBackground")));
+			categories.get(0).getButton().setBorder(new MatteBorder(5, 5, 0, 0, new Color(60, 63, 65)));
+			categories.get(categories.size()-1).getButton().setBorder(new MatteBorder(0, 5, 5, 0, new Color(60, 63, 65)));
 
 			int miniBtnSize = 48;
 			//---- btnContact ----
 			int btnContactSize = 40;
 			btnContact = new JButton();
 			btnContact.setToolTipText(Language.LAYOUT_LABEL_CONTACT_TOOL_TIP_TEXT);
-			btnContact.setIcon(createImageIcon("images/components/cup.png" , btnContactSize, btnContactSize));
+			btnContact.setIcon(createImageIcon("bin/images/components/cup.png" , btnContactSize, btnContactSize));
 			btnContact.setBackground(Color.white);
 			btnContact.setContentAreaFilled(false);
 			btnContact.setBorderPainted(false);
@@ -423,12 +425,12 @@ public class FrameLayout extends JMovableJFrame {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					btnContact.setContentAreaFilled(true);
-					btnContact.setIcon(createImageIcon("images/components/contact-hover.gif" , btnContactSize-4, btnContactSize-4));
+					btnContact.setIcon(createImageIcon("bin/images/components/contact-hover.gif" , btnContactSize-4, btnContactSize-4));
 				}
 				@Override
 				public void mouseExited(MouseEvent e) {
 					btnContact.setContentAreaFilled(false);
-					btnContact.setIcon(createImageIcon("images/components/cup.png" , btnContactSize, btnContactSize));
+					btnContact.setIcon(createImageIcon("bin/images/components/cup.png" , btnContactSize, btnContactSize));
 				}
 			});
 
@@ -436,7 +438,7 @@ public class FrameLayout extends JMovableJFrame {
 			int btnLogoutSize = 16;
 			btnLogout = new JButton();
 			btnLogout.setToolTipText(Language.LAYOUT_LABEL_LOGOUT_TOOL_TIP_TEXT);
-			btnLogout.setIcon(createImageIcon("images/components/logout.png" , btnLogoutSize, btnLogoutSize));
+			btnLogout.setIcon(createImageIcon("bin/images/components/logout.png" , btnLogoutSize, btnLogoutSize));
 			btnLogout.setBackground(Color.white);
 			btnLogout.setContentAreaFilled(false);
 			btnLogout.setBorderPainted(false);
@@ -453,12 +455,12 @@ public class FrameLayout extends JMovableJFrame {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					btnLogout.setContentAreaFilled(true);
-					btnLogout.setIcon(createImageIcon("images/components/logout-hover.png" , btnLogoutSize, btnLogoutSize));
+					btnLogout.setIcon(createImageIcon("bin/images/components/logout-hover.png" , btnLogoutSize, btnLogoutSize));
 				}
 				@Override
 				public void mouseExited(MouseEvent e) {
 					btnLogout.setContentAreaFilled(false);
-					btnLogout.setIcon(createImageIcon("images/components/logout.png" , btnLogoutSize, btnLogoutSize));
+					btnLogout.setIcon(createImageIcon("bin/images/components/logout.png" , btnLogoutSize, btnLogoutSize));
 				}
 			});
 
@@ -466,7 +468,7 @@ public class FrameLayout extends JMovableJFrame {
 			int btnSettingSize = 16;
 			btnSetting = new JButton();
 			btnSetting.setToolTipText(Language.LAYOUT_LABEL_SETTING_TOOL_TIP_TEXT);
-			btnSetting.setIcon(createImageIcon("images/components/setting.png" , btnSettingSize, btnSettingSize));
+			btnSetting.setIcon(createImageIcon("bin/images/components/setting.png" , btnSettingSize, btnSettingSize));
 			btnSetting.setBackground(Color.white);
 			btnSetting.setContentAreaFilled(false);
 			btnSetting.setBorderPainted(false);
@@ -483,13 +485,13 @@ public class FrameLayout extends JMovableJFrame {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					btnSetting.setContentAreaFilled(true);
-					btnSetting.setIcon(createImageIcon("images/components/setting-hover.gif" , btnSettingSize*2, btnSettingSize*2));
+					btnSetting.setIcon(createImageIcon("bin/images/components/setting-hover.gif" , btnSettingSize*2, btnSettingSize*2));
 				}
 				@Override
 				public void mouseExited(MouseEvent e) {
 					if (!settingPanel.isVisible()) {
 						btnSetting.setContentAreaFilled(false);
-						btnSetting.setIcon(createImageIcon("images/components/setting.png" , btnSettingSize, btnSettingSize));
+						btnSetting.setIcon(createImageIcon("bin/images/components/setting.png" , btnSettingSize, btnSettingSize));
 					}
 				}
 			});
@@ -504,7 +506,7 @@ public class FrameLayout extends JMovableJFrame {
 			int lbWaterWeight = 105;
 			int lbWaterHeight = 579;
 			lbWaterDropPanel = new JLabel();
-			lbWaterDropPanel.setIcon(createImageIcon("images/components/waterDropLoop.gif", lbWaterWeight, lbWaterHeight));
+			lbWaterDropPanel.setIcon(createImageIcon("bin/images/components/waterDropLoop.gif", lbWaterWeight, lbWaterHeight));
 			lbWaterDropPanel.setFocusable(false);
 			lbWaterDropPanel.setVisible(false);
 			menuPanel.add(lbWaterDropPanel);
@@ -514,7 +516,7 @@ public class FrameLayout extends JMovableJFrame {
 		menuPanel.setBounds(0, formLayoutPanel.getY()-5, 185, formLayoutPanel.getHeight()+5);
 
 		JPanel topBorderFormLayoutPanel = new JPanel();
-		topBorderFormLayoutPanel.setBackground(UIManager.getColor("Button.disabledBackground"));
+		topBorderFormLayoutPanel.setBackground(new Color(60, 63, 65));
 		contentPane.add(topBorderFormLayoutPanel);
 		topBorderFormLayoutPanel.setBounds(185, formLayoutPanel.getY()-5, formLayoutPanel.getWidth(), 5);
 
@@ -527,7 +529,7 @@ public class FrameLayout extends JMovableJFrame {
 			//---- btnExit ----
 			int btnExitSize = 24;
 			JLabel btnExit = new JLabel();
-			btnExit.setIcon(createImageIcon("images/components/exit-w.png", btnExitSize, btnExitSize));
+			btnExit.setIcon(createImageIcon("bin/images/components/exit-w.png", btnExitSize, btnExitSize));
 			btnExit.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			backgroundPanel.add(btnExit);
 			btnExit.setBounds(1160, 15, btnExitSize, btnExitSize);
@@ -541,10 +543,10 @@ public class FrameLayout extends JMovableJFrame {
 			//---- btnMinimize ----
 			int btnMinimizeSize = 24;
 			JLabel btnMinimize = new JLabel();
-			btnMinimize.setIcon(createImageIcon("images/components/minimize-w.png", btnMinimizeSize, btnMinimizeSize));
+			btnMinimize.setIcon(createImageIcon("bin/images/components/minimize-w.png", btnMinimizeSize, btnMinimizeSize));
 			btnMinimize.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			backgroundPanel.add(btnMinimize);
-			btnMinimize.setBounds(1125, 10, btnMinimizeSize + 8, btnMinimizeSize + 8);
+			btnMinimize.setBounds(1125, 10, btnMinimizeSize+8, btnMinimizeSize+8);
 			btnMinimize.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -584,7 +586,7 @@ public class FrameLayout extends JMovableJFrame {
 		int confirm = JOptionPane.showConfirmDialog(getContentPane(), Language.LAYOUT_MESSAGE_LOGOUT, Language.LAYOUT_LABEL_LOGOUT_TOOL_TIP_TEXT, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (confirm == JOptionPane.YES_OPTION) {
 			General.CURRENT_USER = null;
-			FileHandler.importConfig();
+			General.importMapper(FileHandler.importConfig());
 			Language.setup();
 			Theme.setupDefault();
 			JFrame frame = new FrameLogin();
@@ -608,15 +610,14 @@ public class FrameLayout extends JMovableJFrame {
 			infoPanel.setVisible(false);
 		int iconSize;
 		if (!settingPanel.isVisible()) {
-			btnSetting.setContentAreaFilled(true);
 			iconSize = 32;
-			btnSetting.setIcon(createImageIcon("images/components/setting-hover.gif", iconSize, iconSize));
+			btnSetting.setIcon(createImageIcon("bin/images/components/setting-hover.gif", iconSize, iconSize));
 		}
 		else {
-			btnSetting.setContentAreaFilled(false);
 			iconSize = 16;
-			btnSetting.setIcon(createImageIcon("images/components/setting.png", iconSize, iconSize));
+			btnSetting.setIcon(createImageIcon("bin/images/components/setting.png", iconSize, iconSize));
 		}
+		btnSetting.setContentAreaFilled(!settingPanel.isVisible());
 		settingPanel.setVisible(!settingPanel.isVisible());
 		setVisibleMenuButton(!settingPanel.isVisible());
 	}
@@ -627,7 +628,7 @@ public class FrameLayout extends JMovableJFrame {
 			Language.setSystemLanguage(currentLanguage);
 			Theme.setSystemThemeInfo(currentTheme);
 			Theme.setSystemThemeFont(currentFont);
-			FileHandler.exportConfig();
+			FileHandler.exportConfig(General.exportMapper());
 			JOptionPane.showMessageDialog(getContentPane(), Language.LAYOUT_SETTING_FINISH_TITLE, Language.LAYOUT_MESSAGE_SETTING_FINISH, JOptionPane.INFORMATION_MESSAGE);
 		}
 		btnSetting.doClick();
@@ -667,7 +668,7 @@ public class FrameLayout extends JMovableJFrame {
 	}
 
 	private void onClickBtnFontChooser() {
-		Font newFont = JChooserDialog.showFontChooser(FrameLayout.this);
+		Font newFont = ChooserJDialog.showFontChooser(FrameLayout.this);
 		if (newFont != null) {
 			currentFont = newFont;
 			setFormFont(currentFont);
@@ -717,14 +718,14 @@ public class FrameLayout extends JMovableJFrame {
 		});
 	}
 
-	private void setSelectedButton(JButton btn) {
+	private void setSelectedButton(JButton newBtn) {
 		ArrayList<JButton> oldBtnList = new ArrayList<JButton>();
 		for (Component c : menuPanel.getComponents())
-			if (c instanceof JButton && c != btn && (!c.isEnabled() || c.getWidth() > Category.ITEM_BUTTON_SIZE)) {
+			if (c instanceof JButton && c != newBtn && (!c.isEnabled() || c.getWidth() > Category.ITEM_BUTTON_SIZE)) {
 				oldBtnList.add((JButton) c);
 				break;
 			}
-		animatedSwapSelectedButton(btn, oldBtnList);
+		animatedSwapSelectedButton(newBtn, oldBtnList);
 	}
 
 	private void setVisibleMenuButton(boolean isVisible) {
@@ -736,9 +737,10 @@ public class FrameLayout extends JMovableJFrame {
 
 	private void setFormPanel(JPanel newPanel) {
 		formLayoutPanel.removeAll();
-		for (Category item : categories)
+		for (Category item : categories) {
 			if (item.getFormClassName().equals(newPanel.getClass().getName()))
 				currentItem = item;
+		}
 		currentItem.getForm().setOpaque(true);
 		currentItem.getForm().setBounds(0, 0, formLayoutPanel.getWidth(), formLayoutPanel.getHeight());
 		formLayoutPanel.add(currentItem.getForm());
@@ -748,9 +750,10 @@ public class FrameLayout extends JMovableJFrame {
 
 	private void changeFont(Component component, Font font) {
 		component.setFont(font);
-		if (component instanceof Container)
+		if (component instanceof Container) {
 			for (Component child : ((Container) component).getComponents())
 				changeFont(child, font);
+		}
 	}
 
 	private void setFormFont(Font font) {
@@ -760,9 +763,10 @@ public class FrameLayout extends JMovableJFrame {
 	}
 
 	private void repaintAllForm() {
-		for (Category item : categories)
+		for (Category item : categories) {
 			if (item.getRootForm() != null)
 				item.renewForm();
+		}
 		setFormPanel(currentItem.getForm());
 		setFormFont(currentFont);
 	}
@@ -775,11 +779,12 @@ public class FrameLayout extends JMovableJFrame {
 			public void run() {
 				isDisplayIntro = false;
 				initMenuButton();
-				for (Category item : categories)
+				for (Category item : categories) {
 					if (item.getCode().equals(currentItem.getCode())) {
 						currentItem = item;
 						break;
 					}
+				}
 				getContentPane().removeAll();
 				revalidate();
 				repaint();

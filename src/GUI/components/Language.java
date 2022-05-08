@@ -24,9 +24,8 @@ public class Language {
     }
 
     public static void importLanguage(Language language) {
-        Properties prop = FileHandler.getLanguageProperties(language.getDisplayName());
-        if (prop != null)
-            importMapper(prop);
+        Properties prop = FileHandler.importLanguage(language.getDisplayName());
+        importMapper(prop);
     }
 
     public static Language getSystemLanguage() {

@@ -31,7 +31,7 @@ public class FrameLogin extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		setTitle("THE CROSSING COFFEE MANAGER");
-		setIconImage(new ImageIcon("images/logo.png").getImage());
+		setIconImage(new ImageIcon("bin/images/logo.png").getImage());
 	}
 
 	private void initComponents() {
@@ -65,18 +65,10 @@ public class FrameLogin extends JFrame {
 			loginPanel.add(lbPassword);
 			lbPassword.setBounds(695, 325, 106, 19);
 
-			//---- lbLogo ----
-			int logoWidth = 160;
-			int logoHeight = 144;
-			JLabel lbLogo = new JLabel();
-			lbLogo.setIcon(createImageIcon("images/logo-w.png", logoWidth, logoHeight));
-			loginPanel.add(lbLogo);
-			lbLogo.setBounds(775, 65, logoWidth, logoHeight);
-
 			//---- lbEye ----
 			int lbEyeSize = 16;
 			lbEye = new JLabel();
-			lbEye.setIcon(createImageIcon("images/components/eye-w.png", lbEyeSize, lbEyeSize));
+			lbEye.setIcon(createImageIcon("bin/images/components/eye-w.png", lbEyeSize, lbEyeSize));
 			lbEye.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			loginPanel.add(lbEye);
 			lbEye.setBounds(1000, 350, lbEyeSize, lbEyeSize);
@@ -99,21 +91,29 @@ public class FrameLogin extends JFrame {
 			lbTitleYear.setForeground(Color.white);
 			lbTitleYear.setFont(new Font("Segoe UI Black", Font.BOLD, 20));
 			loginPanel.add(lbTitleYear);
-			lbTitleYear.setBounds(635, 140, 97, 36);
+			lbTitleYear.setBounds(635, 140, 150, 36);
 
 			//---- lbTitleFirst ----
 			JLabel lbTitleFirst = new JLabel("THE CROSSING");
 			lbTitleFirst.setForeground(Color.white);
 			lbTitleFirst.setFont(new Font("Papyrus", Font.PLAIN, 17));
 			loginPanel.add(lbTitleFirst);
-			lbTitleFirst.setBounds(454, 106, 218, 36);
+			lbTitleFirst.setBounds(454, 106, 318, 36);
 
 			//---- lbTitleSecond ----
 			JLabel lbTitleSecond = new JLabel("COFFEE");
 			lbTitleSecond.setForeground(Color.white);
 			lbTitleSecond.setFont(new Font("Segoe UI Black", Font.BOLD, 26));
 			loginPanel.add(lbTitleSecond);
-			lbTitleSecond.setBounds(new Rectangle(new Point(633, 105), lbTitleSecond.getPreferredSize()));
+			lbTitleSecond.setBounds(633, 105, 300, 36);
+
+			//---- lbLogo ----
+			int logoWidth = 160;
+			int logoHeight = 144;
+			JLabel lbLogo = new JLabel();
+			lbLogo.setIcon(createImageIcon("bin/images/logo-w.png", logoWidth, logoHeight));
+			loginPanel.add(lbLogo);
+			lbLogo.setBounds(775, 65, logoWidth, logoHeight);
 
 			//---- btnLogin ----
 			btnLogin = new JButton(Language.LOGIN_BUTTON_TEXT);
@@ -231,7 +231,7 @@ public class FrameLogin extends JFrame {
 			//---- btnExit ----
 			int btnExitSize = 24;
 			JLabel btnExit = new JLabel();
-			btnExit.setIcon(createImageIcon("images/components/exit-w.png", btnExitSize, btnExitSize));
+			btnExit.setIcon(createImageIcon("bin/images/components/exit-w.png", btnExitSize, btnExitSize));
 			btnExit.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			loginPanel.add(btnExit);
 			btnExit.setBounds(1045, 10, btnExitSize, btnExitSize);
@@ -245,7 +245,7 @@ public class FrameLogin extends JFrame {
 			//---- btnMinimize ----
 			int btnMinimizeSize = 24;
 			JLabel btnMinimize = new JLabel();
-			btnMinimize.setIcon(createImageIcon("images/components/minimize-w.png", btnMinimizeSize, btnMinimizeSize));
+			btnMinimize.setIcon(createImageIcon("bin/images/components/minimize-w.png", btnMinimizeSize, btnMinimizeSize));
 			btnMinimize.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			loginPanel.add(btnMinimize);
 			btnMinimize.setBounds(1010, 5, btnMinimizeSize + 8, btnMinimizeSize + 8);
@@ -270,7 +270,7 @@ public class FrameLogin extends JFrame {
 		int bgWidth = 1080;
 		int bgHeight = 607;
 		JLabel lbBackground = new JLabel();
-		lbBackground.setIcon(createImageIcon("images/login/background2.gif", bgWidth, bgHeight));
+		lbBackground.setIcon(createImageIcon("bin/images/login/background2.gif", bgWidth, bgHeight));
 		contentPane.add(lbBackground);
 		lbBackground.setBounds(-70, -30, bgWidth, bgHeight);
 	}
@@ -286,10 +286,10 @@ public class FrameLogin extends JFrame {
 
 	private void onClickLbEye() {
 		if (isHidePassword) {
-			lbEye.setIcon(createImageIcon("images/components/eye-w-close.png", lbEye.getWidth(), lbEye.getHeight()));
+			lbEye.setIcon(createImageIcon("bin/images/components/eye-w-close.png", lbEye.getWidth(), lbEye.getHeight()));
 			txtPassword.setEchoChar((char) 0);
 		} else {
-			lbEye.setIcon(createImageIcon("images/components/eye-w.png", lbEye.getWidth(), lbEye.getHeight()));
+			lbEye.setIcon(createImageIcon("bin/images/components/eye-w.png", lbEye.getWidth(), lbEye.getHeight()));
 			txtPassword.setEchoChar('*');
 		}
 		isHidePassword = !isHidePassword;
@@ -334,12 +334,12 @@ public class FrameLogin extends JFrame {
 				General.USER_USERNAME = null;
 				General.USER_PASSWORD = null;
 			}
-			FileHandler.exportConfig();
+			FileHandler.exportConfig(General.exportMapper());
 		} else if (General.USER_IS_REMEMBER
 				&& (!General.USER_USERNAME.equals(username) || !General.USER_PASSWORD.equals(password))) {
 			General.USER_USERNAME = username;
 			General.USER_PASSWORD = password;
-			FileHandler.exportConfig();
+			FileHandler.exportConfig(General.exportMapper());
 		}
 		animatedLogin();
 	}
@@ -391,7 +391,7 @@ public class FrameLogin extends JFrame {
 	}
 
 	private void animatedLogin() {
-		lbTransition.setIcon(createImageIcon("images/login/transition.gif", getWidth(), getHeight()));
+		lbTransition.setIcon(createImageIcon("bin/images/login/transition.gif", getWidth(), getHeight()));
 		lbTransition.setBounds(0, 0, getWidth(), getHeight());
 		new Thread(new Runnable() {
 			@Override

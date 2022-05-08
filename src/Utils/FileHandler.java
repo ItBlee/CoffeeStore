@@ -1,15 +1,11 @@
 package Utils;
 
 import DAO.Mapper.Interfaces.IExcelRowMapper;
-import GUI.components.Language;
-import GUI.components.Theme;
-import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Font;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -19,85 +15,26 @@ import java.util.Properties;
 import static Utils.SystemConstant.*;
 
 public class FileHandler {
-    public static void exportConfig() {
+    public static void exportConfig(Properties prop) {
         try {
-            OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(CONFIG_FILE_URL), StandardCharsets.UTF_8);
-            Properties prop = new Properties();
-
-            if (General.USER_IS_REMEMBER) {
-                prop.setProperty(CONFIG_PROP_USER_USERNAME, General.USER_USERNAME);
-                prop.setProperty(CONFIG_PROP_USER_PASSWORD, General.USER_PASSWORD);
-                prop.setProperty(CONFIG_PROP_USER_REMEMBER, String.valueOf(General.USER_IS_REMEMBER));
-            }
-            prop.setProperty(CONFIG_PROP_DB_HOST, General.DB_HOST);
-            prop.setProperty(CONFIG_PROP_DB_NAME, General.DB_NAME);
-            prop.setProperty(CONFIG_PROP_DB_USERNAME, General.DB_USERNAME);
-            if (!General.DB_PASSWORD.isBlank())
-                prop.setProperty(CONFIG_PROP_DB_PASSWORD, General.DB_PASSWORD);
-            prop.setProperty(CONFIG_PROP_THEME_NAME, Theme.getSystemThemeInfo().getName());
-            if (Theme.getSystemThemeFont() != null) {
-                prop.setProperty(CONFIG_PROP_THEME_FONT_NAME, Theme.getSystemThemeFont().getName());
-                prop.setProperty(CONFIG_PROP_THEME_FONT_STYLE, String.valueOf(Theme.getSystemThemeFont().getStyle()));
-                prop.setProperty(CONFIG_PROP_THEME_FONT_SIZE, String.valueOf(Theme.getSystemThemeFont().getSize()));
-            }
-            if (Language.getSystemLanguage() != null)
-                prop.setProperty(CONFIG_PROP_LANGUAGE_CODE, Language.getSystemLanguage().getDisplayName());
-
+            OutputStreamWriter output = new OutputStreamWriter(
+                    new FileOutputStream(CONFIG_FILE_URL),
+                    StandardCharsets.UTF_8);
             prop.store(output, "Coffee Store App Config File");
             output.close();
         } catch (Exception ignored) {}
     }
 
-    public static void importConfig() {
+    public static Properties importConfig() {
         Properties prop = new Properties();
         try {
-            InputStreamReader input = new InputStreamReader(new FileInputStream(CONFIG_FILE_URL), StandardCharsets.UTF_8);
+            InputStreamReader input = new InputStreamReader(
+                    new FileInputStream(CONFIG_FILE_URL),
+                    StandardCharsets.UTF_8);
             prop.load(input);
             input.close();
-        } catch (Exception e) {
-            return;
-        }
-
-        General.USER_USERNAME = prop.getProperty(CONFIG_PROP_USER_USERNAME);
-        General.USER_PASSWORD = prop.getProperty(CONFIG_PROP_USER_PASSWORD);
-        General.USER_IS_REMEMBER = Boolean.parseBoolean(prop.getProperty(CONFIG_PROP_USER_REMEMBER));
-
-        String dbHost = prop.getProperty(CONFIG_PROP_DB_HOST);
-        String dbName = prop.getProperty(CONFIG_PROP_DB_NAME);
-        String dbUsername = prop.getProperty(CONFIG_PROP_DB_USERNAME);
-        String dbPassword = prop.getProperty(CONFIG_PROP_DB_PASSWORD);
-        if (dbHost != null && !dbHost.isBlank())
-            General.DB_HOST = dbHost;
-        if (dbName != null && !dbName.isBlank())
-            General.DB_NAME = dbName;
-        if (dbUsername != null && !dbUsername.isBlank())
-            General.DB_USERNAME = dbUsername;
-        if (dbPassword != null && !dbPassword.isBlank())
-            General.DB_PASSWORD = dbPassword;
-
-        String themeName = prop.getProperty(CONFIG_PROP_THEME_NAME);
-        FlatAllIJThemes.FlatIJLookAndFeelInfo theme = Theme.getThemeInfoByName(themeName);
-        if (theme != null)
-            Theme.setSystemThemeInfo(theme);
-
-        String fontName = prop.getProperty(CONFIG_PROP_THEME_FONT_NAME);
-        if (fontName != null && !fontName.isBlank()) {
-            int fontStyle, fontSize;
-            try {
-                fontStyle = Integer.parseInt(prop.getProperty(CONFIG_PROP_THEME_FONT_STYLE));
-            } catch (NumberFormatException e) {
-                fontStyle = Font.PLAIN;
-            }
-            try {
-                fontSize = Integer.parseInt(prop.getProperty(CONFIG_PROP_THEME_FONT_SIZE));
-            } catch (NumberFormatException e) {
-                fontSize = 14;
-            }
-            Theme.setSystemThemeFont(new java.awt.Font(fontName, fontStyle, fontSize));
-        }
-        String languageCode = prop.getProperty(CONFIG_PROP_LANGUAGE_CODE);
-        if (languageCode != null)
-            Language.setSystemLanguage(Language.getLanguageByDisplayName(languageCode));
+        } catch (Exception ignored) {}
+        return prop;
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -153,16 +90,16 @@ public class FileHandler {
         return list;
     }
 
-    public static Properties getLanguageProperties(String language) {
+    public static Properties importLanguage(String language) {
         Properties prop = new Properties();
         try {
-            InputStreamReader input = new InputStreamReader(new FileInputStream("languages/" + language + ".language"), StandardCharsets.UTF_8);
+            InputStreamReader input = new InputStreamReader(
+                    new FileInputStream("bin/languages/" + language + ".language"),
+                    StandardCharsets.UTF_8);
             prop.load(input);
             input.close();
-            return prop;
-        } catch (Exception e) {
-            return null;
-        }
+        } catch (Exception ignored) {}
+        return prop;
     }
 
     public static ImageIcon createImageIcon(String path, int width, int height) {
@@ -175,5 +112,9 @@ public class FileHandler {
             icon = new ImageIcon(scale);
         }
         return icon;
+    }
+
+    public static File getFile(String path) {
+        return new File(path);
     }
 }

@@ -1,11 +1,13 @@
 package GUI.components;
 
+import Utils.FileHandler;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes.FlatIJLookAndFeelInfo;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 import static Utils.SystemConstant.*;
@@ -15,12 +17,15 @@ public class Theme {
     private static Font systemThemeFont;
 
     public static void setupDefault() {
+        if (systemThemeFont == null)
+            systemThemeInfo = new FlatIJLookAndFeelInfo(DEFAULT_THEME_NAME, DEFAULT_THEME_CLASS, DEFAULT_THEME_DARK_MODE);
+        if (systemThemeFont == null)
+            systemThemeFont = UIManager.getDefaults().getFont("TabbedPane.font");
         FlatDarkLaf.setup();
+        registerFont();
     }
 
     public static FlatIJLookAndFeelInfo getSystemThemeInfo() {
-        if (systemThemeFont == null)
-            systemThemeInfo = new FlatIJLookAndFeelInfo(DEFAULT_THEME_NAME, DEFAULT_THEME_CLASS, DEFAULT_THEME_DARK_MODE);
         return systemThemeInfo;
     }
 
@@ -30,8 +35,6 @@ public class Theme {
     }
 
     public static Font getSystemThemeFont() {
-        if (systemThemeFont == null)
-            systemThemeFont = UIManager.getDefaults().getFont("TabbedPane.font");
         return systemThemeFont;
     }
 
@@ -82,5 +85,15 @@ public class Theme {
         UIManager.put( "ScrollBar.track", new Color( 0xe0e0e0 ) );
         UIManager.put( "TabbedPane.tabWidthMode", "compact" );
         UIManager.put( "TabbedPane.showTabSeparators", true );
+    }
+
+    public static void registerFont() {
+        try {
+            Font font = Font.createFont(Font.TRUETYPE_FONT, FileHandler.getFile("bin/font/seguibl.ttf"));
+            GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            environment.registerFont(font);
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+        }
     }
 }

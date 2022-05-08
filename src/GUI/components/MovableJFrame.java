@@ -5,8 +5,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class JMovableJFrame extends JFrame {
-    public JMovableJFrame() {
+public class MovableJFrame extends JFrame {
+    public MovableJFrame() {
         FrameDragListener frameDragListener = new FrameDragListener(this);
         this.addMouseListener(frameDragListener);
         this.addMouseMotionListener(frameDragListener);

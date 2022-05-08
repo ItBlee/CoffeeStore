@@ -7,8 +7,6 @@ import static Utils.FileHandler.createImageIcon;
 public class Category {
     public static final int ICON_SIZE = 36;
     public static final int ITEM_BUTTON_SIZE = 70;
-    public static final int DEFAULT_X = 110;
-    public static final int START_Y = 120;
     private String code;
     private JButton button;
     private String toolTipText;

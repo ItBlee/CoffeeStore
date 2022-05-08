@@ -6,7 +6,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 
-public class JChooserDialog {
+public class ChooserJDialog {
     /**
      * Mở Dialog để người dùng chọn file muốn thao tác
      * @param path đường dẫn mặc định khi mở.
