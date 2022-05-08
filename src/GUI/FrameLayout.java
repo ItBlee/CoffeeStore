@@ -803,20 +803,20 @@ public class FrameLayout extends MovableJFrame {
 	}
 
 	private void animatedSwapSelectedButton(JButton enableBtn, ArrayList<JButton> disableBtnList) {
+		if (isLocked)
+			return;
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				if (isLocked)
-					return;
 				isLocked = true;
 				lbWaterDropPanel.setVisible(false);
-				enableBtn.setEnabled(false);
 				for (JButton disableBtn : disableBtnList) {
 					if (disableBtn != null) {
 						disableBtn.setEnabled(true);
 						disableBtn.setText("");
 					}
 				}
+				enableBtn.setEnabled(false);
 				int time = 0;
 				int pixelEachTime = 1;
 				int loopTimes = enableBtn.getX() / pixelEachTime;

@@ -17,7 +17,7 @@ public class Main {
         Theme.setupDefault();
         Theme.setupComponentStyle();
 
-        JFrame frame = new FrameLayout();
+        JFrame frame = new FrameLogin();
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
