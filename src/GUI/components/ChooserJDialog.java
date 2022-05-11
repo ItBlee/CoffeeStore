@@ -1,5 +1,6 @@
 package GUI.components;
 
+import GUI.common.Language;
 import org.drjekyll.fontchooser.FontDialog;
 
 import javax.swing.*;

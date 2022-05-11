@@ -1,8 +1,8 @@
 package Utils;
 
 import DTO.TaiKhoanDTO;
-import GUI.components.Language;
-import GUI.components.Theme;
+import GUI.common.Language;
+import GUI.common.Theme;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 
 import java.awt.*;

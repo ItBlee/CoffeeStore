@@ -1,6 +1,6 @@
 import GUI.FrameLogin;
-import GUI.components.Language;
-import GUI.components.Theme;
+import GUI.common.Language;
+import GUI.common.Theme;
 import Utils.FileHandler;
 import Utils.General;
 

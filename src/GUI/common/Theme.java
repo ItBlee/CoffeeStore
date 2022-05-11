@@ -1,4 +1,4 @@
-package GUI.components;
+package GUI.common;
 
 import Utils.FileHandler;
 import com.formdev.flatlaf.FlatDarkLaf;

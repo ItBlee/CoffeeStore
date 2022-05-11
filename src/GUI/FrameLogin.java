@@ -2,7 +2,7 @@ package GUI;
 
 import BUS.Interfaces.ITaiKhoanBUS;
 import BUS.TaiKhoanBUS;
-import GUI.components.Language;
+import GUI.common.Language;
 import Utils.FileHandler;
 import Utils.General;
 import Utils.Validator;

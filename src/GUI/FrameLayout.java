@@ -1,6 +1,8 @@
 package GUI;
 
 import GUI.Form.*;
+import GUI.common.Language;
+import GUI.common.Theme;
 import GUI.components.*;
 import Utils.FileHandler;
 import Utils.General;
