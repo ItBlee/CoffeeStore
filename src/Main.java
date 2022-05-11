@@ -1,4 +1,3 @@
-import GUI.FrameLayout;
 import GUI.FrameLogin;
 import GUI.components.Language;
 import GUI.components.Theme;
@@ -11,7 +10,6 @@ import java.util.Properties;
 
 public class Main {
     public static void main(String[] args) {
-        String helloFromTVU;
         Properties config = FileHandler.importConfig();
         General.importMapper(config);
         Language.setup();

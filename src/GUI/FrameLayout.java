@@ -381,10 +381,10 @@ public class FrameLayout extends MovableJFrame {
 				btn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						if (isLocked)
-							return;
-						setSelectedButton(btn);
-						setFormPanel(item.getForm());
+						if (!FrameLayout.this.isLocked) {
+							setSelectedButton(btn);
+							setFormPanel(item.getForm());
+						}
 					}
 				});
 				btn.addMouseListener(new MouseAdapter() {
@@ -658,6 +658,7 @@ public class FrameLayout extends MovableJFrame {
 		if (repaintLevel >= LANGUAGE_FLAG)
 			repaintFrame();
 		else repaintAllForm();
+		btnSetting.doClick();
 	}
 
 	private void onClickLBAvatar() {
@@ -803,8 +804,6 @@ public class FrameLayout extends MovableJFrame {
 	}
 
 	private void animatedSwapSelectedButton(JButton enableBtn, ArrayList<JButton> disableBtnList) {
-		if (isLocked)
-			return;
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
