@@ -72,6 +72,15 @@ public class TaiKhoanDTO {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TaiKhoanDTO)) return false;
+        TaiKhoanDTO dto = (TaiKhoanDTO) o;
+        return getMaTK().equals(dto.getMaTK())
+                || getTenDangNhap().equals(dto.getTenDangNhap());
+    }
+
+    @Override
     public String toString() {
         return "TaiKhoanDTO{" +
                 "MaTK=" + MaTK +

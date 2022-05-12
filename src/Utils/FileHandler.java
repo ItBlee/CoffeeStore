@@ -3,6 +3,7 @@ package Utils;
 import DAO.Mapper.Interfaces.IExcelRowMapper;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Font;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,11 +44,27 @@ public class FileHandler {
         Sheet sheet = workbook.createSheet("Sheet 1");
 
         int rowIndex = 0;
-        mapper.mapExcelHeader(sheet, rowIndex);
+        // Create font
+        Font font = sheet.getWorkbook().createFont();
+        font.setFontName("Times New Roman");
+        font.setBold(true);
+        font.setFontHeightInPoints((short) 14);
+        font.setColor(IndexedColors.WHITE.getIndex());
+
+        // Create CellStyle
+        CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        cellStyle.setFont(font);
+        cellStyle.setFillForegroundColor(IndexedColors.BLUE.getIndex());
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+
+        // Create row
+        Row row = sheet.createRow(rowIndex);
+
+        mapper.mapExcelHeader(cellStyle, row);
         rowIndex++;
-        for (E ele : list) {
-            Row row = sheet.createRow(rowIndex);
-            mapper.mapExcelBody(ele, row);
+        for (E dto : list) {
+            mapper.mapExcelBody(dto, row);
             rowIndex++;
         }
         int numberOfColumn = sheet.getRow(0).getPhysicalNumberOfCells();

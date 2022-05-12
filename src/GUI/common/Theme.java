@@ -22,7 +22,7 @@ public class Theme {
         if (systemThemeFont == null)
             systemThemeFont = UIManager.getDefaults().getFont("TabbedPane.font");
         FlatDarkLaf.setup();
-        registerFont();
+        registerFont("bin/font/seguibl.ttf");
     }
 
     public static FlatIJLookAndFeelInfo getSystemThemeInfo() {
@@ -87,9 +87,9 @@ public class Theme {
         UIManager.put( "TabbedPane.showTabSeparators", true );
     }
 
-    public static void registerFont() {
+    public static void registerFont(String fontFilePath) {
         try {
-            Font font = Font.createFont(Font.TRUETYPE_FONT, FileHandler.getFile("bin/font/seguibl.ttf"));
+            Font font = Font.createFont(Font.TRUETYPE_FONT, FileHandler.getFile(fontFilePath));
             GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
             environment.registerFont(font);
         } catch (FontFormatException | IOException e) {

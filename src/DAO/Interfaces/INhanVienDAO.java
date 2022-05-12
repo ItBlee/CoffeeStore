@@ -1,4 +1,10 @@
 package DAO.Interfaces;
 
-public interface INhanVienDAO {
+import DTO.NhanVienDTO;
+
+import java.util.ArrayList;
+
+public interface INhanVienDAO extends ICrudDAO<NhanVienDTO> {
+    ArrayList<NhanVienDTO> findAll();
+    NhanVienDTO findByID(int MaNV);
 }

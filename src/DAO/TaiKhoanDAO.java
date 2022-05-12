@@ -1,14 +1,13 @@
 package DAO;
 
-import DAO.Abstracts.AbstractDAO;
-import DAO.Interfaces.IDAO;
+import DAO.Abstract.AbstractDAO;
 import DAO.Interfaces.ITaiKhoanDAO;
 import DTO.TaiKhoanDTO;
 import DAO.Mapper.TaiKhoanMapper;
 
 import java.util.ArrayList;
 
-public class TaiKhoanDAO extends AbstractDAO<TaiKhoanDTO> implements IDAO<TaiKhoanDTO>, ITaiKhoanDAO {
+public class TaiKhoanDAO extends AbstractDAO<TaiKhoanDTO> implements ITaiKhoanDAO {
     @Override
     public ArrayList<TaiKhoanDTO> findAll() {
         String sql = "SELECT * FROM taikhoan";
@@ -16,17 +15,17 @@ public class TaiKhoanDAO extends AbstractDAO<TaiKhoanDTO> implements IDAO<TaiKho
     }
 
     @Override
-    public TaiKhoanDTO findByID(int id) {
+    public TaiKhoanDTO findByID(int MaTK) {
         String sql = "SELECT * FROM taikhoan WHERE MaTK = ?";
-        ArrayList<TaiKhoanDTO> result = query(sql, new TaiKhoanMapper(), id);
+        ArrayList<TaiKhoanDTO> result = query(sql, new TaiKhoanMapper(), MaTK);
         return result.isEmpty() ? null : result.get(0);
     }
 
     @Override
     public Integer save(TaiKhoanDTO taiKhoan) {
         String sql = "INSERT INTO taikhoan"
-                + "(MaTK, TenDangNhap, MatKhau, NgayTao, NguoiTao, ChucVu, TinhTrang)"
-                + "VALUES(?, ?, ?, ?, ?, ?, ?)";
+                + " (MaTK, TenDangNhap, MatKhau, NgayTao, NguoiTao, ChucVu, TinhTrang)"
+                + " VALUES(?, ?, ?, ?, ?, ?, ?)";
         return insert(sql, taiKhoan.getMaTK(), taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau(),
                 taiKhoan.getNgayTao(), taiKhoan.getNguoiTao(), taiKhoan.getChucVu(), taiKhoan.getTinhTrang());
     }
@@ -41,9 +40,9 @@ public class TaiKhoanDAO extends AbstractDAO<TaiKhoanDTO> implements IDAO<TaiKho
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(int MaTK) {
         String sql = "DELETE FROM taikhoan"
                 + " WHERE MaTK = ?";
-        return update(sql, id);
+        return update(sql, MaTK);
     }
 }

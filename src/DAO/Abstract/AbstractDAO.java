@@ -1,4 +1,4 @@
-package DAO.Abstracts;
+package DAO.Abstract;
 
 import DAO.Interfaces.IAbstractDAO;
 import DAO.Mapper.Interfaces.IRowMapper;

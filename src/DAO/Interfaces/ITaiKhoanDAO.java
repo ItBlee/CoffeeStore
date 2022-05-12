@@ -4,7 +4,7 @@ import DTO.TaiKhoanDTO;
 
 import java.util.ArrayList;
 
-public interface ITaiKhoanDAO extends IDAO<TaiKhoanDTO> {
+public interface ITaiKhoanDAO extends ICrudDAO<TaiKhoanDTO> {
     ArrayList<TaiKhoanDTO> findAll();
-    TaiKhoanDTO findByID(int id);
+    TaiKhoanDTO findByID(int MaTK);
 }
