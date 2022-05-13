@@ -12,6 +12,7 @@ import static Utils.FileHandler.createImageIcon;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -303,13 +304,14 @@ public class FrameLayout extends MovableJFrame {
 				lbInfoTitle.setBounds(5, 10, 170, 20);
 
 				JTextArea info = new JTextArea();
-				info.setText("Mã NV: NV1" + "\n\n" +
-						"Mã TK: TK1" + "\n\n" +
-						"Họ tên: Trần Long Tuấn Vũ" + "\n\n" +
-						"Ngày sinh: 12/34/1234" + "\n\n" +
-						"SDT: 0123456789" + "\n\n" +
-						"Email: tranlongtuanvu@gmail.com" + "\n\n" +
-						"Giới tính: Nam");
+				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+				info.setText("Mã NV: " + General.CURRENT_USER.getMaNV() + "\n\n" +
+						"Mã TK: TK" + General.CURRENT_USER.getMaTK() + "\n\n" +
+						"Họ tên: " + General.CURRENT_USER.getHo() + " "  + General.CURRENT_USER.getTen() + "\n\n" +
+						"Ngày sinh: " + formatter.format(General.CURRENT_USER.getNgaySinh()) + "\n\n" +
+						"SDT: " + General.CURRENT_USER.getSDT() + "\n\n" +
+						"Email: " + General.CURRENT_USER.getEmail() + "\n\n" +
+						"Giới tính: " + (General.CURRENT_USER.getGioiTinh() == 1 ? "Nam" : "Nữ"));
 				info.setEditable(false);
 				info.setCursor(null);
 				info.setOpaque(false);

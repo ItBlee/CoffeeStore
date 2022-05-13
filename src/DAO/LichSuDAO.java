@@ -24,17 +24,17 @@ public class LichSuDAO extends AbstractDAO<LichSuDTO> implements ILichSuDAO {
     @Override
     public Integer save(LichSuDTO lichSu) {
         String sql = "INSERT INTO lichsu"
-                + " (MaDoiTuong, NguoiThucHien, ThaoTac)"
-                + " VALUES(?, ?, ?)";
-        return insert(sql, lichSu.getMaDoiTuong(), lichSu.getNguoiThucHien(), lichSu.getThaoTac());
+                + " (TenDoiTuong, MaDoiTuong, NguoiThucHien, ThaoTac)"
+                + " VALUES(?, ?, ?, ?)";
+        return insert(sql, lichSu.getTenDoiTuong(), lichSu.getMaDoiTuong(), lichSu.getNguoiThucHien(), lichSu.getThaoTac());
     }
 
     @Override
     public boolean update(LichSuDTO lichSu) {
         String sql = "UPDATE lichsu"
-                + " SET MaDoiTuong = ?, NguoiThucHien = ?, ThaoTac = ?"
+                + " SET TenDoiTuong = ?, MaDoiTuong = ?, NguoiThucHien = ?, ThaoTac = ?"
                 + " WHERE MaLS = ?";
-        return update(sql, lichSu.getMaDoiTuong(), lichSu.getNguoiThucHien(), lichSu.getThaoTac(), lichSu.getMaLS());
+        return update(sql, lichSu.getTenDoiTuong(), lichSu.getMaDoiTuong(), lichSu.getNguoiThucHien(), lichSu.getThaoTac(), lichSu.getMaLS());
     }
 
     @Override

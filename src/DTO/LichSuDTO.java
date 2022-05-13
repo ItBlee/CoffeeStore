@@ -4,9 +4,9 @@ import java.sql.Timestamp;
 
 public class LichSuDTO {
     private Integer MaLS;
-    private String MaDoiTuong;
-    private Timestamp NgayTao;
-    private Timestamp NgaySua;
+    private String TenDoiTuong;
+    private Integer MaDoiTuong;
+    private Timestamp ThoiGian;
     private Integer NguoiThucHien;
     private String ThaoTac;
 
@@ -21,28 +21,28 @@ public class LichSuDTO {
         MaLS = maLS;
     }
 
-    public String getMaDoiTuong() {
+    public String getTenDoiTuong() {
+        return TenDoiTuong;
+    }
+
+    public void setTenDoiTuong(String tenDoiTuong) {
+        TenDoiTuong = tenDoiTuong;
+    }
+
+    public Integer getMaDoiTuong() {
         return MaDoiTuong;
     }
 
-    public void setMaDoiTuong(String maDoiTuong) {
+    public void setMaDoiTuong(Integer maDoiTuong) {
         MaDoiTuong = maDoiTuong;
     }
 
-    public Timestamp getNgayTao() {
-        return NgayTao;
+    public Timestamp getThoiGian() {
+        return ThoiGian;
     }
 
-    public void setNgayTao(Timestamp ngayTao) {
-        NgayTao = ngayTao;
-    }
-
-    public Timestamp getNgaySua() {
-        return NgaySua;
-    }
-
-    public void setNgaySua(Timestamp ngaySua) {
-        NgaySua = ngaySua;
+    public void setThoiGian(Timestamp thoiGian) {
+        ThoiGian = thoiGian;
     }
 
     public Integer getNguoiThucHien() {

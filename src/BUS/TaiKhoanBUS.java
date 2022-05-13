@@ -1,6 +1,8 @@
 package BUS;
 
+import DAO.Interfaces.INhanVienDAO;
 import DAO.Interfaces.ITaiKhoanDAO;
+import DAO.NhanVienDAO;
 import DAO.TaiKhoanDAO;
 import DTO.TaiKhoanDTO;
 import BUS.Interfaces.ITaiKhoanBUS;
@@ -85,7 +87,8 @@ public class TaiKhoanBUS implements ITaiKhoanBUS {
                 break;
             }
         }
-        General.CURRENT_USER = findTaiKhoan;
+        NhanVienDAO nhanVienDAO = new NhanVienDAO();
+        General.CURRENT_USER = nhanVienDAO.findByMaTK(findTaiKhoan.getMaTK());
         return General.CURRENT_USER != null;
     }
 

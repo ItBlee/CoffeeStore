@@ -1,5 +1,6 @@
 package Utils;
 
+import DTO.NhanVienDTO;
 import DTO.TaiKhoanDTO;
 import GUI.common.Language;
 import GUI.common.Theme;
@@ -12,7 +13,7 @@ import static Utils.SystemConstant.*;
 
 public class General {
     //USER
-    public static TaiKhoanDTO CURRENT_USER = null;
+    public static NhanVienDTO CURRENT_USER = null;
     public static String USER_USERNAME = null;
     public static String USER_PASSWORD = null;
     public static boolean USER_IS_REMEMBER = false;

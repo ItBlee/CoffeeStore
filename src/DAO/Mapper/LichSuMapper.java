@@ -18,9 +18,9 @@ public class LichSuMapper implements IRowMapper<LichSuDTO>, IExcelRowMapper<Lich
         try {
             LichSuDTO lichSu = new LichSuDTO();
             lichSu.setMaLS(resultSet.getInt("MaLS"));
-            lichSu.setMaDoiTuong(resultSet.getString("MaDoiTuong"));
-            lichSu.setNgayTao(resultSet.getTimestamp("NgayTao"));
-            lichSu.setNgaySua(resultSet.getTimestamp("NgaySua"));
+            lichSu.setTenDoiTuong(resultSet.getString("TenDoiTuong"));
+            lichSu.setMaDoiTuong(resultSet.getInt("MaDoiTuong"));
+            lichSu.setThoiGian(resultSet.getTimestamp("ThoiGian"));
             lichSu.setNguoiThucHien(resultSet.getInt("NguoiThucHien"));
             lichSu.setThaoTac(resultSet.getString("ThaoTac"));
             return lichSu;
@@ -38,15 +38,15 @@ public class LichSuMapper implements IRowMapper<LichSuDTO>, IExcelRowMapper<Lich
 
         cell = row.createCell(1);
         cell.setCellStyle(cellStyle);
-        cell.setCellValue("Mã đối tượng");
+        cell.setCellValue("Tên đối tượng");
 
         cell = row.createCell(2);
         cell.setCellStyle(cellStyle);
-        cell.setCellValue("Ngày tạo");
+        cell.setCellValue("Mã đối tượng");
 
         cell = row.createCell(3);
         cell.setCellStyle(cellStyle);
-        cell.setCellValue("Ngày sửa");
+        cell.setCellValue("Thời điểm");
 
         cell = row.createCell(4);
         cell.setCellStyle(cellStyle);
@@ -64,13 +64,13 @@ public class LichSuMapper implements IRowMapper<LichSuDTO>, IExcelRowMapper<Lich
         cell.setCellValue(dto.getMaLS() != null ? "LS" + dto.getMaLS() : "null");
 
         cell = row.createCell(1);
-        cell.setCellValue(dto.getMaDoiTuong() != null ? dto.getMaDoiTuong() : "null");
+        cell.setCellValue(dto.getTenDoiTuong() != null ? dto.getTenDoiTuong() : "null");
 
         cell = row.createCell(2);
-        cell.setCellValue(dto.getNgayTao() != null ? String.valueOf(dto.getNgayTao()) : "null");
+        cell.setCellValue(dto.getMaDoiTuong() != null ? String.valueOf(dto.getMaDoiTuong()) : "null");
 
         cell = row.createCell(3);
-        cell.setCellValue(dto.getNgaySua() != null ? String.valueOf(dto.getNgaySua()) : "null");
+        cell.setCellValue(dto.getThoiGian() != null ? String.valueOf(dto.getThoiGian()) : "null");
 
         cell = row.createCell(4);
         cell.setCellValue(dto.getNguoiThucHien() != null ? "NV" + dto.getNguoiThucHien() : "null");
@@ -89,13 +89,13 @@ public class LichSuMapper implements IRowMapper<LichSuDTO>, IExcelRowMapper<Lich
                     dto.setMaLS(Integer.parseInt(cellValue.replace("LS", "")));
                     break;
                 case 1:
-                    dto.setMaDoiTuong(cellValue);
+                    dto.setTenDoiTuong(cellValue);
                     break;
                 case 2:
-                    dto.setNgayTao(Timestamp.valueOf(cellValue));
+                    dto.setMaDoiTuong(Integer.valueOf(cellValue));
                     break;
                 case 3:
-                    dto.setNgaySua(Timestamp.valueOf(cellValue));
+                    dto.setThoiGian(Timestamp.valueOf(cellValue));
                     break;
                 case 4:
                     dto.setNguoiThucHien(Integer.parseInt(cellValue.replace("LS", "")));
