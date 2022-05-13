@@ -1,6 +1,8 @@
 package DTO;
 
-public class PhanQuyenDTO {
+import DTO.Interface.IEntity;
+
+public class PhanQuyenDTO implements IEntity {
     private Integer MaPQ;
     private String TenPQ;
     private Integer QuyenHD;
@@ -14,6 +16,16 @@ public class PhanQuyenDTO {
     private Integer QuyenNV;
 
     public PhanQuyenDTO() {
+    }
+
+    @Override
+    public Integer getID() {
+        return MaPQ;
+    }
+
+    @Override
+    public void setID(Integer id) {
+        MaPQ = id;
     }
 
     public Integer getMaPQ() {
@@ -102,5 +114,13 @@ public class PhanQuyenDTO {
 
     public void setQuyenNV(Integer quyenNV) {
         QuyenNV = quyenNV;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PhanQuyenDTO)) return false;
+        PhanQuyenDTO that = (PhanQuyenDTO) o;
+        return getMaPQ().equals(that.getMaPQ()) || getTenPQ().equals(that.getTenPQ());
     }
 }

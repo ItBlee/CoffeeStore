@@ -1,8 +1,11 @@
 package DTO;
 
-import java.sql.Date;
+import DTO.Interface.IEntity;
 
-public class NhanVienDTO {
+import java.sql.Date;
+import java.util.Objects;
+
+public class NhanVienDTO implements IEntity {
     private Integer MaNV;
     private Integer MaTK;
     private String Ho;
@@ -14,6 +17,16 @@ public class NhanVienDTO {
     private Integer Luong;
 
     public NhanVienDTO() {
+    }
+
+    @Override
+    public Integer getID() {
+        return MaNV;
+    }
+
+    @Override
+    public void setID(Integer id) {
+        MaNV = id;
     }
 
     public Integer getMaNV() {
@@ -86,5 +99,13 @@ public class NhanVienDTO {
 
     public void setLuong(Integer luong) {
         Luong = luong;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NhanVienDTO)) return false;
+        NhanVienDTO that = (NhanVienDTO) o;
+        return getMaNV().equals(that.getMaNV()) || getMaTK().equals(that.getMaTK());
     }
 }

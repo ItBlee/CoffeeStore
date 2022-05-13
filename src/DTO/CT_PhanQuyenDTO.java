@@ -1,6 +1,8 @@
 package DTO;
 
-public class CT_PhanQuyenDTO {
+import DTO.Interface.IEntity;
+
+public class CT_PhanQuyenDTO implements IEntity {
     private Integer MaCTPQ;
     private Integer QuyenDoc;
     private Integer QuyenTao;
@@ -8,6 +10,16 @@ public class CT_PhanQuyenDTO {
     private Integer QuyenXoa;
 
     public CT_PhanQuyenDTO() {
+    }
+
+    @Override
+    public Integer getID() {
+        return MaCTPQ;
+    }
+
+    @Override
+    public void setID(Integer id) {
+        MaCTPQ = id;
     }
 
     public Integer getMaCTPQ() {
@@ -48,5 +60,13 @@ public class CT_PhanQuyenDTO {
 
     public void setQuyenXoa(Integer quyenXoa) {
         QuyenXoa = quyenXoa;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CT_PhanQuyenDTO)) return false;
+        CT_PhanQuyenDTO that = (CT_PhanQuyenDTO) o;
+        return getMaCTPQ().equals(that.getMaCTPQ());
     }
 }

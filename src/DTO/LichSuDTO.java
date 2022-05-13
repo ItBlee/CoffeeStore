@@ -1,8 +1,10 @@
 package DTO;
 
+import DTO.Interface.IEntity;
+
 import java.sql.Timestamp;
 
-public class LichSuDTO {
+public class LichSuDTO implements IEntity {
     private Integer MaLS;
     private String TenDoiTuong;
     private Integer MaDoiTuong;
@@ -11,6 +13,16 @@ public class LichSuDTO {
     private String ThaoTac;
 
     public LichSuDTO() {
+    }
+
+    @Override
+    public Integer getID() {
+        return MaLS;
+    }
+
+    @Override
+    public void setID(Integer id) {
+        MaLS = id;
     }
 
     public Integer getMaLS() {
@@ -59,5 +71,13 @@ public class LichSuDTO {
 
     public void setThaoTac(String thaoTac) {
         ThaoTac = thaoTac;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LichSuDTO)) return false;
+        LichSuDTO lichSuDTO = (LichSuDTO) o;
+        return getMaLS().equals(lichSuDTO.getMaLS());
     }
 }

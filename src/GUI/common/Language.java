@@ -24,7 +24,8 @@ public class Language {
     }
 
     public static void importLanguage(Language language) {
-        Properties prop = FileHandler.importLanguage(language.getDisplayName());
+        String filePath = "bin/languages/" + language.getDisplayName() + ".language";
+        Properties prop = FileHandler.importConfig(filePath);
         importMapper(prop);
     }
 

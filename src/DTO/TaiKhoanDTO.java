@@ -1,9 +1,11 @@
 package DTO;
 
+import DTO.Interface.IEntity;
+
 import java.sql.Timestamp;
 import java.util.Objects;
 
-public class TaiKhoanDTO {
+public class TaiKhoanDTO implements IEntity {
     private Integer MaTK;
     private String TenDangNhap;
     private String MatKhau;
@@ -13,6 +15,16 @@ public class TaiKhoanDTO {
     private Integer TinhTrang;
 
     public TaiKhoanDTO() {
+    }
+
+    @Override
+    public Integer getID() {
+        return this.MaTK;
+    }
+
+    @Override
+    public void setID(Integer id) {
+        this.MaTK = id;
     }
 
     public Integer getMaTK() {

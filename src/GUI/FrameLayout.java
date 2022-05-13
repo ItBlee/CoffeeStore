@@ -6,6 +6,7 @@ import GUI.common.Theme;
 import GUI.components.*;
 import Utils.FileHandler;
 import Utils.General;
+import Utils.SystemConstant;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes.FlatIJLookAndFeelInfo;
 
 import static Utils.FileHandler.createImageIcon;
@@ -590,7 +591,7 @@ public class FrameLayout extends MovableJFrame {
 		int confirm = JOptionPane.showConfirmDialog(getContentPane(), Language.LAYOUT_MESSAGE_LOGOUT, Language.LAYOUT_LABEL_LOGOUT_TOOL_TIP_TEXT, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (confirm == JOptionPane.YES_OPTION) {
 			General.CURRENT_USER = null;
-			General.importMapper(FileHandler.importConfig());
+			General.importMapper(FileHandler.importConfig(SystemConstant.CONFIG_FILE_URL));
 			Language.setup();
 			Theme.setupDefault();
 			JFrame frame = new FrameLogin();

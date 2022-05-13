@@ -26,11 +26,11 @@ public class FileHandler {
         } catch (Exception ignored) {}
     }
 
-    public static Properties importConfig() {
+    public static Properties importConfig(String filePath) {
         Properties prop = new Properties();
         try {
             InputStreamReader input = new InputStreamReader(
-                    new FileInputStream(CONFIG_FILE_URL),
+                    new FileInputStream(filePath),
                     StandardCharsets.UTF_8);
             prop.load(input);
             input.close();
@@ -105,18 +105,6 @@ public class FileHandler {
         workbook.close();
         inputStream.close();
         return list;
-    }
-
-    public static Properties importLanguage(String language) {
-        Properties prop = new Properties();
-        try {
-            InputStreamReader input = new InputStreamReader(
-                    new FileInputStream("bin/languages/" + language + ".language"),
-                    StandardCharsets.UTF_8);
-            prop.load(input);
-            input.close();
-        } catch (Exception ignored) {}
-        return prop;
     }
 
     public static ImageIcon createImageIcon(String path, int width, int height) {
