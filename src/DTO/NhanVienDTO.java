@@ -3,7 +3,6 @@ package DTO;
 import DTO.Interface.IEntity;
 
 import java.sql.Date;
-import java.util.Objects;
 
 public class NhanVienDTO implements IEntity {
     private Integer MaNV;

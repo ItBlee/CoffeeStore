@@ -1,4 +1,10 @@
 package DAO.Interfaces;
 
-public interface ISanPhamDAO<T> {
+import DTO.SanPhamDTO;
+
+import java.util.ArrayList;
+
+public interface ISanPhamDAO extends ICrudDAO<SanPhamDTO> {
+    ArrayList<SanPhamDTO> findAll();
+    SanPhamDTO findByID(int MaSP);
 }

@@ -10,11 +10,10 @@ public interface ITaiKhoanBUS {
     ArrayList<TaiKhoanDTO> findAll();
     TaiKhoanDTO findByID(int id);
     TaiKhoanDTO findByTenDangNhap(String tenDangNhap);
-    ArrayList<TaiKhoanDTO> findByNgayTao(Date ngayTao);
+    ArrayList<TaiKhoanDTO> findByNgayTao(Date tuNgay, Date denNgay);
     ArrayList<TaiKhoanDTO> findByNguoiTao(Integer nguoiTao);
     ArrayList<TaiKhoanDTO> findByChucVu(String chucVu);
     ArrayList<TaiKhoanDTO> findByTinhTrang(Integer tinhTrang);
-
 
     void save(TaiKhoanDTO taikhoan) throws Exception;
     void update(TaiKhoanDTO taikhoan) throws Exception;

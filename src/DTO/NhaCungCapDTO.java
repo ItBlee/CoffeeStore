@@ -1,4 +1,15 @@
 package DTO;
 
-public class NhaCungCapDTO {
+import DTO.Interface.IEntity;
+
+public class NhaCungCapDTO implements IEntity {
+    @Override
+    public Integer getID() {
+        return null;
+    }
+
+    @Override
+    public void setID(Integer id) {
+
+    }
 }

@@ -1,4 +1,10 @@
 package DAO.Interfaces;
 
-public interface IKhuyenMaiDAO {
+import DTO.KhuyenMaiDTO;
+
+import java.util.ArrayList;
+
+public interface IKhuyenMaiDAO  extends ICrudDAO<KhuyenMaiDTO> {
+    ArrayList<KhuyenMaiDTO> findAll();
+    KhuyenMaiDTO findByID(int MaSP);
 }

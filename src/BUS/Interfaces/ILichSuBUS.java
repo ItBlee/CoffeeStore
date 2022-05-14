@@ -10,7 +10,7 @@ public interface ILichSuBUS {
     LichSuDTO findByID(int id);
     ArrayList<LichSuDTO> findByTenDoiTuong(String tenDoiTuong);
     ArrayList<LichSuDTO> findByTenDoiTuongAndMaDoiTuong(String tenDoiTuong, Integer maDoiTuong);
-    ArrayList<LichSuDTO> findByThoiGian(Timestamp thoiGian);
+    ArrayList<LichSuDTO> findByThoiGian(Timestamp tuNgay, Timestamp denNgay);
     ArrayList<LichSuDTO> findByNguoiThucHien(Integer nguoiThucHien);
     ArrayList<LichSuDTO> findByThaoTac(String thaoTac);
 

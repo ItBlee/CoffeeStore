@@ -4,7 +4,6 @@ import BUS.Abstract.AbstractHistoricBUS;
 import BUS.Interfaces.ICT_PhanQuyenBUS;
 import BUS.Interfaces.INhanVienBUS;
 import BUS.Interfaces.IPhanQuyenBUS;
-import DAO.CT_PhanQuyenDAO;
 import DAO.Interfaces.ITaiKhoanDAO;
 import DAO.TaiKhoanDAO;
 import DTO.NhanVienDTO;
@@ -48,7 +47,7 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
     }
 
     @Override
-    public ArrayList<TaiKhoanDTO> findByNgayTao(Date ngayTao) {
+    public ArrayList<TaiKhoanDTO> findByNgayTao(Date tuNgay, Date denNgay) {
         return null;
     }
 
@@ -157,7 +156,7 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
         General.CURRENT_ROLE.setQuyenTK(ictPhanQuyenBUS.findByID(getRole.getQuyenTK()));
         General.CURRENT_ROLE.setQuyenExcel(ictPhanQuyenBUS.findByID(getRole.getQuyenExcel()));
         General.CURRENT_ROLE.setQuyenNV(ictPhanQuyenBUS.findByID(getRole.getQuyenNV()));
-        return General.CURRENT_USER != null && General.CURRENT_ROLE.getMaPQ() != null;
+        return General.CURRENT_USER != null && General.CURRENT_ROLE.getPhanQuyen().getMaPQ() != null;
     }
 
     @Override

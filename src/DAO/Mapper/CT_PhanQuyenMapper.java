@@ -3,14 +3,12 @@ package DAO.Mapper;
 import DAO.Mapper.Interfaces.IExcelRowMapper;
 import DAO.Mapper.Interfaces.IRowMapper;
 import DTO.CT_PhanQuyenDTO;
-import DTO.TaiKhoanDTO;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 public class CT_PhanQuyenMapper implements IRowMapper<CT_PhanQuyenDTO>, IExcelRowMapper<CT_PhanQuyenDTO> {
     @Override

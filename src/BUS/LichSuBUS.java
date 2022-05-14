@@ -42,7 +42,7 @@ public class LichSuBUS implements ILichSuBUS {
     }
 
     @Override
-    public ArrayList<LichSuDTO> findByThoiGian(Timestamp thoiGian) {
+    public ArrayList<LichSuDTO> findByThoiGian(Timestamp tuNgay, Timestamp denNgay) {
         return null;
     }
 
