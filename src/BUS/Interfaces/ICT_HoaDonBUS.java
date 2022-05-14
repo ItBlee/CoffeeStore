@@ -13,7 +13,6 @@ public interface ICT_HoaDonBUS {
     ArrayList<CT_HoaDonDTO> findByDonGia(Integer from, Integer to);
     ArrayList<CT_HoaDonDTO> findByThanhTien(Integer from, Integer to);
 
-
     void save(CT_HoaDonDTO ctHoaDon) throws Exception;
     void update(CT_HoaDonDTO ctHoaDon) throws Exception;
     void delete(int id) throws Exception;

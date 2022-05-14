@@ -15,7 +15,6 @@ public interface IHoaDonBUS {
     ArrayList<HoaDonDTO> findByTongTien(Integer from, Integer to);
     ArrayList<HoaDonDTO> findByThanhTien(Integer from, Integer to);
 
-
     void save(HoaDonDTO hoaDon) throws Exception;
     void update(HoaDonDTO hoaDon) throws Exception;
     void delete(int id) throws Exception;

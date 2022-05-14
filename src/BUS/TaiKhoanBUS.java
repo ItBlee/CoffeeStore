@@ -126,8 +126,6 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
 
     @Override
     public boolean login(String username, String password) {
-        //d83c81ba59bb048750c30c9d3fd7abd07d27140ce6dfcf17244b944073438fce
-        //cdd1a14c970e3c41
         TaiKhoanDTO findTaiKhoan = null;
         for (TaiKhoanDTO dto : listTaiKhoan) {
             String hashPassword = Security.applySha256(password, dto.getMatKhauSalt());

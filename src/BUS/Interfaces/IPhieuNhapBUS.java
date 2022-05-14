@@ -22,5 +22,4 @@ public interface IPhieuNhapBUS {
 
     boolean isExist(PhieuNhapDTO phieuNhap);
     int getTotalCount();
-    int getSoLuongNhapTheoMaSP(Integer maSP);
 }

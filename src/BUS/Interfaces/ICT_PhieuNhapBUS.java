@@ -13,7 +13,6 @@ public interface ICT_PhieuNhapBUS {
     ArrayList<CT_PhieuNhapDTO> findByDonGia(Integer from, Integer to);
     ArrayList<CT_PhieuNhapDTO> findByThanhTien(Integer from, Integer to);
 
-
     void save(CT_PhieuNhapDTO ctPhieuNhap) throws Exception;
     void update(CT_PhieuNhapDTO ctPhieuNhap) throws Exception;
     void delete(int id) throws Exception;

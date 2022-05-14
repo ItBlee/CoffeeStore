@@ -23,5 +23,5 @@ public interface ISanPhamBUS {
 
     boolean isExist(SanPhamDTO sanPham);
     int getTotalCount();
-    int getSoLuongSanPham();
+    int tinhSoLuongSP();
 }

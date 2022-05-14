@@ -10,9 +10,6 @@ public interface IKhuyenMaiBUS {
     ArrayList<KhuyenMaiDTO> findAll();
     KhuyenMaiDTO findByID(int id);
     ArrayList<KhuyenMaiDTO> findByTieuDe(String tieuDe);
-    ArrayList<KhuyenMaiDTO> findByNoiDung(String noiDung);
-    ArrayList<KhuyenMaiDTO> findBySDT(String sdt);
-    ArrayList<KhuyenMaiDTO> findByEmail(String email);
     ArrayList<KhuyenMaiDTO> findByThoiGian(Date tuNgay, Date denNgay);
 
     void save(KhuyenMaiDTO khuyenMai) throws Exception;
