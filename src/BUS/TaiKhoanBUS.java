@@ -1,12 +1,19 @@
 package BUS;
 
 import BUS.Abstract.AbstractHistoricBUS;
+import BUS.Interfaces.ICT_PhanQuyenBUS;
+import BUS.Interfaces.INhanVienBUS;
+import BUS.Interfaces.IPhanQuyenBUS;
+import DAO.CT_PhanQuyenDAO;
 import DAO.Interfaces.ITaiKhoanDAO;
-import DAO.NhanVienDAO;
 import DAO.TaiKhoanDAO;
+import DTO.NhanVienDTO;
+import DTO.PhanQuyenDTO;
 import DTO.TaiKhoanDTO;
 import BUS.Interfaces.ITaiKhoanBUS;
 import Utils.General;
+import Utils.Role;
+import Utils.Security;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -120,18 +127,37 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
 
     @Override
     public boolean login(String username, String password) {
+        //d83c81ba59bb048750c30c9d3fd7abd07d27140ce6dfcf17244b944073438fce
+        //cdd1a14c970e3c41
         TaiKhoanDTO findTaiKhoan = null;
         for (TaiKhoanDTO dto : listTaiKhoan) {
+            String hashPassword = Security.applySha256(password, dto.getMatKhauSalt());
             if (dto.getTenDangNhap().equals(username)
-                && dto.getMatKhau().equals(password)
+                && dto.getMatKhauHash().equals(hashPassword)
                 && dto.getTinhTrang() == 1) {
                 findTaiKhoan = dto;
                 break;
             }
         }
-        NhanVienDAO nhanVienDAO = new NhanVienDAO();
-        General.CURRENT_USER = nhanVienDAO.findByMaTK(findTaiKhoan.getMaTK());
-        return General.CURRENT_USER != null;
+        INhanVienBUS nhanVienBUS = new NhanVienBUS();
+        IPhanQuyenBUS phanQuyenBUS = new PhanQuyenBUS();
+        ICT_PhanQuyenBUS ictPhanQuyenBUS = new CT_PhanQuyenBUS();
+        NhanVienDTO getUser = nhanVienBUS.findByMaTK(findTaiKhoan.getMaTK());
+        PhanQuyenDTO getRole = phanQuyenBUS.findByID(findTaiKhoan.getMaPQ());
+        if (getUser == null || getRole == null)
+            return false;
+        General.CURRENT_USER = getUser;
+        General.CURRENT_ROLE = new Role(getRole);
+        General.CURRENT_ROLE.setQuyenHD(ictPhanQuyenBUS.findByID(getRole.getQuyenHD()));
+        General.CURRENT_ROLE.setQuyenSP(ictPhanQuyenBUS.findByID(getRole.getQuyenSP()));
+        General.CURRENT_ROLE.setQuyenPN(ictPhanQuyenBUS.findByID(getRole.getQuyenPN()));
+        General.CURRENT_ROLE.setQuyenNCC(ictPhanQuyenBUS.findByID(getRole.getQuyenNCC()));
+        General.CURRENT_ROLE.setQuyenKH(ictPhanQuyenBUS.findByID(getRole.getQuyenKH()));
+        General.CURRENT_ROLE.setQuyenKM(ictPhanQuyenBUS.findByID(getRole.getQuyenKM()));
+        General.CURRENT_ROLE.setQuyenTK(ictPhanQuyenBUS.findByID(getRole.getQuyenTK()));
+        General.CURRENT_ROLE.setQuyenExcel(ictPhanQuyenBUS.findByID(getRole.getQuyenExcel()));
+        General.CURRENT_ROLE.setQuyenNV(ictPhanQuyenBUS.findByID(getRole.getQuyenNV()));
+        return General.CURRENT_USER != null && General.CURRENT_ROLE.getMaPQ() != null;
     }
 
     @Override

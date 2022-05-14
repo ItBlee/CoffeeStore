@@ -8,10 +8,11 @@ import java.util.Objects;
 public class TaiKhoanDTO implements IEntity {
     private Integer MaTK;
     private String TenDangNhap;
-    private String MatKhau;
+    private String MatKhauHash;
+    private String MatKhauSalt;
     private Timestamp NgayTao;
     private Integer NguoiTao;
-    private String ChucVu;
+    private Integer MaPQ;
     private Integer TinhTrang;
 
     public TaiKhoanDTO() {
@@ -43,12 +44,20 @@ public class TaiKhoanDTO implements IEntity {
         this.TenDangNhap = tenDangNhap;
     }
 
-    public String getMatKhau() {
-        return this.MatKhau;
+    public String getMatKhauHash() {
+        return MatKhauHash;
     }
 
-    public void setMatKhau(String matKhau) {
-        this.MatKhau = matKhau;
+    public void setMatKhauHash(String matKhauHash) {
+        MatKhauHash = matKhauHash;
+    }
+
+    public String getMatKhauSalt() {
+        return MatKhauSalt;
+    }
+
+    public void setMatKhauSalt(String matKhauSalt) {
+        MatKhauSalt = matKhauSalt;
     }
 
     public Timestamp getNgayTao() {
@@ -67,12 +76,12 @@ public class TaiKhoanDTO implements IEntity {
         this.NguoiTao = nguoiTao;
     }
 
-    public String getChucVu() {
-        return this.ChucVu;
+    public Integer getMaPQ() {
+        return this.MaPQ;
     }
 
-    public void setChucVu(String chucVu) {
-        this.ChucVu = chucVu;
+    public void setMaPQ(Integer maPQ) {
+        this.MaPQ = maPQ;
     }
 
     public Integer getTinhTrang() {
@@ -90,18 +99,5 @@ public class TaiKhoanDTO implements IEntity {
         TaiKhoanDTO dto = (TaiKhoanDTO) o;
         return getMaTK().equals(dto.getMaTK())
                 || getTenDangNhap().equals(dto.getTenDangNhap());
-    }
-
-    @Override
-    public String toString() {
-        return "TaiKhoanDTO{" +
-                "MaTK=" + MaTK +
-                ", TenDangNhap='" + TenDangNhap + '\'' +
-                ", MatKhau='" + MatKhau + '\'' +
-                ", NgayTao=" + NgayTao +
-                ", NguoiTao=" + NguoiTao +
-                ", ChucVu='" + ChucVu + '\'' +
-                ", TinhTrang=" + TinhTrang +
-                '}';
     }
 }

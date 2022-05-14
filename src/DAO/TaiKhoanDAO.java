@@ -20,23 +20,22 @@ public class TaiKhoanDAO extends AbstractDAO<TaiKhoanDTO> implements ITaiKhoanDA
         ArrayList<TaiKhoanDTO> result = query(sql, new TaiKhoanMapper(), MaTK);
         return result.isEmpty() ? null : result.get(0);
     }
-
     @Override
     public Integer save(TaiKhoanDTO taiKhoan) {
         String sql = "INSERT INTO taikhoan"
-                + " (MaTK, TenDangNhap, MatKhau, NgayTao, NguoiTao, ChucVu, TinhTrang)"
+                + " (MaTK, TenDangNhap, MatKhauHash, MatKhauSalt, NgayTao, NguoiTao, ChucVu, TinhTrang)"
                 + " VALUES(?, ?, ?, ?, ?, ?, ?)";
-        return insert(sql, taiKhoan.getMaTK(), taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau(),
-                taiKhoan.getNgayTao(), taiKhoan.getNguoiTao(), taiKhoan.getChucVu(), taiKhoan.getTinhTrang());
+        return insert(sql, taiKhoan.getMaTK(), taiKhoan.getTenDangNhap(), taiKhoan.getMatKhauHash(), taiKhoan.getMatKhauSalt(),
+                taiKhoan.getNgayTao(), taiKhoan.getNguoiTao(), taiKhoan.getMaPQ(), taiKhoan.getTinhTrang());
     }
 
     @Override
     public boolean update(TaiKhoanDTO taiKhoan) {
         String sql = "UPDATE taikhoan"
-                + " SET TenDangNhap = ?, MatKhau = ?, NgayTao = ?, NguoiTao = ?, ChucVu = ?, TinhTrang = ?"
+                + " SET TenDangNhap = ?, MatKhauHash = ?, MatKhauSalt = ?, NgayTao = ?, NguoiTao = ?, ChucVu = ?, TinhTrang = ?"
                 + " WHERE MaTK = ?";
-        return update(sql, taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau(), taiKhoan.getNgayTao(),
-                taiKhoan.getNguoiTao(), taiKhoan.getChucVu(), taiKhoan.getTinhTrang(), taiKhoan.getMaTK());
+        return update(sql, taiKhoan.getTenDangNhap(), taiKhoan.getMatKhauHash(), taiKhoan.getMatKhauSalt(), taiKhoan.getNgayTao(),
+                taiKhoan.getNguoiTao(), taiKhoan.getMaPQ(), taiKhoan.getTinhTrang(), taiKhoan.getMaTK());
     }
 
     @Override

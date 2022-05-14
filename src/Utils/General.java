@@ -14,6 +14,7 @@ import static Utils.SystemConstant.*;
 public class General {
     //USER
     public static NhanVienDTO CURRENT_USER = null;
+    public static Role CURRENT_ROLE = null;
     public static String USER_USERNAME = null;
     public static String USER_PASSWORD = null;
     public static boolean USER_IS_REMEMBER = false;
@@ -29,14 +30,14 @@ public class General {
 
         if (USER_IS_REMEMBER) {
             prop.setProperty(CONFIG_PROP_USER_USERNAME, USER_USERNAME);
-            prop.setProperty(CONFIG_PROP_USER_PASSWORD, USER_PASSWORD);
+            prop.setProperty(CONFIG_PROP_USER_PASSWORD, Security.encode(USER_PASSWORD));
             prop.setProperty(CONFIG_PROP_USER_REMEMBER, String.valueOf(USER_IS_REMEMBER));
         }
         prop.setProperty(CONFIG_PROP_DB_HOST, DB_HOST);
         prop.setProperty(CONFIG_PROP_DB_NAME, DB_NAME);
         prop.setProperty(CONFIG_PROP_DB_USERNAME, DB_USERNAME);
         if (!DB_PASSWORD.isBlank())
-            prop.setProperty(CONFIG_PROP_DB_PASSWORD, DB_PASSWORD);
+            prop.setProperty(CONFIG_PROP_DB_PASSWORD, Security.encode(DB_PASSWORD));
         prop.setProperty(CONFIG_PROP_THEME_NAME, Theme.getSystemThemeInfo().getName());
         if (Theme.getSystemThemeFont() != null) {
             prop.setProperty(CONFIG_PROP_THEME_FONT_NAME, Theme.getSystemThemeFont().getName());
@@ -50,7 +51,7 @@ public class General {
 
     public static void importMapper(Properties prop) {
         USER_USERNAME = prop.getProperty(CONFIG_PROP_USER_USERNAME);
-        USER_PASSWORD = prop.getProperty(CONFIG_PROP_USER_PASSWORD);
+        USER_PASSWORD = Security.decode(prop.getProperty(CONFIG_PROP_USER_PASSWORD));
         USER_IS_REMEMBER = Boolean.parseBoolean(prop.getProperty(CONFIG_PROP_USER_REMEMBER));
 
         String dbHost = prop.getProperty(CONFIG_PROP_DB_HOST);
@@ -64,7 +65,7 @@ public class General {
         if (dbUsername != null && !dbUsername.isBlank())
             DB_USERNAME = dbUsername;
         if (dbPassword != null && !dbPassword.isBlank())
-            DB_PASSWORD = dbPassword;
+            DB_PASSWORD = Security.decode(dbPassword);
 
         String themeName = prop.getProperty(CONFIG_PROP_THEME_NAME);
         FlatAllIJThemes.FlatIJLookAndFeelInfo theme = Theme.getThemeInfoByName(themeName);

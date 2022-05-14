@@ -34,7 +34,10 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
     }
 
     @Override
-    public NhanVienDTO findByMaTK(String maTK) {
+    public NhanVienDTO findByMaTK(Integer maTK) {
+        for (NhanVienDTO NhanVienDTO : listNhanVien)
+            if (NhanVienDTO.getMaTK().equals(maTK))
+                return NhanVienDTO;
         return null;
     }
 

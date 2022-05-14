@@ -9,7 +9,7 @@ import java.util.HashMap;
 public interface INhanVienBUS {
     ArrayList<NhanVienDTO> findAll();
     NhanVienDTO findByID(int id);
-    NhanVienDTO findByMaTK(String maTK);
+    NhanVienDTO findByMaTK(Integer maTK);
     ArrayList<NhanVienDTO> findByHoTen(String hoTen);
     ArrayList<NhanVienDTO> findByNgaySinh(Date ngaySinh);
     ArrayList<NhanVienDTO> findBySDT(String sdt);

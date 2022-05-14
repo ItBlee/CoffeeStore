@@ -58,80 +58,104 @@ public class FrameLayout extends MovableJFrame {
 	private void initMenuButton() {
 		categories = new ArrayList<Category>();
 
-		Category itemHoaDon = new Category();
-		itemHoaDon.setCode("HD");
-		itemHoaDon.setToolTipText(Language.LAYOUT_BUTTON_HD);
-		itemHoaDon.setKeyBlind(KeyEvent.VK_1);
-		itemHoaDon.setIcon("bin/images/components/HD.png");
-		itemHoaDon.setIconHover("bin/images/components/HD-hover.gif");
-		itemHoaDon.setFormClassName(FormHoaDon.class.getName());
-		categories.add(itemHoaDon);
+		if (General.CURRENT_ROLE.getQuyenHD() != null &&
+			General.CURRENT_ROLE.getQuyenHD().getQuyenDoc() == 1) {
+			Category itemHoaDon = new Category();
+			itemHoaDon.setCode("HD");
+			itemHoaDon.setToolTipText(Language.LAYOUT_BUTTON_HD);
+			itemHoaDon.setKeyBlind(KeyEvent.VK_1);
+			itemHoaDon.setIcon("bin/images/components/HD.png");
+			itemHoaDon.setIconHover("bin/images/components/HD-hover.gif");
+			itemHoaDon.setFormClassName(FormHoaDon.class.getName());
+			categories.add(itemHoaDon);
+		}
 
-		Category itemSanPham = new Category();
-		itemSanPham.setCode("SP");
-		itemSanPham.setToolTipText(Language.LAYOUT_BUTTON_SP);
-		itemSanPham.setKeyBlind(KeyEvent.VK_2);
-		itemSanPham.setIcon("bin/images/components/SP.png");
-		itemSanPham.setIconHover("bin/images/components/SP-hover.gif");
-		itemSanPham.setFormClassName(FormSanPham.class.getName());
-		categories.add(itemSanPham);
+		if (General.CURRENT_ROLE.getQuyenSP() != null &&
+				General.CURRENT_ROLE.getQuyenSP().getQuyenDoc() == 1) {
+			Category itemSanPham = new Category();
+			itemSanPham.setCode("SP");
+			itemSanPham.setToolTipText(Language.LAYOUT_BUTTON_SP);
+			itemSanPham.setKeyBlind(KeyEvent.VK_2);
+			itemSanPham.setIcon("bin/images/components/SP.png");
+			itemSanPham.setIconHover("bin/images/components/SP-hover.gif");
+			itemSanPham.setFormClassName(FormSanPham.class.getName());
+			categories.add(itemSanPham);
+		}
 
-		Category itemPhieuNhap = new Category();
-		itemPhieuNhap.setCode("PN");
-		itemPhieuNhap.setToolTipText(Language.LAYOUT_BUTTON_PN);
-		itemPhieuNhap.setKeyBlind(KeyEvent.VK_3);
-		itemPhieuNhap.setIcon("bin/images/components/PN.png");
-		itemPhieuNhap.setIconHover("bin/images/components/PN-hover.gif");
-		itemPhieuNhap.setFormClassName(FormPhieuNhap.class.getName());
-		categories.add(itemPhieuNhap);
+		if (General.CURRENT_ROLE.getQuyenPN() != null &&
+				General.CURRENT_ROLE.getQuyenPN().getQuyenDoc() == 1) {
+			Category itemPhieuNhap = new Category();
+			itemPhieuNhap.setCode("PN");
+			itemPhieuNhap.setToolTipText(Language.LAYOUT_BUTTON_PN);
+			itemPhieuNhap.setKeyBlind(KeyEvent.VK_3);
+			itemPhieuNhap.setIcon("bin/images/components/PN.png");
+			itemPhieuNhap.setIconHover("bin/images/components/PN-hover.gif");
+			itemPhieuNhap.setFormClassName(FormPhieuNhap.class.getName());
+			categories.add(itemPhieuNhap);
+		}
 
-		Category itemNCC = new Category();
-		itemNCC.setCode("NCC");
-		itemNCC.setToolTipText(Language.LAYOUT_BUTTON_NCC);
-		itemNCC.setKeyBlind(KeyEvent.VK_4);
-		itemNCC.setIcon("bin/images/components/NCC.png");
-		itemNCC.setIconHover("bin/images/components/NCC-hover.gif");
-		itemNCC.setFormClassName(FormNCC.class.getName());
-		categories.add(itemNCC);
+		if (General.CURRENT_ROLE.getQuyenNCC() != null &&
+				General.CURRENT_ROLE.getQuyenNCC().getQuyenDoc() == 1) {
+			Category itemNCC = new Category();
+			itemNCC.setCode("NCC");
+			itemNCC.setToolTipText(Language.LAYOUT_BUTTON_NCC);
+			itemNCC.setKeyBlind(KeyEvent.VK_4);
+			itemNCC.setIcon("bin/images/components/NCC.png");
+			itemNCC.setIconHover("bin/images/components/NCC-hover.gif");
+			itemNCC.setFormClassName(FormNCC.class.getName());
+			categories.add(itemNCC);
+		}
 
-		Category itemKhachHang = new Category();
-		itemKhachHang.setCode("KH");
-		itemKhachHang.setToolTipText(Language.LAYOUT_BUTTON_KH);
-		itemKhachHang.setKeyBlind(KeyEvent.VK_5);
-		itemKhachHang.setIcon("bin/images/components/KH.png");
-		itemKhachHang.setIconHover("bin/images/components/KH-hover.gif");
-		itemKhachHang.setFormClassName(FormKhachHang.class.getName());
-		categories.add(itemKhachHang);
+		if (General.CURRENT_ROLE.getQuyenKH() != null &&
+				General.CURRENT_ROLE.getQuyenKH().getQuyenDoc() == 1) {
+			Category itemKhachHang = new Category();
+			itemKhachHang.setCode("KH");
+			itemKhachHang.setToolTipText(Language.LAYOUT_BUTTON_KH);
+			itemKhachHang.setKeyBlind(KeyEvent.VK_5);
+			itemKhachHang.setIcon("bin/images/components/KH.png");
+			itemKhachHang.setIconHover("bin/images/components/KH-hover.gif");
+			itemKhachHang.setFormClassName(FormKhachHang.class.getName());
+			categories.add(itemKhachHang);
+		}
 
-		Category itemKhuyenMai = new Category();
-		itemKhuyenMai.setCode("KM");
-		itemKhuyenMai.setToolTipText(Language.LAYOUT_BUTTON_KM);
-		itemKhuyenMai.setKeyBlind(KeyEvent.VK_6);
-		itemKhuyenMai.setIcon("bin/images/components/KM.png");
-		itemKhuyenMai.setIconHover("bin/images/components/KM-hover.gif");
-		itemKhuyenMai.setFormClassName(FormKhuyenMai.class.getName());
-		categories.add(itemKhuyenMai);
+		if (General.CURRENT_ROLE.getQuyenKM() != null &&
+				General.CURRENT_ROLE.getQuyenKM().getQuyenDoc() == 1) {
+			Category itemKhuyenMai = new Category();
+			itemKhuyenMai.setCode("KM");
+			itemKhuyenMai.setToolTipText(Language.LAYOUT_BUTTON_KM);
+			itemKhuyenMai.setKeyBlind(KeyEvent.VK_6);
+			itemKhuyenMai.setIcon("bin/images/components/KM.png");
+			itemKhuyenMai.setIconHover("bin/images/components/KM-hover.gif");
+			itemKhuyenMai.setFormClassName(FormKhuyenMai.class.getName());
+			categories.add(itemKhuyenMai);
+		}
 
-		Category itemThongKe = new Category();
-		itemThongKe.setCode("TK");
-		itemThongKe.setToolTipText(Language.LAYOUT_BUTTON_TK);
-		itemThongKe.setKeyBlind(KeyEvent.VK_7);
-		itemThongKe.setIcon("bin/images/components/TK.png");
-		itemThongKe.setIconHover("bin/images/components/TK-hover.gif");
-		itemThongKe.setFormClassName(FormThongKe.class.getName());
-		categories.add(itemThongKe);
+		if (General.CURRENT_ROLE.getQuyenTK() != null &&
+				General.CURRENT_ROLE.getQuyenTK().getQuyenDoc() == 1) {
+			Category itemThongKe = new Category();
+			itemThongKe.setCode("TK");
+			itemThongKe.setToolTipText(Language.LAYOUT_BUTTON_TK);
+			itemThongKe.setKeyBlind(KeyEvent.VK_7);
+			itemThongKe.setIcon("bin/images/components/TK.png");
+			itemThongKe.setIconHover("bin/images/components/TK-hover.gif");
+			itemThongKe.setFormClassName(FormThongKe.class.getName());
+			categories.add(itemThongKe);
+		}
 
-		Category itemExcel = new Category();
-		itemExcel.setCode("excel");
-		itemExcel.setToolTipText(Language.LAYOUT_BUTTON_EXCEL);
-		itemExcel.setKeyBlind(KeyEvent.VK_8);
-		itemExcel.setIcon("bin/images/components/excel.png");
-		itemExcel.setIconHover("bin/images/components/excel-hover.gif");
-		itemExcel.setFormClassName(FormExcel.class.getName());
-		categories.add(itemExcel);
+		if (General.CURRENT_ROLE.getQuyenExcel() != null &&
+				General.CURRENT_ROLE.getQuyenExcel().getQuyenDoc() == 1) {
+			Category itemExcel = new Category();
+			itemExcel.setCode("excel");
+			itemExcel.setToolTipText(Language.LAYOUT_BUTTON_EXCEL);
+			itemExcel.setKeyBlind(KeyEvent.VK_8);
+			itemExcel.setIcon("bin/images/components/excel.png");
+			itemExcel.setIconHover("bin/images/components/excel-hover.gif");
+			itemExcel.setFormClassName(FormExcel.class.getName());
+			categories.add(itemExcel);
+		}
 
-		//if (General.CURRENT_USER.getChucVu().equals("admin"))
-		{
+		if (General.CURRENT_ROLE.getQuyenNV() != null &&
+				General.CURRENT_ROLE.getQuyenNV().getQuyenDoc() == 1) {
 			Category itemTaiKhoan = new Category();
 			itemTaiKhoan.setCode("NV");
 			itemTaiKhoan.setToolTipText(Language.LAYOUT_BUTTON_NV);
