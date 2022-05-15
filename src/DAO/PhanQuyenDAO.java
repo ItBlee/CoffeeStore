@@ -24,9 +24,9 @@ public class PhanQuyenDAO extends AbstractDAO<PhanQuyenDTO> implements IPhanQuye
     @Override
     public Integer save(PhanQuyenDTO dto) {
         String sql = "INSERT INTO phanquyen"
-                + " (TenPQ, QuyenHD, QuyenSP, QuyenPN, QuyenNCC, QuyenKH, QuyenKM, QuyenTK, QuyenExcel, QuyenNV)"
-                + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        return insert(sql, dto.getTenPQ(), dto.getQuyenHD(), dto.getQuyenSP(),
+                + " (MaPQ, TenPQ, QuyenHD, QuyenSP, QuyenPN, QuyenNCC, QuyenKH, QuyenKM, QuyenTK, QuyenExcel, QuyenNV)"
+                + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        return insert(sql, dto.getMaPQ(), dto.getTenPQ(), dto.getQuyenHD(), dto.getQuyenSP(),
                 dto.getQuyenPN(), dto.getQuyenNCC(), dto.getQuyenKH(), dto.getQuyenKM(),
                 dto.getQuyenTK(), dto.getQuyenExcel(), dto.getQuyenNV());
     }

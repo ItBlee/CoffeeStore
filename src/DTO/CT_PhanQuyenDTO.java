@@ -2,6 +2,8 @@ package DTO;
 
 import DTO.Interface.IEntity;
 
+import java.util.Objects;
+
 public class CT_PhanQuyenDTO implements IEntity {
     private Integer MaCTPQ;
     private Integer QuyenDoc;
@@ -31,7 +33,7 @@ public class CT_PhanQuyenDTO implements IEntity {
     }
 
     public Integer getQuyenDoc() {
-        return QuyenDoc;
+        return Objects.requireNonNullElse(QuyenDoc, 0);
     }
 
     public void setQuyenDoc(Integer quyenDoc) {
@@ -39,7 +41,7 @@ public class CT_PhanQuyenDTO implements IEntity {
     }
 
     public Integer getQuyenTao() {
-        return QuyenTao;
+        return Objects.requireNonNullElse(QuyenTao, 0);
     }
 
     public void setQuyenTao(Integer quyenTao) {
@@ -47,7 +49,7 @@ public class CT_PhanQuyenDTO implements IEntity {
     }
 
     public Integer getQuyenSua() {
-        return QuyenSua;
+        return Objects.requireNonNullElse(QuyenSua, 0);
     }
 
     public void setQuyenSua(Integer quyenSua) {
@@ -55,7 +57,7 @@ public class CT_PhanQuyenDTO implements IEntity {
     }
 
     public Integer getQuyenXoa() {
-        return QuyenXoa;
+        return Objects.requireNonNullElse(QuyenXoa, 0);
     }
 
     public void setQuyenXoa(Integer quyenXoa) {

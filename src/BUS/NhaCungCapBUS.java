@@ -13,7 +13,7 @@ public class NhaCungCapBUS extends AbstractHistoricBUS implements INhaCungCapBUS
     private static ArrayList<NhaCungCapDTO> listNhaCungCap = null;
     private final INhaCungCapDAO nhaCungCapDAO;
 
-    public TaiKhoanBUS() {
+    public NhaCungCapBUS() {
         this.nhaCungCapDAO = new NhaCungCapDAO();
         if (listNhaCungCap == null)
             listNhaCungCap = findAll();

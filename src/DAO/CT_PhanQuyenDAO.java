@@ -24,9 +24,9 @@ public class CT_PhanQuyenDAO extends AbstractDAO<CT_PhanQuyenDTO> implements ICT
     @Override
     public Integer save(CT_PhanQuyenDTO dto) {
         String sql = "INSERT INTO ct_phanquyen"
-                + " (QuyenDoc, QuyenTao, QuyenSua, QuyenXoa)"
-                + " VALUES(?, ?, ?, ?)";
-        return insert(sql, dto.getQuyenDoc(), dto.getQuyenTao(), dto.getQuyenSua(), dto.getQuyenXoa());
+                + " (MaCTPQ, QuyenDoc, QuyenTao, QuyenSua, QuyenXoa)"
+                + " VALUES(?, ?, ?, ?, ?)";
+        return insert(sql, dto.getMaCTPQ(), dto.getQuyenDoc(), dto.getQuyenTao(), dto.getQuyenSua(), dto.getQuyenXoa());
     }
 
     @Override

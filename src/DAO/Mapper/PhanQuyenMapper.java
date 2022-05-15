@@ -15,7 +15,7 @@ public class PhanQuyenMapper implements IRowMapper<PhanQuyenDTO>, IExcelRowMappe
     public PhanQuyenDTO mapRow(ResultSet resultSet) {
         try {
             PhanQuyenDTO phanQuyenDTO = new PhanQuyenDTO();
-            phanQuyenDTO.setMaPQ(resultSet.getInt("MaPQ "));
+            phanQuyenDTO.setMaPQ(resultSet.getInt("MaPQ"));
             phanQuyenDTO.setTenPQ(resultSet.getString("TenPQ"));
             phanQuyenDTO.setQuyenHD(resultSet.getInt("QuyenHD"));
             phanQuyenDTO.setQuyenSP(resultSet.getInt("QuyenSP"));

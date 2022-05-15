@@ -31,9 +31,9 @@ public class NhanVienDAO extends AbstractDAO<NhanVienDTO> implements INhanVienDA
     @Override
     public Integer save(NhanVienDTO nhanVien) {
         String sql = "INSERT INTO nhanvien"
-                + " (MaTK, Ho, Ten, NgaySinh, SDT, Email, GioiTinh, Luong)"
-                + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-        return insert(sql, nhanVien.getMaTK(), nhanVien.getHo(), nhanVien.getTen(), nhanVien.getNgaySinh(),
+                + " (MaNV, MaTK, Ho, Ten, NgaySinh, SDT, Email, GioiTinh, Luong)"
+                + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        return insert(sql, nhanVien.getMaNV(), nhanVien.getMaTK(), nhanVien.getHo(), nhanVien.getTen(), nhanVien.getNgaySinh(),
                 nhanVien.getSDT(), nhanVien.getEmail(), nhanVien.getGioiTinh(), nhanVien.getLuong());
     }
 
