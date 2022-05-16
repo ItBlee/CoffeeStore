@@ -2,9 +2,7 @@ package DTO;
 
 import DTO.Interface.IEntity;
 
-import java.sql.Timestamp;
-
-public class PhieuNhapDTO implements IEntity {
+public class KhachHangDTO implements IEntity {
     @Override
     public Integer getID() {
         return null;
@@ -15,19 +13,15 @@ public class PhieuNhapDTO implements IEntity {
 
     }
 
-    public Timestamp getNgayLap() {
+    public String getHo() {
         return null;
     }
 
-    public Integer getMaNV() {
+    public String getTen() {
         return null;
     }
 
-    public Integer getMaNCC() {
-        return null;
-    }
-
-    public Integer getTongTien() {
+    public Integer getSDT() {
         return null;
     }
 }

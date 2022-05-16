@@ -1,12 +1,22 @@
 package Utils;
 
+import BUS.Interfaces.IKhachHangBUS;
+import BUS.Interfaces.INhaCungCapBUS;
+import BUS.Interfaces.INhanVienBUS;
+import BUS.Interfaces.ISanPhamBUS;
+import BUS.KhachHangBUS;
+import BUS.NhaCungCapBUS;
+import BUS.NhanVienBUS;
+import BUS.SanPhamBUS;
 import DAO.Mapper.Interfaces.IExcelRowMapper;
+import DTO.*;
+import DTO.Interface.IDetailEntity;
+import DTO.Interface.IEntity;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
@@ -14,7 +24,6 @@ import org.apache.poi.ss.usermodel.Font;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -114,7 +123,60 @@ public class FileHandler {
         return list;
     }
 
-    public static void exportPDFReport(String path) {
+    public static void exportPDFReport(String path, IEntity reportInstance, ArrayList<IDetailEntity> list) {
+        ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+        INhanVienBUS nhanVienBUS = new NhanVienBUS();
+
+        String title;
+        String cooperatorLabel;
+        String cooperatorDetail;
+        String employeeDetail;
+        String timestamp;
+        String totalPrice;
+        String salePrice = null;
+        String payment = null;
+
+        ArrayList<SanPhamDTO> productList = new ArrayList<SanPhamDTO>();
+        for (IDetailEntity entity:list) {
+            SanPhamDTO dto = sanPhamBUS.findByID(entity.getForeignID());
+            if (dto != null && dto.getTinhTrang() != 0) {
+                productList.add(dto);
+            } else {
+                list.remove(entity);
+            }
+        }
+
+
+        if (reportInstance instanceof HoaDonDTO) {
+            HoaDonDTO hoaDon = (HoaDonDTO) reportInstance;
+            title = "Hóa ĐƠn";
+            NhanVienDTO nhanVien = nhanVienBUS.findByID(hoaDon.getMaNV());
+            employeeDetail = nhanVien.getHo() + " " + nhanVien.getTen() + " - SĐT: " + nhanVien.getSDT();
+            IKhachHangBUS khachHangBUS = new KhachHangBUS();
+            KhachHangDTO khachHang = khachHangBUS.findByID(hoaDon.getMaKH());
+            cooperatorLabel = "Khách hàng";
+            cooperatorDetail = khachHang.getHo() + " " + khachHang.getTen() + " - SĐT: " + khachHang.getSDT();
+            timestamp = String.valueOf(hoaDon.getNgayLap());
+            totalPrice = String.valueOf(hoaDon.getTongTien());
+            salePrice = String.valueOf(hoaDon.getTienKhuyenMai());
+            payment = String.valueOf(hoaDon.getTienThanhToan());
+        }
+        else if (reportInstance instanceof PhieuNhapDTO) {
+            PhieuNhapDTO phieuNhap = (PhieuNhapDTO) reportInstance;
+            title = "Phiếu Nhậpl";
+            NhanVienDTO nhanVien = nhanVienBUS.findByID(phieuNhap.getMaNV());
+            employeeDetail = nhanVien.getHo() + " " + nhanVien.getTen() + " - SĐT: " + nhanVien.getSDT();
+            INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();
+            NhaCungCapDTO nhaCungCap = nhaCungCapBUS.findByID(phieuNhap.getMaNCC());
+            cooperatorLabel = "Nhà cung cấp";
+            cooperatorDetail = nhaCungCap.getTenNCC() + " - SĐT: " + nhaCungCap.getSDT();
+            timestamp = String.valueOf(phieuNhap.getNgayLap());
+            totalPrice = String.valueOf(phieuNhap.getTongTien());
+        }
+        else
+            return;
+
+
         PDDocument document = new PDDocument();
         PDPage newPage = new PDPage();
         document.addPage(newPage);
@@ -133,59 +195,60 @@ public class FileHandler {
             content.endText();
 
             content.beginText();
-            content.setFont(fontBold, 18);
+            content.setFont(fontBold, 20);
             content.newLineAtOffset(270, 690);
-            content.showText("Hóa đơn");
+            content.showText(title);
             content.endText();
 
             content.beginText();
             content.setFont(font, 14);
             content.setLeading(20f);
             content.newLineAtOffset(60, 610);
-            content.showText("Customer Name: ");
+            content.showText(cooperatorLabel + ": " + cooperatorDetail);
             content.newLine();
-            content.showText("Phone Number: ");
+            content.showText("Nhân viên: " + employeeDetail);
+            content.newLine();
+            content.showText("Ngày lập: " + timestamp);
+            content.newLine();
             content.endText();
 
             content.beginText();
-            content.setFont(font, 14);
-            content.setLeading(20f);
-            content.newLineAtOffset(170, 610);
-            content.showText("Trần Long Tuấn Vũ");
-            content.newLine();
-            content.showText("0397631223");
-            content.endText();
-
-            content.beginText();
-            content.setFont(font, 14);
+            content.setFont(fontBold, 16);
             content.newLineAtOffset(80, 540);
-            content.showText("Product Name");
+            content.showText("Mã");
             content.endText();
 
             content.beginText();
-            content.setFont(font, 14);
+            content.setFont(fontBold, 16);
             content.newLineAtOffset(200, 540);
-            content.showText("Unit Price");
+            content.showText("Sản phẩm");
             content.endText();
 
             content.beginText();
-            content.setFont(font, 14);
+            content.setFont(fontBold, 16);
             content.newLineAtOffset(310, 540);
-            content.showText("Quantity");
+            content.showText("Số lượng");
             content.endText();
 
             content.beginText();
-            content.setFont(font, 14);
+            content.setFont(fontBold, 16);
             content.newLineAtOffset(410, 540);
-            content.showText("Price");
+            content.showText("Đơn giá");
             content.endText();
+
+            content.beginText();
+            content.setFont(fontBold, 16);
+            content.newLineAtOffset(510, 540);
+            content.showText("Tổng");
+            content.endText();
+
 
             content.beginText();
             content.setFont(font, 12);
             content.setLeading(20f);
             content.newLineAtOffset(80, 520);
-            for(int i =0; i< 10; i++) {
-                content.showText("" + i);
+            for (IDetailEntity entity:list) {
+                content.showText(String.valueOf(entity.getForeignID()));
                 content.newLine();
             }
             content.endText();
@@ -194,8 +257,8 @@ public class FileHandler {
             content.setFont(font, 12);
             content.setLeading(20f);
             content.newLineAtOffset(200, 520);
-            for(int i =0; i< 10; i++) {
-                content.showText("" + i);
+            for (int i = 0; i < list.size(); i++) {
+                content.showText(productList.get(i).getTenSP());
                 content.newLine();
             }
             content.endText();
@@ -204,8 +267,8 @@ public class FileHandler {
             content.setFont(font, 12);
             content.setLeading(20f);
             content.newLineAtOffset(310, 520);
-            for(int i =0; i< 10; i++) {
-                content.showText("" + i);
+            for (int i = 0; i < list.size(); i++) {
+                content.showText(list.get(i).getSoLuong() + " " + productList.get(i).getDonVi());
                 content.newLine();
             }
             content.endText();
@@ -214,23 +277,35 @@ public class FileHandler {
             content.setFont(font, 12);
             content.setLeading(20f);
             content.newLineAtOffset(410, 520);
-            for(int i =0; i< 10; i++) {
-                content.showText("" + i);
+            for (int i = 0; i < list.size(); i++) {
+                content.showText(list.get(i).getDonGia() + "/" + productList.get(i).getDonVi());
                 content.newLine();
             }
             content.endText();
 
             content.beginText();
-            content.setFont(font, 14);
-            content.newLineAtOffset(310, (500-(20*10)));
-            content.showText("Total: ");
+            content.setFont(font, 12);
+            content.setLeading(20f);
+            content.newLineAtOffset(510, 520);
+            for (IDetailEntity entity : list) {
+                content.showText(String.valueOf(entity.getDonGia() * entity.getSoLuong()));
+                content.newLine();
+            }
             content.endText();
 
             content.beginText();
-            content.setFont(font, 14);
-            content.newLineAtOffset(410, (500-(20*10)));
-            content.showText("999");
-            content.endText();
+            content.setFont(fontBold, 16);
+            content.newLineAtOffset(310, (500-(20*list.size())));
+            content.showText("Tổng tiền: " + totalPrice + " đồng");
+            content.newLine();
+            if (salePrice != null) {
+                content.showText("Giảm giá: " + salePrice + " đồng");
+                content.newLine();
+            }
+            if (payment != null) {
+                content.showText("Thành tiền: " + payment + " đồng");
+                content.endText();
+            }
 
             content.close();
             document.save(path);
@@ -253,9 +328,5 @@ public class FileHandler {
 
     public static File getFile(String path) {
         return new File(path);
-    }
-
-    public static void main(String[] args) {
-        exportPDFReport("export/HoaDon.pdf");
     }
 }

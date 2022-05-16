@@ -12,4 +12,12 @@ public class NhaCungCapDTO implements IEntity {
     public void setID(Integer id) {
 
     }
+
+    public String getTenNCC() {
+        return null;
+    }
+
+    public Integer getSDT() {
+        return null;
+    }
 }
