@@ -1,4 +1,4 @@
-package DAO.Interfaces;
+package DAO.Interfaces.common;
 
 public interface ICrudDAO<T> {
     Integer save(T entity);

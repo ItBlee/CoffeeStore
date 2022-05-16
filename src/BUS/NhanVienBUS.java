@@ -5,6 +5,8 @@ import BUS.Interfaces.INhanVienBUS;
 import DAO.Interfaces.INhanVienDAO;
 import DAO.NhanVienDAO;
 import DTO.NhanVienDTO;
+import DTO.TaiKhoanDTO;
+import Utils.StringUtils;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -43,32 +45,56 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
 
     @Override
     public ArrayList<NhanVienDTO> findByHoTen(String hoTen) {
-        return null;
+        ArrayList<NhanVienDTO> result = new ArrayList<NhanVienDTO>();
+        for (NhanVienDTO nhanVienDTO : listNhanVien)
+            if (StringUtils.containsIgnoreCase(nhanVienDTO.getHo() + " " + nhanVienDTO.getTen(), hoTen))
+                result.add(nhanVienDTO);
+        return result;
     }
 
     @Override
     public ArrayList<NhanVienDTO> findByNgaySinh(Date ngaySinh) {
-        return null;
+        ArrayList<NhanVienDTO> result = new ArrayList<NhanVienDTO>();
+        for (NhanVienDTO nhanVienDTO : listNhanVien)
+            if (nhanVienDTO.getNgaySinh().equals(ngaySinh))
+                result.add(nhanVienDTO);
+        return result;
     }
 
     @Override
-    public ArrayList<NhanVienDTO> findBySDT(String sdt) {
-        return null;
+    public ArrayList<NhanVienDTO> findBySDT(Integer sdt) {
+        ArrayList<NhanVienDTO> result = new ArrayList<NhanVienDTO>();
+        for (NhanVienDTO nhanVienDTO : listNhanVien)
+            if (StringUtils.containsIgnoreCase(nhanVienDTO.getSDT(), String.valueOf(sdt)))
+                result.add(nhanVienDTO);
+        return result;
     }
 
     @Override
     public ArrayList<NhanVienDTO> findByEmail(String email) {
-        return null;
+        ArrayList<NhanVienDTO> result = new ArrayList<NhanVienDTO>();
+        for (NhanVienDTO nhanVienDTO : listNhanVien)
+            if (StringUtils.containsIgnoreCase(nhanVienDTO.getEmail(), email))
+                result.add(nhanVienDTO);
+        return result;
     }
 
     @Override
-    public ArrayList<NhanVienDTO> findByGioiTinh(String gioiTinh) {
-        return null;
+    public ArrayList<NhanVienDTO> findByGioiTinh(Integer gioiTinh) {
+        ArrayList<NhanVienDTO> result = new ArrayList<NhanVienDTO>();
+        for (NhanVienDTO nhanVienDTO : listNhanVien)
+            if (nhanVienDTO.getGioiTinh().equals(gioiTinh))
+                result.add(nhanVienDTO);
+        return result;
     }
 
     @Override
     public ArrayList<NhanVienDTO> findByLuong(Integer luong) {
-        return null;
+        ArrayList<NhanVienDTO> result = new ArrayList<NhanVienDTO>();
+        for (NhanVienDTO nhanVienDTO : listNhanVien)
+            if (nhanVienDTO.getLuong().equals(luong))
+                result.add(nhanVienDTO);
+        return result;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package DAO.Interfaces;
+package DAO.Interfaces.common;
 
 import DAO.Mapper.Interfaces.IRowMapper;
 

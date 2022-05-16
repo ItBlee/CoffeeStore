@@ -7,6 +7,7 @@ import DAO.PhanQuyenDAO;
 import DTO.PhanQuyenDTO;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PhanQuyenBUS extends AbstractHistoricBUS implements IPhanQuyenBUS {
     private static ArrayList<PhanQuyenDTO> listPhanQuyen = null;
@@ -68,7 +69,29 @@ public class PhanQuyenBUS extends AbstractHistoricBUS implements IPhanQuyenBUS {
     }
 
     @Override
+    public HashMap<Integer, Boolean> delete(int[] ids) {
+        HashMap<Integer, Boolean> report = new HashMap<Integer, Boolean>();
+        boolean resultExecute;
+        for (int id:ids) {
+            try {
+                delete(id);
+                resultExecute = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                resultExecute = false;
+            }
+            report.put(id, resultExecute);
+        }
+        return report;
+    }
+
+    @Override
     public boolean isExist(PhanQuyenDTO phanQuyen) {
         return listPhanQuyen.contains(phanQuyen);
+    }
+
+    @Override
+    public int getTotalCount() {
+        return listPhanQuyen.size();
     }
 }

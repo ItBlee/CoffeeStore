@@ -4,7 +4,9 @@ import BUS.Interfaces.ILichSuBUS;
 import DAO.Interfaces.ILichSuDAO;
 import DAO.LichSuDAO;
 import DTO.LichSuDTO;
+import Utils.StringUtils;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -33,27 +35,49 @@ public class LichSuBUS implements ILichSuBUS {
 
     @Override
     public ArrayList<LichSuDTO> findByTenDoiTuong(String tenDoiTuong) {
-        return null;
+        ArrayList<LichSuDTO> result = new ArrayList<LichSuDTO>();
+        for (LichSuDTO lichSuDTO : listLichSu)
+            if (StringUtils.containsIgnoreCase(lichSuDTO.getTenDoiTuong(), tenDoiTuong))
+                result.add(lichSuDTO);
+        return result;
     }
 
     @Override
     public ArrayList<LichSuDTO> findByTenDoiTuongAndMaDoiTuong(String tenDoiTuong, Integer maDoiTuong) {
-        return null;
+        ArrayList<LichSuDTO> result = new ArrayList<LichSuDTO>();
+        for (LichSuDTO lichSuDTO : listLichSu)
+            if (lichSuDTO.getMaDoiTuong().equals(maDoiTuong)
+                && StringUtils.containsIgnoreCase(lichSuDTO.getTenDoiTuong(), tenDoiTuong))
+                result.add(lichSuDTO);
+        return result;
     }
 
     @Override
     public ArrayList<LichSuDTO> findByThoiGian(Timestamp tuNgay, Timestamp denNgay) {
-        return null;
+        ArrayList<LichSuDTO> result = new ArrayList<LichSuDTO>();
+        for (LichSuDTO lichSuDTO : listLichSu)
+            if ((lichSuDTO.getThoiGian().after(tuNgay) && lichSuDTO.getThoiGian().before(denNgay))
+                || (tuNgay.equals(denNgay) && tuNgay.equals(lichSuDTO.getThoiGian())))
+                result.add(lichSuDTO);
+        return result;
     }
 
     @Override
     public ArrayList<LichSuDTO> findByNguoiThucHien(Integer nguoiThucHien) {
-        return null;
+        ArrayList<LichSuDTO> result = new ArrayList<LichSuDTO>();
+        for (LichSuDTO lichSuDTO : listLichSu)
+            if (lichSuDTO.getNguoiThucHien().equals(nguoiThucHien))
+                result.add(lichSuDTO);
+        return result;
     }
 
     @Override
     public ArrayList<LichSuDTO> findByThaoTac(String thaoTac) {
-        return null;
+        ArrayList<LichSuDTO> result = new ArrayList<LichSuDTO>();
+        for (LichSuDTO lichSuDTO : listLichSu)
+            if (StringUtils.containsIgnoreCase(lichSuDTO.getThaoTac(), thaoTac))
+                result.add(lichSuDTO);
+        return result;
     }
 
     @Override
@@ -69,5 +93,10 @@ public class LichSuBUS implements ILichSuBUS {
     @Override
     public boolean isExist(LichSuDTO lichSu) {
         return listLichSu.contains(lichSu);
+    }
+
+    @Override
+    public int getTotalCount() {
+        return listLichSu.size();
     }
 }

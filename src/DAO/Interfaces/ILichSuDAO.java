@@ -1,10 +1,8 @@
 package DAO.Interfaces;
 
+import DAO.Interfaces.common.ICrudDAO;
+import DAO.Interfaces.common.ISearchableDAO;
 import DTO.LichSuDTO;
 
-import java.util.ArrayList;
-
-public interface ILichSuDAO extends ICrudDAO<LichSuDTO> {
-    ArrayList<LichSuDTO> findAll();
-    LichSuDTO findByID(int MaLS);
+public interface ILichSuDAO extends ISearchableDAO<LichSuDTO>, ICrudDAO<LichSuDTO> {
 }

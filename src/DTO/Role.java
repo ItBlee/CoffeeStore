@@ -1,7 +1,4 @@
-package Utils;
-
-import DTO.CT_PhanQuyenDTO;
-import DTO.PhanQuyenDTO;
+package DTO;
 
 public class Role {
     private final PhanQuyenDTO phanQuyen;

@@ -1,22 +1,13 @@
 package BUS.Interfaces;
 
+import BUS.Interfaces.common.ICrudBUS;
+import BUS.Interfaces.common.ISearchableBUS;
 import DTO.KhuyenMaiDTO;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public interface IKhuyenMaiBUS {
-    ArrayList<KhuyenMaiDTO> findAll();
-    KhuyenMaiDTO findByID(int id);
+public interface IKhuyenMaiBUS extends ISearchableBUS<KhuyenMaiDTO>, ICrudBUS<KhuyenMaiDTO> {
     ArrayList<KhuyenMaiDTO> findByTieuDe(String tieuDe);
     ArrayList<KhuyenMaiDTO> findByThoiGian(Date tuNgay, Date denNgay);
-
-    void save(KhuyenMaiDTO khuyenMai) throws Exception;
-    void update(KhuyenMaiDTO khuyenMai) throws Exception;
-    void delete(int id) throws Exception;
-    HashMap<Integer, Boolean> delete(int[] ids);
-
-    boolean isExist(KhuyenMaiDTO khuyenMai);
-    int getTotalCount();
 }

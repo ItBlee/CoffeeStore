@@ -2,12 +2,22 @@ package BUS;
 
 import BUS.Abstract.AbstractHistoricBUS;
 import BUS.Interfaces.IKhachHangBUS;
+import DAO.Interfaces.IKhachHangDAO;
+import DAO.KhachHangDAO;
 import DTO.KhachHangDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class KhachHangBUS extends AbstractHistoricBUS implements IKhachHangBUS {
+    private static ArrayList<KhachHangDTO> listKhachHang = null;
+    private final IKhachHangDAO khachHangDAO;
+
+    public KhachHangBUS() {
+        this.khachHangDAO = new KhachHangDAO();
+        if (listKhachHang == null)
+            listKhachHang = findAll();
+    }
     @Override
     public ArrayList<KhachHangDTO> findAll() {
         return null;
@@ -15,11 +25,6 @@ public class KhachHangBUS extends AbstractHistoricBUS implements IKhachHangBUS {
 
     @Override
     public KhachHangDTO findByID(int id) {
-        return null;
-    }
-
-    @Override
-    public KhachHangDTO findByMaTK(Integer maTK) {
         return null;
     }
 

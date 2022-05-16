@@ -1,10 +1,8 @@
 package DAO.Interfaces;
 
+import DAO.Interfaces.common.ICrudDAO;
+import DAO.Interfaces.common.ISearchableDAO;
 import DTO.TaiKhoanDTO;
 
-import java.util.ArrayList;
-
-public interface ITaiKhoanDAO extends ICrudDAO<TaiKhoanDTO> {
-    ArrayList<TaiKhoanDTO> findAll();
-    TaiKhoanDTO findByID(int MaTK);
+public interface ITaiKhoanDAO extends ISearchableDAO<TaiKhoanDTO>, ICrudDAO<TaiKhoanDTO> {
 }

@@ -1,10 +1,8 @@
 package DAO.Interfaces;
 
+import DAO.Interfaces.common.ICrudDAO;
+import DAO.Interfaces.common.ISearchableDAO;
 import DTO.NhaCungCapDTO;
 
-import java.util.ArrayList;
-
-public interface INhaCungCapDAO  extends ICrudDAO<NhaCungCapDTO> {
-    ArrayList<NhaCungCapDTO> findAll();
-    NhaCungCapDTO findByID(int MaSP);
+public interface INhaCungCapDAO extends ISearchableDAO<NhaCungCapDTO>, ICrudDAO<NhaCungCapDTO> {
 }

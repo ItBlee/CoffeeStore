@@ -22,13 +22,6 @@ public class NhanVienDAO extends AbstractDAO<NhanVienDTO> implements INhanVienDA
     }
 
     @Override
-    public NhanVienDTO findByMaTK(int MaTK) {
-        String sql = "SELECT * FROM nhanvien WHERE MaTK = ?";
-        ArrayList<NhanVienDTO> result = query(sql, new NhanVienMapper(), MaTK);
-        return result.isEmpty() ? null : result.get(0);
-    }
-
-    @Override
     public Integer save(NhanVienDTO nhanVien) {
         String sql = "INSERT INTO nhanvien"
                 + " (MaNV, MaTK, Ho, Ten, NgaySinh, SDT, Email, GioiTinh, Luong)"

@@ -1,10 +1,8 @@
 package DAO.Interfaces;
 
+import DAO.Interfaces.common.ICrudDAO;
+import DAO.Interfaces.common.ISearchableDAO;
 import DTO.CT_PhieuNhapDTO;
 
-import java.util.ArrayList;
-
-public interface ICT_PhieuNhapDAO extends ICrudDAO<CT_PhieuNhapDTO> {
-    ArrayList<CT_PhieuNhapDTO> findAll();
-    CT_PhieuNhapDTO findByID(int MaSP);
+public interface ICT_PhieuNhapDAO extends ISearchableDAO<CT_PhieuNhapDTO>, ICrudDAO<CT_PhieuNhapDTO> {
 }

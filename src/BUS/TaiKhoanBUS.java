@@ -11,8 +11,9 @@ import DTO.PhanQuyenDTO;
 import DTO.TaiKhoanDTO;
 import BUS.Interfaces.ITaiKhoanBUS;
 import Utils.General;
-import Utils.Role;
+import DTO.Role;
 import Utils.Security;
+import Utils.StringUtils;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -42,28 +43,49 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
     }
 
     @Override
-    public TaiKhoanDTO findByTenDangNhap(String tenDangNhap) {
-        return null;
+    public ArrayList<TaiKhoanDTO> findByMaPQ(Integer maPQ) {
+        ArrayList<TaiKhoanDTO> result = new ArrayList<TaiKhoanDTO>();
+        for (TaiKhoanDTO taiKhoanDTO : listTaiKhoan)
+            if (taiKhoanDTO.getMaPQ().equals(maPQ))
+                result.add(taiKhoanDTO);
+        return result;
+    }
+
+    @Override
+    public ArrayList<TaiKhoanDTO> findByTenDangNhap(String tenDangNhap) {
+        ArrayList<TaiKhoanDTO> result = new ArrayList<TaiKhoanDTO>();
+        for (TaiKhoanDTO taiKhoanDTO : listTaiKhoan)
+            if (StringUtils.containsIgnoreCase(taiKhoanDTO.getTenDangNhap(), tenDangNhap))
+                result.add(taiKhoanDTO);
+        return result;
     }
 
     @Override
     public ArrayList<TaiKhoanDTO> findByNgayTao(Date tuNgay, Date denNgay) {
-        return null;
+        ArrayList<TaiKhoanDTO> result = new ArrayList<TaiKhoanDTO>();
+        for (TaiKhoanDTO taiKhoanDTO : listTaiKhoan)
+            if ((taiKhoanDTO.getNgayTao().after(tuNgay) && taiKhoanDTO.getNgayTao().before(denNgay))
+                || (tuNgay.equals(denNgay) && tuNgay.equals(new Date(taiKhoanDTO.getNgayTao().getTime()))))
+                result.add(taiKhoanDTO);
+        return result;
     }
 
     @Override
     public ArrayList<TaiKhoanDTO> findByNguoiTao(Integer nguoiTao) {
-        return null;
-    }
-
-    @Override
-    public ArrayList<TaiKhoanDTO> findByChucVu(String chucVu) {
-        return null;
+        ArrayList<TaiKhoanDTO> result = new ArrayList<TaiKhoanDTO>();
+        for (TaiKhoanDTO taiKhoanDTO : listTaiKhoan)
+            if (taiKhoanDTO.getNguoiTao().equals(nguoiTao))
+                result.add(taiKhoanDTO);
+        return result;
     }
 
     @Override
     public ArrayList<TaiKhoanDTO> findByTinhTrang(Integer tinhTrang) {
-        return null;
+        ArrayList<TaiKhoanDTO> result = new ArrayList<TaiKhoanDTO>();
+        for (TaiKhoanDTO taiKhoanDTO : listTaiKhoan)
+            if (taiKhoanDTO.getTinhTrang().equals(tinhTrang))
+                result.add(taiKhoanDTO);
+        return result;
     }
 
     @Override

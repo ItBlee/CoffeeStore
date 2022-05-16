@@ -1,10 +1,8 @@
 package DAO.Interfaces;
 
+import DAO.Interfaces.common.ICrudDAO;
+import DAO.Interfaces.common.ISearchableDAO;
 import DTO.CT_HoaDonDTO;
 
-import java.util.ArrayList;
-
-public interface ICT_HoaDonDAO extends ICrudDAO<CT_HoaDonDTO> {
-    ArrayList<CT_HoaDonDTO> findAll();
-    CT_HoaDonDTO findByID(int MaSP);
+public interface ICT_HoaDonDAO extends ISearchableDAO<CT_HoaDonDTO>, ICrudDAO<CT_HoaDonDTO> {
 }

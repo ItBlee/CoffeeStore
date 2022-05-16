@@ -1,11 +1,8 @@
 package DAO.Interfaces;
 
+import DAO.Interfaces.common.ICrudDAO;
+import DAO.Interfaces.common.ISearchableDAO;
 import DTO.NhanVienDTO;
 
-import java.util.ArrayList;
-
-public interface INhanVienDAO extends ICrudDAO<NhanVienDTO> {
-    ArrayList<NhanVienDTO> findAll();
-    NhanVienDTO findByID(int MaNV);
-    NhanVienDTO findByMaTK(int MaTK);
+public interface INhanVienDAO extends ISearchableDAO<NhanVienDTO>, ICrudDAO<NhanVienDTO> {
 }

@@ -1,27 +1,19 @@
 package BUS.Interfaces;
 
+import BUS.Interfaces.common.ISearchableBUS;
+import BUS.Interfaces.common.ICrudBUS;
 import DTO.TaiKhoanDTO;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public interface ITaiKhoanBUS {
-    ArrayList<TaiKhoanDTO> findAll();
-    TaiKhoanDTO findByID(int id);
-    TaiKhoanDTO findByTenDangNhap(String tenDangNhap);
+public interface ITaiKhoanBUS extends ISearchableBUS<TaiKhoanDTO>, ICrudBUS<TaiKhoanDTO> {
+    ArrayList<TaiKhoanDTO> findByMaPQ(Integer maPQ);
+    ArrayList<TaiKhoanDTO> findByTenDangNhap(String tenDangNhap);
     ArrayList<TaiKhoanDTO> findByNgayTao(Date tuNgay, Date denNgay);
     ArrayList<TaiKhoanDTO> findByNguoiTao(Integer nguoiTao);
-    ArrayList<TaiKhoanDTO> findByChucVu(String chucVu);
     ArrayList<TaiKhoanDTO> findByTinhTrang(Integer tinhTrang);
 
-    void save(TaiKhoanDTO taikhoan) throws Exception;
-    void update(TaiKhoanDTO taikhoan) throws Exception;
-    void delete(int id) throws Exception;
-    HashMap<Integer, Boolean> delete(int[] ids);
-
-    boolean isExist(TaiKhoanDTO taikhoan);
-    int getTotalCount();
     boolean login(String username, String password);
     void logout();
 }

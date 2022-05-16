@@ -1,6 +1,6 @@
 package DAO.Abstract;
 
-import DAO.Interfaces.IAbstractDAO;
+import DAO.Interfaces.common.IAbstractDAO;
 import DAO.Mapper.Interfaces.IRowMapper;
 import Utils.General;
 import Utils.MyDBConnection;

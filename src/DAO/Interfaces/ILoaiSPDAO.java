@@ -1,10 +1,8 @@
 package DAO.Interfaces;
 
+import DAO.Interfaces.common.ICrudDAO;
+import DAO.Interfaces.common.ISearchableDAO;
 import DTO.LoaiSPDTO;
 
-import java.util.ArrayList;
-
-public interface ILoaiSPDAO  extends ICrudDAO<LoaiSPDTO> {
-    ArrayList<LoaiSPDTO> findAll();
-    LoaiSPDTO findByID(int MaSP);
+public interface ILoaiSPDAO extends ISearchableDAO<LoaiSPDTO>, ICrudDAO<LoaiSPDTO> {
 }

@@ -1,10 +1,8 @@
 package DAO.Interfaces;
 
+import DAO.Interfaces.common.ICrudDAO;
+import DAO.Interfaces.common.ISearchableDAO;
 import DTO.CT_PhanQuyenDTO;
 
-import java.util.ArrayList;
-
-public interface ICT_PhanQuyenDAO extends ICrudDAO<CT_PhanQuyenDTO> {
-    ArrayList<CT_PhanQuyenDTO> findAll();
-    CT_PhanQuyenDTO findByID(int MaCTPQ);
+public interface ICT_PhanQuyenDAO extends ISearchableDAO<CT_PhanQuyenDTO>, ICrudDAO<CT_PhanQuyenDTO> {
 }
