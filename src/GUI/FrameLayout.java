@@ -787,6 +787,8 @@ public class FrameLayout extends MovableJFrame {
 	}
 
 	private void setFormFont(Font font) {
+		if (font == null)
+			return;
 		changeFont(currentItem.getForm(), font);
 		for (Category item : categories)
 			changeFont(item.getForm(), font);

@@ -17,11 +17,10 @@ public class Theme {
     private static Font systemThemeFont;
 
     public static void setupDefault() {
-        if (systemThemeFont == null)
+        if (systemThemeInfo == null)
             systemThemeInfo = new FlatIJLookAndFeelInfo(DEFAULT_THEME_NAME, DEFAULT_THEME_CLASS, DEFAULT_THEME_DARK_MODE);
-        if (systemThemeFont == null)
-            systemThemeFont = UIManager.getDefaults().getFont("TabbedPane.font");
         FlatDarkLaf.setup();
+        registerFont("bin/font/segoeui.ttf");
         registerFont("bin/font/seguibl.ttf");
     }
 
