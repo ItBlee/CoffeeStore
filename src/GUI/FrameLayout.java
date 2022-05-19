@@ -162,7 +162,7 @@ public class FrameLayout extends MovableJFrame {
 			itemTaiKhoan.setKeyBlind(KeyEvent.VK_9);
 			itemTaiKhoan.setIcon("bin/images/components/NV.png");
 			itemTaiKhoan.setIconHover("bin/images/components/NV-hover.gif");
-			itemTaiKhoan.setFormClassName(FormTaiKhoan.class.getName());
+			itemTaiKhoan.setFormClassName(FormNhanSu.class.getName());
 			categories.add(itemTaiKhoan);
 		}
 	}
@@ -749,6 +749,8 @@ public class FrameLayout extends MovableJFrame {
 	}
 
 	private void setSelectedButton(JButton newBtn) {
+		if (newBtn == null)
+			return;
 		ArrayList<JButton> oldBtnList = new ArrayList<JButton>();
 		for (Component c : menuPanel.getComponents())
 			if (c instanceof JButton && c != newBtn && (!c.isEnabled() || c.getWidth() > Category.ITEM_BUTTON_SIZE)) {
@@ -766,6 +768,8 @@ public class FrameLayout extends MovableJFrame {
 	}
 
 	private void setFormPanel(JPanel newPanel) {
+		if (newPanel == null)
+			return;
 		formLayoutPanel.removeAll();
 		for (Category item : categories) {
 			if (item.getFormClassName().equals(newPanel.getClass().getName()))
@@ -779,6 +783,8 @@ public class FrameLayout extends MovableJFrame {
 	}
 
 	private void changeFont(Component component, Font font) {
+		if (component == null)
+			return;
 		component.setFont(font);
 		if (component instanceof Container) {
 			for (Component child : ((Container) component).getComponents())

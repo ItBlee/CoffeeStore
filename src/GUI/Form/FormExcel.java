@@ -12,9 +12,9 @@ public class FormExcel extends JPanel {
     private void initComponents() {
         JPanel importPanel = new JPanel();
         JPanel dragDropPanel = new JPanel();
-        JLabel jLabel4 = new JLabel();
-        JLabel jLabel10 = new JLabel();
-        JLabel jLabel5 = new JLabel();
+        JLabel lbDragDrop = new JLabel();
+        JLabel lbDragDrop2 = new JLabel();
+        JLabel lbDragDrop3 = new JLabel();
         JButton btnImport = new JButton();
         JLabel icFile = new JLabel();
         JLabel lbPercentUpload = new JLabel();
@@ -83,28 +83,34 @@ public class FormExcel extends JPanel {
         JButton btnSelectPNPDF = new JButton();
         JLabel lbCTExportPDF = new JLabel();
 
-        setBackground(new Color(255, 255, 255));
         setFont(new Font("Segoe UI", Font.BOLD, 13));
-        setOpaque(false);
         setLayout(null);
 
         importPanel.setBackground(new Color(255, 255, 255));
         importPanel.setBorder(new LineBorder(new Color(72, 139, 255), 2, true));
         importPanel.setLayout(null);
 
-        dragDropPanel.setBackground(new Color(72, 139, 255));
-        dragDropPanel.setBorder(new LineBorder(new Color(72, 139, 255), 1, true));
+        dragDropPanel.setBorder(BorderFactory.createDashedBorder(new Color(72, 139, 255), 2, 5, 2, true));
         dragDropPanel.setOpaque(false);
+        dragDropPanel.setLayout(new BoxLayout(dragDropPanel, BoxLayout.PAGE_AXIS));
 
-        jLabel4.setText("Kéo và Thả tập tin vào đây");
-        dragDropPanel.add(jLabel4);
+        dragDropPanel.add(Box.createVerticalGlue());
+        lbDragDrop.setText("Kéo và Thả tập tin vào đây");
+        lbDragDrop.setAlignmentX(CENTER_ALIGNMENT);
+        dragDropPanel.add(lbDragDrop);
+        dragDropPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
-        jLabel10.setText("hoặc");
-        dragDropPanel.add(jLabel10);
+        lbDragDrop2.setText("hoặc");
+        lbDragDrop2.setAlignmentX(CENTER_ALIGNMENT);
+        dragDropPanel.add(lbDragDrop2);
+        dragDropPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
-        jLabel5.setForeground(new Color(72, 139, 255));
-        jLabel5.setText("duyệt");
-        dragDropPanel.add(jLabel5);
+        lbDragDrop3.setForeground(new Color(72, 139, 255));
+        lbDragDrop3.setText("duyệt");
+        lbDragDrop3.setAlignmentX(CENTER_ALIGNMENT);
+        dragDropPanel.add(lbDragDrop3);
+        dragDropPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        dragDropPanel.add(Box.createVerticalGlue());
 
         importPanel.add(dragDropPanel);
         dragDropPanel.setBounds(20, 220, 360, 180);

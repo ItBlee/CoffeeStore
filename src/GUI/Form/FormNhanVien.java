@@ -7,12 +7,12 @@ package GUI.Form;/*
  *
  * @author PC
  */
-public class FormTaiKhoan extends javax.swing.JPanel {
+public class FormNhanVien extends javax.swing.JPanel {
 
     /**
      * Creates new form NewJPanel
      */
-    public FormTaiKhoan() {
+    public FormNhanVien() {
         initComponents();
     }
 
@@ -51,13 +51,17 @@ public class FormTaiKhoan extends javax.swing.JPanel {
         btnAccount = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         btnHistory = new javax.swing.JButton();
+        lbMailNV1 = new javax.swing.JLabel();
+        txtMailNV1 = new javax.swing.JTextField();
+        txtMailNV2 = new javax.swing.JTextField();
+        lbMailNV2 = new javax.swing.JLabel();
 
         setLayout(null);
 
         lbChucvuNV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lbChucvuNV.setText("Chức vụ");
+        lbChucvuNV.setText("Mã tài khoản");
         add(lbChucvuNV);
-        lbChucvuNV.setBounds(440, 240, 70, 30);
+        lbChucvuNV.setBounds(410, 240, 120, 30);
 
         txtNameNV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -84,17 +88,17 @@ public class FormTaiKhoan extends javax.swing.JPanel {
         txtHoNV.setBounds(160, 240, 220, 30);
 
         lbNameNV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lbNameNV.setText("Mật khẩu");
+        lbNameNV.setText("Tên nhân viên");
         add(lbNameNV);
         lbNameNV.setBounds(30, 290, 110, 30);
 
         lbHoNV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lbHoNV.setText("Tên đăng nhập");
+        lbHoNV.setText("Họ nhân viên");
         add(lbHoNV);
-        lbHoNV.setBounds(30, 240, 120, 30);
+        lbHoNV.setBounds(30, 240, 110, 30);
 
         lbInfNV.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        lbInfNV.setText("Thông tin tài khoản");
+        lbInfNV.setText("Thông tin nhân viên");
         add(lbInfNV);
         lbInfNV.setBounds(340, 110, 230, 30);
 
@@ -107,9 +111,9 @@ public class FormTaiKhoan extends javax.swing.JPanel {
         txtSĐTNV.setBounds(160, 340, 220, 30);
 
         lbIDNV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lbIDNV.setText("Mã tài khoản");
+        lbIDNV.setText("Mã nhân viên");
         add(lbIDNV);
-        lbIDNV.setBounds(20, 190, 110, 30);
+        lbIDNV.setBounds(30, 190, 110, 30);
 
         txtIDNV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -122,12 +126,12 @@ public class FormTaiKhoan extends javax.swing.JPanel {
         btnAddNV.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnAddNV.setText("Thêm");
         add(btnAddNV);
-        btnAddNV.setBounds(440, 340, 120, 30);
+        btnAddNV.setBounds(850, 190, 120, 30);
 
         btnFixNCC.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnFixNCC.setText("Sửa");
         add(btnFixNCC);
-        btnFixNCC.setBounds(720, 340, 120, 29);
+        btnFixNCC.setBounds(850, 290, 120, 29);
 
         btnDelNV.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnDelNV.setText("Xóa");
@@ -137,7 +141,7 @@ public class FormTaiKhoan extends javax.swing.JPanel {
             }
         });
         add(btnDelNV);
-        btnDelNV.setBounds(860, 340, 120, 29);
+        btnDelNV.setBounds(850, 340, 120, 29);
 
         btnReloadNV.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnReloadNV.setText("Tải lại");
@@ -152,7 +156,7 @@ public class FormTaiKhoan extends javax.swing.JPanel {
             }
         });
         add(btnFindNV);
-        btnFindNV.setBounds(580, 340, 120, 29);
+        btnFindNV.setBounds(850, 240, 120, 29);
 
         tblListNV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tblListNV.setForeground(new java.awt.Color(0, 102, 255));
@@ -161,11 +165,11 @@ public class FormTaiKhoan extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Họ", "Tên", "SĐT", "Giới tính", "Chức vụ", "Mail"
+                "Mã NV", "Mã tài khoản", "Họ", "Tên", "Ngày sinh", "SĐT", "Mail", "Giới tính", "Lương"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, true, false, false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -180,19 +184,19 @@ public class FormTaiKhoan extends javax.swing.JPanel {
         jScrollPane1.setBounds(2, 490, 1000, 330);
 
         lbSĐTNV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lbSĐTNV.setText("Ngày tạo");
+        lbSĐTNV.setText("SĐT nhân viên");
         add(lbSĐTNV);
         lbSĐTNV.setBounds(30, 340, 120, 30);
 
         lbListNV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lbListNV.setText("Danh sách nhân viên");
         add(lbListNV);
-        lbListNV.setBounds(10, 390, 200, 30);
+        lbListNV.setBounds(160, 440, 200, 30);
 
         lbMailNV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lbMailNV.setText("Tình trạng");
+        lbMailNV.setText("Ngày sinh");
         add(lbMailNV);
-        lbMailNV.setBounds(440, 290, 130, 30);
+        lbMailNV.setBounds(30, 390, 130, 30);
 
         txtMailNV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -200,12 +204,12 @@ public class FormTaiKhoan extends javax.swing.JPanel {
             }
         });
         add(txtMailNV);
-        txtMailNV.setBounds(580, 290, 220, 30);
+        txtMailNV.setBounds(160, 390, 220, 30);
 
         lbSexNV.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lbSexNV.setText("Người tạo");
+        lbSexNV.setText("Giới tính nhân viên");
         add(lbSexNV);
-        lbSexNV.setBounds(440, 190, 90, 30);
+        lbSexNV.setBounds(410, 190, 150, 30);
 
         txtSexNV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -216,7 +220,7 @@ public class FormTaiKhoan extends javax.swing.JPanel {
         txtSexNV.setBounds(580, 190, 220, 30);
 
         btnAccount.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btnAccount.setText("NHÂN VIÊN");
+        btnAccount.setText("TÀI KHOẢN");
         btnAccount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAccountActionPerformed(evt);
@@ -244,6 +248,32 @@ public class FormTaiKhoan extends javax.swing.JPanel {
         });
         add(btnHistory);
         btnHistory.setBounds(410, 20, 120, 60);
+
+        lbMailNV1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lbMailNV1.setText("Mail nhân viên");
+        add(lbMailNV1);
+        lbMailNV1.setBounds(410, 290, 130, 30);
+
+        txtMailNV1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMailNV1ActionPerformed(evt);
+            }
+        });
+        add(txtMailNV1);
+        txtMailNV1.setBounds(580, 290, 220, 30);
+
+        txtMailNV2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMailNV2ActionPerformed(evt);
+            }
+        });
+        add(txtMailNV2);
+        txtMailNV2.setBounds(580, 340, 220, 30);
+
+        lbMailNV2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lbMailNV2.setText("Lương");
+        add(lbMailNV2);
+        lbMailNV2.setBounds(410, 340, 130, 30);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtNameNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameNVActionPerformed
@@ -294,6 +324,14 @@ public class FormTaiKhoan extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnHistoryActionPerformed
 
+    private void txtMailNV1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMailNV1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMailNV1ActionPerformed
+
+    private void txtMailNV2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMailNV2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMailNV2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAccount;
@@ -311,6 +349,8 @@ public class FormTaiKhoan extends javax.swing.JPanel {
     private javax.swing.JLabel lbInfNV;
     private javax.swing.JLabel lbListNV;
     private javax.swing.JLabel lbMailNV;
+    private javax.swing.JLabel lbMailNV1;
+    private javax.swing.JLabel lbMailNV2;
     private javax.swing.JLabel lbNameNV;
     private javax.swing.JLabel lbSexNV;
     private javax.swing.JLabel lbSĐTNV;
@@ -319,6 +359,8 @@ public class FormTaiKhoan extends javax.swing.JPanel {
     private javax.swing.JTextField txtHoNV;
     private javax.swing.JTextField txtIDNV;
     private javax.swing.JTextField txtMailNV;
+    private javax.swing.JTextField txtMailNV1;
+    private javax.swing.JTextField txtMailNV2;
     private javax.swing.JTextField txtNameNV;
     private javax.swing.JTextField txtSexNV;
     private javax.swing.JTextField txtSĐTNV;
