@@ -67,13 +67,14 @@ public class Category {
         this.keyBlind = keyBlind;
     }
 
-    public JPanel renewForm() {
+    public void renewForm() {
         if (form == null)
-            return null;
+            return;
         try {
             form = form.getClass().getConstructor().newInstance();
-        } catch (Exception ignored) {}
-        return form;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public JPanel getRootForm() {
@@ -84,7 +85,9 @@ public class Category {
         if (form == null && formClassName != null) {
             try {
                 form = (JPanel) Class.forName(formClassName).getConstructor().newInstance();
-            } catch (Exception ignored) {}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return form;
     }

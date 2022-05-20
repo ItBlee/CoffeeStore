@@ -1,311 +1,60 @@
 package GUI.Form;
 
+import BUS.Abstract.AbstractHistoricBUS;
+import DTO.LichSuDTO;
+
 import java.awt.*;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Random;
 import javax.swing.*;
 
 public class FormLichSu extends JPanel {
+    private int countBoard;
+
     public FormLichSu() {
         initComponents();
+        countBoard = 0;
+        loadBoards();
+    }
+
+    private void loadBoards() {
+        for (int i = 1; i <= 10; i++) {
+            LichSuDTO dto = new LichSuDTO();
+            dto.setID(i);
+            dto.setMaDoiTuong(i+100);
+            dto.setNguoiThucHien(i+30);
+            dto.setTenDoiTuong("HoaDon");
+            final String[] proper_noun = {"Thêm", "Xóa", "Sửa", "Ngoại lệ"};
+            Random random = new Random();
+            int index = random.nextInt(proper_noun.length);
+            dto.setThaoTac(proper_noun[index]);
+            dto.setThoiGian(new Timestamp(System.currentTimeMillis()));
+            createHistoryBoard(dto);
+        }
+        mainPanel.setPreferredSize(new Dimension(mainPanel.getWidth(), 270 + (125 * countBoard) - (countBoard/10)*200));
+        timeLine.setBounds(timeLine.getX(), timeLine.getY(), timeLine.getWidth(), 150 + (125 * countBoard) - (countBoard/10)*200);
+        mainPanel.revalidate();
+        mainPanel.repaint();
     }
     
     private void initComponents() {
-        JScrollPane jScrollPane = new JScrollPane();
-        JPanel timeBox1 = new JPanel();
-        JPanel timePanel1 = new JPanel();
-        JLabel lbTime1 = new JLabel();
-        JPanel historyPanel1 = new JPanel();
-        JPanel coverTitlePanel1 = new JPanel();
-        JPanel actionMark1 = new JPanel();
-        JLabel lbTitleHistory1 = new JLabel();
-        JLabel lbNameNV1 = new JLabel();
-        JLabel lbDate1 = new JLabel();
-        JLabel lbTarget1 = new JLabel();
-        JPanel timeBox3 = new JPanel();
-        JPanel timePanel3 = new JPanel();
-        JLabel lbTime3 = new JLabel();
-        JPanel historyPanel3 = new JPanel();
-        JPanel coverTitlePanel3 = new JPanel();
-        JPanel actionMark3 = new JPanel();
-        JLabel lbTitleHistory3 = new JLabel();
-        JLabel lbNameNV3 = new JLabel();
-        JLabel lbTarget3 = new JLabel();
-        JLabel lbDate3 = new JLabel();
-        JPanel timeBox2 = new JPanel();
-        JPanel timePanel2 = new JPanel();
-        JLabel lbTime2 = new JLabel();
-        JPanel historyPanel2 = new JPanel();
-        JPanel coverTitlePanel2 = new JPanel();
-        JPanel actionMark2 = new JPanel();
-        JLabel lbTitleHistory2 = new JLabel();
-        JLabel lbNameNV2 = new JLabel();
-        JLabel lbTarget2 = new JLabel();
-        JLabel lbDate2 = new JLabel();
-        JPanel timeBox4 = new JPanel();
-        JPanel timePanel4 = new JPanel();
-        JLabel lbTime4 = new JLabel();
-        JPanel historyPanel4 = new JPanel();
-        JPanel coverTitlePanel4 = new JPanel();
-        JPanel actionMark4 = new JPanel();
-        JLabel lbTitleHistory4 = new JLabel();
-        JLabel lbNameNV4 = new JLabel();
-        JLabel lbTarget4 = new JLabel();
-        JLabel lbDate4 = new JLabel();
-        JButton btnCurrent = new JButton();
-
         setLayout(null);
 
+        //======== mainPanel ========
+        mainPanel = new JPanel();
         mainPanel.setLayout(null);
 
-        timeBox1.setBackground(new Color(198, 202, 206));
-        timeBox1.setLayout(null);
-        mainPanel.add(timeBox1);
-        timeBox1.setBounds(465, 175, 25, 25);
-
-        timePanel1.setBackground(new Color(56, 56, 56));
-        timePanel1.setForeground(new Color(37, 37, 37));
-        timePanel1.setLayout(null);
-
-        lbTime1.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lbTime1.setForeground(new Color(198, 202, 206));
-        lbTime1.setText("09:00");
-        timePanel1.add(lbTime1);
-        lbTime1.setBounds(30, 10, 50, 18);
-
-        mainPanel.add(timePanel1);
-        timePanel1.setBounds(365, 170, 90, 40);
-
-        historyPanel1.setBackground(new Color(255, 255, 255));
-        historyPanel1.setLayout(null);
-
-        coverTitlePanel1.setBackground(new Color(0, 0, 0));
-        coverTitlePanel1.setLayout(null);
-
-        actionMark1.setBackground(new Color(47, 168, 79));
-        actionMark1.setLayout(null);
-
-        coverTitlePanel1.add(actionMark1);
-        actionMark1.setBounds(10, 10, 20, 20);
-
-        lbTitleHistory1.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lbTitleHistory1.setForeground(Color.white);
-        lbTitleHistory1.setText("Thêm");
-        coverTitlePanel1.add(lbTitleHistory1);
-        lbTitleHistory1.setBounds(40, 10, 170, 20);
-
-        historyPanel1.add(coverTitlePanel1);
-        coverTitlePanel1.setBounds(0, 0, 300, 40);
-
-        lbNameNV1.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        lbNameNV1.setForeground(new Color(198, 202, 206));
-        lbNameNV1.setText("Nhân viên: ");
-        historyPanel1.add(lbNameNV1);
-        lbNameNV1.setBounds(30, 50, 260, 18);
-
-        lbDate1.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        lbDate1.setForeground(new Color(198, 202, 206));
-        lbDate1.setText("Thời điểm: ");
-        historyPanel1.add(lbDate1);
-        lbDate1.setBounds(30, 110, 260, 18);
-
-        lbTarget1.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        lbTarget1.setForeground(new Color(198, 202, 206));
-        lbTarget1.setText("Đối tượng: ");
-        historyPanel1.add(lbTarget1);
-        lbTarget1.setBounds(30, 80, 260, 18);
-
-        mainPanel.add(historyPanel1);
-        historyPanel1.setBounds(145, 180, 300, 140);
-
-        timeBox3.setBackground(new Color(198, 202, 206));
-        timeBox3.setLayout(null);
-        mainPanel.add(timeBox3);
-        timeBox3.setBounds(465, 375, 25, 25);
-
-        timePanel3.setBackground(new Color(56, 56, 56));
-        timePanel3.setForeground(new Color(37, 37, 37));
-        timePanel3.setLayout(null);
-
-        lbTime3.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lbTime3.setForeground(new Color(198, 202, 206));
-        lbTime3.setText("09:00");
-        timePanel3.add(lbTime3);
-        lbTime3.setBounds(30, 10, 41, 18);
-
-        mainPanel.add(timePanel3);
-        timePanel3.setBounds(365, 370, 90, 40);
-
-        historyPanel3.setBackground(new Color(255, 255, 255));
-        historyPanel3.setLayout(null);
-
-        coverTitlePanel3.setBackground(new Color(0, 0, 0));
-        coverTitlePanel3.setLayout(null);
-
-        actionMark3.setBackground(new Color(243, 170, 24));
-        actionMark3.setLayout(null);
-
-        coverTitlePanel3.add(actionMark3);
-        actionMark3.setBounds(10, 10, 20, 20);
-
-        lbTitleHistory3.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lbTitleHistory3.setForeground(Color.white);
-        lbTitleHistory3.setText("Sửa");
-        coverTitlePanel3.add(lbTitleHistory3);
-        lbTitleHistory3.setBounds(40, 10, 170, 20);
-
-        historyPanel3.add(coverTitlePanel3);
-        coverTitlePanel3.setBounds(0, 0, 300, 40);
-
-        lbNameNV3.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        lbNameNV3.setForeground(new Color(198, 202, 206));
-        lbNameNV3.setText("Nhân viên: ");
-        historyPanel3.add(lbNameNV3);
-        lbNameNV3.setBounds(30, 50, 260, 18);
-
-        lbTarget3.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        lbTarget3.setForeground(new Color(198, 202, 206));
-        lbTarget3.setText("Đối tượng: ");
-        historyPanel3.add(lbTarget3);
-        lbTarget3.setBounds(30, 80, 260, 18);
-
-        lbDate3.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        lbDate3.setForeground(new Color(198, 202, 206));
-        lbDate3.setText("Thời điểm: ");
-        historyPanel3.add(lbDate3);
-        lbDate3.setBounds(30, 110, 260, 18);
-
-        mainPanel.add(historyPanel3);
-        historyPanel3.setBounds(145, 380, 300, 140);
-
-        timeBox2.setBackground(new Color(198, 202, 206));
-        timeBox2.setLayout(null);
-        mainPanel.add(timeBox2);
-        timeBox2.setBounds(465, 275, 25, 25);
-
-        timePanel2.setBackground(new Color(56, 56, 56));
-        timePanel2.setForeground(new Color(37, 37, 37));
-        timePanel2.setLayout(null);
-
-        lbTime2.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lbTime2.setForeground(new Color(198, 202, 206));
-        lbTime2.setText("09:00");
-        timePanel2.add(lbTime2);
-        lbTime2.setBounds(30, 10, 50, 18);
-
-        mainPanel.add(timePanel2);
-        timePanel2.setBounds(500, 270, 90, 40);
-
-        historyPanel2.setBackground(new Color(255, 255, 255));
-        historyPanel2.setLayout(null);
-
-        coverTitlePanel2.setBackground(new Color(0, 0, 0));
-        coverTitlePanel2.setLayout(null);
-
-        actionMark2.setBackground(new Color(234, 61, 47));
-        actionMark2.setLayout(null);
-
-        coverTitlePanel2.add(actionMark2);
-        actionMark2.setBounds(270, 10, 20, 20);
-
-        lbTitleHistory2.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lbTitleHistory2.setForeground(Color.white);
-        lbTitleHistory2.setHorizontalAlignment(SwingConstants.RIGHT);
-        lbTitleHistory2.setText("Xóa");
-        coverTitlePanel2.add(lbTitleHistory2);
-        lbTitleHistory2.setBounds(87, 10, 170, 20);
-
-        historyPanel2.add(coverTitlePanel2);
-        coverTitlePanel2.setBounds(0, 0, 300, 40);
-
-        lbNameNV2.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        lbNameNV2.setForeground(new Color(198, 202, 206));
-        lbNameNV2.setText("Nhân viên: ");
-        historyPanel2.add(lbNameNV2);
-        lbNameNV2.setBounds(30, 50, 260, 18);
-
-        lbTarget2.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        lbTarget2.setForeground(new Color(198, 202, 206));
-        lbTarget2.setText("Đối tượng: ");
-        historyPanel2.add(lbTarget2);
-        lbTarget2.setBounds(30, 80, 260, 18);
-
-        lbDate2.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        lbDate2.setForeground(new Color(198, 202, 206));
-        lbDate2.setText("Thời điểm: ");
-        historyPanel2.add(lbDate2);
-        lbDate2.setBounds(30, 110, 260, 18);
-
-        mainPanel.add(historyPanel2);
-        historyPanel2.setBounds(510, 280, 300, 140);
-
-        timeBox4.setBackground(new Color(198, 202, 206));
-        timeBox4.setLayout(null);
-        mainPanel.add(timeBox4);
-        timeBox4.setBounds(465, 475, 25, 25);
-
-        timePanel4.setBackground(new Color(56, 56, 56));
-        timePanel4.setForeground(new Color(37, 37, 37));
-        timePanel4.setLayout(null);
-
-        lbTime4.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lbTime4.setForeground(new Color(198, 202, 206));
-        lbTime4.setText("09:00");
-        timePanel4.add(lbTime4);
-        lbTime4.setBounds(30, 10, 50, 18);
-
-        mainPanel.add(timePanel4);
-        timePanel4.setBounds(500, 470, 90, 40);
-
-        historyPanel4.setBackground(new Color(255, 255, 255));
-        historyPanel4.setLayout(null);
-
-        coverTitlePanel4.setBackground(new Color(0, 0, 0));
-        coverTitlePanel4.setLayout(null);
-
-        actionMark4.setBackground(new Color(54, 123, 245));
-        actionMark4.setLayout(null);
-
-        coverTitlePanel4.add(actionMark4);
-        actionMark4.setBounds(270, 10, 20, 20);
-
-        lbTitleHistory4.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lbTitleHistory4.setForeground(Color.white);
-        lbTitleHistory4.setHorizontalAlignment(SwingConstants.RIGHT);
-        lbTitleHistory4.setText("Ngoại lệ");
-        coverTitlePanel4.add(lbTitleHistory4);
-        lbTitleHistory4.setBounds(86, 10, 160, 20);
-
-        historyPanel4.add(coverTitlePanel4);
-        coverTitlePanel4.setBounds(0, 0, 300, 40);
-
-        lbNameNV4.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        lbNameNV4.setForeground(new Color(198, 202, 206));
-        lbNameNV4.setText("Nhân viên: ");
-        historyPanel4.add(lbNameNV4);
-        lbNameNV4.setBounds(30, 50, 260, 18);
-
-        lbTarget4.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        lbTarget4.setForeground(new Color(198, 202, 206));
-        lbTarget4.setText("Đối tượng: ");
-        historyPanel4.add(lbTarget4);
-        lbTarget4.setBounds(30, 80, 260, 18);
-
-        lbDate4.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        lbDate4.setForeground(new Color(198, 202, 206));
-        lbDate4.setText("Thời điểm: ");
-        historyPanel4.add(lbDate4);
-        lbDate4.setBounds(30, 110, 260, 18);
-
-        mainPanel.add(historyPanel4);
-        historyPanel4.setBounds(510, 480, 300, 140);
-
+        timeLine = new JPanel();
         timeLine.setBackground(new Color(198, 202, 206));
         timeLine.setLayout(null);
-
         mainPanel.add(timeLine);
-        timeLine.setBounds(475, 100, 5, 680);
+        timeLine.setBounds(495, 100, 5, 680);
 
+        JButton btnCurrent = new JButton();
         btnCurrent.setBackground(new Color(198, 202, 206));
         btnCurrent.setFont(new Font("Segoe UI", Font.BOLD, 24));
         btnCurrent.setForeground(Color.white);
@@ -313,12 +62,12 @@ public class FormLichSu extends JPanel {
         btnCurrent.setBorderPainted(false);
         btnCurrent.setFocusable(false);
         mainPanel.add(btnCurrent);
-        btnCurrent.setBounds(407, 54, 140, 50);
+        btnCurrent.setBounds(427, 54, 140, 50);
 
+        JScrollPane jScrollPane = new JScrollPane();
         jScrollPane.setViewportView(mainPanel);
-
         add(jScrollPane);
-        jScrollPane.setBounds(0, 0, 960, 750);
+        jScrollPane.setBounds(0, 0, 1000, 807);
 
         JScrollBar jScrollBar = jScrollPane.getVerticalScrollBar();
         jScrollBar.setUnitIncrement(20);
@@ -332,12 +81,206 @@ public class FormLichSu extends JPanel {
     }
 
     public void loadMoreEvent() {
-        mainPanel.setPreferredSize(new Dimension(mainPanel.getWidth(), mainPanel.getHeight() + 1000));
-        timeLine.setBounds(timeLine.getX(), timeLine.getY(), timeLine.getWidth(), timeLine.getHeight() + 1000);
-        mainPanel.revalidate();
-        mainPanel.repaint();
+        loadBoards();
     }
 
-    JPanel mainPanel = new JPanel();
-    JPanel timeLine = new JPanel();
+    public void createHistoryBoard(LichSuDTO dto) {
+        final int RIGHT_ALIGN = 0;
+        final int LEFT_ALIGN = 1;
+        countBoard++;
+
+        int alignment;
+        if (countBoard % 2 == 0)
+            alignment = RIGHT_ALIGN;
+        else alignment = LEFT_ALIGN;
+
+        JPanel timeBox = new JPanel();
+        timeBox.setBackground(new Color(198, 202, 206));
+        timeBox.setLayout(null);
+        mainPanel.add(timeBox);
+        timeBox.setBounds(485, 75 + (100 * countBoard), 25, 25);
+
+        JPanel timePanel = new JPanel();
+        timePanel.setBackground(new Color(56, 56, 56));
+        timePanel.setForeground(new Color(37, 37, 37));
+        timePanel.setLayout(null);
+
+        JLabel lbIconTime = new JLabel();
+        lbIconTime.setIcon(new ImageIcon("bin/images/FormLichSu/time.png"));
+        timePanel.add(lbIconTime);
+        lbIconTime.setBounds(10, 10, 50, 24);
+
+        JLabel lbTime = new JLabel();
+        lbTime.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lbTime.setForeground(new Color(198, 202, 206));
+        Date date = new Date(dto.getThoiGian().getTime());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        lbTime.setText(dateFormat.format(date));
+        timePanel.add(lbTime);
+        lbTime.setBounds(40, 12, 50, 18);
+
+        mainPanel.add(timePanel);
+        if (alignment == LEFT_ALIGN)
+            timePanel.setBounds(385, 70 + (100 * countBoard), 90, 40);
+        else timePanel.setBounds(520, 70 + (100 * countBoard), 90, 40);
+
+        JPanel historyPanel = new JPanel();
+        historyPanel.setBackground(new Color(255, 255, 255));
+        historyPanel.setLayout(null);
+
+        JPanel coverTitlePanel = new JPanel();
+        coverTitlePanel.setBackground(new Color(0, 0, 0));
+        coverTitlePanel.setLayout(null);
+
+        JPanel actionMark = new JPanel();
+        switch (dto.getThaoTac()) {
+            case AbstractHistoricBUS.SAVE_FLAG:
+                actionMark.setBackground(new Color(47, 168, 79));
+                break;
+
+            case AbstractHistoricBUS.UPDATE_FLAG:
+                actionMark.setBackground(new Color(243, 170, 24));
+                break;
+
+            case AbstractHistoricBUS.DELETE_FLAG:
+                actionMark.setBackground(new Color(234, 61, 47));
+                break;
+
+            default:
+                actionMark.setBackground(new Color(54, 123, 245));
+                break;
+        }
+
+        actionMark.setLayout(null);
+        coverTitlePanel.add(actionMark);
+        if (alignment == LEFT_ALIGN)
+            actionMark.setBounds(10, 10, 20, 20);
+        else actionMark.setBounds(270, 10, 20, 20);
+
+        JLabel lbTitleHistory = new JLabel();
+        lbTitleHistory.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lbTitleHistory.setForeground(Color.white);
+        lbTitleHistory.setText(dto.getThaoTac());
+        coverTitlePanel.add(lbTitleHistory);
+        if (alignment == LEFT_ALIGN)
+            lbTitleHistory.setBounds(40, 10, 170, 20);
+        else {
+            lbTitleHistory.setBounds(87, 10, 170, 20);
+            lbTitleHistory.setHorizontalAlignment(SwingConstants.RIGHT);
+        }
+
+        historyPanel.add(coverTitlePanel);
+        coverTitlePanel.setBounds(0, 0, 300, 40);
+
+        JLabel lbIconNameNV = new JLabel();
+        lbIconNameNV.setIcon(new ImageIcon("bin/images/FormLichSu/user.png"));
+        historyPanel.add(lbIconNameNV);
+        lbIconNameNV.setBounds(12, 50, 16, 16);
+
+        /*INhanVienBUS nhanVienBUS = new NhanVienBUS();
+        NhanVienDTO nhanVienDTO = nhanVienBUS.findByMaTK(dto.getNguoiThucHien());
+        String MaNV = "NV" + nhanVienDTO.getMaNV();
+        String tenNV = nhanVienDTO.getHoTen();*/
+        JLabel lbNameNV = new JLabel();
+        lbNameNV.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lbNameNV.setForeground(new Color(198, 202, 206));
+        lbNameNV.setText("Nhân viên: " + dto.getNguoiThucHien());
+        historyPanel.add(lbNameNV);
+        lbNameNV.setBounds(30, 50, 260, 18);
+
+        JLabel lbIconDate = new JLabel();
+        lbIconDate.setIcon(new ImageIcon("bin/images/FormLichSu/date.png"));
+        historyPanel.add(lbIconDate);
+        lbIconDate.setBounds(10, 110, 16, 16);
+
+        JLabel lbDate = new JLabel();
+        lbDate.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lbDate.setForeground(new Color(198, 202, 206));
+        SimpleDateFormat timeFormat = new SimpleDateFormat("EEE, dd MMM yyyy, HH:mm:ss");
+        lbDate.setText("Thời điểm: " + timeFormat.format(dto.getThoiGian()));
+        historyPanel.add(lbDate);
+        lbDate.setBounds(30, 110, 260, 18);
+
+        JLabel lbIconTarget = new JLabel();
+        lbIconTarget.setIcon(new ImageIcon("bin/images/FormLichSu/target.png"));
+        historyPanel.add(lbIconTarget);
+        lbIconTarget.setBounds(10, 80, 16, 16);
+
+        JLabel lbTarget = new JLabel();
+        lbTarget.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lbTarget.setForeground(new Color(198, 202, 206));
+        String targetDetail;
+        switch (dto.getTenDoiTuong()) {
+            case "HoaDon":
+                targetDetail = "Hóa đơn - " + "HD" + dto.getMaDoiTuong();
+                break;
+
+            case "SanPham":
+                targetDetail = "Sản phẩm - " + "SP" + dto.getMaDoiTuong();
+                break;
+
+            case "PhieuNhap":
+                targetDetail = "Phiếu nhập - " + "PN" + dto.getMaDoiTuong();
+                break;
+
+            case "NhaCungCap":
+                targetDetail = "Nhà cung cấp - " + "NCC" + dto.getMaDoiTuong();
+                break;
+
+            case "KhachHang":
+                targetDetail = "Khách hàng - " + "KH" + dto.getMaDoiTuong();
+                break;
+
+            case "KhuyenMai":
+                targetDetail = "Khuyến mãi - " + "KM" + dto.getMaDoiTuong();
+                break;
+
+            case "NhanVien":
+                targetDetail = "Nhân viên - " + "NV" + dto.getMaDoiTuong();
+                break;
+
+            case "TaiKhoan":
+                targetDetail = "Tài khoản - " + "TK" + dto.getMaDoiTuong();
+                break;
+
+            case "PhanQuyen":
+                targetDetail = "Phân quyền - " + "PQ" + dto.getMaDoiTuong();
+                break;
+
+            case "LoaiSP":
+                targetDetail = "Loại sản phẩm - " + "LSP" + dto.getMaDoiTuong();
+                break;
+
+            case "CT_HoaDon":
+                targetDetail = "Chi tiết hóa đơn - " + "CTHD" + dto.getMaDoiTuong();
+                break;
+
+            case "CT_PhieuNhap":
+                targetDetail = "Chi tiết phiếu nhập - " + "CTPN" + dto.getMaDoiTuong();
+                break;
+
+            case "CT_KhuyenMai":
+                targetDetail = "Chi tiết khuyến mãi - " + "CTKM" + dto.getMaDoiTuong();
+                break;
+
+            case "CT_PhanQuyen":
+                targetDetail = "Chi tiết phân quyền - " + "CTPQ" + dto.getMaDoiTuong();
+                break;
+
+            default:
+                targetDetail = "Không xác định";
+                break;
+        }
+        lbTarget.setText("Đối tượng: " + targetDetail);
+        historyPanel.add(lbTarget);
+        lbTarget.setBounds(30, 80, 260, 18);
+
+        mainPanel.add(historyPanel);
+        if (alignment == LEFT_ALIGN)
+            historyPanel.setBounds(165, 80 + (100 * countBoard), 300, 140);
+        else historyPanel.setBounds(530, 80 + (100 * countBoard), 300, 140);
+    }
+
+    private JPanel mainPanel;
+    private JPanel timeLine;
 }

@@ -29,6 +29,6 @@ public class FormNhanSu extends JPanel {
         jTabbedPane.addTab("Lịch sử", historyPanel);
 
         add(jTabbedPane);
-        jTabbedPane.setBounds(20, 20, 960, 780);
+        jTabbedPane.setBounds(0, 0, 1000, 807);
     }
 }

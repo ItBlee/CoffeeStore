@@ -1,5 +1,8 @@
 package GUI.Form;
 
+import GUI.components.chart.Chart;
+import GUI.components.chart.ModelChart;
+
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -212,6 +215,20 @@ public class FormThongKe extends JPanel {
         lvSalesTitle.setText("Doanh số");
         salesPanel.add(lvSalesTitle);
         lvSalesTitle.setBounds(10, 10, 190, 30);
+
+        Chart chart = new Chart();
+        chart.addLegend("Tổng thu", new Color(47, 168, 79));
+        chart.addLegend("Tông chi", new Color(234, 61, 47));
+        chart.addLegend("Doanh thu", new Color(54, 123, 245));
+        chart.addLegend("Khách hàng", new Color(243, 170, 24));
+        chart.addData(new ModelChart("January", new double[]{100, 150, 200, 500}));
+        chart.addData(new ModelChart("February", new double[]{600, 750, 300, 150}));
+        chart.addData(new ModelChart("March", new double[]{200, 350, 1000, 900}));
+        chart.addData(new ModelChart("April", new double[]{480, 150, 750, 700}));
+        chart.addData(new ModelChart("May", new double[]{350, 540, 300, 150}));
+        chart.addData(new ModelChart("June", new double[]{190, 500, 700, 1000}));
+        salesPanel.add(chart);
+        chart.setBounds(22, 60, 940, 350);
 
         add(salesPanel);
         salesPanel.setBounds(10, 380, 980, 420);

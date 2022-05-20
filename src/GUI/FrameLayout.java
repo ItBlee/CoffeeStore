@@ -332,7 +332,7 @@ public class FrameLayout extends MovableJFrame {
 				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 				info.setText("Mã NV: " + General.CURRENT_USER.getMaNV() + "\n\n" +
 						"Mã TK: TK" + General.CURRENT_USER.getMaTK() + "\n\n" +
-						"Họ tên: " + General.CURRENT_USER.getHo() + " "  + General.CURRENT_USER.getTen() + "\n\n" +
+						"Họ tên: " + General.CURRENT_USER.getHoTen() + "\n\n" +
 						"Ngày sinh: " + formatter.format(General.CURRENT_USER.getNgaySinh()) + "\n\n" +
 						"SDT: " + General.CURRENT_USER.getSDT() + "\n\n" +
 						"Email: " + General.CURRENT_USER.getEmail() + "\n\n" +
@@ -886,17 +886,18 @@ public class FrameLayout extends MovableJFrame {
 					//animated form appear
 					{
 						while (currentItem.getForm().getHeight() < menuPanel.getHeight()) {
-							currentItem.getForm().setBounds(0, 0, formLayoutPanel.getWidth(), currentItem.getForm().getHeight() + 3);
+							currentItem.getForm().setBounds(0, 0, formLayoutPanel.getWidth(), currentItem.getForm().getHeight() + 6);
 							Thread.sleep(1);
 						}
 						currentItem.getForm().setBounds(0, 0, formLayoutPanel.getWidth(), formLayoutPanel.getHeight());
 					}
-					Thread.sleep(2000);
+					Thread.sleep(1400);
+					//remove intro panel after finish
+					menuPanel.setVisible(true);
+					Thread.sleep(200);
+					lbIntro.setIcon(null);
+					lbWaterDropPanel.setVisible(true);
 				} catch (InterruptedException ignored) {}
-				//remove intro panel after finish
-				menuPanel.setVisible(true);
-				lbIntro.setIcon(null);
-				lbWaterDropPanel.setVisible(true);
 				remove(lbIntro);
 				revalidate();
 				repaint();

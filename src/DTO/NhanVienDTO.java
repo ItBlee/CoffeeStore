@@ -60,6 +60,10 @@ public class NhanVienDTO implements IEntity {
         Ten = ten;
     }
 
+    public String getHoTen() {
+        return Ho + " " + Ten;
+    }
+
     public Date getNgaySinh() {
         return NgaySinh;
     }

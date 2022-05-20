@@ -72,7 +72,7 @@ public class FormPhanQuyen extends JPanel {
 
         cbRole.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         add(cbRole);
-        cbRole.setBounds(10, 50, 350, 40);
+        cbRole.setBounds(30, 50, 350, 40);
 
         functionPanel.setBackground(new Color(255, 255, 255));
         functionPanel.setLayout(null);
@@ -282,7 +282,7 @@ public class FormPhanQuyen extends JPanel {
         btnReset.setBounds(490, 10, 72, 22);
 
         add(functionPanel);
-        functionPanel.setBounds(380, 10, 580, 420);
+        functionPanel.setBounds(400, 10, 580, 420);
 
         detailPanel.setBackground(new Color(255, 255, 255));
         detailPanel.setLayout(null);
@@ -360,6 +360,6 @@ public class FormPhanQuyen extends JPanel {
         btnRenew.setBounds(270, 180, 90, 22);
 
         add(detailPanel);
-        detailPanel.setBounds(0, 10, 370, 420);
+        detailPanel.setBounds(20, 10, 370, 420);
     }
 }

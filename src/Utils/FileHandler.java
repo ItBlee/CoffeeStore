@@ -151,11 +151,11 @@ public class FileHandler {
             HoaDonDTO hoaDon = (HoaDonDTO) reportInstance;
             title = "Hóa ĐƠn";
             NhanVienDTO nhanVien = nhanVienBUS.findByID(hoaDon.getMaNV());
-            employeeDetail = nhanVien.getHo() + " " + nhanVien.getTen() + " - SĐT: " + nhanVien.getSDT();
+            employeeDetail = nhanVien.getHoTen() + " - SĐT: " + nhanVien.getSDT();
             IKhachHangBUS khachHangBUS = new KhachHangBUS();
             KhachHangDTO khachHang = khachHangBUS.findByID(hoaDon.getMaKH());
             cooperatorLabel = "Khách hàng";
-            cooperatorDetail = khachHang.getHo() + " " + khachHang.getTen() + " - SĐT: " + khachHang.getSDT();
+            cooperatorDetail = khachHang.getHoTen() + " - SĐT: " + khachHang.getSDT();
             timestamp = String.valueOf(hoaDon.getNgayLap());
             totalPrice = String.valueOf(hoaDon.getTongTien());
             salePrice = String.valueOf(hoaDon.getTienKhuyenMai());
@@ -165,7 +165,7 @@ public class FileHandler {
             PhieuNhapDTO phieuNhap = (PhieuNhapDTO) reportInstance;
             title = "Phiếu Nhậpl";
             NhanVienDTO nhanVien = nhanVienBUS.findByID(phieuNhap.getMaNV());
-            employeeDetail = nhanVien.getHo() + " " + nhanVien.getTen() + " - SĐT: " + nhanVien.getSDT();
+            employeeDetail = nhanVien.getHoTen() + " - SĐT: " + nhanVien.getSDT();
             INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();
             NhaCungCapDTO nhaCungCap = nhaCungCapBUS.findByID(phieuNhap.getMaNCC());
             cooperatorLabel = "Nhà cung cấp";

@@ -355,7 +355,7 @@ public class FrameLogin extends JFrame {
 				new EmptyBorder(0, 10, 0, 25),
 				new MatteBorder(0,0,2,0, new Color(235, 64, 52))));
 		setEnableForm(true);
-		JOptionPane.showMessageDialog(getContentPane(), message, Language.LOGIN_ERROR, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(getContentPane(), "Đăng nhập thất bại!\n" + (message == null ? "" : message), Language.LOGIN_ERROR, JOptionPane.ERROR_MESSAGE);
 	}
 
 	private void setEnableForm(boolean isEnable) {

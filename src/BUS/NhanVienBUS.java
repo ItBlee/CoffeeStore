@@ -47,7 +47,7 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
     public ArrayList<NhanVienDTO> findByHoTen(String hoTen) {
         ArrayList<NhanVienDTO> result = new ArrayList<NhanVienDTO>();
         for (NhanVienDTO nhanVienDTO : listNhanVien)
-            if (StringUtils.containsIgnoreCase(nhanVienDTO.getHo() + " " + nhanVienDTO.getTen(), hoTen))
+            if (StringUtils.containsIgnoreCase(nhanVienDTO.getHoTen(), hoTen))
                 result.add(nhanVienDTO);
         return result;
     }

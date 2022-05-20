@@ -21,6 +21,10 @@ public class KhachHangDTO implements IEntity {
         return null;
     }
 
+    public String getHoTen() {
+        return null;
+    }
+
     public Integer getSDT() {
         return null;
     }

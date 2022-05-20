@@ -6,9 +6,9 @@ import DTO.LichSuDTO;
 import Utils.General;
 
 public abstract class AbstractHistoricBUS {
-    public static final String SAVE_FLAG = "thêm";
-    public static final String UPDATE_FLAG = "sửa";
-    public static final String DELETE_FLAG = "xóa";
+    public static final String SAVE_FLAG = "Thêm";
+    public static final String UPDATE_FLAG = "Sửa";
+    public static final String DELETE_FLAG = "Xóa";
 
     protected AbstractHistoricBUS() {
     }
