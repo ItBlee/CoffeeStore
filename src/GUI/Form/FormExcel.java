@@ -123,30 +123,31 @@ public class FormExcel extends JPanel {
         importPanel.add(btnImport);
         btnImport.setBounds(20, 420, 360, 40);
 
-        icFile.setBackground(new Color(102, 102, 102));
-        icFile.setOpaque(true);
+        icFile.setOpaque(false);
+        Image icFileImage = new ImageIcon("bin/images/components/excel.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
+        icFile.setIcon(new ImageIcon(icFileImage));
         importPanel.add(icFile);
         icFile.setBounds(20, 160, 40, 40);
 
-        lbPercentUpload.setText("100%");
+        lbPercentUpload.setText("0%");
         importPanel.add(lbPercentUpload);
         lbPercentUpload.setBounds(350, 160, 32, 18);
 
         progressUpload.setBackground(new Color(252, 201, 76));
         progressUpload.setLayout(null);
         importPanel.add(progressUpload);
-        progressUpload.setBounds(70, 190, 310, 2);
+        progressUpload.setBounds(70, 190, 0, 2);
 
         progressUploadHolder.setBackground(new Color(204, 204, 204));
         progressUploadHolder.setLayout(null);
         importPanel.add(progressUploadHolder);
         progressUploadHolder.setBounds(70, 190, 310, 2);
 
-        lbFileName.setText("abc.xls");
+        lbFileName.setText("Chưa nhập file");
         importPanel.add(lbFileName);
-        lbFileName.setBounds(70, 160, 39, 18);
+        lbFileName.setBounds(70, 160, 360, 18);
 
-        cbTarget.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbTarget.setModel(new DefaultComboBoxModel<>(new String[] { "Hóa đơn", "Item 2", "Item 3", "Item 4" }));
         importPanel.add(cbTarget);
         cbTarget.setBounds(20, 100, 360, 40);
 
@@ -173,17 +174,19 @@ public class FormExcel extends JPanel {
         exportPanel.add(lbTitleExport);
         lbTitleExport.setBounds(195, 20, 250, 25);
 
-        lbTickHD.setText("X");
+        Image tickImage = new ImageIcon("bin/images/components/check.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
+        lbTickHD.setIcon(new ImageIcon(tickImage));
         exportPanel.add(lbTickHD);
-        lbTickHD.setBounds(240, 80, 8, 18);
+        lbTickHD.setBounds(235, 68, 40, 40);
 
         exportHDPanel.setBackground(new Color(51, 196, 129));
         exportHDPanel.setForeground(new Color(255, 255, 255));
         exportHDPanel.setLayout(null);
 
-        lbIconHD.setText("IC");
+        Image IconHD = new ImageIcon("bin/images/components/HD.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
+        lbIconHD.setIcon(new ImageIcon(IconHD));
         exportHDPanel.add(lbIconHD);
-        lbIconHD.setBounds(20, 50, 11, 18);
+        lbIconHD.setBounds(20, 50, 40, 40);
 
         lbNameHD.setFont(new Font("Segoe UI", Font.BOLD, 24));
         lbNameHD.setForeground(new Color(255, 255, 255));
@@ -214,17 +217,18 @@ public class FormExcel extends JPanel {
         exportPanel.add(btnImport2);
         btnImport2.setBounds(20, 720, 500, 40);
 
-        lbTickPN.setText("X");
+        lbTickPN.setIcon(new ImageIcon(tickImage));
         exportPanel.add(lbTickPN);
-        lbTickPN.setBounds(240, 230, 8, 18);
+        lbTickPN.setBounds(235, 218, 40, 40);
 
         exportPNPanel.setBackground(new Color(51, 196, 129));
         exportPNPanel.setForeground(new Color(255, 255, 255));
         exportPNPanel.setLayout(null);
 
-        jLabel8.setText("IC");
+        Image IconPN = new ImageIcon("bin/images/components/PN.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
+        jLabel8.setIcon(new ImageIcon(IconPN));
         exportPNPanel.add(jLabel8);
-        jLabel8.setBounds(20, 50, 11, 18);
+        jLabel8.setBounds(20, 50, 40, 40);
 
         jLabel9.setFont(new Font("Segoe UI", Font.BOLD, 24));
         jLabel9.setForeground(new Color(255, 255, 255));
@@ -247,17 +251,18 @@ public class FormExcel extends JPanel {
         exportPanel.add(exportPNPanel);
         exportPNPanel.setBounds(30, 240, 230, 125);
 
-        lbTickKH.setText("X");
+        lbTickKH.setIcon(new ImageIcon(tickImage));
         exportPanel.add(lbTickKH);
-        lbTickKH.setBounds(240, 380, 8, 18);
+        lbTickKH.setBounds(235, 368, 40, 40);
 
         exportKHPanel.setBackground(new Color(51, 196, 129));
         exportKHPanel.setForeground(new Color(255, 255, 255));
         exportKHPanel.setLayout(null);
 
-        jLabel14.setText("IC");
+        Image IconKH = new ImageIcon("bin/images/components/KH.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
+        jLabel14.setIcon(new ImageIcon(IconKH));
         exportKHPanel.add(jLabel14);
-        jLabel14.setBounds(20, 50, 11, 18);
+        jLabel14.setBounds(20, 50, 40, 40);
 
         jLabel15.setFont(new Font("Segoe UI", Font.BOLD, 24));
         jLabel15.setForeground(new Color(255, 255, 255));
@@ -280,17 +285,18 @@ public class FormExcel extends JPanel {
         exportPanel.add(exportKHPanel);
         exportKHPanel.setBounds(30, 390, 230, 125);
 
-        lbTickKM.setText("X");
+        lbTickKM.setIcon(new ImageIcon(tickImage));
         exportPanel.add(lbTickKM);
-        lbTickKM.setBounds(240, 530, 8, 18);
+        lbTickKM.setBounds(235, 518, 40, 40);
 
         exportKMPanel.setBackground(new Color(51, 196, 129));
         exportKMPanel.setForeground(new Color(255, 255, 255));
         exportKMPanel.setLayout(null);
 
-        jLabel19.setText("IC");
+        Image IconKM = new ImageIcon("bin/images/components/KM.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
+        jLabel19.setIcon(new ImageIcon(IconKM));
         exportKMPanel.add(jLabel19);
-        jLabel19.setBounds(20, 50, 11, 18);
+        jLabel19.setBounds(20, 50, 40, 40);
 
         jLabel20.setFont(new Font("Segoe UI", Font.BOLD, 24));
         jLabel20.setForeground(new Color(255, 255, 255));
@@ -313,17 +319,18 @@ public class FormExcel extends JPanel {
         exportPanel.add(exportKMPanel);
         exportKMPanel.setBounds(30, 540, 230, 125);
 
-        jLabel28.setText("X");
+        jLabel28.setIcon(new ImageIcon(tickImage));
         exportPanel.add(jLabel28);
-        jLabel28.setBounds(490, 530, 8, 18);
+        jLabel28.setBounds(485, 518, 40, 40);
 
         exportHDPanel4.setBackground(new Color(51, 196, 129));
         exportHDPanel4.setForeground(new Color(255, 255, 255));
         exportHDPanel4.setLayout(null);
 
-        jLabel24.setText("IC");
+        Image IconTK = new ImageIcon("bin/images/components/TK.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
+        jLabel24.setIcon(new ImageIcon(IconTK));
         exportHDPanel4.add(jLabel24);
-        jLabel24.setBounds(20, 50, 11, 18);
+        jLabel24.setBounds(20, 50, 40, 40);
 
         jLabel25.setFont(new Font("Segoe UI", Font.BOLD, 24));
         jLabel25.setForeground(new Color(255, 255, 255));
@@ -346,17 +353,18 @@ public class FormExcel extends JPanel {
         exportPanel.add(exportHDPanel4);
         exportHDPanel4.setBounds(280, 540, 230, 125);
 
-        lbTickNV.setText("X");
+        lbTickNV.setIcon(new ImageIcon(tickImage));
         exportPanel.add(lbTickNV);
-        lbTickNV.setBounds(490, 380, 8, 18);
+        lbTickNV.setBounds(485, 368, 40, 40);
 
         exportNVPanel.setBackground(new Color(51, 196, 129));
         exportNVPanel.setForeground(new Color(255, 255, 255));
         exportNVPanel.setLayout(null);
 
-        jLabel29.setText("IC");
+        Image IconNV = new ImageIcon("bin/images/components/NV.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
+        jLabel29.setIcon(new ImageIcon(IconNV));
         exportNVPanel.add(jLabel29);
-        jLabel29.setBounds(20, 50, 11, 18);
+        jLabel29.setBounds(20, 50, 40, 40);
 
         jLabel30.setFont(new Font("Segoe UI", Font.BOLD, 24));
         jLabel30.setForeground(new Color(255, 255, 255));
@@ -379,17 +387,18 @@ public class FormExcel extends JPanel {
         exportPanel.add(exportNVPanel);
         exportNVPanel.setBounds(280, 390, 230, 125);
 
-        lbTickSP.setText("X");
+        lbTickSP.setIcon(new ImageIcon(tickImage));
         exportPanel.add(lbTickSP);
-        lbTickSP.setBounds(490, 230, 8, 18);
+        lbTickSP.setBounds(485, 218, 40, 40);
 
         exportSPPanel.setBackground(new Color(51, 196, 129));
         exportSPPanel.setForeground(new Color(255, 255, 255));
         exportSPPanel.setLayout(null);
 
-        jLabel34.setText("IC");
+        Image IconSP = new ImageIcon("bin/images/components/SP.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
+        jLabel34.setIcon(new ImageIcon(IconSP));
         exportSPPanel.add(jLabel34);
-        jLabel34.setBounds(20, 50, 11, 18);
+        jLabel34.setBounds(20, 50, 40, 40);
 
         jLabel35.setFont(new Font("Segoe UI", Font.BOLD, 24));
         jLabel35.setForeground(new Color(255, 255, 255));
@@ -412,17 +421,18 @@ public class FormExcel extends JPanel {
         exportPanel.add(exportSPPanel);
         exportSPPanel.setBounds(280, 240, 230, 125);
 
-        lbTickNCC.setText("X");
+        lbTickNCC.setIcon(new ImageIcon(tickImage));
         exportPanel.add(lbTickNCC);
-        lbTickNCC.setBounds(490, 80, 8, 18);
+        lbTickNCC.setBounds(485, 68, 40, 40);
 
         exportNCCPanel.setBackground(new Color(51, 196, 129));
         exportNCCPanel.setForeground(new Color(255, 255, 255));
         exportNCCPanel.setLayout(null);
 
-        jLabel39.setText("IC");
+        Image IconNCC = new ImageIcon("bin/images/components/NCC.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
+        jLabel39.setIcon(new ImageIcon(IconNCC));
         exportNCCPanel.add(jLabel39);
-        jLabel39.setBounds(20, 50, 11, 18);
+        jLabel39.setBounds(20, 50, 40, 40);
 
         jLabel40.setFont(new Font("Segoe UI", Font.BOLD, 24));
         jLabel40.setForeground(new Color(255, 255, 255));

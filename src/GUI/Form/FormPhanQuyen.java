@@ -1,18 +1,42 @@
 package GUI.Form;
 
+import BUS.CT_PhanQuyenBUS;
+import BUS.Interfaces.ICT_PhanQuyenBUS;
+import BUS.Interfaces.IPhanQuyenBUS;
+import BUS.PhanQuyenBUS;
+import DTO.CT_PhanQuyenDTO;
+import DTO.PhanQuyenDTO;
+import DTO.Role;
+import GUI.components.IEventSwitchSelected;
 import GUI.components.SwitchJButton;
 
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class FormPhanQuyen extends JPanel {
     public FormPhanQuyen() {
         initComponents();
+        initRoleList();
+    }
+
+    private void initRoleList() {
+        IPhanQuyenBUS phanQuyenBUS = new PhanQuyenBUS();
+        ArrayList<PhanQuyenDTO> roleList = phanQuyenBUS.findAll();
+        String[] nameList = new String[roleList.size()+1];
+        nameList[0] = "Chọn quyền";
+        for (int i = 0; i < roleList.size(); i++)
+            nameList[i+1] = "PQ" + roleList.get(i).getMaPQ() + " - " + roleList.get(i).getTenPQ();
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(nameList);
+        cbRole.setModel(model);
+        cbRole.setSelectedIndex(0);
     }
     
     private void initComponents() {
-        JComboBox<String> cbRole = new JComboBox<>();
-        JPanel functionPanel = new JPanel();
+        cbRole = new JComboBox<>();
+
         JLabel lbSP = new JLabel();
         JLabel lbPN = new JLabel();
         JLabel lbNCC = new JLabel();
@@ -22,33 +46,6 @@ public class FormPhanQuyen extends JPanel {
         JLabel lbExcel = new JLabel();
         JLabel lbNV = new JLabel();
         JLabel lbHD = new JLabel();
-        JCheckBox btnXoaHD = new JCheckBox();
-        JCheckBox btnThemHD = new JCheckBox();
-        JCheckBox btnSuaHD = new JCheckBox();
-        JCheckBox btnThemPN = new JCheckBox();
-        JCheckBox btnSuaPN = new JCheckBox();
-        JCheckBox btnXoaPN = new JCheckBox();
-        JCheckBox btnThemSP = new JCheckBox();
-        JCheckBox btnSuaSP = new JCheckBox();
-        JCheckBox btnXoaSP = new JCheckBox();
-        JCheckBox btnThemNCC = new JCheckBox();
-        JCheckBox btnSuaNCC = new JCheckBox();
-        JCheckBox btnXoaNCC = new JCheckBox();
-        JCheckBox btnThemKH = new JCheckBox();
-        JCheckBox btnSuaKH = new JCheckBox();
-        JCheckBox btnXoaKH = new JCheckBox();
-        JCheckBox btnThemKM = new JCheckBox();
-        JCheckBox btnSuaKM = new JCheckBox();
-        JCheckBox btnXoaKM = new JCheckBox();
-        JCheckBox btnThemTK = new JCheckBox();
-        JCheckBox btnSuaTK = new JCheckBox();
-        JCheckBox btnXoaTK = new JCheckBox();
-        JCheckBox btnThemExcel = new JCheckBox();
-        JCheckBox btnSuaExcel = new JCheckBox();
-        JCheckBox btnXoaExcel = new JCheckBox();
-        JCheckBox btnThemNV = new JCheckBox();
-        JCheckBox btnSuaNV = new JCheckBox();
-        JCheckBox btnXoaNV = new JCheckBox();
         JPanel decorateFunctionPanel1 = new JPanel();
         JPanel decorateFunctionPanel2 = new JPanel();
         JPanel decorateFunctionPanel3 = new JPanel();
@@ -60,10 +57,8 @@ public class FormPhanQuyen extends JPanel {
         JButton btnThem = new JButton();
         JButton btnXoa = new JButton();
         JButton btnSua = new JButton();
-        JTextField txtTenPQ = new JTextField();
         JLabel lbTenPQ = new JLabel();
         JLabel lbMaPQ = new JLabel();
-        JTextField txtMaPQ = new JTextField();
         JLabel lbStatus = new JLabel();
         JLabel lbCurrentStatus = new JLabel();
         JLabel lbSelectRole = new JLabel();
@@ -72,23 +67,54 @@ public class FormPhanQuyen extends JPanel {
 
         setLayout(null);
 
-        cbRole.setModel(new DefaultComboBoxModel<>(new String[] { "PQ1 - Quản trị viên", "Item 2", "Item 3", "Item 4" }));
+        cbRole.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                onSelectedRoleListener();
+            }
+        });
         add(cbRole);
         cbRole.setBounds(30, 50, 350, 40);
 
         functionPanel.setBackground(new Color(255, 255, 255));
         functionPanel.setLayout(null);
 
-        SwitchJButton switchJButton1 = new SwitchJButton(new Color(47, 168, 79));
-        functionPanel.add(switchJButton1);
-        switchJButton1.setBounds(30, 130, 40, 20);
+        switchJButtonSP = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonSP.addEventSelected(new IEventSwitchSelected() {
+            @Override
+            public void onSelected(boolean selected) {
+                btnThemSP.setEnabled(selected);
+                btnSuaSP.setEnabled(selected);
+                btnXoaSP.setEnabled(selected);
+                if (!selected) {
+                    btnThemSP.setSelected(false);
+                    btnSuaSP.setSelected(false);
+                    btnXoaSP.setSelected(false);
+                }
+            }
+        });
+        functionPanel.add(switchJButtonSP);
+        switchJButtonSP.setBounds(30, 130, 40, 20);
 
         lbSP.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbSP.setText("Quản lý Sản phẩm");
         functionPanel.add(lbSP);
         lbSP.setBounds(90, 130, 160, 24);
 
-        SwitchJButton switchJButtonPN = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonPN = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonPN.addEventSelected(new IEventSwitchSelected() {
+            @Override
+            public void onSelected(boolean selected) {
+                btnThemPN.setEnabled(selected);
+                btnSuaPN.setEnabled(selected);
+                btnXoaPN.setEnabled(selected);
+                if (!selected) {
+                    btnThemPN.setSelected(false);
+                    btnSuaPN.setSelected(false);
+                    btnXoaPN.setSelected(false);
+                }
+            }
+        });
         functionPanel.add(switchJButtonPN);
         switchJButtonPN.setBounds(30, 90, 40, 20);
 
@@ -97,7 +123,20 @@ public class FormPhanQuyen extends JPanel {
         functionPanel.add(lbPN);
         lbPN.setBounds(90, 90, 160, 24);
 
-        SwitchJButton switchJButtonNCC = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonNCC = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonNCC.addEventSelected(new IEventSwitchSelected() {
+            @Override
+            public void onSelected(boolean selected) {
+                btnThemNCC.setEnabled(selected);
+                btnSuaNCC.setEnabled(selected);
+                btnXoaNCC.setEnabled(selected);
+                if (!selected) {
+                    btnThemNCC.setSelected(false);
+                    btnSuaNCC.setSelected(false);
+                    btnXoaNCC.setSelected(false);
+                }
+            }
+        });
         functionPanel.add(switchJButtonNCC);
         switchJButtonNCC.setBounds(30, 170, 40, 20);
 
@@ -106,7 +145,20 @@ public class FormPhanQuyen extends JPanel {
         functionPanel.add(lbNCC);
         lbNCC.setBounds(90, 170, 160, 24);
 
-        SwitchJButton switchJButtonKH = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonKH = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonKH.addEventSelected(new IEventSwitchSelected() {
+            @Override
+            public void onSelected(boolean selected) {
+                btnThemKH.setEnabled(selected);
+                btnSuaKH.setEnabled(selected);
+                btnXoaKH.setEnabled(selected);
+                if (!selected) {
+                    btnThemKH.setSelected(false);
+                    btnSuaKH.setSelected(false);
+                    btnXoaKH.setSelected(false);
+                }
+            }
+        });
         functionPanel.add(switchJButtonKH);
         switchJButtonKH.setBounds(30, 210, 40, 20);
 
@@ -115,7 +167,20 @@ public class FormPhanQuyen extends JPanel {
         functionPanel.add(lbKH);
         lbKH.setBounds(90, 210, 160, 24);
 
-        SwitchJButton switchJButtonKM = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonKM = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonKM.addEventSelected(new IEventSwitchSelected() {
+            @Override
+            public void onSelected(boolean selected) {
+                btnThemKM.setEnabled(selected);
+                btnSuaKM.setEnabled(selected);
+                btnXoaKM.setEnabled(selected);
+                if (!selected) {
+                    btnThemKM.setSelected(false);
+                    btnSuaKM.setSelected(false);
+                    btnXoaKM.setSelected(false);
+                }
+            }
+        });
         functionPanel.add(switchJButtonKM);
         switchJButtonKM.setBounds(30, 250, 40, 20);
 
@@ -124,7 +189,20 @@ public class FormPhanQuyen extends JPanel {
         functionPanel.add(lbKM);
         lbKM.setBounds(90, 250, 160, 24);
 
-        SwitchJButton switchJButtonTK = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonTK = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonTK.addEventSelected(new IEventSwitchSelected() {
+            @Override
+            public void onSelected(boolean selected) {
+                btnThemTK.setEnabled(selected);
+                btnSuaTK.setEnabled(selected);
+                btnXoaTK.setEnabled(selected);
+                if (!selected) {
+                    btnThemTK.setSelected(false);
+                    btnSuaTK.setSelected(false);
+                    btnXoaTK.setSelected(false);
+                }
+            }
+        });
         functionPanel.add(switchJButtonTK);
         switchJButtonTK.setBounds(30, 290, 40, 20);
 
@@ -133,7 +211,20 @@ public class FormPhanQuyen extends JPanel {
         functionPanel.add(lbTK);
         lbTK.setBounds(90, 290, 160, 24);
 
-        SwitchJButton switchJButtonExcel = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonExcel = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonExcel.addEventSelected(new IEventSwitchSelected() {
+            @Override
+            public void onSelected(boolean selected) {
+                btnThemExcel.setEnabled(selected);
+                btnSuaExcel.setEnabled(selected);
+                btnXoaExcel.setEnabled(selected);
+                if (!selected) {
+                    btnThemExcel.setSelected(false);
+                    btnSuaExcel.setSelected(false);
+                    btnXoaExcel.setSelected(false);
+                }
+            }
+        });
         functionPanel.add(switchJButtonExcel);
         switchJButtonExcel.setBounds(30, 330, 40, 20);
 
@@ -142,7 +233,20 @@ public class FormPhanQuyen extends JPanel {
         functionPanel.add(lbExcel);
         lbExcel.setBounds(90, 330, 160, 24);
 
-        SwitchJButton switchJButtonNV = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonNV = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonNV.addEventSelected(new IEventSwitchSelected() {
+            @Override
+            public void onSelected(boolean selected) {
+                btnThemNV.setEnabled(selected);
+                btnSuaNV.setEnabled(selected);
+                btnXoaNV.setEnabled(selected);
+                if (!selected) {
+                    btnThemNV.setSelected(false);
+                    btnSuaNV.setSelected(false);
+                    btnXoaNV.setSelected(false);
+                }
+            }
+        });
         functionPanel.add(switchJButtonNV);
         switchJButtonNV.setBounds(30, 370, 40, 20);
 
@@ -151,7 +255,20 @@ public class FormPhanQuyen extends JPanel {
         functionPanel.add(lbNV);
         lbNV.setBounds(90, 370, 160, 24);
 
-        SwitchJButton switchJButtonHD = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonHD = new SwitchJButton(new Color(47, 168, 79));
+        switchJButtonHD.addEventSelected(new IEventSwitchSelected() {
+            @Override
+            public void onSelected(boolean selected) {
+                btnThemHD.setEnabled(selected);
+                btnSuaHD.setEnabled(selected);
+                btnXoaHD.setEnabled(selected);
+                if (!selected) {
+                    btnThemHD.setSelected(false);
+                    btnSuaHD.setSelected(false);
+                    btnXoaHD.setSelected(false);
+                }
+            }
+        });
         functionPanel.add(switchJButtonHD);
         switchJButtonHD.setBounds(30, 50, 40, 20);
 
@@ -401,4 +518,179 @@ public class FormPhanQuyen extends JPanel {
         add(detailPanel);
         detailPanel.setBounds(20, 10, 370, 420);
     }
+
+    private void onSelectedRoleListener() {
+        int selectedIndex = cbRole.getSelectedIndex();
+        if (selectedIndex == 0) {
+            txtMaPQ.setText("thêm");
+            txtTenPQ.setText("");
+            clearSelectedFunction();
+            return;
+        }
+        IPhanQuyenBUS phanQuyenBUS = new PhanQuyenBUS();
+        ArrayList<PhanQuyenDTO> roleList = phanQuyenBUS.findAll();
+        PhanQuyenDTO selectedRole = roleList.get(selectedIndex-1);
+
+        txtMaPQ.setText("PQ" + selectedRole.getMaPQ());
+        txtTenPQ.setText(selectedRole.getTenPQ());
+
+        ICT_PhanQuyenBUS ctPhanQuyenBUS = new CT_PhanQuyenBUS();
+        CT_PhanQuyenDTO getFunctionHD = ctPhanQuyenBUS.findByID(selectedRole.getQuyenHD());
+        CT_PhanQuyenDTO getFunctionSP = ctPhanQuyenBUS.findByID(selectedRole.getQuyenSP());
+        CT_PhanQuyenDTO getFunctionPN = ctPhanQuyenBUS.findByID(selectedRole.getQuyenPN());
+        CT_PhanQuyenDTO getFunctionNCC = ctPhanQuyenBUS.findByID(selectedRole.getQuyenNCC());
+        CT_PhanQuyenDTO getFunctionKH = ctPhanQuyenBUS.findByID(selectedRole.getQuyenKH());
+        CT_PhanQuyenDTO getFunctionKM = ctPhanQuyenBUS.findByID(selectedRole.getQuyenKM());
+        CT_PhanQuyenDTO getFunctionTK = ctPhanQuyenBUS.findByID(selectedRole.getQuyenTK());
+        CT_PhanQuyenDTO getFunctionExcel = ctPhanQuyenBUS.findByID(selectedRole.getQuyenExcel());
+        CT_PhanQuyenDTO getFunctionNV = ctPhanQuyenBUS.findByID(selectedRole.getQuyenNV());
+
+        switchJButtonHD.setSelected(getFunctionHD != null && getFunctionHD.getQuyenDoc() == 1);
+        switchJButtonSP.setSelected(getFunctionSP != null && getFunctionSP.getQuyenDoc() == 1);
+        switchJButtonPN.setSelected(getFunctionPN != null && getFunctionPN.getQuyenDoc() == 1);
+        switchJButtonNCC.setSelected(getFunctionNCC != null && getFunctionNCC.getQuyenDoc() == 1);
+        switchJButtonKH.setSelected(getFunctionKH != null && getFunctionKH.getQuyenDoc() == 1);
+        switchJButtonKM.setSelected(getFunctionKM != null && getFunctionKM.getQuyenDoc() == 1);
+        switchJButtonTK.setSelected(getFunctionTK != null && getFunctionTK.getQuyenDoc() == 1);
+        switchJButtonExcel.setSelected(getFunctionExcel != null && getFunctionExcel.getQuyenDoc() == 1);
+        switchJButtonNV.setSelected(getFunctionNV != null && getFunctionNV.getQuyenDoc() == 1);
+
+        if (switchJButtonHD.isSelected()) {
+            btnThemHD.setSelected(getFunctionHD.getQuyenTao() == 1);
+            btnSuaHD.setSelected(getFunctionHD.getQuyenSua() == 1);
+            btnXoaHD.setSelected(getFunctionHD.getQuyenXoa() == 1);
+        }
+        if (switchJButtonSP.isSelected()) {
+            btnThemSP.setSelected(getFunctionSP.getQuyenTao() == 1);
+            btnSuaSP.setSelected(getFunctionSP.getQuyenSua() == 1);
+            btnXoaSP.setSelected(getFunctionSP.getQuyenXoa() == 1);
+        }
+        if (switchJButtonPN.isSelected()) {
+            btnThemPN.setSelected(getFunctionPN.getQuyenTao() == 1);
+            btnSuaPN.setSelected(getFunctionPN.getQuyenSua() == 1);
+            btnXoaPN.setSelected(getFunctionPN.getQuyenXoa() == 1);
+        }
+        if (switchJButtonNCC.isSelected()) {
+            btnThemNCC.setSelected(getFunctionNCC.getQuyenTao() == 1);
+            btnSuaNCC.setSelected(getFunctionNCC.getQuyenSua() == 1);
+            btnXoaNCC.setSelected(getFunctionNCC.getQuyenXoa() == 1);
+        }
+        if (switchJButtonKH.isSelected()) {
+            btnThemKH.setSelected(getFunctionKH.getQuyenTao() == 1);
+            btnSuaKH.setSelected(getFunctionKH.getQuyenSua() == 1);
+            btnXoaKH.setSelected(getFunctionKH.getQuyenXoa() == 1);
+        }
+        if (switchJButtonKM.isSelected()) {
+            btnThemKM.setSelected(getFunctionKM.getQuyenTao() == 1);
+            btnSuaKM.setSelected(getFunctionKM.getQuyenSua() == 1);
+            btnXoaKM.setSelected(getFunctionKM.getQuyenXoa() == 1);
+        }
+        if (switchJButtonTK.isSelected()) {
+            btnThemTK.setSelected(getFunctionTK.getQuyenTao() == 1);
+            btnSuaTK.setSelected(getFunctionTK.getQuyenSua() == 1);
+            btnXoaTK.setSelected(getFunctionTK.getQuyenXoa() == 1);
+        }
+        if (switchJButtonExcel.isSelected()) {
+            btnThemExcel.setSelected(getFunctionExcel.getQuyenTao() == 1);
+            btnSuaExcel.setSelected(getFunctionExcel.getQuyenSua() == 1);
+            btnXoaExcel.setSelected(getFunctionExcel.getQuyenXoa() == 1);
+        }
+        if (switchJButtonNV.isSelected()) {
+            btnThemNV.setSelected(getFunctionNV.getQuyenTao() == 1);
+            btnSuaNV.setSelected(getFunctionNV.getQuyenSua() == 1);
+            btnXoaNV.setSelected(getFunctionNV.getQuyenXoa() == 1);
+        }
+    }
+
+    private void clearSelectedFunction() {
+        for (Component component: functionPanel.getComponents()) {
+            if (component instanceof SwitchJButton)
+                ((SwitchJButton) component).setSelected(false);
+        }
+    }
+
+    private Role getRole() {
+        PhanQuyenDTO dto = new PhanQuyenDTO();
+        dto.setMaPQ(Integer.valueOf(txtMaPQ.getText()));
+        dto.setTenPQ(txtTenPQ.getText());
+        Role role = new Role(dto);
+
+        CT_PhanQuyenDTO ctHD = null;
+        if (switchJButtonHD.isSelected()) {
+            ctHD = new CT_PhanQuyenDTO();
+            ctHD.setMaCTPQ();
+            ctHD.setQuyenDoc();
+            ctHD.setQuyenTao();
+            ctHD.setQuyenSua();
+            ctHD.setQuyenXoa();
+        }
+        role.setQuyenHD();
+        role.setQuyenSP();
+        role.setQuyenPN();
+        role.setQuyenNCC();
+        role.setQuyenKH();
+        role.setQuyenKM();
+        role.setQuyenTK();
+        role.setQuyenExcel();
+        role.setQuyenNV();
+        return role;
+    }
+
+    private void onClickBtnThemListener() {
+
+    }
+
+    private void onClickBtnXoaListener() {
+
+    }
+
+    private void onClickBtnSuaListener() {
+
+    }
+
+    private void onClickBtnResetListener() {
+        cbRole.setSelectedIndex(0);
+    }
+
+    JComboBox<String> cbRole;
+    JPanel functionPanel = new JPanel();
+    JCheckBox btnXoaHD = new JCheckBox();
+    JCheckBox btnThemHD = new JCheckBox();
+    JCheckBox btnSuaHD = new JCheckBox();
+    JCheckBox btnThemPN = new JCheckBox();
+    JCheckBox btnSuaPN = new JCheckBox();
+    JCheckBox btnXoaPN = new JCheckBox();
+    JCheckBox btnThemSP = new JCheckBox();
+    JCheckBox btnSuaSP = new JCheckBox();
+    JCheckBox btnXoaSP = new JCheckBox();
+    JCheckBox btnThemNCC = new JCheckBox();
+    JCheckBox btnSuaNCC = new JCheckBox();
+    JCheckBox btnXoaNCC = new JCheckBox();
+    JCheckBox btnThemKH = new JCheckBox();
+    JCheckBox btnSuaKH = new JCheckBox();
+    JCheckBox btnXoaKH = new JCheckBox();
+    JCheckBox btnThemKM = new JCheckBox();
+    JCheckBox btnSuaKM = new JCheckBox();
+    JCheckBox btnXoaKM = new JCheckBox();
+    JCheckBox btnThemTK = new JCheckBox();
+    JCheckBox btnSuaTK = new JCheckBox();
+    JCheckBox btnXoaTK = new JCheckBox();
+    JCheckBox btnThemExcel = new JCheckBox();
+    JCheckBox btnSuaExcel = new JCheckBox();
+    JCheckBox btnXoaExcel = new JCheckBox();
+    JCheckBox btnThemNV = new JCheckBox();
+    JCheckBox btnSuaNV = new JCheckBox();
+    JCheckBox btnXoaNV = new JCheckBox();
+    JTextField txtTenPQ = new JTextField();
+    JTextField txtMaPQ = new JTextField();
+
+    SwitchJButton switchJButtonSP;
+    SwitchJButton switchJButtonPN;
+    SwitchJButton switchJButtonNCC;
+    SwitchJButton switchJButtonKH;
+    SwitchJButton switchJButtonKM;
+    SwitchJButton switchJButtonTK;
+    SwitchJButton switchJButtonExcel;
+    SwitchJButton switchJButtonNV;
+    SwitchJButton switchJButtonHD;
 }

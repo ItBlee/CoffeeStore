@@ -24,7 +24,9 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
 
     @Override
     public ArrayList<NhanVienDTO> findAll() {
-        return nhanVienDAO.findAll();
+        if (listNhanVien == null || listNhanVien.isEmpty())
+            listNhanVien = nhanVienDAO.findAll();
+        return listNhanVien;
     }
 
     @Override

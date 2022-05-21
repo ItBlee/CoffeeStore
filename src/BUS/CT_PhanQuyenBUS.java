@@ -20,7 +20,9 @@ public class CT_PhanQuyenBUS extends AbstractHistoricBUS implements ICT_PhanQuye
 
     @Override
     public ArrayList<CT_PhanQuyenDTO> findAll() {
-        return ctPhanQuyenDAO.findAll();
+        if (listCTPhanQuyen == null || listCTPhanQuyen.isEmpty())
+            listCTPhanQuyen = ctPhanQuyenDAO.findAll();
+        return listCTPhanQuyen;
     }
 
     @Override

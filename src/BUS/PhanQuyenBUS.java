@@ -21,7 +21,9 @@ public class PhanQuyenBUS extends AbstractHistoricBUS implements IPhanQuyenBUS {
 
     @Override
     public ArrayList<PhanQuyenDTO> findAll() {
-        return phanQuyenDAO.findAll();
+        if (listPhanQuyen == null || listPhanQuyen.isEmpty())
+            listPhanQuyen = phanQuyenDAO.findAll();
+        return listPhanQuyen;
     }
 
     @Override

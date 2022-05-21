@@ -86,8 +86,20 @@ public class FormThongKe extends JPanel {
         overviewPanel.setBackground(new Color(255, 255, 255));
         overviewPanel.setLayout(null);
 
+
         totalExpensesPanel.setBackground(new Color(254, 228, 226));
         totalExpensesPanel.setLayout(null);
+
+        lbOverviewTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        lbOverviewTitle.setForeground(new Color(37, 57, 111));
+        lbOverviewTitle.setText("Tổng quan");
+        overviewPanel.add(lbOverviewTitle);
+        lbOverviewTitle.setBounds(10, 10, 230, 30);
+
+        JLabel icTotalExpenses = new JLabel();
+        icTotalExpenses.setIcon(new ImageIcon("bin/images/FormThongKe/pay.png"));
+        totalExpensesPanel.add(icTotalExpenses);
+        icTotalExpenses.setBounds(10, 10, 24, 24);
 
         lbTotalExpensesCompare.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbTotalExpensesCompare.setForeground(new Color(47, 168, 79));
@@ -110,18 +122,17 @@ public class FormThongKe extends JPanel {
         overviewPanel.add(totalExpensesPanel);
         totalExpensesPanel.setBounds(190, 60, 170, 100);
 
-        lbOverviewTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        lbOverviewTitle.setForeground(new Color(37, 57, 111));
-        lbOverviewTitle.setText("Tổng quan");
-        overviewPanel.add(lbOverviewTitle);
-        lbOverviewTitle.setBounds(10, 10, 230, 30);
-
         totalSalesPanel.setBackground(new Color(220, 247, 227));
         totalSalesPanel.setLayout(null);
 
+        JLabel icTotalSales = new JLabel();
+        icTotalSales.setIcon(new ImageIcon("bin/images/FormThongKe/income.png"));
+        totalSalesPanel.add(icTotalSales);
+        icTotalSales.setBounds(10, 10, 24, 24);
+
         lbTotalSalesCompare.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lbTotalSalesCompare.setForeground(new Color(47, 168, 79));
-        lbTotalSalesCompare.setText("+100%");
+        lbTotalSalesCompare.setForeground(new Color(234, 61, 47));
+        lbTotalSalesCompare.setText("-37%");
         totalSalesPanel.add(lbTotalSalesCompare);
         lbTotalSalesCompare.setBounds(120, 10, 50, 20);
 
@@ -142,6 +153,11 @@ public class FormThongKe extends JPanel {
 
         totalBillPanel.setBackground(new Color(229, 239, 255));
         totalBillPanel.setLayout(null);
+
+        JLabel icTotalBill = new JLabel();
+        icTotalBill.setIcon(new ImageIcon("bin/images/FormThongKe/bill.png"));
+        totalBillPanel.add(icTotalBill);
+        icTotalBill.setBounds(10, 10, 24, 24);
 
         lbTotalBillPanelCompare.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbTotalBillPanelCompare.setForeground(new Color(47, 168, 79));
@@ -167,9 +183,14 @@ public class FormThongKe extends JPanel {
         totalCustomerPanel.setBackground(new Color(252, 243, 215));
         totalCustomerPanel.setLayout(null);
 
+        JLabel icTotalCustomer = new JLabel();
+        icTotalCustomer.setIcon(new ImageIcon("bin/images/FormThongKe/customer.png"));
+        totalCustomerPanel.add(icTotalCustomer);
+        icTotalCustomer.setBounds(10, 10, 24, 24);
+
         lbTotalCustomerCompare.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lbTotalCustomerCompare.setForeground(new Color(47, 168, 79));
-        lbTotalCustomerCompare.setText("+100%");
+        lbTotalCustomerCompare.setForeground(new Color(243, 170, 24));
+        lbTotalCustomerCompare.setText("-55%");
         totalCustomerPanel.add(lbTotalCustomerCompare);
         lbTotalCustomerCompare.setBounds(120, 10, 50, 20);
 
@@ -259,6 +280,11 @@ public class FormThongKe extends JPanel {
 
         bestsellerPanel.add(bestSellHeaderTable);
         bestSellHeaderTable.setBounds(10, 60, 220, 40);
+
+        JLabel icBestseller = new JLabel();
+        icBestseller.setIcon(new ImageIcon("bin/images/FormThongKe/best.png"));
+        bestsellerPanel.add(icBestseller);
+        icBestseller.setBounds(47, 110, 20, 20);
 
         lbBestsellerBest.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbBestsellerBest.setForeground(new Color(155, 84, 225));

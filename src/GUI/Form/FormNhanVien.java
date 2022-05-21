@@ -204,7 +204,7 @@ public class FormNhanVien extends JPanel {
         tablePanel.add(btnTimKiem);
         btnTimKiem.setBounds(750, 20, 170, 40);
 
-        btnReset.setText("jButton3");
+        btnReset.setIcon(new ImageIcon("bin/images/components/reset.png"));
         tablePanel.add(btnReset);
         btnReset.setBounds(923, 20, 40, 40);
 

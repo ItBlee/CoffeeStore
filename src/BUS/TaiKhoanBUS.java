@@ -31,7 +31,9 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
 
     @Override
     public ArrayList<TaiKhoanDTO> findAll() {
-        return taiKhoanDAO.findAll();
+        if (listTaiKhoan == null || listTaiKhoan.isEmpty())
+            listTaiKhoan = taiKhoanDAO.findAll();
+        return listTaiKhoan;
     }
 
     @Override

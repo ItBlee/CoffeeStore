@@ -23,7 +23,7 @@ public class SystemConstant {
     public static final String CONFIG_PROP_LANGUAGE_CODE = "LANGUAGE.code";
 
     //Theme
-    public static final String DEFAULT_THEME_NAME = "Dark Flat";
-    public static final String DEFAULT_THEME_CLASS = "com.formdev.flatlaf.intellijthemes.FlatDarkFlatIJTheme";
+    public static final String DEFAULT_THEME_NAME = "Light Flat";
+    public static final String DEFAULT_THEME_CLASS = "com.formdev.flatlaf.intellijthemes.FlatLightFlatIJTheme";
     public static final boolean DEFAULT_THEME_DARK_MODE = true;
 }

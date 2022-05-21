@@ -22,7 +22,9 @@ public class LichSuBUS implements ILichSuBUS {
 
     @Override
     public ArrayList<LichSuDTO> findAll() {
-        return lichSuDAO.findAll();
+        if (listLichSu == null || listLichSu.isEmpty())
+            listLichSu = lichSuDAO.findAll();
+        return listLichSu;
     }
 
     @Override
