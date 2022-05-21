@@ -1,5 +1,7 @@
 package GUI.Form;
 
+import GUI.components.SwitchJButton;
+
 import java.awt.*;
 import javax.swing.*;
 
@@ -70,52 +72,88 @@ public class FormPhanQuyen extends JPanel {
 
         setLayout(null);
 
-        cbRole.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbRole.setModel(new DefaultComboBoxModel<>(new String[] { "PQ1 - Quản trị viên", "Item 2", "Item 3", "Item 4" }));
         add(cbRole);
         cbRole.setBounds(30, 50, 350, 40);
 
         functionPanel.setBackground(new Color(255, 255, 255));
         functionPanel.setLayout(null);
 
+        SwitchJButton switchJButton1 = new SwitchJButton(new Color(47, 168, 79));
+        functionPanel.add(switchJButton1);
+        switchJButton1.setBounds(30, 130, 40, 20);
+
         lbSP.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbSP.setText("Quản lý Sản phẩm");
         functionPanel.add(lbSP);
         lbSP.setBounds(90, 130, 160, 24);
+
+        SwitchJButton switchJButtonPN = new SwitchJButton(new Color(47, 168, 79));
+        functionPanel.add(switchJButtonPN);
+        switchJButtonPN.setBounds(30, 90, 40, 20);
 
         lbPN.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbPN.setText("Quản lý Phiếu nhập");
         functionPanel.add(lbPN);
         lbPN.setBounds(90, 90, 160, 24);
 
+        SwitchJButton switchJButtonNCC = new SwitchJButton(new Color(47, 168, 79));
+        functionPanel.add(switchJButtonNCC);
+        switchJButtonNCC.setBounds(30, 170, 40, 20);
+
         lbNCC.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbNCC.setText("Quản lý Nguồn cung");
         functionPanel.add(lbNCC);
         lbNCC.setBounds(90, 170, 160, 24);
+
+        SwitchJButton switchJButtonKH = new SwitchJButton(new Color(47, 168, 79));
+        functionPanel.add(switchJButtonKH);
+        switchJButtonKH.setBounds(30, 210, 40, 20);
 
         lbKH.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbKH.setText("Quản lý Khách hàng");
         functionPanel.add(lbKH);
         lbKH.setBounds(90, 210, 160, 24);
 
+        SwitchJButton switchJButtonKM = new SwitchJButton(new Color(47, 168, 79));
+        functionPanel.add(switchJButtonKM);
+        switchJButtonKM.setBounds(30, 250, 40, 20);
+
         lbKM.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbKM.setText("Quản lý Khuyến mãi");
         functionPanel.add(lbKM);
         lbKM.setBounds(90, 250, 160, 24);
+
+        SwitchJButton switchJButtonTK = new SwitchJButton(new Color(47, 168, 79));
+        functionPanel.add(switchJButtonTK);
+        switchJButtonTK.setBounds(30, 290, 40, 20);
 
         lbTK.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbTK.setText("Quản lý Thống kê");
         functionPanel.add(lbTK);
         lbTK.setBounds(90, 290, 160, 24);
 
+        SwitchJButton switchJButtonExcel = new SwitchJButton(new Color(47, 168, 79));
+        functionPanel.add(switchJButtonExcel);
+        switchJButtonExcel.setBounds(30, 330, 40, 20);
+
         lbExcel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbExcel.setText("Quản lý Tập tin");
         functionPanel.add(lbExcel);
         lbExcel.setBounds(90, 330, 160, 24);
 
+        SwitchJButton switchJButtonNV = new SwitchJButton(new Color(47, 168, 79));
+        functionPanel.add(switchJButtonNV);
+        switchJButtonNV.setBounds(30, 370, 40, 20);
+
         lbNV.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbNV.setText("Quản lý Nhân sự");
         functionPanel.add(lbNV);
         lbNV.setBounds(90, 370, 160, 24);
+
+        SwitchJButton switchJButtonHD = new SwitchJButton(new Color(47, 168, 79));
+        functionPanel.add(switchJButtonHD);
+        switchJButtonHD.setBounds(30, 50, 40, 20);
 
         lbHD.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbHD.setText("Quản lý Hóa đơn");
@@ -326,7 +364,8 @@ public class FormPhanQuyen extends JPanel {
         detailPanel.add(lbMaPQ);
         lbMaPQ.setBounds(10, 100, 60, 20);
 
-        txtMaPQ.setEditable(false);
+        txtMaPQ.setEnabled(false);
+        txtMaPQ.setBackground(new Color(245, 245, 245));
         txtMaPQ.setAutoscrolls(false);
         txtMaPQ.setFocusable(false);
         detailPanel.add(txtMaPQ);

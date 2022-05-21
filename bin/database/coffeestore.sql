@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 13, 2022 lúc 05:53 PM
+-- Thời gian đã tạo: Th5 21, 2022 lúc 03:33 AM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.3
 
@@ -63,6 +63,21 @@ CREATE TABLE `ct_phanquyen` (
   `QuyenXoa` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Đang đổ dữ liệu cho bảng `ct_phanquyen`
+--
+
+INSERT INTO `ct_phanquyen` (`MaCTPQ`, `QuyenDoc`, `QuyenTao`, `QuyenSua`, `QuyenXoa`) VALUES
+(1, 1, 1, 1, 1),
+(2, 1, 1, 1, 1),
+(3, 1, 1, 1, 1),
+(4, 1, 1, 1, 1),
+(5, 1, 1, 1, 1),
+(6, 1, 1, 1, 1),
+(7, 1, 1, 1, 1),
+(8, 1, 1, 1, 1),
+(9, 1, 1, 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -108,6 +123,23 @@ CREATE TABLE `khachhang` (
   `Email` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Đang đổ dữ liệu cho bảng `khachhang`
+--
+
+INSERT INTO `khachhang` (`MaKH`, `Ho`, `Ten`, `SDT`, `DiaChi`, `Email`) VALUES
+(0, 'Nguyễn Bình ', 'Minh', 961197985, '128 Bàu cát', 'binhminhdaw@gmail.com'),
+(1, 'Nguyễn Bình ', 'Minhh', 961197985, '125 Bàu Sờ Cát', 'binhminhdaw@gmail.com'),
+(2, 'Nguyễn Bình ', 'Bình', 961197985, '125 Bàu Sô Cát', 'binhminhdaw@gmail.com'),
+(3, 'Trần Long Tuấn', 'Vũ ', 961666333, 'An Dương Vương', 'tuanvu@gmail.com'),
+(4, 'Hoàng ', 'Đại', 988877755, '123 lê hồng phong', 'hoangdai@gmail.com'),
+(5, 'Thành', 'Lộc', 977755511, '257 lê hồng phong', 'thanhloc@gmail.com'),
+(6, 'Nguyễn Bình', 'Minh', 944466622, '963 lê hồng phong', 'binhminh@gmail.com'),
+(7, 'Nguyễn Bình', 'Minh', 944466633, '963 lý thường', 'binhminh@gmail.com'),
+(8, 'Nguyễn Bình', 'Minh', 944466644, '963 âu sờ cơ', 'binhminh@gmail.com'),
+(9, 'Nguyễn Bình', 'Minh', 944466655, '963 lê duẩn', 'binhminh@gmail.com'),
+(10, 'Nguyễn Bình', 'Minh', 944466666, '963 lê đại thành', 'binhminh@gmail.com');
+
 -- --------------------------------------------------------
 
 --
@@ -149,6 +181,22 @@ CREATE TABLE `loaisp` (
   `MoTa` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Đang đổ dữ liệu cho bảng `loaisp`
+--
+
+INSERT INTO `loaisp` (`MaLoai`, `TenLoai`, `MoTa`) VALUES
+(1, 'CAFE', 'Các loại cà phê'),
+(2, 'Nước Ngọt', 'Các loại nước ngọt'),
+(3, 'Matcha', 'Matcha '),
+(4, 'Cà Phê Phin', 'Cà Phê Phin'),
+(5, 'Cà Phê Pha Máy', 'Cà Phê Pha Máy'),
+(6, 'Cà Phê Nguyên Chất', 'Cà Phê Nguyên Chất'),
+(7, 'Cà Phê Latte', 'Cà Phê Latte'),
+(8, 'Cà Phê Nguyên Chất', 'Cà Phê Nguyên Chất'),
+(9, 'Capuchino', 'Capuchino từ cà phê nguyên chất'),
+(10, 'Macchiato', 'Macchiato có vị béo thơm đặc trưng của sữa quyện lẫn với vị ngọt nhẹ hoặc đôi chút hơi mặn');
+
 -- --------------------------------------------------------
 
 --
@@ -163,6 +211,22 @@ CREATE TABLE `nhacungcap` (
   `SoTaiKhoan` int(20) NOT NULL,
   `TinhTrang` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `nhacungcap`
+--
+
+INSERT INTO `nhacungcap` (`MaNCC`, `TenNCC`, `SDT`, `DiaChi`, `SoTaiKhoan`, `TinhTrang`) VALUES
+(1, 'Đại lý cà phê', 961197985, 'ở đâu ai mà biết', 961197985, 1),
+(2, 'Đại Lý Đường', 0, '125 lý Thường Kiệt', 0, 0),
+(3, 'Đại lý sữa', 955333444, '157 Bàu Cát', 777744444, 1),
+(4, 'Đại Lý Kem', 955522233, '78 Chu Văn An', 44447777, 1),
+(5, 'Đại Lý Nước', 977744488, '85 Âu Cơ', 77844444, 1),
+(6, 'Đại Lý Đá', 999888777, '85 Âu Cơ Quá', 11112222, 1),
+(7, 'Đại lý giấy in bill', 922333444, '190 an dương vương', 60233322, 1),
+(8, 'Đại Lý Cà Phê Hạt', 976456876, '183 âu cơ', 999911299, 1),
+(9, 'Đại Lý Bao Đựng ly', 788866642, '452 Lê Hồng Phong', 60255544, 1),
+(10, 'Đại Lý Hộp Nhựa', 965111555, '335 bảy hiền', 60233355, 1);
 
 -- --------------------------------------------------------
 
@@ -209,6 +273,13 @@ CREATE TABLE `phanquyen` (
   `QuyenNV` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Đang đổ dữ liệu cho bảng `phanquyen`
+--
+
+INSERT INTO `phanquyen` (`MaPQ`, `TenPQ`, `QuyenHD`, `QuyenSP`, `QuyenPN`, `QuyenNCC`, `QuyenKH`, `QuyenKM`, `QuyenTK`, `QuyenExcel`, `QuyenNV`) VALUES
+(1, 'Quản trị viên', 1, 2, 3, 4, 5, 6, 7, 8, 9);
+
 -- --------------------------------------------------------
 
 --
@@ -251,10 +322,11 @@ CREATE TABLE `sanpham` (
 CREATE TABLE `taikhoan` (
   `MaTK` int(10) UNSIGNED NOT NULL,
   `TenDangNhap` varchar(20) NOT NULL,
-  `MatKhau` varchar(20) NOT NULL,
+  `MatKhauHash` varchar(200) NOT NULL,
+  `MatKhauSalt` varchar(50) NOT NULL,
   `NgayTao` timestamp NOT NULL DEFAULT current_timestamp(),
   `NguoiTao` int(10) UNSIGNED NOT NULL,
-  `ChucVu` varchar(100) NOT NULL,
+  `MaPQ` int(10) NOT NULL,
   `TinhTrang` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -262,8 +334,8 @@ CREATE TABLE `taikhoan` (
 -- Đang đổ dữ liệu cho bảng `taikhoan`
 --
 
-INSERT INTO `taikhoan` (`MaTK`, `TenDangNhap`, `MatKhau`, `NgayTao`, `NguoiTao`, `ChucVu`, `TinhTrang`) VALUES
-(1, 'admin', 'admin', '2022-04-03 10:42:55', 1, 'admin', 1);
+INSERT INTO `taikhoan` (`MaTK`, `TenDangNhap`, `MatKhauHash`, `MatKhauSalt`, `NgayTao`, `NguoiTao`, `MaPQ`, `TinhTrang`) VALUES
+(1, 'admin', 'd83c81ba59bb048750c30c9d3fd7abd07d27140ce6dfcf17244b944073438fce', 'cdd1a14c970e3c41', '2022-04-03 10:42:55', 1, 1, 1);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -381,7 +453,8 @@ ALTER TABLE `sanpham`
 ALTER TABLE `taikhoan`
   ADD PRIMARY KEY (`MaTK`),
   ADD UNIQUE KEY `UNIQUE_TenDangNhap` (`TenDangNhap`) USING BTREE,
-  ADD KEY `FK_NguoiTao_MaTK` (`NguoiTao`);
+  ADD KEY `FK_NguoiTao_MaTK` (`NguoiTao`),
+  ADD KEY `FK_TK_PQ` (`MaPQ`);
 
 --
 -- AUTO_INCREMENT cho các bảng đã đổ
@@ -391,7 +464,7 @@ ALTER TABLE `taikhoan`
 -- AUTO_INCREMENT cho bảng `ct_phanquyen`
 --
 ALTER TABLE `ct_phanquyen`
-  MODIFY `MaCTPQ` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `MaCTPQ` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT cho bảng `khuyenmai`
@@ -409,13 +482,13 @@ ALTER TABLE `lichsu`
 -- AUTO_INCREMENT cho bảng `loaisp`
 --
 ALTER TABLE `loaisp`
-  MODIFY `MaLoai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `MaLoai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT cho bảng `nhacungcap`
 --
 ALTER TABLE `nhacungcap`
-  MODIFY `MaNCC` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `MaNCC` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT cho bảng `nhanvien`
@@ -427,7 +500,7 @@ ALTER TABLE `nhanvien`
 -- AUTO_INCREMENT cho bảng `phanquyen`
 --
 ALTER TABLE `phanquyen`
-  MODIFY `MaPQ` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `MaPQ` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT cho bảng `phieunhap`
@@ -517,7 +590,8 @@ ALTER TABLE `sanpham`
 -- Các ràng buộc cho bảng `taikhoan`
 --
 ALTER TABLE `taikhoan`
-  ADD CONSTRAINT `FK_NguoiTao_MaTK` FOREIGN KEY (`NguoiTao`) REFERENCES `taikhoan` (`MaTK`);
+  ADD CONSTRAINT `FK_NguoiTao_MaTK` FOREIGN KEY (`NguoiTao`) REFERENCES `taikhoan` (`MaTK`),
+  ADD CONSTRAINT `FK_TK_PQ` FOREIGN KEY (`MaPQ`) REFERENCES `phanquyen` (`MaPQ`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

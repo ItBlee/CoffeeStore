@@ -86,7 +86,8 @@ public class FormKhachHang extends JPanel {
         infoPanel.add(lbEmail);
         lbEmail.setBounds(231, 140, 100, 20);
 
-        txtMaKH.setEditable(false);
+        txtMaKH.setEnabled(false);
+        txtMaKH.setBackground(new Color(245, 245, 245));
         infoPanel.add(txtMaKH);
         txtMaKH.setBounds(30, 100, 170, 35);
         infoPanel.add(txtSDT);

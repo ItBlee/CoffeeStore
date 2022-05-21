@@ -86,7 +86,8 @@ public class FormNCC extends JPanel {
         infoPanel.add(lbDiaChi);
         lbDiaChi.setBounds(31, 200, 100, 20);
 
-        txtMaNCC.setEditable(false);
+        txtMaNCC.setEnabled(false);
+        txtMaNCC.setBackground(new Color(245, 245, 245));
         infoPanel.add(txtMaNCC);
         txtMaNCC.setBounds(30, 100, 120, 35);
         infoPanel.add(txtSDT);

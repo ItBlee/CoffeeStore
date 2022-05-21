@@ -142,11 +142,13 @@ public class FormTaiKhoan extends JPanel {
         infoPanel.add(lbNguoiTao);
         lbNguoiTao.setBounds(171, 80, 90, 20);
 
-        txtMaTK.setEditable(false);
+        txtMaTK.setEnabled(false);
+        txtMaTK.setBackground(new Color(245, 245, 245));
         infoPanel.add(txtMaTK);
         txtMaTK.setBounds(30, 100, 120, 35);
 
-        txtNguoiTao.setEditable(false);
+        txtNguoiTao.setEnabled(false);
+        txtNguoiTao.setBackground(new Color(245, 245, 245));
         infoPanel.add(txtNguoiTao);
         txtNguoiTao.setBounds(170, 100, 120, 35);
 
@@ -193,11 +195,13 @@ public class FormTaiKhoan extends JPanel {
         infoPanel.add(lbMaNV);
         lbMaNV.setBounds(31, 280, 120, 20);
 
-        txtMaNV.setEditable(false);
+        txtMaNV.setEnabled(false);
+        txtMaNV.setBackground(new Color(245, 245, 245));
         infoPanel.add(txtMaNV);
         txtMaNV.setBounds(30, 300, 120, 35);
 
-        txtHoTenNV.setEditable(false);
+        txtHoTenNV.setEnabled(false);
+        txtHoTenNV.setBackground(new Color(245, 245, 245));
         infoPanel.add(txtHoTenNV);
         txtHoTenNV.setBounds(170, 300, 300, 35);
 

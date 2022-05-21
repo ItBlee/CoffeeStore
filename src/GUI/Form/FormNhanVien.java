@@ -119,11 +119,13 @@ public class FormNhanVien extends JPanel {
         infoPanel.add(lbEmail);
         lbEmail.setBounds(231, 200, 100, 20);
 
-        txtMaNV.setEditable(false);
+        txtMaNV.setEnabled(false);
+        txtMaNV.setBackground(new Color(245, 245, 245));
         infoPanel.add(txtMaNV);
         txtMaNV.setBounds(31, 100, 130, 30);
 
-        txtMaTK.setEditable(false);
+        txtMaTK.setEnabled(false);
+        txtMaTK.setBackground(new Color(245, 245, 245));
         infoPanel.add(txtMaTK);
         txtMaTK.setBounds(30, 160, 130, 35);
 

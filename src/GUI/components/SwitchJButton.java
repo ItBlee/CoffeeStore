@@ -22,12 +22,12 @@ public class SwitchJButton extends Component {
     private float location;
     private boolean selected;
     private boolean mouseOver;
-    private final float speed = 0.1f;
+    private final float speed = 0.3f;
     private final List<IEventSwitchSelected> events;
 
     public SwitchJButton(Color color) {
         setBackground(color);
-        setPreferredSize(new Dimension(50, 25));
+        setPreferredSize(new Dimension(40, 20));
         setForeground(Color.WHITE);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
         events = new ArrayList<>();
@@ -89,11 +89,11 @@ public class SwitchJButton extends Component {
         float alpha = getAlpha();
         if (alpha < 1) {
             g2.setColor(Color.GRAY);
-            g2.fillRoundRect(0, 0, width, height, 25, 25);
+            g2.fillRoundRect(0, 0, width, height, 20, 20);
         }
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
         g2.setColor(getBackground());
-        g2.fillRoundRect(0, 0, width, height, 25, 25);
+        g2.fillRoundRect(0, 0, width, height, 20, 20);
         g2.setColor(getForeground());
         g2.setComposite(AlphaComposite.SrcOver);
         g2.fillOval((int) location, 2, height - 4, height - 4);

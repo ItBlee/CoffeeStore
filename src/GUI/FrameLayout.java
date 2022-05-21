@@ -58,16 +58,16 @@ public class FrameLayout extends MovableJFrame {
 	private void initMenuButton() {
 		categories = new ArrayList<Category>();
 
-		if (General.CURRENT_ROLE.getQuyenHD() != null &&
-			General.CURRENT_ROLE.getQuyenHD().getQuyenDoc() == 1) {
-			Category itemHoaDon = new Category();
-			itemHoaDon.setCode("HD");
-			itemHoaDon.setToolTipText(Language.LAYOUT_BUTTON_HD);
-			itemHoaDon.setKeyBlind(KeyEvent.VK_1);
-			itemHoaDon.setIcon("bin/images/components/HD.png");
-			itemHoaDon.setIconHover("bin/images/components/HD-hover.gif");
-			itemHoaDon.setFormClassName(FormHoaDon.class.getName());
-			categories.add(itemHoaDon);
+		if (General.CURRENT_ROLE.getQuyenNV() != null &&
+				General.CURRENT_ROLE.getQuyenNV().getQuyenDoc() == 1) {
+			Category itemTaiKhoan = new Category();
+			itemTaiKhoan.setCode("NV");
+			itemTaiKhoan.setToolTipText(Language.LAYOUT_BUTTON_NV);
+			itemTaiKhoan.setKeyBlind(KeyEvent.VK_9);
+			itemTaiKhoan.setIcon("bin/images/components/NV.png");
+			itemTaiKhoan.setIconHover("bin/images/components/NV-hover.gif");
+			itemTaiKhoan.setFormClassName(FormNhanSu.class.getName());
+			categories.add(itemTaiKhoan);
 		}
 
 		if (General.CURRENT_ROLE.getQuyenSP() != null &&
@@ -154,16 +154,16 @@ public class FrameLayout extends MovableJFrame {
 			categories.add(itemExcel);
 		}
 
-		if (General.CURRENT_ROLE.getQuyenNV() != null &&
-				General.CURRENT_ROLE.getQuyenNV().getQuyenDoc() == 1) {
-			Category itemTaiKhoan = new Category();
-			itemTaiKhoan.setCode("NV");
-			itemTaiKhoan.setToolTipText(Language.LAYOUT_BUTTON_NV);
-			itemTaiKhoan.setKeyBlind(KeyEvent.VK_9);
-			itemTaiKhoan.setIcon("bin/images/components/NV.png");
-			itemTaiKhoan.setIconHover("bin/images/components/NV-hover.gif");
-			itemTaiKhoan.setFormClassName(FormNhanSu.class.getName());
-			categories.add(itemTaiKhoan);
+		if (General.CURRENT_ROLE.getQuyenHD() != null &&
+				General.CURRENT_ROLE.getQuyenHD().getQuyenDoc() == 1) {
+			Category itemHoaDon = new Category();
+			itemHoaDon.setCode("HD");
+			itemHoaDon.setToolTipText(Language.LAYOUT_BUTTON_HD);
+			itemHoaDon.setKeyBlind(KeyEvent.VK_1);
+			itemHoaDon.setIcon("bin/images/components/HD.png");
+			itemHoaDon.setIconHover("bin/images/components/HD-hover.gif");
+			itemHoaDon.setFormClassName(FormHoaDon.class.getName());
+			categories.add(itemHoaDon);
 		}
 	}
 

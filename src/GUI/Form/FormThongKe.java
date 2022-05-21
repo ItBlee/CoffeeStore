@@ -470,7 +470,7 @@ public class FormThongKe extends JPanel {
         lbRevenueTitle.setBounds(10, 10, 140, 30);
 
         lbPercentRevenue.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        lbPercentRevenue.setForeground(new Color(255, 255, 255));
+        lbPercentRevenue.setForeground(new Color(47, 168, 79));
         lbPercentRevenue.setHorizontalAlignment(SwingConstants.CENTER);
         lbPercentRevenue.setText("1.000.000.000 (80%)");
         revenuePanel.add(lbPercentRevenue);
