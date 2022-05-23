@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 21, 2022 lúc 03:33 AM
+-- Thời gian đã tạo: Th5 23, 2022 lúc 10:32 AM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.3
 
@@ -76,7 +76,52 @@ INSERT INTO `ct_phanquyen` (`MaCTPQ`, `QuyenDoc`, `QuyenTao`, `QuyenSua`, `Quyen
 (6, 1, 1, 1, 1),
 (7, 1, 1, 1, 1),
 (8, 1, 1, 1, 1),
-(9, 1, 1, 1, 1);
+(9, 1, 1, 1, 1),
+(10, 1, 1, 1, 1),
+(11, 1, 1, 1, 1),
+(12, 1, 1, 1, 1),
+(13, 1, 1, 1, 1),
+(14, 1, 1, 1, 1),
+(15, 0, 0, 0, 0),
+(16, 0, 0, 0, 0),
+(17, 0, 0, 0, 0),
+(18, 0, 0, 0, 0),
+(28, 1, 1, 1, 1),
+(29, 1, 1, 1, 1),
+(30, 1, 1, 1, 1),
+(31, 0, 0, 0, 0),
+(32, 1, 1, 1, 1),
+(33, 1, 1, 1, 1),
+(34, 0, 0, 0, 0),
+(35, 0, 0, 0, 0),
+(36, 0, 0, 0, 0),
+(37, 1, 1, 1, 1),
+(38, 1, 1, 1, 1),
+(39, 1, 1, 1, 1),
+(40, 1, 1, 1, 1),
+(41, 0, 0, 0, 0),
+(42, 0, 0, 0, 0),
+(43, 0, 0, 0, 0),
+(44, 0, 0, 0, 0),
+(45, 0, 0, 0, 0),
+(46, 0, 0, 0, 0),
+(47, 0, 0, 0, 0),
+(48, 0, 0, 0, 0),
+(49, 0, 0, 0, 0),
+(50, 0, 0, 0, 0),
+(51, 0, 0, 0, 0),
+(52, 1, 1, 1, 1),
+(53, 1, 1, 1, 1),
+(54, 1, 1, 1, 1),
+(55, 1, 1, 1, 1),
+(56, 1, 1, 1, 1),
+(57, 0, 0, 0, 0),
+(58, 0, 0, 0, 0),
+(59, 1, 1, 1, 1),
+(60, 1, 1, 1, 1),
+(61, 1, 1, 1, 1),
+(62, 0, 0, 0, 0),
+(63, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -168,6 +213,36 @@ CREATE TABLE `lichsu` (
   `NguoiThucHien` int(11) NOT NULL,
   `ThaoTac` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `lichsu`
+--
+
+INSERT INTO `lichsu` (`MaLS`, `TenDoiTuong`, `MaDoiTuong`, `ThoiGian`, `NguoiThucHien`, `ThaoTac`) VALUES
+(1, 'PhanQuyen', 1, '2022-05-22 02:20:52', 1, 'Sửa'),
+(2, 'PhanQuyen', 1, '2022-05-22 02:36:04', 1, 'Sửa'),
+(3, 'PhanQuyen', 1, '2022-05-22 02:39:13', 1, 'Sửa'),
+(4, 'PhanQuyen', 1, '2022-05-22 02:49:04', 1, 'Sửa'),
+(5, 'PhanQuyen', 1, '2022-05-22 02:57:44', 1, 'Sửa'),
+(6, 'PhanQuyen', 1, '2022-05-22 02:59:31', 1, 'Sửa'),
+(7, 'PhanQuyen', 1, '2022-05-22 03:00:16', 1, 'Sửa'),
+(8, 'PhanQuyen', 1, '2022-05-22 03:01:00', 1, 'Sửa'),
+(9, 'PhanQuyen', 1, '2022-05-22 03:34:10', 1, 'Sửa'),
+(10, 'PhanQuyen', 1, '2022-05-22 03:34:30', 1, 'Sửa'),
+(11, 'PhanQuyen', 3, '2022-05-22 03:57:04', 1, 'Thêm'),
+(12, 'PhanQuyen', 3, '2022-05-22 04:08:46', 1, 'Xóa'),
+(13, 'PhanQuyen', 4, '2022-05-22 07:18:54', 1, 'Thêm'),
+(14, 'PhanQuyen', 5, '2022-05-22 07:20:17', 1, 'Thêm'),
+(15, 'PhanQuyen', 6, '2022-05-22 07:27:43', 1, 'Thêm'),
+(16, 'PhanQuyen', 7, '2022-05-22 07:28:40', 1, 'Thêm'),
+(17, 'TaiKhoan', 4, '2022-05-23 04:07:08', 1, 'Sửa'),
+(18, 'TaiKhoan', 4, '2022-05-23 04:07:15', 1, 'Sửa'),
+(19, 'TaiKhoan', 4, '2022-05-23 04:09:28', 1, 'Sửa'),
+(20, 'TaiKhoan', 4, '2022-05-23 04:12:37', 1, 'Sửa'),
+(21, 'TaiKhoan', 4, '2022-05-23 04:12:41', 1, 'Xóa'),
+(22, 'TaiKhoan', 5, '2022-05-23 04:22:21', 1, 'Thêm'),
+(23, 'TaiKhoan', 5, '2022-05-23 04:32:39', 1, 'Sửa'),
+(24, 'TaiKhoan', 5, '2022-05-23 04:33:00', 1, 'Sửa');
 
 -- --------------------------------------------------------
 
@@ -278,7 +353,12 @@ CREATE TABLE `phanquyen` (
 --
 
 INSERT INTO `phanquyen` (`MaPQ`, `TenPQ`, `QuyenHD`, `QuyenSP`, `QuyenPN`, `QuyenNCC`, `QuyenKH`, `QuyenKM`, `QuyenTK`, `QuyenExcel`, `QuyenNV`) VALUES
-(1, 'Quản trị viên', 1, 2, 3, 4, 5, 6, 7, 8, 9);
+(1, 'Quản trị viên', 1, 2, 3, 4, 5, 6, 7, 8, 9),
+(2, 'Nhân viên', 10, 11, 12, 13, 14, 15, 16, 17, 18),
+(4, 'Nhân viên bán hàng', 28, 29, 30, 31, 32, 33, 34, 35, 36),
+(5, 'Thủ kho', 37, 38, 39, 40, 41, 42, 43, 44, 45),
+(6, 'Quản lý nhân sự', 46, 47, 48, 49, 50, 51, 52, 53, 54),
+(7, 'Quản lý chiến lược', 55, 56, 57, 58, 59, 60, 61, 62, 63);
 
 -- --------------------------------------------------------
 
@@ -335,7 +415,8 @@ CREATE TABLE `taikhoan` (
 --
 
 INSERT INTO `taikhoan` (`MaTK`, `TenDangNhap`, `MatKhauHash`, `MatKhauSalt`, `NgayTao`, `NguoiTao`, `MaPQ`, `TinhTrang`) VALUES
-(1, 'admin', 'd83c81ba59bb048750c30c9d3fd7abd07d27140ce6dfcf17244b944073438fce', 'cdd1a14c970e3c41', '2022-04-03 10:42:55', 1, 1, 1);
+(1, 'admin', 'd83c81ba59bb048750c30c9d3fd7abd07d27140ce6dfcf17244b944073438fce', 'cdd1a14c970e3c41', '2022-04-03 10:42:55', 1, 1, 1),
+(5, 'testt', '595c42a1acecd90b16ae62de32897d7455a4ff17c40e396af406e5bd1130a3b1', '48505f476a7ea472', '2022-05-23 04:22:21', 1, 5, 1);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -419,7 +500,7 @@ ALTER TABLE `nhanvien`
 -- Chỉ mục cho bảng `phanquyen`
 --
 ALTER TABLE `phanquyen`
-  ADD PRIMARY KEY (`MaPQ`),
+  ADD PRIMARY KEY (`MaPQ`,`TenPQ`),
   ADD KEY `FK_PQ_QuyenHD` (`QuyenHD`),
   ADD KEY `FK_PQ_QuyenSP` (`QuyenSP`),
   ADD KEY `FK_PQ_QuyenNCC` (`QuyenNCC`),
@@ -453,8 +534,8 @@ ALTER TABLE `sanpham`
 ALTER TABLE `taikhoan`
   ADD PRIMARY KEY (`MaTK`),
   ADD UNIQUE KEY `UNIQUE_TenDangNhap` (`TenDangNhap`) USING BTREE,
-  ADD KEY `FK_NguoiTao_MaTK` (`NguoiTao`),
-  ADD KEY `FK_TK_PQ` (`MaPQ`);
+  ADD KEY `FK_TK_PQ` (`MaPQ`),
+  ADD KEY `FK_NguoiTao_MaTK` (`NguoiTao`);
 
 --
 -- AUTO_INCREMENT cho các bảng đã đổ
@@ -464,7 +545,7 @@ ALTER TABLE `taikhoan`
 -- AUTO_INCREMENT cho bảng `ct_phanquyen`
 --
 ALTER TABLE `ct_phanquyen`
-  MODIFY `MaCTPQ` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `MaCTPQ` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT cho bảng `khuyenmai`
@@ -476,7 +557,7 @@ ALTER TABLE `khuyenmai`
 -- AUTO_INCREMENT cho bảng `lichsu`
 --
 ALTER TABLE `lichsu`
-  MODIFY `MaLS` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `MaLS` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT cho bảng `loaisp`
@@ -500,7 +581,7 @@ ALTER TABLE `nhanvien`
 -- AUTO_INCREMENT cho bảng `phanquyen`
 --
 ALTER TABLE `phanquyen`
-  MODIFY `MaPQ` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `MaPQ` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `phieunhap`
@@ -518,7 +599,7 @@ ALTER TABLE `sanpham`
 -- AUTO_INCREMENT cho bảng `taikhoan`
 --
 ALTER TABLE `taikhoan`
-  MODIFY `MaTK` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `MaTK` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
@@ -590,7 +671,7 @@ ALTER TABLE `sanpham`
 -- Các ràng buộc cho bảng `taikhoan`
 --
 ALTER TABLE `taikhoan`
-  ADD CONSTRAINT `FK_NguoiTao_MaTK` FOREIGN KEY (`NguoiTao`) REFERENCES `taikhoan` (`MaTK`),
+  ADD CONSTRAINT `FK_NguoiTao_MaTK` FOREIGN KEY (`NguoiTao`) REFERENCES `nhanvien` (`MaNV`),
   ADD CONSTRAINT `FK_TK_PQ` FOREIGN KEY (`MaPQ`) REFERENCES `phanquyen` (`MaPQ`);
 COMMIT;
 
