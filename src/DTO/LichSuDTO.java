@@ -4,7 +4,7 @@ import DTO.Interface.IEntity;
 
 import java.sql.Timestamp;
 
-public class LichSuDTO implements IEntity {
+public class LichSuDTO implements IEntity, Comparable<LichSuDTO> {
     private Integer MaLS;
     private String TenDoiTuong;
     private Integer MaDoiTuong;
@@ -79,5 +79,10 @@ public class LichSuDTO implements IEntity {
         if (!(o instanceof LichSuDTO)) return false;
         LichSuDTO lichSuDTO = (LichSuDTO) o;
         return getMaLS().equals(lichSuDTO.getMaLS());
+    }
+
+    @Override
+    public int compareTo(LichSuDTO o) {
+        return o.getMaLS() - this.getMaLS();
     }
 }

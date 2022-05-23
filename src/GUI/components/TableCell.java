@@ -20,7 +20,11 @@ public class TableCell extends JLabel {
             setText(obj.toString());
         }
         setBorder(new EmptyBorder(10, 10, 10, 10));
-        setForeground(new Color(80, 80, 80));
+        if (getText().equalsIgnoreCase("Hoạt động"))
+            setForeground(MyColor.GREEN);
+        else if (getText().equalsIgnoreCase("Vô hiệu"))
+            setForeground(MyColor.RED);
+        else setForeground(new Color(80, 80, 80));
     }
 
     public TableCell(Object obj, boolean selected, CellType cellType) {
@@ -30,7 +34,11 @@ public class TableCell extends JLabel {
             setText(obj.toString());
         }
         setBorder(new EmptyBorder(10, 10, 10, 10));
-        setForeground(new Color(80, 80, 80));
+        if (getText().equalsIgnoreCase("Hoạt động"))
+            setForeground(MyColor.GREEN);
+        else if (getText().equalsIgnoreCase("Vô hiệu") || getText().equalsIgnoreCase("Chưa sở hữu"))
+            setForeground(MyColor.RED);
+        else setForeground(new Color(80, 80, 80));
     }
 
     @Override

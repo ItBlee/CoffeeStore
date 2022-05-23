@@ -9,7 +9,7 @@ import DTO.CT_PhieuNhapDTO;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CT_PhieuNhapBUS extends AbstractHistoricBUS implements ICT_PhieuNhapBUS {
+public class CT_PhieuNhapBUS implements ICT_PhieuNhapBUS {
     private static ArrayList<CT_PhieuNhapDTO> listCTPhieuNhap = null;
     private final ICT_PhieuNhapDAO ictPhieuNhapDAO;
 
@@ -50,8 +50,8 @@ public class CT_PhieuNhapBUS extends AbstractHistoricBUS implements ICT_PhieuNha
     }
 
     @Override
-    public void save(CT_PhieuNhapDTO ctPhieuNhap) throws Exception {
-
+    public Integer save(CT_PhieuNhapDTO ctPhieuNhap) throws Exception {
+        return null;
     }
 
     @Override

@@ -32,7 +32,7 @@ public class TaiKhoanDTO implements IEntity {
         return this.MaTK;
     }
 
-    public void setMaTK(int maTK) {
+    public void setMaTK(Integer maTK) {
         this.MaTK = maTK;
     }
 
@@ -72,7 +72,7 @@ public class TaiKhoanDTO implements IEntity {
         return this.NguoiTao;
     }
 
-    public void setNguoiTao(int nguoiTao) {
+    public void setNguoiTao(Integer nguoiTao) {
         this.NguoiTao = nguoiTao;
     }
 
@@ -88,7 +88,7 @@ public class TaiKhoanDTO implements IEntity {
         return Objects.requireNonNullElse(this.TinhTrang, 1);
     }
 
-    public void setTinhTrang(int tinhTrang) {
+    public void setTinhTrang(Integer tinhTrang) {
         this.TinhTrang = tinhTrang;
     }
 

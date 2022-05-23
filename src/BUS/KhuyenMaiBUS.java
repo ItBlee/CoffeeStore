@@ -41,8 +41,8 @@ public class KhuyenMaiBUS extends AbstractHistoricBUS implements IKhuyenMaiBUS {
     }
 
     @Override
-    public void save(KhuyenMaiDTO khuyenMai) throws Exception {
-
+    public Integer save(KhuyenMaiDTO khuyenMai) throws Exception {
+        return null;
     }
 
     @Override

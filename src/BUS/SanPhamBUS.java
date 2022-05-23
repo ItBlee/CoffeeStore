@@ -5,6 +5,7 @@ import BUS.Interfaces.ISanPhamBUS;
 import DAO.Interfaces.ISanPhamDAO;
 import DAO.SanPhamDAO;
 import DTO.SanPhamDTO;
+import DTO.TaiKhoanDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,13 +65,14 @@ public class SanPhamBUS extends AbstractHistoricBUS implements ISanPhamBUS {
         return null;
     }
 
-    @Override
-    public void save(SanPhamDTO sanPham) throws Exception {
 
+    @Override
+    public Integer save(SanPhamDTO entity) throws Exception {
+        return null;
     }
 
     @Override
-    public void update(SanPhamDTO sanPham) throws Exception {
+    public void update(SanPhamDTO entity) throws Exception {
 
     }
 
@@ -91,11 +93,6 @@ public class SanPhamBUS extends AbstractHistoricBUS implements ISanPhamBUS {
 
     @Override
     public int getTotalCount() {
-        return 0;
-    }
-
-    @Override
-    public int tinhSoLuongSP() {
         return 0;
     }
 }

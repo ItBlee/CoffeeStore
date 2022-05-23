@@ -1,8 +1,20 @@
 package GUI.Form;
 
+import BUS.Interfaces.INhanVienBUS;
+import BUS.Interfaces.IPhanQuyenBUS;
+import BUS.Interfaces.ITaiKhoanBUS;
+import BUS.NhanVienBUS;
+import BUS.PhanQuyenBUS;
+import BUS.TaiKhoanBUS;
+import DTO.NhanVienDTO;
+import DTO.Role;
+import DTO.TaiKhoanDTO;
 import GUI.components.TableColumn;
+import Utils.General;
+import com.toedter.calendar.JDateChooser;
 
 import java.awt.*;
+import java.text.SimpleDateFormat;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -11,56 +23,33 @@ public class FormNhanVien extends JPanel {
         initComponents();
     }
 
-    private void initComponents() {
-        JPanel infoPanel = new JPanel();
-        JLabel lbDetailTitle = new JLabel();
-        JTextField txtNgaySinh = new JTextField();
-        JLabel lbLuong = new JLabel();
-        JLabel lbMaNV = new JLabel();
-        JLabel lbHo = new JLabel();
-        JLabel lbTen = new JLabel();
-        JLabel lbSDT = new JLabel();
-        JLabel lbNgaySinh = new JLabel();
-        JLabel lbGioiTinh = new JLabel();
-        JLabel lbMaTK = new JLabel();
-        JLabel lbEmail = new JLabel();
-        JTextField txtMaNV = new JTextField();
-        JTextField txtMaTK = new JTextField();
-        JLabel lbLuongUnit = new JLabel();
-        JTextField txtLuong = new JTextField();
-        JTextField txtSDT = new JTextField();
-        JTextField txtHo = new JTextField();
-        JTextField txtTen = new JTextField();
-        JTextField txtEmail = new JTextField();
-        JComboBox<String> cbGioiTinh = new JComboBox<>();
-        JButton btnSelectNgaySinh = new JButton();
-        JButton btnThem = new JButton();
-        JButton btnSua = new JButton();
-        JButton btnSelectMaTK = new JButton();
-        JButton btnXoa = new JButton();
-        JPanel tablePanel = new JPanel();
-        JLabel lbTableTitle = new JLabel();
-        JButton btnTimKiem = new JButton();
-        JButton btnReset = new JButton();
-        JPanel taskPanel = new JPanel();
-        JLabel lbTaskTitle = new JLabel();
-        JLabel lbCountHD = new JLabel();
-        JPanel progressHD = new JPanel();
-        JLabel progressHDText = new JLabel();
-        JPanel progressHDValue = new JPanel();
-        JLabel lbCountPN = new JLabel();
-        JPanel progressPN = new JPanel();
-        JLabel progressPNText = new JLabel();
-        JPanel progressPNValue = new JPanel();
-        JLabel lbCountKH = new JLabel();
-        JPanel progressKH = new JPanel();
-        JLabel progressKHText = new JLabel();
-        JPanel progressKHValue = new JPanel();
-        JPanel progressLS = new JPanel();
-        JLabel progressLSText = new JLabel();
-        JPanel progressLSValue = new JPanel();
-        JLabel lbCountLichSu = new JLabel();
+    private void fillTable() {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
+        ITaiKhoanBUS taiKhoanBUS = new TaiKhoanBUS();
+        IPhanQuyenBUS phanQuyenBUS = new PhanQuyenBUS();
+        INhanVienBUS nhanVienBUS = new NhanVienBUS();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
 
+        for (TaiKhoanDTO dto: taiKhoanBUS.findAll()) {
+            if (dto.getMaPQ() == Role.DEFAULT_ADMIN_ROLE_ID && !General.CURRENT_ROLE.isAdmin())
+                continue;
+            NhanVienDTO owner = nhanVienBUS.findByMaTK(dto.getMaTK());
+            String ownName = owner != null ? owner.getHoTen() : "Chưa sở hữu";
+            String creatorName = nhanVienBUS.findByID(dto.getNguoiTao()).getHoTen();
+            String roleName = phanQuyenBUS.findByID(dto.getMaPQ()).getTenPQ();
+            Object[] row;
+            if (General.CURRENT_ROLE.isAdmin())
+                row = new Object[] { "TK" + dto.getMaTK(), dto.getTenDangNhap(),
+                        roleName, ownName, dateFormat.format(dto.getNgayTao()), creatorName,
+                        dto.getTinhTrang() == 1 ? "Hoạt động" : "Vô hiệu"};
+            else row = new Object[] { "TK" + dto.getMaTK(), dto.getTenDangNhap(),
+                    roleName, ownName, dateFormat.format(dto.getNgayTao()), creatorName};
+            model.addRow(row);
+        }
+    }
+
+    private void initComponents() {
         setLayout(null);
 
         infoPanel.setBackground(new Color(255, 255, 255));
@@ -71,8 +60,11 @@ public class FormNhanVien extends JPanel {
         lbDetailTitle.setText("Thông tin nhân viên");
         infoPanel.add(lbDetailTitle);
         lbDetailTitle.setBounds(131, 20, 240, 40);
+
+        txtNgaySinh.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        txtNgaySinh.setDateFormatString("dd/MM/yyyy");
         infoPanel.add(txtNgaySinh);
-        txtNgaySinh.setBounds(30, 220, 130, 35);
+        txtNgaySinh.setBounds(30, 220, 152, 35);
 
         lbLuong.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbLuong.setText("Lương");
@@ -146,11 +138,7 @@ public class FormNhanVien extends JPanel {
 
         cbGioiTinh.setModel(new DefaultComboBoxModel<>(new String[] { "Nam", "Nữ" }));
         infoPanel.add(cbGioiTinh);
-        cbGioiTinh.setBounds(30, 280, 130, 30);
-
-        btnSelectNgaySinh.setText("jButton1");
-        infoPanel.add(btnSelectNgaySinh);
-        btnSelectNgaySinh.setBounds(170, 220, 35, 35);
+        cbGioiTinh.setBounds(30, 280, 130, 35);
 
         btnThem.setBackground(new Color(220, 247, 227));
         btnThem.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -172,7 +160,7 @@ public class FormNhanVien extends JPanel {
 
         btnSelectMaTK.setText("jButton1");
         infoPanel.add(btnSelectMaTK);
-        btnSelectMaTK.setBounds(170, 160, 35, 35);
+        btnSelectMaTK.setBounds(160, 160, 35, 35);
 
         btnXoa.setBackground(new Color(254, 228, 226));
         btnXoa.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -208,12 +196,12 @@ public class FormNhanVien extends JPanel {
         tablePanel.add(btnReset);
         btnReset.setBounds(923, 20, 40, 40);
 
-        JScrollPane jScrollPane = new JScrollPane();
+        jScrollPane = new JScrollPane();
         jScrollPane.setBackground(Color.white);
         jScrollPane.setBorder(BorderFactory.createEmptyBorder());
         jScrollPane.setFocusable(false);
 
-        TableColumn table = new TableColumn();
+        table = new TableColumn();
         table.setModel(new DefaultTableModel(
                 new Object [][] {
 
@@ -234,19 +222,6 @@ public class FormNhanVien extends JPanel {
         if (table.getColumnModel().getColumnCount() > 0) {
             table.getColumnModel().getColumn(0).setPreferredWidth(50);
         }
-
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        model.addRow(new Object[]{1, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{2, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{3, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{4, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{5, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{6, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{7, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{8, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{9, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{10, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{11, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
 
         tablePanel.add(jScrollPane);
         jScrollPane.setBounds(22, 60, 940, 350);
@@ -355,4 +330,55 @@ public class FormNhanVien extends JPanel {
         add(taskPanel);
         taskPanel.setBounds(520, 10, 470, 380);
     }
+
+    JScrollPane jScrollPane;
+    TableColumn table;
+
+    JPanel infoPanel = new JPanel();
+    JLabel lbDetailTitle = new JLabel();
+    JDateChooser txtNgaySinh = new JDateChooser();
+    JLabel lbLuong = new JLabel();
+    JLabel lbMaNV = new JLabel();
+    JLabel lbHo = new JLabel();
+    JLabel lbTen = new JLabel();
+    JLabel lbSDT = new JLabel();
+    JLabel lbNgaySinh = new JLabel();
+    JLabel lbGioiTinh = new JLabel();
+    JLabel lbMaTK = new JLabel();
+    JLabel lbEmail = new JLabel();
+    JTextField txtMaNV = new JTextField();
+    JTextField txtMaTK = new JTextField();
+    JLabel lbLuongUnit = new JLabel();
+    JTextField txtLuong = new JTextField();
+    JTextField txtSDT = new JTextField();
+    JTextField txtHo = new JTextField();
+    JTextField txtTen = new JTextField();
+    JTextField txtEmail = new JTextField();
+    JComboBox<String> cbGioiTinh = new JComboBox<>();
+    JButton btnThem = new JButton();
+    JButton btnSua = new JButton();
+    JButton btnSelectMaTK = new JButton();
+    JButton btnXoa = new JButton();
+    JPanel tablePanel = new JPanel();
+    JLabel lbTableTitle = new JLabel();
+    JButton btnTimKiem = new JButton();
+    JButton btnReset = new JButton();
+    JPanel taskPanel = new JPanel();
+    JLabel lbTaskTitle = new JLabel();
+    JLabel lbCountHD = new JLabel();
+    JPanel progressHD = new JPanel();
+    JLabel progressHDText = new JLabel();
+    JPanel progressHDValue = new JPanel();
+    JLabel lbCountPN = new JLabel();
+    JPanel progressPN = new JPanel();
+    JLabel progressPNText = new JLabel();
+    JPanel progressPNValue = new JPanel();
+    JLabel lbCountKH = new JLabel();
+    JPanel progressKH = new JPanel();
+    JLabel progressKHText = new JLabel();
+    JPanel progressKHValue = new JPanel();
+    JPanel progressLS = new JPanel();
+    JLabel progressLSText = new JLabel();
+    JPanel progressLSValue = new JPanel();
+    JLabel lbCountLichSu = new JLabel();
 }

@@ -9,7 +9,7 @@ import DTO.CT_HoaDonDTO;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CT_HoaDonBUS extends AbstractHistoricBUS implements ICT_HoaDonBUS {
+public class CT_HoaDonBUS implements ICT_HoaDonBUS {
     private static ArrayList<CT_HoaDonDTO> listCTHoaDon = null;
     private final ICT_HoaDonDAO ictHoaDonDAO;
 
@@ -50,8 +50,8 @@ public class CT_HoaDonBUS extends AbstractHistoricBUS implements ICT_HoaDonBUS {
     }
 
     @Override
-    public void save(CT_HoaDonDTO ctHoaDon) throws Exception {
-
+    public Integer save(CT_HoaDonDTO ctHoaDon) throws Exception {
+        return null;
     }
 
     @Override

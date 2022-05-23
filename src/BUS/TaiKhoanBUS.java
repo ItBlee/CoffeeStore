@@ -91,14 +91,16 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
     }
 
     @Override
-    public void save(TaiKhoanDTO taiKhoan) throws Exception {
+    public Integer save(TaiKhoanDTO taiKhoan) throws Exception {
         if (isExist(taiKhoan))
             throw new Exception("Đã tồn tại tài khoản này.");
         Integer newID = taiKhoanDAO.save(taiKhoan);
         if (newID == null)
             throw new Exception("Phát sinh lỗi trong quá trình thêm tài khoản.");
-        listTaiKhoan.add(taiKhoanDAO.findByID(newID));
+        taiKhoan = taiKhoanDAO.findByID(newID);
+        listTaiKhoan.add(taiKhoan);
         super.save(taiKhoan);
+        return newID;
     }
 
     @Override
@@ -108,13 +110,10 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
         if (!taiKhoanDAO.update(taiKhoan))
             throw new Exception("Phát sinh lỗi trong quá trình thêm tài khoản.");
         taiKhoan = taiKhoanDAO.findByID(taiKhoan.getMaTK());
-        for (TaiKhoanDTO taiKhoanDTO : listTaiKhoan) {
-            if (taiKhoanDTO.getMaTK().equals(taiKhoan.getMaTK())) {
-                taiKhoanDTO = taiKhoan;
-                return;
-            }
+        for (int i = 0; i < listTaiKhoan.size(); i++) {
+            if (listTaiKhoan.get(i).getMaTK().equals(taiKhoan.getMaTK()))
+                listTaiKhoan.set(i, taiKhoan);
         }
-        listTaiKhoan.add(taiKhoan);
         super.update(taiKhoan);
     }
 
@@ -145,6 +144,8 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
 
     @Override
     public boolean isExist(TaiKhoanDTO taiKhoan) {
+        if (taiKhoan.getMaTK() == null)
+            return false;
         return listTaiKhoan.contains(taiKhoan);
     }
 

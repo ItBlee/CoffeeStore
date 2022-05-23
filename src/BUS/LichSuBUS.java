@@ -9,6 +9,7 @@ import Utils.StringUtils;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class LichSuBUS implements ILichSuBUS {
     private static ArrayList<LichSuDTO> listLichSu = null;
@@ -24,6 +25,7 @@ public class LichSuBUS implements ILichSuBUS {
     public ArrayList<LichSuDTO> findAll() {
         if (listLichSu == null || listLichSu.isEmpty())
             listLichSu = lichSuDAO.findAll();
+        Collections.sort(listLichSu);
         return listLichSu;
     }
 
@@ -94,6 +96,8 @@ public class LichSuBUS implements ILichSuBUS {
 
     @Override
     public boolean isExist(LichSuDTO lichSu) {
+        if (lichSu.getMaLS() == null)
+            return false;
         return listLichSu.contains(lichSu);
     }
 

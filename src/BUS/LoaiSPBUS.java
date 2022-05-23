@@ -35,8 +35,8 @@ public class LoaiSPBUS extends AbstractHistoricBUS implements ILoaiSPBUS {
     }
 
     @Override
-    public void save(LoaiSPDTO loaiSP) throws Exception {
-
+    public Integer save(LoaiSPDTO loaiSP) throws Exception {
+        return null;
     }
 
     @Override

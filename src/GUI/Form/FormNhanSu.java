@@ -1,6 +1,8 @@
 package GUI.Form;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class FormNhanSu extends JPanel {
     public FormNhanSu() {
@@ -27,6 +29,14 @@ public class FormNhanSu extends JPanel {
 
         historyPanel.setLayout(null);
         jTabbedPane.addTab("Lịch sử", historyPanel);
+
+        jTabbedPane.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                if (jTabbedPane.getSelectedComponent() instanceof FormLichSu) {
+                    ((FormLichSu) jTabbedPane.getSelectedComponent()).reload();
+                }
+            }
+        });
 
         add(jTabbedPane);
         jTabbedPane.setBounds(0, 0, 1000, 807);

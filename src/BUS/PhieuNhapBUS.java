@@ -56,8 +56,8 @@ public class PhieuNhapBUS extends AbstractHistoricBUS implements IPhieuNhapBUS {
     }
 
     @Override
-    public void save(PhieuNhapDTO phieuNhap) throws Exception {
-
+    public Integer save(PhieuNhapDTO phieuNhap) throws Exception {
+        return null;
     }
 
     @Override

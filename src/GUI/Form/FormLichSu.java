@@ -1,15 +1,17 @@
 package GUI.Form;
 
 import BUS.Abstract.AbstractHistoricBUS;
+import BUS.Interfaces.ILichSuBUS;
+import BUS.LichSuBUS;
 import DTO.LichSuDTO;
+import GUI.components.MyColor;
 
 import java.awt.*;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Random;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class FormLichSu extends JPanel {
@@ -22,19 +24,16 @@ public class FormLichSu extends JPanel {
     }
 
     private void loadBoards() {
+        ILichSuBUS bus = new LichSuBUS();
+        ArrayList<LichSuDTO> list = bus.findAll();
         for (int i = 1; i <= 10; i++) {
-            LichSuDTO dto = new LichSuDTO();
-            dto.setID(i);
-            dto.setMaDoiTuong(i+100);
-            dto.setNguoiThucHien(i+30);
-            dto.setTenDoiTuong("HoaDon");
-            final String[] proper_noun = {"Thêm", "Xóa", "Sửa", "Ngoại lệ"};
-            Random random = new Random();
-            int index = random.nextInt(proper_noun.length);
-            dto.setThaoTac(proper_noun[index]);
-            dto.setThoiGian(new Timestamp(System.currentTimeMillis()));
-            createHistoryBoard(dto);
+            try {
+                createHistoryBoard(list.get(countBoard));
+            } catch (IndexOutOfBoundsException e) {
+                break;
+            }
         }
+
         mainPanel.setPreferredSize(new Dimension(mainPanel.getWidth(), 270 + (125 * countBoard) - (countBoard/10)*200));
         timeLine.setBounds(timeLine.getX(), timeLine.getY(), timeLine.getWidth(), 150 + (125 * countBoard) - (countBoard/10)*200);
         mainPanel.revalidate();
@@ -135,19 +134,19 @@ public class FormLichSu extends JPanel {
         JPanel actionMark = new JPanel();
         switch (dto.getThaoTac()) {
             case AbstractHistoricBUS.SAVE_FLAG:
-                actionMark.setBackground(new Color(47, 168, 79));
+                actionMark.setBackground(MyColor.GREEN);
                 break;
 
             case AbstractHistoricBUS.UPDATE_FLAG:
-                actionMark.setBackground(new Color(243, 170, 24));
+                actionMark.setBackground(MyColor.ORANGE);
                 break;
 
             case AbstractHistoricBUS.DELETE_FLAG:
-                actionMark.setBackground(new Color(234, 61, 47));
+                actionMark.setBackground(MyColor.RED);
                 break;
 
             default:
-                actionMark.setBackground(new Color(54, 123, 245));
+                actionMark.setBackground(MyColor.Blue);
                 break;
         }
 
@@ -279,6 +278,15 @@ public class FormLichSu extends JPanel {
         if (alignment == LEFT_ALIGN)
             historyPanel.setBounds(165, 80 + (100 * countBoard), 300, 140);
         else historyPanel.setBounds(530, 80 + (100 * countBoard), 300, 140);
+    }
+
+    public void reload() {
+        removeAll();
+        initComponents();
+        countBoard = 0;
+        loadBoards();
+        revalidate();
+        repaint();
     }
 
     private JPanel mainPanel;

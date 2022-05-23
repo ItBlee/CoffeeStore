@@ -16,7 +16,7 @@ public class Security {
             return Long.toHexString(ByteBuffer.wrap(salt.digest()).getLong());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            return null;
+            return getSalt();
         }
     }
 

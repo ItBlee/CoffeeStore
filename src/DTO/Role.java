@@ -1,7 +1,10 @@
 package DTO;
 
 public class Role {
-    private final PhanQuyenDTO phanQuyen;
+    public static final int DEFAULT_ADMIN_ROLE_ID = 1;
+    public static final int DEFAULT_EMPLOYEE_ROLE_ID = 2;
+
+    private PhanQuyenDTO phanQuyen;
     private CT_PhanQuyenDTO QuyenHD;
     private CT_PhanQuyenDTO QuyenSP;
     private CT_PhanQuyenDTO QuyenPN;
@@ -13,6 +16,10 @@ public class Role {
     private CT_PhanQuyenDTO QuyenNV;
 
     public Role(PhanQuyenDTO phanQuyen) {
+        this.phanQuyen = phanQuyen;
+    }
+
+    public void setPhanQuyen(PhanQuyenDTO phanQuyen) {
         this.phanQuyen = phanQuyen;
     }
 
@@ -90,5 +97,9 @@ public class Role {
 
     public void setQuyenNV(CT_PhanQuyenDTO quyenNV) {
         QuyenNV = quyenNV;
+    }
+
+    public boolean isAdmin() {
+        return getPhanQuyen().getMaPQ() == DEFAULT_ADMIN_ROLE_ID;
     }
 }

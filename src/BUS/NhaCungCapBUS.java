@@ -55,8 +55,8 @@ public class NhaCungCapBUS extends AbstractHistoricBUS implements INhaCungCapBUS
     }
 
     @Override
-    public void save(NhaCungCapDTO nhaCungCap) throws Exception {
-
+    public Integer save(NhaCungCapDTO nhaCungCap) throws Exception {
+        return null;
     }
 
     @Override

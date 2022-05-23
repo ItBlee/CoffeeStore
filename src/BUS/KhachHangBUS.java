@@ -54,8 +54,8 @@ public class KhachHangBUS extends AbstractHistoricBUS implements IKhachHangBUS {
     }
 
     @Override
-    public void save(KhachHangDTO nhanVien) throws Exception {
-
+    public Integer save(KhachHangDTO nhanVien) throws Exception {
+        return null;
     }
 
     @Override

@@ -9,7 +9,7 @@ import DTO.CT_KhuyenMaiDTO;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CT_KhuyenMaiBUS extends AbstractHistoricBUS implements ICT_KhuyenMaiBUS {
+public class CT_KhuyenMaiBUS implements ICT_KhuyenMaiBUS {
     private static ArrayList<CT_KhuyenMaiDTO> listCTKhuyenMai = null;
     private final IKhuyenMaiDAO khuyenMaiDAO;
 
@@ -35,8 +35,8 @@ public class CT_KhuyenMaiBUS extends AbstractHistoricBUS implements ICT_KhuyenMa
     }
 
     @Override
-    public void save(CT_KhuyenMaiDTO ctKhuyenMai) throws Exception {
-
+    public Integer save(CT_KhuyenMaiDTO ctKhuyenMai) throws Exception {
+        return null;
     }
 
     @Override

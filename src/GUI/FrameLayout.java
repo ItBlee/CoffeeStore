@@ -23,7 +23,7 @@ public class FrameLayout extends MovableJFrame {
 	private boolean isDisplayIntro = true;
 	private ArrayList<Category> categories = null;
 
-	private Category currentItem;
+	public Category currentItem;
 	private Font currentFont;
 	private Language currentLanguage;
 	private FlatIJLookAndFeelInfo currentTheme;

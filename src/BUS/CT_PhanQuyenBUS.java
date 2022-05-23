@@ -7,8 +7,9 @@ import DAO.Interfaces.ICT_PhanQuyenDAO;
 import DTO.CT_PhanQuyenDTO;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class CT_PhanQuyenBUS extends AbstractHistoricBUS implements ICT_PhanQuyenBUS {
+public class CT_PhanQuyenBUS implements ICT_PhanQuyenBUS {
     private static ArrayList<CT_PhanQuyenDTO> listCTPhanQuyen = null;
     private final ICT_PhanQuyenDAO ctPhanQuyenDAO;
 
@@ -34,14 +35,15 @@ public class CT_PhanQuyenBUS extends AbstractHistoricBUS implements ICT_PhanQuye
     }
 
     @Override
-    public void save(CT_PhanQuyenDTO ctPhanQuyen) throws Exception {
+    public Integer save(CT_PhanQuyenDTO ctPhanQuyen) throws Exception {
         if (isExist(ctPhanQuyen))
             throw new Exception("Đã tồn tại chi tiết quyền này.");
         Integer newID = ctPhanQuyenDAO.save(ctPhanQuyen);
         if (newID == null)
             throw new Exception("Phát sinh lỗi trong quá trình thêm chi tiết quyền.");
-        listCTPhanQuyen.add(ctPhanQuyenDAO.findByID(newID));
-        super.save(ctPhanQuyen);
+        ctPhanQuyen = ctPhanQuyenDAO.findByID(newID);
+        listCTPhanQuyen.add(ctPhanQuyen);
+        return newID;
     }
 
     @Override
@@ -51,14 +53,10 @@ public class CT_PhanQuyenBUS extends AbstractHistoricBUS implements ICT_PhanQuye
         if (!ctPhanQuyenDAO.update(ctPhanQuyen))
             throw new Exception("Phát sinh lỗi trong quá trình thêm chi tiết quyền.");
         ctPhanQuyen = ctPhanQuyenDAO.findByID(ctPhanQuyen.getMaCTPQ());
-        for (CT_PhanQuyenDTO CT_PhanQuyenDTO : listCTPhanQuyen) {
-            if (CT_PhanQuyenDTO.getMaCTPQ().equals(ctPhanQuyen.getMaCTPQ())) {
-                CT_PhanQuyenDTO = ctPhanQuyen;
-                return;
-            }
+        for (int i = 0; i < listCTPhanQuyen.size(); i++) {
+            if (listCTPhanQuyen.get(i).getMaCTPQ().equals(ctPhanQuyen.getMaCTPQ()))
+                listCTPhanQuyen.set(i, ctPhanQuyen);
         }
-        listCTPhanQuyen.add(ctPhanQuyen);
-        super.update(ctPhanQuyen);
     }
 
     @Override
@@ -66,11 +64,34 @@ public class CT_PhanQuyenBUS extends AbstractHistoricBUS implements ICT_PhanQuye
         if (!ctPhanQuyenDAO.delete(id))
             throw new Exception("Không thể xóa chi tiết quyền (CTPQ" + id + ").");
         listCTPhanQuyen.removeIf(CT_PhanQuyenDTO -> CT_PhanQuyenDTO.getMaCTPQ() == id);
-        super.delete(CT_PhanQuyenDTO.class, id);
+    }
+
+    @Override
+    public HashMap<Integer, Boolean> delete(int[] ids) {
+        HashMap<Integer, Boolean> report = new HashMap<Integer, Boolean>();
+        boolean resultExecute;
+        for (int id:ids) {
+            try {
+                delete(id);
+                resultExecute = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                resultExecute = false;
+            }
+            report.put(id, resultExecute);
+        }
+        return report;
     }
 
     @Override
     public boolean isExist(CT_PhanQuyenDTO ctPhanQuyen) {
+        if (ctPhanQuyen.getMaCTPQ() == null)
+            return false;
         return listCTPhanQuyen.contains(ctPhanQuyen);
+    }
+
+    @Override
+    public int getTotalCount() {
+        return listCTPhanQuyen.size();
     }
 }

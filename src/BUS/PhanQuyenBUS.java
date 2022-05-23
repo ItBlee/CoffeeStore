@@ -35,14 +35,24 @@ public class PhanQuyenBUS extends AbstractHistoricBUS implements IPhanQuyenBUS {
     }
 
     @Override
-    public void save(PhanQuyenDTO phanQuyen) throws Exception {
+    public PhanQuyenDTO findByTenPhanQuyen(String tenPQ) {
+        for (PhanQuyenDTO PhanQuyenDTO : listPhanQuyen)
+            if (PhanQuyenDTO.getTenPQ().equalsIgnoreCase(tenPQ))
+                return PhanQuyenDTO;
+        return null;
+    }
+
+    @Override
+    public Integer save(PhanQuyenDTO phanQuyen) throws Exception {
         if (isExist(phanQuyen))
             throw new Exception("Đã tồn tại quyền này.");
         Integer newID = phanQuyenDAO.save(phanQuyen);
         if (newID == null)
             throw new Exception("Phát sinh lỗi trong quá trình thêm quyền.");
-        listPhanQuyen.add(phanQuyenDAO.findByID(newID));
+        phanQuyen = phanQuyenDAO.findByID(newID);
+        listPhanQuyen.add(phanQuyen);
         super.save(phanQuyen);
+        return newID;
     }
 
     @Override
@@ -52,13 +62,10 @@ public class PhanQuyenBUS extends AbstractHistoricBUS implements IPhanQuyenBUS {
         if (!phanQuyenDAO.update(phanQuyen))
             throw new Exception("Phát sinh lỗi trong quá trình thêm quyền.");
         phanQuyen = phanQuyenDAO.findByID(phanQuyen.getMaPQ());
-        for (PhanQuyenDTO PhanQuyenDTO : listPhanQuyen) {
-            if (PhanQuyenDTO.getMaPQ().equals(phanQuyen.getMaPQ())) {
-                PhanQuyenDTO = phanQuyen;
-                return;
-            }
+        for (int i = 0; i < listPhanQuyen.size(); i++) {
+            if (listPhanQuyen.get(i).getMaPQ().equals(phanQuyen.getMaPQ()))
+                listPhanQuyen.set(i, phanQuyen);
         }
-        listPhanQuyen.add(phanQuyen);
         super.update(phanQuyen);
     }
 
@@ -89,6 +96,8 @@ public class PhanQuyenBUS extends AbstractHistoricBUS implements IPhanQuyenBUS {
 
     @Override
     public boolean isExist(PhanQuyenDTO phanQuyen) {
+        if (phanQuyen.getMaPQ() == null)
+            return false;
         return listPhanQuyen.contains(phanQuyen);
     }
 

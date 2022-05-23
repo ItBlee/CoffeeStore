@@ -5,7 +5,6 @@ import BUS.Interfaces.INhanVienBUS;
 import DAO.Interfaces.INhanVienDAO;
 import DAO.NhanVienDAO;
 import DTO.NhanVienDTO;
-import DTO.TaiKhoanDTO;
 import Utils.StringUtils;
 
 import java.sql.Date;
@@ -100,14 +99,16 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
     }
 
     @Override
-    public void save(NhanVienDTO nhanVien) throws Exception {
+    public Integer save(NhanVienDTO nhanVien) throws Exception {
         if (isExist(nhanVien))
             throw new Exception("Đã tồn tại nhân viên này.");
         Integer newID = nhanVienDAO.save(nhanVien);
         if (newID == null)
             throw new Exception("Phát sinh lỗi trong quá trình thêm nhân viên.");
-        listNhanVien.add(nhanVienDAO.findByID(newID));
+        nhanVien = nhanVienDAO.findByID(newID);
+        listNhanVien.add(nhanVien);
         super.save(nhanVien);
+        return newID;
     }
 
     @Override
@@ -117,13 +118,10 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
         if (!nhanVienDAO.update(nhanVien))
             throw new Exception("Phát sinh lỗi trong quá trình thêm nhân viên.");
         nhanVien = nhanVienDAO.findByID(nhanVien.getMaNV());
-        for (NhanVienDTO NhanVienDTO : listNhanVien) {
-            if (NhanVienDTO.getMaNV().equals(nhanVien.getMaNV())) {
-                NhanVienDTO = nhanVien;
-                return;
-            }
+        for (int i = 0; i < listNhanVien.size(); i++) {
+            if (listNhanVien.get(i).getMaNV().equals(nhanVien.getMaNV()))
+                listNhanVien.set(i, nhanVien);
         }
-        listNhanVien.add(nhanVien);
         super.update(nhanVien);
     }
 
@@ -154,6 +152,8 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
 
     @Override
     public boolean isExist(NhanVienDTO nhanVien) {
+        if (nhanVien.getMaNV() == null)
+            return false;
         return listNhanVien.contains(nhanVien);
     }
 

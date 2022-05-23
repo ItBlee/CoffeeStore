@@ -56,8 +56,8 @@ public class HoaDonBUS extends AbstractHistoricBUS implements IHoaDonBUS {
     }
 
     @Override
-    public void save(HoaDonDTO hoaDon) throws Exception {
-
+    public Integer save(HoaDonDTO hoaDon) throws Exception {
+        return null;
     }
 
     @Override
