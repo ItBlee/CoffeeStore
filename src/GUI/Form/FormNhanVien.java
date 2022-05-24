@@ -147,7 +147,7 @@ public class FormNhanVien extends JTablePanel {
         lbLuongUnit.setHorizontalAlignment(SwingConstants.CENTER);
         lbLuongUnit.setText("đồng");
         infoPanel.add(lbLuongUnit);
-        lbLuongUnit.setBounds(421, 280, 50, 30);
+        lbLuongUnit.setBounds(421, 282, 50, 30);
 
         NumberFormat principleFormat = NumberFormat.getNumberInstance();
         txtLuong = new JFormattedTextField(principleFormat);
@@ -470,9 +470,10 @@ public class FormNhanVien extends JTablePanel {
         }
         JOptionPane.showMessageDialog(FormNhanVien.this, "Thêm nhân viên thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
         onClickBtnResetListener();
-        //jScrollPane.getVerticalScrollBar().setValue(jScrollPane.getVerticalScrollBar().getMaximum());
         int newIndex = table.getRowCount()-1;
         table.setRowSelectionInterval(newIndex, newIndex);
+        JScrollBar bar = jScrollPane.getVerticalScrollBar();
+        bar.setValue(bar.getMaximum());
     }
 
     private void onClickBtnKichHoatListener() {
@@ -481,7 +482,7 @@ public class FormNhanVien extends JTablePanel {
             NhanVienDTO newDto = getUserInput();
             NhanVienDTO oldDto = nhanVienBUS.findByID(newDto.getMaNV());
             if (oldDto == null)
-                throw new Exception("Không tìm thấy tài khoản." );
+                throw new Exception("Không tìm thấy nhân viên." );
             if (oldDto.getMaTK() == 0)
                 oldDto.setMaTK(null);
             oldDto.setTinhTrang(1);
@@ -617,54 +618,54 @@ public class FormNhanVien extends JTablePanel {
         }
     }
 
-    JScrollPane jScrollPane;
-    TableColumn table;
+    private JScrollPane jScrollPane;
+    private TableColumn table;
 
-    JPanel infoPanel = new JPanel();
-    JLabel lbDetailTitle = new JLabel();
-    JDateChooser txtNgaySinh = new JDateChooser();
-    JLabel lbLuong = new JLabel();
-    JLabel lbMaNV = new JLabel();
-    JLabel lbHo = new JLabel();
-    JLabel lbTen = new JLabel();
-    JLabel lbSDT = new JLabel();
-    JLabel lbNgaySinh = new JLabel();
-    JLabel lbGioiTinh = new JLabel();
-    JLabel lbMaTK = new JLabel();
-    JLabel lbEmail = new JLabel();
-    JTextField txtMaNV = new JTextField();
-    JTextField txtMaTK = new JTextField();
-    JLabel lbLuongUnit = new JLabel();
-    JFormattedTextField txtLuong;
-    JTextField txtSDT = new JTextField();
-    JTextField txtHo = new JTextField();
-    JTextField txtTen = new JTextField();
-    JTextField txtEmail = new JTextField();
-    JComboBox<String> cbGioiTinh = new JComboBox<>();
-    JButton btnThem = new JButton();
-    JButton btnSua = new JButton();
-    JButton btnSelectMaTK = new JButton();
-    JButton btnXoa = new JButton();
-    JPanel tablePanel = new JPanel();
-    JLabel lbTableTitle = new JLabel();
-    JButton btnTimKiem = new JButton();
-    JButton btnReset = new JButton();
-    JPanel taskPanel = new JPanel();
-    JLabel lbTaskTitle = new JLabel();
-    JLabel lbCountHD = new JLabel();
-    JPanel progressHD = new JPanel();
-    JLabel progressHDText = new JLabel();
-    JPanel progressHDValue = new JPanel();
-    JLabel lbCountPN = new JLabel();
-    JPanel progressPN = new JPanel();
-    JLabel progressPNText = new JLabel();
-    JPanel progressPNValue = new JPanel();
-    JLabel lbCountKH = new JLabel();
-    JPanel progressKH = new JPanel();
-    JLabel progressKHText = new JLabel();
-    JPanel progressKHValue = new JPanel();
-    JPanel progressLS = new JPanel();
-    JLabel progressLSText = new JLabel();
-    JPanel progressLSValue = new JPanel();
-    JLabel lbCountLichSu = new JLabel();
+    private final JPanel infoPanel = new JPanel();
+    private final JLabel lbDetailTitle = new JLabel();
+    private final JDateChooser txtNgaySinh = new JDateChooser();
+    private final JLabel lbLuong = new JLabel();
+    private final JLabel lbMaNV = new JLabel();
+    private final JLabel lbHo = new JLabel();
+    private final JLabel lbTen = new JLabel();
+    private final JLabel lbSDT = new JLabel();
+    private final JLabel lbNgaySinh = new JLabel();
+    private final JLabel lbGioiTinh = new JLabel();
+    private final JLabel lbMaTK = new JLabel();
+    private final  JLabel lbEmail = new JLabel();
+    private final JTextField txtMaNV = new JTextField();
+    private final JTextField txtMaTK = new JTextField();
+    private final JLabel lbLuongUnit = new JLabel();
+    private JFormattedTextField txtLuong;
+    private final JTextField txtSDT = new JTextField();
+    private final JTextField txtHo = new JTextField();
+    private final JTextField txtTen = new JTextField();
+    private final JTextField txtEmail = new JTextField();
+    private final JComboBox<String> cbGioiTinh = new JComboBox<>();
+    private final JButton btnThem = new JButton();
+    private final JButton btnSua = new JButton();
+    private final JButton btnSelectMaTK = new JButton();
+    private final JButton btnXoa = new JButton();
+    private final JPanel tablePanel = new JPanel();
+    private final JLabel lbTableTitle = new JLabel();
+    private final JButton btnTimKiem = new JButton();
+    private final JButton btnReset = new JButton();
+    private final JPanel taskPanel = new JPanel();
+    private final JLabel lbTaskTitle = new JLabel();
+    private final JLabel lbCountHD = new JLabel();
+    private final JPanel progressHD = new JPanel();
+    private final JLabel progressHDText = new JLabel();
+    private final JPanel progressHDValue = new JPanel();
+    private final JLabel lbCountPN = new JLabel();
+    private final JPanel progressPN = new JPanel();
+    private final JLabel progressPNText = new JLabel();
+    private final JPanel progressPNValue = new JPanel();
+    private final JLabel lbCountKH = new JLabel();
+    private final JPanel progressKH = new JPanel();
+    private final JLabel progressKHText = new JLabel();
+    private final JPanel progressKHValue = new JPanel();
+    private final JPanel progressLS = new JPanel();
+    private final JLabel progressLSText = new JLabel();
+    private final JPanel progressLSValue = new JPanel();
+    private final JLabel lbCountLichSu = new JLabel();
 }

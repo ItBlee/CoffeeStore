@@ -47,13 +47,6 @@ public class Validator {
         return false;
     }
 
-    public static boolean isValidAddress(String address) {
-        if (address == null)
-            return false;
-        String regx = "^[0-9]{1,}[a-zA-Z]*[/0-9A-Za-z]*([a-zA-Z]|[\\s])*";
-        return Pattern.matches(regx, address);
-    }
-
     public static void main(String[] args) {
         System.out.println(isValidPhone("0397361223"));
     }

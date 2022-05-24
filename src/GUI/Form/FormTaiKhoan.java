@@ -392,9 +392,10 @@ public class FormTaiKhoan extends JTablePanel {
         }
         JOptionPane.showMessageDialog(FormTaiKhoan.this, "Thêm tài khoản thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
         onClickBtnResetListener();
-        //jScrollPane.getVerticalScrollBar().setValue(jScrollPane.getVerticalScrollBar().getMaximum());
         int newIndex = table.getRowCount()-1;
         table.setRowSelectionInterval(newIndex, newIndex);
+        JScrollBar bar = jScrollPane.getVerticalScrollBar();
+        bar.setValue(bar.getMaximum());
     }
 
     private void onClickBtnKichHoatListener() {

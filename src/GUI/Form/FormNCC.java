@@ -1,56 +1,58 @@
 package GUI.Form;
 
+import BUS.Interfaces.INhaCungCapBUS;
+import BUS.NhaCungCapBUS;
+import BUS.SearchMapper.NhaCungCapSearchMapper;
+import DTO.Interface.IEntity;
+import DTO.NhaCungCapDTO;
 import GUI.Form.Abstract.JTablePanel;
+import GUI.FrameSearch;
 import GUI.components.TableColumn;
+import Utils.General;
+import Utils.Validator;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class FormNCC extends JTablePanel {
     public FormNCC() {
         initComponents();
+        fillTable();
+    }
+
+    public void fillTable() {
+        fillTable(null);
+    }
+
+    public void fillTable(ArrayList<IEntity> idList) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
+        INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();
+
+        ArrayList<NhaCungCapDTO> list = new ArrayList<NhaCungCapDTO>();
+        if (idList == null)
+            list = nhaCungCapBUS.findAll();
+        else
+            for (IEntity entity:idList)
+                list.add(nhaCungCapBUS.findByID(entity.getID()));
+
+        for (NhaCungCapDTO dto: list) {
+            Object[] row;
+            if (General.CURRENT_ROLE.isAdmin())
+                row = new Object[] { "NCC" + dto.getMaNCC(), dto.getTenNCC(), dto.getSDT(),
+                        dto.getDiaChi(), dto.getSoTaiKhoan(), dto.getTinhTrang() == 1 ? "Hoạt động" : "Vô hiệu"};
+            else row = new Object[] {  "NCC" + dto.getMaNCC(), dto.getTenNCC(), dto.getSDT(), dto.getDiaChi(), dto.getSoTaiKhoan(),};
+            model.addRow(row);
+        }
     }
     
     private void initComponents() {
-        JPanel infoPanel = new JPanel();
-        JLabel lbDetailTitle = new JLabel();
-        JLabel lbMaNCC = new JLabel();
-        JLabel lbTenNCC = new JLabel();
-        JLabel lbSDT = new JLabel();
-        JLabel lbSTK = new JLabel();
-        JLabel lbDiaChi = new JLabel();
-        JTextField txtMaNCC = new JTextField();
-        JTextField txtSDT = new JTextField();
-        JTextField txtSTK = new JTextField();
-        JTextField txtDiaChi = new JTextField();
-        JButton btnThem = new JButton();
-        JButton btnSua = new JButton();
-        JButton btnXoa = new JButton();
-        JTextField txtTenNCC = new JTextField();
-        JPanel tablePanel = new JPanel();
-        JLabel lbTableTitle = new JLabel();
-        JButton btnTimKiem = new JButton();
-        JButton btnReset = new JButton();
-        JPanel taskPanel = new JPanel();
-        JLabel lbCoopTitle = new JLabel();
-        JLabel lbCountSPIn = new JLabel();
-        JPanel progressSPIn = new JPanel();
-        JLabel progressSPInText = new JLabel();
-        JPanel progressSPInValue = new JPanel();
-        JLabel lbCountPN = new JLabel();
-        JPanel progressPN = new JPanel();
-        JLabel progressPNText = new JLabel();
-        JPanel progressPNValue = new JPanel();
-        JLabel lbCountExpenses = new JLabel();
-        JPanel progressExpenses = new JPanel();
-        JLabel progressExpensesText = new JLabel();
-        JPanel progressExpensesValue = new JPanel();
-        JPanel progressSold = new JPanel();
-        JLabel progressSoldText = new JLabel();
-        JPanel progressSoldValue = new JPanel();
-        JLabel lbCountSold = new JLabel();
-
         setLayout(null);
 
         infoPanel.setBackground(new Color(255, 255, 255));
@@ -106,6 +108,14 @@ public class FormNCC extends JTablePanel {
         btnThem.setText("Thêm");
         btnThem.setBorderPainted(false);
         btnThem.setFocusPainted(false);
+        btnThem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btnThem.getText().equalsIgnoreCase("Thêm"))
+                    onClickBtnThemListener();
+                else onClickBtnKichHoatListener();
+            }
+        });
         infoPanel.add(btnThem);
         btnThem.setBounds(30, 325, 210, 35);
 
@@ -115,6 +125,12 @@ public class FormNCC extends JTablePanel {
         btnSua.setText("Sửa");
         btnSua.setBorderPainted(false);
         btnSua.setFocusPainted(false);
+        btnSua.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnSuaListener();
+            }
+        });
         infoPanel.add(btnSua);
         btnSua.setBounds(30, 280, 440, 40);
 
@@ -124,6 +140,12 @@ public class FormNCC extends JTablePanel {
         btnXoa.setText("Xóa");
         btnXoa.setBorderPainted(false);
         btnXoa.setFocusPainted(false);
+        btnXoa.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnXoaListener();
+            }
+        });
         infoPanel.add(btnXoa);
         btnXoa.setBounds(260, 325, 210, 35);
 
@@ -145,53 +167,59 @@ public class FormNCC extends JTablePanel {
         btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.setBorderPainted(false);
         btnTimKiem.setFocusPainted(false);
+        btnTimKiem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnTimKiemListener();
+            }
+        });
         tablePanel.add(btnTimKiem);
         btnTimKiem.setBounds(750, 20, 170, 40);
 
         btnReset.setIcon(new ImageIcon("bin/images/components/reset.png"));
+        btnReset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnResetListener();
+            }
+        });
         tablePanel.add(btnReset);
         btnReset.setBounds(923, 20, 40, 40);
 
-        JScrollPane jScrollPane = new JScrollPane();
+        jScrollPane = new JScrollPane();
         jScrollPane.setBackground(Color.white);
         jScrollPane.setBorder(BorderFactory.createEmptyBorder());
         jScrollPane.setFocusable(false);
 
-        TableColumn table = new TableColumn();
-        table.setModel(new DefaultTableModel(
-                new Object [][] {
-
-                },
-                new String [] {
-                        "Mã", "Họ tên", "Giới tính", "Tuổi", "Email", "Số điện thoại"
-                }
-        ) {
-            final boolean[] canEdit = new boolean [] {
-                    false, false, false, false, false, false
+        table = new TableColumn();
+        if (General.CURRENT_ROLE.isAdmin())
+            columnHeader = new String [] {
+                    "Mã", "Thương hiệu", "Số điện thoại", "Địa chỉ", "Số tài khoản", "Tình trạng"
             };
+        else columnHeader = new String [] {
+                "Mã", "Thương hiệu", "Số điện thoại", "Địa chỉ", "Số tài khoản", "Tình trạng"
+        };
+        table.setModel(new DefaultTableModel(
+                new Object [][] {},
+                columnHeader
+        ) {
+            final boolean[] canEdit = new boolean [columnHeader.length];
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+
         jScrollPane.setViewportView(table);
         if (table.getColumnModel().getColumnCount() > 0) {
             table.getColumnModel().getColumn(0).setPreferredWidth(50);
         }
 
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        model.addRow(new Object[]{1, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{2, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{3, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{4, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{5, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{6, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{7, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{8, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{9, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{10, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{11, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                onClickTableRow();
+            }
+        });
         tablePanel.add(jScrollPane);
         jScrollPane.setBounds(22, 60, 940, 350);
 
@@ -300,4 +328,198 @@ public class FormNCC extends JTablePanel {
         add(taskPanel);
         taskPanel.setBounds(520, 10, 470, 380);
     }
+
+    private NhaCungCapDTO getUserInput() {
+        Integer idNCC = null;
+        try {
+            idNCC = Integer.valueOf(txtMaNCC.getText().replace("NCC", ""));
+        } catch (NumberFormatException ignored) {}
+
+        NhaCungCapDTO dto = new NhaCungCapDTO();
+        dto.setMaNCC(idNCC);
+        dto.setTenNCC(txtTenNCC.getText());
+        dto.setSDT(txtSDT.getText());
+        dto.setDiaChi(txtDiaChi.getText());
+        dto.setSoTaiKhoan(txtSTK.getText());
+        dto.setTinhTrang(1);
+        return dto;
+    }
+
+    private void onClickBtnThemListener() {
+        INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();
+        try {
+            NhaCungCapDTO dto = getUserInput();
+            if (!Validator.isValidName(dto.getTenNCC()))
+                throw new Exception("Tên không hợp lệ.");
+            if (!Validator.isValidPhone(dto.getSDT()))
+                throw new Exception("Số điện thoại không hợp lệ.");
+            nhaCungCapBUS.save(dto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormNCC.this, "Thêm nhà cung cấp thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(FormNCC.this, "Thêm nhà cung cấp thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        onClickBtnResetListener();
+        int newIndex = table.getRowCount()-1;
+        table.setRowSelectionInterval(newIndex, newIndex);
+        JScrollBar bar = jScrollPane.getVerticalScrollBar();
+        bar.setValue(bar.getMaximum());
+    }
+
+    private void onClickBtnKichHoatListener() {
+        INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();
+        try {
+            NhaCungCapDTO newDto = getUserInput();
+            NhaCungCapDTO oldDto = nhaCungCapBUS.findByID(newDto.getMaNCC());
+            if (oldDto == null)
+                throw new Exception("Không tìm thấy nhà cung cấp." );
+            oldDto.setTinhTrang(1);
+            nhaCungCapBUS.update(oldDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormNCC.this, "Kích hoạt nhà cung cấp thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(FormNCC.this, "Kích hoạt nhà cung cấp thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        fillTable();
+    }
+
+
+    private void onClickBtnSuaListener() {
+        INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();
+        try {
+            NhaCungCapDTO newDto = getUserInput();
+            if (newDto.getMaNCC() == null)
+                throw new Exception("Vui lòng chọn nhà cung cấp.");
+            if (nhaCungCapBUS.findByID(newDto.getMaNCC()) == null)
+                throw new Exception("Không tìm thấy nhà cung cấp." );
+            if (!Validator.isValidName(newDto.getTenNCC()))
+                throw new Exception("Tên không hợp lệ.");
+            if (!Validator.isValidPhone(newDto.getSDT()))
+                throw new Exception("Số điện thoại không hợp lệ.");
+            nhaCungCapBUS.update(newDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormNCC.this, "Sửa nhà cung cấp thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(FormNCC.this, "Sửa nhà cung cấp thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        fillTable();
+    }
+
+    private void onClickBtnXoaListener() {
+        INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();
+        try {
+            NhaCungCapDTO userInput = getUserInput();
+            if (userInput.getMaNCC() == null)
+                throw new Exception("Vui lòng chọn nhà cung cấp.");
+            NhaCungCapDTO dto = nhaCungCapBUS.findByID(userInput.getMaNCC());
+            if (dto == null)
+                throw new Exception("Không tìm thấy nhà cung cấp." );
+            if (General.CURRENT_ROLE.isAdmin() && dto.getTinhTrang() == 0)
+                nhaCungCapBUS.delete(dto.getMaNCC());
+            else {
+                dto.setTinhTrang(0);
+                nhaCungCapBUS.update(dto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormNCC.this, "Xóa nhà cung cấp thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(FormNCC.this, "Xóa nhà cung cấp thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        onClickBtnResetListener();
+    }
+
+    private void onClickBtnTimKiemListener() {
+        try {
+            JFrame frame = new FrameSearch("nhà cung cấp", new NhaCungCapSearchMapper(), FormNCC.class);
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    frame.setVisible(true);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormNCC.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void onClickBtnResetListener() {
+        fillTable();
+        for (Component component:infoPanel.getComponents()) {
+            if (component instanceof JTextField)
+                ((JTextField) component).setText("");
+        }
+        btnThem.setText("Thêm");
+        btnXoa.setText("Xóa");
+    }
+
+    private void onClickTableRow() {
+        int index = table.getSelectedRow();
+        INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();
+        int selectedID;
+        try {
+            selectedID = Integer.parseInt(((String) table.getValueAt(index, 0)).replace("NCC", ""));
+        } catch (Exception e) {
+            return;
+        }
+        NhaCungCapDTO dto = nhaCungCapBUS.findByID(selectedID);
+        if (dto == null)
+            return;
+        txtMaNCC.setText("NCC" + dto.getMaNCC());
+        txtTenNCC.setText(dto.getTenNCC());
+        txtSDT.setText(dto.getSDT());
+        txtDiaChi.setText(dto.getDiaChi());
+        txtSTK.setText(dto.getSoTaiKhoan());
+
+        if (General.CURRENT_ROLE.isAdmin() && dto.getTinhTrang() == 0) {
+            btnThem.setText("Kích hoạt");
+            btnXoa.setText("Xóa");
+            txtSTK.setText("Vô hiệu hóa");
+        } else {
+            btnThem.setText("Thêm");
+            btnXoa.setText("Xóa");
+        }
+    }
+
+    private final JPanel infoPanel = new JPanel();
+    private final JLabel lbDetailTitle = new JLabel();
+    private final JLabel lbMaNCC = new JLabel();
+    private final JLabel lbTenNCC = new JLabel();
+    private final JLabel lbSDT = new JLabel();
+    private final JLabel lbSTK = new JLabel();
+    private final JLabel lbDiaChi = new JLabel();
+    private final JTextField txtMaNCC = new JTextField();
+    private final JTextField txtSDT = new JTextField();
+    private final JTextField txtSTK = new JTextField();
+    private final JTextField txtDiaChi = new JTextField();
+    private final JButton btnThem = new JButton();
+    private final JButton btnSua = new JButton();
+    private final JButton btnXoa = new JButton();
+    private final JTextField txtTenNCC = new JTextField();
+    private final JPanel tablePanel = new JPanel();
+    private final JLabel lbTableTitle = new JLabel();
+    private final JButton btnTimKiem = new JButton();
+    private final JButton btnReset = new JButton();
+    private final JPanel taskPanel = new JPanel();
+    private final JLabel lbCoopTitle = new JLabel();
+    private final JLabel lbCountSPIn = new JLabel();
+    private final JPanel progressSPIn = new JPanel();
+    private final JLabel progressSPInText = new JLabel();
+    private final JPanel progressSPInValue = new JPanel();
+    private final JLabel lbCountPN = new JLabel();
+    private final JPanel progressPN = new JPanel();
+    private final JLabel progressPNText = new JLabel();
+    private final JPanel progressPNValue = new JPanel();
+    private final JLabel lbCountExpenses = new JLabel();
+    private final JPanel progressExpenses = new JPanel();
+    private final JLabel progressExpensesText = new JLabel();
+    private final JPanel progressExpensesValue = new JPanel();
+    private final JPanel progressSold = new JPanel();
+    private final JLabel progressSoldText = new JLabel();
+    private final JPanel progressSoldValue = new JPanel();
+    private final JLabel lbCountSold = new JLabel();
 }
