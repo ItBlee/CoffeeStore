@@ -1,12 +1,13 @@
 package GUI.Form;
 
+import GUI.Form.Abstract.JTablePanel;
 import GUI.components.TableColumn;
 
-import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
-public class FormNCC extends JPanel {
+public class FormNCC extends JTablePanel {
     public FormNCC() {
         initComponents();
     }

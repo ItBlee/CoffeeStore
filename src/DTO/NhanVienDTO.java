@@ -14,6 +14,7 @@ public class NhanVienDTO implements IEntity {
     private String Email;
     private Integer GioiTinh;
     private Integer Luong;
+    private Integer TinhTrang;
 
     public NhanVienDTO() {
     }
@@ -104,11 +105,19 @@ public class NhanVienDTO implements IEntity {
         Luong = luong;
     }
 
+    public Integer getTinhTrang() {
+        return TinhTrang;
+    }
+
+    public void setTinhTrang(Integer tinhTrang) {
+        TinhTrang = tinhTrang;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof NhanVienDTO)) return false;
         NhanVienDTO that = (NhanVienDTO) o;
-        return getMaNV().equals(that.getMaNV()) || getMaTK().equals(that.getMaTK());
+        return getMaNV().equals(that.getMaNV());
     }
 }

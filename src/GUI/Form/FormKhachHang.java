@@ -1,12 +1,13 @@
 package GUI.Form;
 
+import GUI.Form.Abstract.JTablePanel;
 import GUI.components.TableColumn;
 
-import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
-public class FormKhachHang extends JPanel {
+public class FormKhachHang extends JTablePanel {
     public FormKhachHang() {
         initComponents();
     }

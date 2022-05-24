@@ -29,6 +29,7 @@ public class NhanVienMapper implements IRowMapper<NhanVienDTO>, IExcelRowMapper<
             nhanVien.setEmail(resultSet.getString("Email"));
             nhanVien.setGioiTinh(resultSet.getInt("GioiTinh"));
             nhanVien.setLuong(resultSet.getInt("Luong"));
+            nhanVien.setTinhTrang(resultSet.getInt("TinhTrang"));
             return nhanVien;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,6 +74,10 @@ public class NhanVienMapper implements IRowMapper<NhanVienDTO>, IExcelRowMapper<
         cell = row.createCell(8);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Lương");
+
+        cell = row.createCell(9);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Tình trạng");
     }
 
     @Override
@@ -105,6 +110,9 @@ public class NhanVienMapper implements IRowMapper<NhanVienDTO>, IExcelRowMapper<
 
         cell = row.createCell(8);
         cell.setCellValue(dto.getLuong() != null ? String.valueOf(dto.getLuong()) : "null");
+
+        cell = row.createCell(9);
+        cell.setCellValue(dto.getTinhTrang() == 1 ? "Hoạt động" : "Vô hiệu");
     }
 
     @Override
@@ -145,6 +153,9 @@ public class NhanVienMapper implements IRowMapper<NhanVienDTO>, IExcelRowMapper<
                     break;
                 case 8:
                     dto.setLuong(Integer.parseInt(cellValue));
+                    break;
+                case 9:
+                    dto.setTinhTrang(cellValue.equalsIgnoreCase("Hoạt động") ? 1 : 0);
                     break;
                 default:
                     break;

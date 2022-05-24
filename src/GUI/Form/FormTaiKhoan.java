@@ -5,27 +5,31 @@ import BUS.Interfaces.IPhanQuyenBUS;
 import BUS.Interfaces.ITaiKhoanBUS;
 import BUS.NhanVienBUS;
 import BUS.PhanQuyenBUS;
+import BUS.SearchMapper.TaiKhoanSearchMapper;
 import BUS.TaiKhoanBUS;
+import DTO.Interface.IEntity;
 import DTO.NhanVienDTO;
 import DTO.PhanQuyenDTO;
 import DTO.Role;
 import DTO.TaiKhoanDTO;
+import GUI.Form.Abstract.JTablePanel;
+import GUI.FrameSearch;
 import GUI.components.TableColumn;
 import Utils.General;
 import Utils.Security;
 import Utils.Validator;
+
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class FormTaiKhoan extends JPanel {
+public class FormTaiKhoan extends JTablePanel {
     public FormTaiKhoan() {
         initComponents();
         fillTable();
@@ -33,7 +37,11 @@ public class FormTaiKhoan extends JPanel {
         cbPhanQuyen.setSelectedItem("Nhân viên");
     }
 
-    private void fillTable() {
+    public void fillTable() {
+        fillTable(null);
+    }
+
+    public void fillTable(ArrayList<IEntity> idList) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
         ITaiKhoanBUS taiKhoanBUS = new TaiKhoanBUS();
@@ -41,18 +49,25 @@ public class FormTaiKhoan extends JPanel {
         INhanVienBUS nhanVienBUS = new NhanVienBUS();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
 
-        for (TaiKhoanDTO dto: taiKhoanBUS.findAll()) {
+        ArrayList<TaiKhoanDTO> list = new ArrayList<TaiKhoanDTO>();
+        if (idList == null)
+            list = taiKhoanBUS.findAll();
+        else
+            for (IEntity entity:idList)
+                list.add(taiKhoanBUS.findByID(entity.getID()));
+
+        for (TaiKhoanDTO dto: list) {
             if (dto.getMaPQ() == Role.DEFAULT_ADMIN_ROLE_ID && !General.CURRENT_ROLE.isAdmin())
                 continue;
-            NhanVienDTO owner = nhanVienBUS.findByMaTK(dto.getMaTK());
+            NhanVienDTO owner = nhanVienBUS.findByTaiKhoan(dto.getMaTK());
             String ownName = owner != null ? owner.getHoTen() : "Chưa sở hữu";
             String creatorName = nhanVienBUS.findByID(dto.getNguoiTao()).getHoTen();
             String roleName = phanQuyenBUS.findByID(dto.getMaPQ()).getTenPQ();
             Object[] row;
             if (General.CURRENT_ROLE.isAdmin())
-                 row = new Object[] { "TK" + dto.getMaTK(), dto.getTenDangNhap(),
-                    roleName, ownName, dateFormat.format(dto.getNgayTao()), creatorName,
-                    dto.getTinhTrang() == 1 ? "Hoạt động" : "Vô hiệu"};
+                row = new Object[] { "TK" + dto.getMaTK(), dto.getTenDangNhap(),
+                        roleName, ownName, dateFormat.format(dto.getNgayTao()), creatorName,
+                        dto.getTinhTrang() == 1 ? "Hoạt động" : "Vô hiệu"};
             else row = new Object[] { "TK" + dto.getMaTK(), dto.getTenDangNhap(),
                     roleName, ownName, dateFormat.format(dto.getNgayTao()), creatorName};
             model.addRow(row);
@@ -114,21 +129,18 @@ public class FormTaiKhoan extends JPanel {
         jScrollPane.setFocusable(false);
 
         table = new TableColumn() {};
-        String[] column;
         if (General.CURRENT_ROLE.isAdmin())
-            column = new String [] {
+            columnHeader = new String [] {
                     "Mã", "Tên đăng nhập", "Chức vụ", "Sở hữu", "Ngày tạo", "Người tạo", "Tình trạng"
             };
-        else column = new String [] {
+        else columnHeader = new String [] {
                 "Mã", "Tên đăng nhập", "Chức vụ", "Sở hữu", "Ngày tạo", "Người tạo"
             };
         table.setModel(new DefaultTableModel(
                 new Object [][] {},
-                column
+                columnHeader
         ) {
-            final boolean[] canEdit = new boolean [] {
-                    false, false, false, false, false, false
-            };
+            final boolean[] canEdit = new boolean [columnHeader.length];
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -436,7 +448,7 @@ public class FormTaiKhoan extends JPanel {
             TaiKhoanDTO userInput = getUserInput();
             if (userInput.getMaTK() == null)
                 throw new Exception("Vui lòng chọn tài khoản.");
-            NhanVienDTO ownerDto = nhanVienBUS.findByMaTK(userInput.getMaTK());
+            NhanVienDTO ownerDto = nhanVienBUS.findByTaiKhoan(userInput.getMaTK());
             if (ownerDto != null) {
                 ownerDto.setMaTK(null);
                 nhanVienBUS.update(ownerDto);
@@ -460,7 +472,18 @@ public class FormTaiKhoan extends JPanel {
     }
 
     private void onClickBtnTimKiemListener() {
-
+        try {
+            JFrame frame = new FrameSearch("tài khoản", new TaiKhoanSearchMapper(), FormTaiKhoan.class);
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    frame.setVisible(true);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormTaiKhoan.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onClickBtnResetListener() {
@@ -541,7 +564,7 @@ public class FormTaiKhoan extends JPanel {
         TaiKhoanDTO dto = taiKhoanBUS.findByID(selectedID);
         if (dto == null)
             return;
-        NhanVienDTO owner = nhanVienBUS.findByMaTK(dto.getMaTK());
+        NhanVienDTO owner = nhanVienBUS.findByTaiKhoan(dto.getMaTK());
         txtMaTK.setText("TK" + dto.getMaTK());
         txtTenTenDangNhap.setText(dto.getTenDangNhap());
         txtNguoiTao.setText("NV" + dto.getNguoiTao());
@@ -559,8 +582,7 @@ public class FormTaiKhoan extends JPanel {
         }
     }
 
-    JScrollPane jScrollPane;
-    TableColumn table;
+
 
     JPanel tablePanel = new JPanel();
     JLabel lbTableTitle = new JLabel();

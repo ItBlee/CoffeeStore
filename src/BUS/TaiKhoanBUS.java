@@ -45,12 +45,21 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
     }
 
     @Override
-    public ArrayList<TaiKhoanDTO> findByMaPQ(Integer maPQ) {
+    public ArrayList<TaiKhoanDTO> findByPhanQuyen(Integer maPQ) {
         ArrayList<TaiKhoanDTO> result = new ArrayList<TaiKhoanDTO>();
         for (TaiKhoanDTO taiKhoanDTO : listTaiKhoan)
             if (taiKhoanDTO.getMaPQ().equals(maPQ))
                 result.add(taiKhoanDTO);
         return result;
+    }
+
+    @Override
+    public ArrayList<TaiKhoanDTO> findByPhanQuyen(String TenPQ) {
+        IPhanQuyenBUS phanQuyenBUS = new PhanQuyenBUS();
+        for (PhanQuyenDTO dto : phanQuyenBUS.findAll())
+            if (StringUtils.containsIgnoreCase(dto.getTenPQ(), TenPQ))
+                return findByPhanQuyen(dto.getMaPQ());
+        return new ArrayList<TaiKhoanDTO>();
     }
 
     @Override
@@ -63,21 +72,61 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
     }
 
     @Override
+    public TaiKhoanDTO findByNguoiSoHuu(Integer maNV) {
+        INhanVienBUS nhanVienBUS = new NhanVienBUS();
+        for (NhanVienDTO dto: nhanVienBUS.findAll()) {
+            if (dto.getMaNV().equals(maNV))
+                return findByID(dto.getMaTK());
+        }
+        return null;
+    }
+
+    @Override
+    public TaiKhoanDTO findByNguoiSoHuu(String HoTenNV) {
+        INhanVienBUS nhanVienBUS = new NhanVienBUS();
+        for (NhanVienDTO dto: nhanVienBUS.findAll()) {
+            if (StringUtils.containsIgnoreCase(dto.getHoTen(), HoTenNV))
+                return findByID(dto.getMaTK());
+        }
+        return null;
+    }
+
+    @Override
     public ArrayList<TaiKhoanDTO> findByNgayTao(Date tuNgay, Date denNgay) {
         ArrayList<TaiKhoanDTO> result = new ArrayList<TaiKhoanDTO>();
-        for (TaiKhoanDTO taiKhoanDTO : listTaiKhoan)
+        for (TaiKhoanDTO taiKhoanDTO : listTaiKhoan) {
+            if (tuNgay == null && taiKhoanDTO.getNgayTao().before(denNgay)) {
+                result.add(taiKhoanDTO);
+                continue;
+            }
+            if (denNgay == null && taiKhoanDTO.getNgayTao().after(tuNgay)) {
+                result.add(taiKhoanDTO);
+                continue;
+            }
             if ((taiKhoanDTO.getNgayTao().after(tuNgay) && taiKhoanDTO.getNgayTao().before(denNgay))
-                || (tuNgay.equals(denNgay) && tuNgay.equals(new Date(taiKhoanDTO.getNgayTao().getTime()))))
+                    || (tuNgay.equals(denNgay) && tuNgay.equals(new Date(taiKhoanDTO.getNgayTao().getTime()))))
+                result.add(taiKhoanDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public ArrayList<TaiKhoanDTO> findByNguoiTao(Integer MaNguoiTao) {
+        ArrayList<TaiKhoanDTO> result = new ArrayList<TaiKhoanDTO>();
+        for (TaiKhoanDTO taiKhoanDTO : listTaiKhoan)
+            if (taiKhoanDTO.getNguoiTao().equals(MaNguoiTao))
                 result.add(taiKhoanDTO);
         return result;
     }
 
     @Override
-    public ArrayList<TaiKhoanDTO> findByNguoiTao(Integer nguoiTao) {
+    public ArrayList<TaiKhoanDTO> findByNguoiTao(String TenNguoiTao) {
         ArrayList<TaiKhoanDTO> result = new ArrayList<TaiKhoanDTO>();
-        for (TaiKhoanDTO taiKhoanDTO : listTaiKhoan)
-            if (taiKhoanDTO.getNguoiTao().equals(nguoiTao))
-                result.add(taiKhoanDTO);
+        INhanVienBUS nhanVienBUS = new NhanVienBUS();
+        for (NhanVienDTO dto: nhanVienBUS.findAll()) {
+            if (StringUtils.containsIgnoreCase(dto.getHoTen(), TenNguoiTao))
+                result.add(findByID(dto.getMaTK()));
+        }
         return result;
     }
 
@@ -164,7 +213,7 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
         INhanVienBUS nhanVienBUS = new NhanVienBUS();
         IPhanQuyenBUS phanQuyenBUS = new PhanQuyenBUS();
         ICT_PhanQuyenBUS ictPhanQuyenBUS = new CT_PhanQuyenBUS();
-        NhanVienDTO getUser = nhanVienBUS.findByMaTK(findTaiKhoan.getMaTK());
+        NhanVienDTO getUser = nhanVienBUS.findByTaiKhoan(findTaiKhoan.getMaTK());
         PhanQuyenDTO getRole = phanQuyenBUS.findByID(findTaiKhoan.getMaPQ());
         if (getUser == null || getRole == null)
             return false;
@@ -180,11 +229,6 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
         General.CURRENT_ROLE.setQuyenExcel(ictPhanQuyenBUS.findByID(getRole.getQuyenExcel()));
         General.CURRENT_ROLE.setQuyenNV(ictPhanQuyenBUS.findByID(getRole.getQuyenNV()));
         return General.CURRENT_USER != null && General.CURRENT_ROLE.getPhanQuyen().getMaPQ() != null;
-    }
-
-    @Override
-    public void logout() {
-        General.CURRENT_USER = null;
     }
 
     @Override
