@@ -33,10 +33,10 @@ public class NhanVienDAO extends AbstractDAO<NhanVienDTO> implements INhanVienDA
     @Override
     public boolean update(NhanVienDTO nhanVien) {
         String sql = "UPDATE nhanvien"
-                + " SET MaTK = ?, Ho = ?, Ten = ?, NgaySinh = ?, SDT = ?, Email = ?, GioiTinh = ?, Luong = ?, TinhTrang = ?"
+                + " SET MaTK = ?, Ho = ?, Ten = ?, NgaySinh = ?, SDT = ?, Email = ?, GioiTinh = ?, Luong = ?"
                 + " WHERE MaNV = ?";
         return update(sql, nhanVien.getMaTK(), nhanVien.getHo(), nhanVien.getTen(), nhanVien.getNgaySinh(),
-                nhanVien.getSDT(), nhanVien.getEmail(), nhanVien.getGioiTinh(), nhanVien.getLuong(), nhanVien.getTinhTrang(), nhanVien.getMaNV());
+                nhanVien.getSDT(), nhanVien.getEmail(), nhanVien.getGioiTinh(), nhanVien.getLuong(), nhanVien.getMaNV());
     }
 
     @Override

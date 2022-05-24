@@ -3,30 +3,27 @@ package GUI;
 import GUI.Form.*;
 import GUI.common.Language;
 import GUI.common.Theme;
-import GUI.components.Category;
-import GUI.components.ChooserJDialog;
-import GUI.components.MovableJFrame;
+import GUI.components.*;
 import Utils.FileHandler;
 import Utils.General;
 import Utils.SystemConstant;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes.FlatIJLookAndFeelInfo;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
+import static Utils.FileHandler.createImageIcon;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-import static Utils.FileHandler.createImageIcon;
+import javax.swing.*;
+import javax.swing.border.*;
 
 public class FrameLayout extends MovableJFrame {
 	private boolean isLocked = false;
 	private boolean isDisplayIntro = true;
 	private ArrayList<Category> categories = null;
 
-	private Category currentItem;
+	public Category currentItem;
 	private Font currentFont;
 	private Language currentLanguage;
 	private FlatIJLookAndFeelInfo currentTheme;
@@ -605,14 +602,6 @@ public class FrameLayout extends MovableJFrame {
 			animatedIntro();
 	}
 
-	public Category getCurrentItem() {
-		return currentItem;
-	}
-
-	public ArrayList<Category> getCategories() {
-		return categories;
-	}
-
 	private void onClickBtnExit() {
 		dispose();
 		System.exit(0);
@@ -629,12 +618,12 @@ public class FrameLayout extends MovableJFrame {
 			General.importMapper(FileHandler.importConfig(SystemConstant.CONFIG_FILE_URL));
 			Language.setup();
 			Theme.setupDefault();
-			General.frame = new FrameLogin();
+			JFrame frame = new FrameLogin();
 			EventQueue.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					General.frame.setVisible(true);
-					General.frame.requestFocusInWindow();
+					frame.setVisible(true);
+					frame.requestFocusInWindow();
 					dispose();
 				}
 			});
@@ -796,8 +785,7 @@ public class FrameLayout extends MovableJFrame {
 	private void changeFont(Component component, Font font) {
 		if (component == null)
 			return;
-		Font tempFont = new Font(font.getName(), font.getStyle(), component.getFont().getSize());
-		component.setFont(tempFont);
+		component.setFont(font);
 		if (component instanceof Container) {
 			for (Component child : ((Container) component).getComponents())
 				changeFont(child, font);

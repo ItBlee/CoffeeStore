@@ -2,11 +2,9 @@ package BUS;
 
 import BUS.Abstract.AbstractHistoricBUS;
 import BUS.Interfaces.INhanVienBUS;
-import BUS.Interfaces.ITaiKhoanBUS;
 import DAO.Interfaces.INhanVienDAO;
 import DAO.NhanVienDAO;
 import DTO.NhanVienDTO;
-import DTO.TaiKhoanDTO;
 import Utils.StringUtils;
 
 import java.sql.Date;
@@ -39,20 +37,10 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
     }
 
     @Override
-    public NhanVienDTO findByTaiKhoan(Integer maTK) {
+    public NhanVienDTO findByMaTK(Integer maTK) {
         for (NhanVienDTO NhanVienDTO : listNhanVien)
             if (NhanVienDTO.getMaTK().equals(maTK))
                 return NhanVienDTO;
-        return null;
-    }
-
-    @Override
-    public NhanVienDTO findByTaiKhoan(String tenTK) {
-        ITaiKhoanBUS bus = new TaiKhoanBUS();
-        for (TaiKhoanDTO dto : bus.findAll()) {
-            if (StringUtils.containsIgnoreCase(dto.getTenDangNhap(), tenTK))
-                return findByTaiKhoan(dto.getMaTK());
-        }
         return null;
     }
 
@@ -66,21 +54,11 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
     }
 
     @Override
-    public ArrayList<NhanVienDTO> findByNgaySinh(Date tuNgay, Date denNgay) {
+    public ArrayList<NhanVienDTO> findByNgaySinh(Date ngaySinh) {
         ArrayList<NhanVienDTO> result = new ArrayList<NhanVienDTO>();
-        for (NhanVienDTO nhanVienDTO : listNhanVien) {
-            if (tuNgay == null && nhanVienDTO.getNgaySinh().before(denNgay)) {
+        for (NhanVienDTO nhanVienDTO : listNhanVien)
+            if (nhanVienDTO.getNgaySinh().equals(ngaySinh))
                 result.add(nhanVienDTO);
-                continue;
-            }
-            if (denNgay == null && nhanVienDTO.getNgaySinh().after(tuNgay)) {
-                result.add(nhanVienDTO);
-                continue;
-            }
-            if ((nhanVienDTO.getNgaySinh().after(tuNgay) && nhanVienDTO.getNgaySinh().before(denNgay))
-                    || (tuNgay.equals(denNgay) && tuNgay.equals(new Date(nhanVienDTO.getNgaySinh().getTime()))))
-                result.add(nhanVienDTO);
-        }
         return result;
     }
 
@@ -116,15 +94,6 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
         ArrayList<NhanVienDTO> result = new ArrayList<NhanVienDTO>();
         for (NhanVienDTO nhanVienDTO : listNhanVien)
             if (nhanVienDTO.getLuong().equals(luong))
-                result.add(nhanVienDTO);
-        return result;
-    }
-
-    @Override
-    public ArrayList<NhanVienDTO> findByTinhTrang(Integer TinhTrang) {
-        ArrayList<NhanVienDTO> result = new ArrayList<NhanVienDTO>();
-        for (NhanVienDTO nhanVienDTO : listNhanVien)
-            if (nhanVienDTO.getTinhTrang().equals(TinhTrang))
                 result.add(nhanVienDTO);
         return result;
     }

@@ -5,6 +5,7 @@ import Utils.FileHandler;
 import Utils.General;
 import Utils.SystemConstant;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.Properties;
 
@@ -16,12 +17,12 @@ public class Main {
         Theme.setupDefault();
         Theme.setupComponentStyle();
 
-        General.frame = new FrameLogin();
+        JFrame frame = new FrameLogin();
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                General.frame.setVisible(true);
-                General.frame.requestFocusInWindow();
+                frame.setVisible(true);
+                frame.requestFocusInWindow();
             }
         });
     }

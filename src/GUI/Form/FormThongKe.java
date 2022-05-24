@@ -1,14 +1,13 @@
 package GUI.Form;
 
-import GUI.Form.Abstract.JTablePanel;
 import GUI.components.chart.Chart;
 import GUI.components.chart.ModelChart;
 
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import java.awt.*;
 
-public class FormThongKe extends JTablePanel {
+public class FormThongKe extends JPanel {
     public FormThongKe() {
         initComponents();
     }

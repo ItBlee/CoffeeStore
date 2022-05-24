@@ -1,8 +1,13 @@
 package GUI.components;
 
-import javax.swing.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
 
 public class TableCell extends JLabel {
     private final CellType cellType;
@@ -31,9 +36,7 @@ public class TableCell extends JLabel {
         setBorder(new EmptyBorder(10, 10, 10, 10));
         if (getText().equalsIgnoreCase("Hoạt động"))
             setForeground(MyColor.GREEN);
-        else if (getText().equalsIgnoreCase("Vô hiệu")
-                || getText().equalsIgnoreCase("Chưa sở hữu")
-                || getText().equalsIgnoreCase("Chưa có tài khoản"))
+        else if (getText().equalsIgnoreCase("Vô hiệu") || getText().equalsIgnoreCase("Chưa sở hữu"))
             setForeground(MyColor.RED);
         else setForeground(new Color(80, 80, 80));
     }

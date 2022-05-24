@@ -1,71 +1,50 @@
 package GUI.Form;
 
 import BUS.Interfaces.INhanVienBUS;
+import BUS.Interfaces.IPhanQuyenBUS;
 import BUS.Interfaces.ITaiKhoanBUS;
 import BUS.NhanVienBUS;
-import BUS.SearchMapper.NhanVienSearchMapper;
-import BUS.SearchMapper.TaiKhoanSearchMapper;
+import BUS.PhanQuyenBUS;
 import BUS.TaiKhoanBUS;
-import DTO.Interface.IEntity;
 import DTO.NhanVienDTO;
 import DTO.Role;
 import DTO.TaiKhoanDTO;
-import GUI.Form.Abstract.JTablePanel;
-import GUI.FrameSearch;
-import GUI.FrameSelect;
 import GUI.components.TableColumn;
 import Utils.General;
-import Utils.Validator;
 import com.toedter.calendar.JDateChooser;
 
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
-public class FormNhanVien extends JTablePanel {
+public class FormNhanVien extends JPanel {
     public FormNhanVien() {
         initComponents();
-        fillTable();
     }
 
-    public void fillTable() {
-        fillTable(null);
-    }
-
-    public void fillTable(ArrayList<IEntity> idList) {
+    private void fillTable() {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
         ITaiKhoanBUS taiKhoanBUS = new TaiKhoanBUS();
+        IPhanQuyenBUS phanQuyenBUS = new PhanQuyenBUS();
         INhanVienBUS nhanVienBUS = new NhanVienBUS();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
 
-        ArrayList<NhanVienDTO> list = new ArrayList<NhanVienDTO>();
-        if (idList == null)
-            list = nhanVienBUS.findAll();
-        else
-            for (IEntity entity:idList)
-                list.add(nhanVienBUS.findByID(entity.getID()));
-
-        for (NhanVienDTO dto: list) {
-            if (dto.getMaTK() == Role.DEFAULT_ADMIN_ROLE_ID && !General.CURRENT_ROLE.isAdmin())
+        for (TaiKhoanDTO dto: taiKhoanBUS.findAll()) {
+            if (dto.getMaPQ() == Role.DEFAULT_ADMIN_ROLE_ID && !General.CURRENT_ROLE.isAdmin())
                 continue;
-            TaiKhoanDTO account = taiKhoanBUS.findByID(dto.getMaTK());
-            String accountName = account != null ? account.getTenDangNhap() : "Chưa có tài khoản";
+            NhanVienDTO owner = nhanVienBUS.findByMaTK(dto.getMaTK());
+            String ownName = owner != null ? owner.getHoTen() : "Chưa sở hữu";
+            String creatorName = nhanVienBUS.findByID(dto.getNguoiTao()).getHoTen();
+            String roleName = phanQuyenBUS.findByID(dto.getMaPQ()).getTenPQ();
             Object[] row;
             if (General.CURRENT_ROLE.isAdmin())
-                row = new Object[] { "NV" + dto.getMaNV(), accountName, dto.getHoTen(), dateFormat.format(dto.getNgaySinh()),
-                        dto.getSDT(), dto.getEmail(), dto.getGioiTinh() == 1 ? "Nam" : "Nữ", dto.getLuong(),
+                row = new Object[] { "TK" + dto.getMaTK(), dto.getTenDangNhap(),
+                        roleName, ownName, dateFormat.format(dto.getNgayTao()), creatorName,
                         dto.getTinhTrang() == 1 ? "Hoạt động" : "Vô hiệu"};
-            else row = new Object[] { "NV" + dto.getMaNV(), accountName, dto.getHoTen(), dateFormat.format(dto.getNgaySinh()),
-                    dto.getSDT(), dto.getEmail(), dto.getGioiTinh() == 1 ? "Nam" : "Nữ", dto.getLuong()};
+            else row = new Object[] { "TK" + dto.getMaTK(), dto.getTenDangNhap(),
+                    roleName, ownName, dateFormat.format(dto.getNgayTao()), creatorName};
             model.addRow(row);
         }
     }
@@ -146,14 +125,8 @@ public class FormNhanVien extends JTablePanel {
         lbLuongUnit.setText("đồng");
         infoPanel.add(lbLuongUnit);
         lbLuongUnit.setBounds(421, 280, 50, 30);
-
-        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-        dfs.setGroupingSeparator('.');
-        DecimalFormat dFormat = new DecimalFormat ("#0", dfs);
-        txtLuong = new JFormattedTextField(dFormat);
         infoPanel.add(txtLuong);
         txtLuong.setBounds(230, 280, 240, 35);
-
         infoPanel.add(txtSDT);
         txtSDT.setBounds(230, 160, 240, 35);
         infoPanel.add(txtHo);
@@ -173,14 +146,6 @@ public class FormNhanVien extends JTablePanel {
         btnThem.setText("Thêm");
         btnThem.setBorderPainted(false);
         btnThem.setFocusPainted(false);
-        btnThem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (btnThem.getText().equalsIgnoreCase("Thêm"))
-                    onClickBtnThemListener();
-                else onClickBtnKichHoatListener();
-            }
-        });
         infoPanel.add(btnThem);
         btnThem.setBounds(230, 330, 160, 35);
 
@@ -190,22 +155,10 @@ public class FormNhanVien extends JTablePanel {
         btnSua.setText("Sửa");
         btnSua.setBorderPainted(false);
         btnSua.setFocusPainted(false);
-        btnSua.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                onClickBtnSuaListener();
-            }
-        });
         infoPanel.add(btnSua);
         btnSua.setBounds(30, 330, 130, 35);
 
         btnSelectMaTK.setText("jButton1");
-        btnSelectMaTK.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                onClickBtnSelectMaTKListener();
-            }
-        });
         infoPanel.add(btnSelectMaTK);
         btnSelectMaTK.setBounds(160, 160, 35, 35);
 
@@ -215,12 +168,6 @@ public class FormNhanVien extends JTablePanel {
         btnXoa.setText("Xóa");
         btnXoa.setBorderPainted(false);
         btnXoa.setFocusPainted(false);
-        btnXoa.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                onClickBtnXoaListener();
-            }
-        });
         infoPanel.add(btnXoa);
         btnXoa.setBounds(400, 330, 70, 35);
 
@@ -242,22 +189,10 @@ public class FormNhanVien extends JTablePanel {
         btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.setBorderPainted(false);
         btnTimKiem.setFocusPainted(false);
-        btnTimKiem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                onClickBtnTimKiemListener();
-            }
-        });
         tablePanel.add(btnTimKiem);
         btnTimKiem.setBounds(750, 20, 170, 40);
 
         btnReset.setIcon(new ImageIcon("bin/images/components/reset.png"));
-        btnReset.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                onClickBtnResetListener();
-            }
-        });
         tablePanel.add(btnReset);
         btnReset.setBounds(923, 20, 40, 40);
 
@@ -267,34 +202,26 @@ public class FormNhanVien extends JTablePanel {
         jScrollPane.setFocusable(false);
 
         table = new TableColumn();
-        if (General.CURRENT_ROLE.isAdmin())
-            columnHeader = new String [] {
-                "Mã", "Tài khoản", "Họ tên", "Ngày sinh", "Số điện thoại", "Email", "Giới tính", "Lương", "Tình trạng"
-            };
-        else columnHeader = new String [] {
-                "Mã", "Tài khoản", "Họ tên", "Ngày sinh", "Số điện thoại", "Email", "Giới tính", "Lương"
-            };
         table.setModel(new DefaultTableModel(
-                new Object [][] {},
-                columnHeader
+                new Object [][] {
+
+                },
+                new String [] {
+                        "Mã", "Họ tên", "Giới tính", "Tuổi", "Email", "Số điện thoại"
+                }
         ) {
-            final boolean[] canEdit = new boolean [columnHeader.length];
+            final boolean[] canEdit = new boolean [] {
+                    false, false, false, false, false, false
+            };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-
         jScrollPane.setViewportView(table);
         if (table.getColumnModel().getColumnCount() > 0) {
             table.getColumnModel().getColumn(0).setPreferredWidth(50);
         }
-
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-            public void valueChanged(ListSelectionEvent event) {
-                onClickTableRow();
-            }
-        });
 
         tablePanel.add(jScrollPane);
         jScrollPane.setBounds(22, 60, 940, 350);
@@ -404,212 +331,6 @@ public class FormNhanVien extends JTablePanel {
         taskPanel.setBounds(520, 10, 470, 380);
     }
 
-    private void onClickBtnSelectMaTKListener() {
-        try {
-            JFrame frame = new FrameSelect("tài khoản", txtMaTK, new TaiKhoanSearchMapper(), FormTaiKhoan.class, FormNhanVien.class);
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    frame.setVisible(true);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNhanVien.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private NhanVienDTO getUserInput() {
-        Integer idNV = null;
-        Integer idTK = null;
-        try {
-            idNV = Integer.valueOf(txtMaNV.getText().replace("NV", ""));
-            idTK = Integer.valueOf(txtMaTK.getText().replace("TK", ""));
-        } catch (NumberFormatException ignored) {}
-
-        NhanVienDTO dto = new NhanVienDTO();
-        dto.setMaNV(idNV);
-        dto.setMaTK(idTK);
-        dto.setHo(txtHo.getText());
-        dto.setTen(txtTen.getText());
-        dto.setSDT(txtSDT.getText());
-        dto.setEmail(txtEmail.getText());
-        dto.setGioiTinh(cbGioiTinh.getSelectedIndex() == 0 ? 1 : 0);
-        try {
-            dto.setNgaySinh(new java.sql.Date(txtNgaySinh.getDate().getTime()));
-            dto.setLuong(Integer.valueOf(txtLuong.getText()));
-        } catch (NumberFormatException ignored) {}
-        return dto;
-    }
-
-    private void onClickBtnThemListener() {
-        INhanVienBUS nhanVienBUS = new NhanVienBUS();
-        try {
-            NhanVienDTO dto = getUserInput();
-            if (!Validator.isValidName(dto.getHoTen()))
-                throw new Exception("Họ tên không hợp lệ.");
-            if (!Validator.isValidPhone(dto.getSDT()))
-                throw new Exception("Số điện thoại không hợp lệ.");
-            if (!Validator.isValidEmail(dto.getEmail()))
-                throw new Exception("Email không hợp lệ.");
-            if (dto.getNgaySinh() == null)
-                throw new Exception("Ngày sinh không hợp lệ.");
-            if (dto.getLuong() == null)
-                throw new Exception("Lương không hợp lệ.");
-            for (NhanVienDTO nhanVienDTO:nhanVienBUS.findAll()) {
-                if (nhanVienDTO.getMaTK().equals(dto.getMaTK()) && !nhanVienDTO.getMaNV().equals(dto.getMaNV())) {
-                    throw new Exception("Tài khoản đã dùng.");
-                }
-            }
-            nhanVienBUS.save(dto);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNhanVien.this, "Thêm nhân viên thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        JOptionPane.showMessageDialog(FormNhanVien.this, "Thêm nhân viên thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
-        onClickBtnResetListener();
-        //jScrollPane.getVerticalScrollBar().setValue(jScrollPane.getVerticalScrollBar().getMaximum());
-        int newIndex = table.getRowCount()-1;
-        table.setRowSelectionInterval(newIndex, newIndex);
-    }
-
-    private void onClickBtnKichHoatListener() {
-        INhanVienBUS nhanVienBUS = new NhanVienBUS();
-        try {
-            NhanVienDTO newDto = getUserInput();
-            NhanVienDTO oldDto = nhanVienBUS.findByID(newDto.getMaNV());
-            if (oldDto == null)
-                throw new Exception("Không tìm thấy tài khoản." );
-            oldDto.setTinhTrang(1);
-            nhanVienBUS.update(oldDto);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNhanVien.this, "Kích hoạt nhân viên thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        JOptionPane.showMessageDialog(FormNhanVien.this, "Kích hoạt nhân viên thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
-        fillTable();
-    }
-
-
-    private void onClickBtnSuaListener() {
-        INhanVienBUS nhanVienBUS = new NhanVienBUS();
-        try {
-            NhanVienDTO newDto = getUserInput();
-            if (newDto.getMaNV() == null)
-                throw new Exception("Vui lòng chọn nhân viên.");
-            if (nhanVienBUS.findByID(newDto.getMaNV()) == null)
-                throw new Exception("Không tìm thấy nhân viên." );
-            if (!Validator.isValidName(newDto.getHoTen()))
-                throw new Exception("Họ tên không hợp lệ.");
-            if (!Validator.isValidPhone(newDto.getSDT()))
-                throw new Exception("Số điện thoại không hợp lệ.");
-            if (!Validator.isValidEmail(newDto.getEmail()))
-                throw new Exception("Email không hợp lệ.");
-            if (newDto.getNgaySinh() == null)
-                throw new Exception("Ngày sinh không hợp lệ.");
-            if (newDto.getLuong() == null)
-                throw new Exception("Lương không hợp lệ.");
-            for (NhanVienDTO nhanVienDTO:nhanVienBUS.findAll()) {
-                if (nhanVienDTO.getMaTK().equals(newDto.getMaTK()) && !nhanVienDTO.getMaNV().equals(newDto.getMaNV())) {
-                    throw new Exception("Tài khoản đã dùng.");
-                }
-            }
-            nhanVienBUS.update(newDto);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNhanVien.this, "Sửa nhân viên thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        JOptionPane.showMessageDialog(FormNhanVien.this, "Sửa nhân viên thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
-        fillTable();
-    }
-
-    private void onClickBtnXoaListener() {
-        INhanVienBUS nhanVienBUS = new NhanVienBUS();
-        try {
-            NhanVienDTO userInput = getUserInput();
-            if (userInput.getMaNV() == null)
-                throw new Exception("Vui lòng chọn nhân viên.");
-            NhanVienDTO dto = nhanVienBUS.findByID(userInput.getMaNV());
-            if (dto == null)
-                throw new Exception("Không tìm thấy nhân viên." );
-            if (General.CURRENT_ROLE.isAdmin() && dto.getTinhTrang() == 0)
-                nhanVienBUS.delete(dto.getMaTK());
-            else {
-                dto.setMaTK(null);
-                dto.setTinhTrang(0);
-                nhanVienBUS.update(dto);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNhanVien.this, "Xóa nhân viên thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        JOptionPane.showMessageDialog(FormNhanVien.this, "Xóa nhân viên thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
-        onClickBtnResetListener();
-    }
-
-    private void onClickBtnTimKiemListener() {
-        try {
-            JFrame frame = new FrameSearch("nhân viên", new NhanVienSearchMapper(), FormNhanVien.class);
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    frame.setVisible(true);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNhanVien.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void onClickBtnResetListener() {
-        fillTable();
-        for (Component component:infoPanel.getComponents()) {
-            if (component instanceof JTextField)
-                ((JTextField) component).setText("");
-        }
-        txtNgaySinh.setCalendar(null);
-        cbGioiTinh.setSelectedIndex(0);
-        btnThem.setText("Thêm");
-        btnXoa.setText("Xóa");
-    }
-
-    private void onClickTableRow() {
-        int index = table.getSelectedRow();
-        INhanVienBUS nhanVienBUS = new NhanVienBUS();
-        int selectedID;
-        try {
-            selectedID = Integer.parseInt(((String) table.getValueAt(index, 0)).replace("NV", ""));
-        } catch (Exception e) {
-            return;
-        }
-        NhanVienDTO dto = nhanVienBUS.findByID(selectedID);
-        if (dto == null)
-            return;
-        txtMaNV.setText(String.valueOf(dto.getMaNV()));
-        txtHo.setText(dto.getHo());
-        txtTen.setText(dto.getTen());
-        txtMaTK.setText(dto.getMaTK() != null ? "TK" + dto.getMaTK() : "Chưa có");
-        txtSDT.setText(dto.getSDT());
-        txtEmail.setText(dto.getEmail());
-        txtLuong.setText(String.valueOf(dto.getLuong()));
-        txtNgaySinh.setDate(dto.getNgaySinh());
-        cbGioiTinh.setSelectedIndex(dto.getGioiTinh() == 1 ? 0 : 1);
-
-        if (General.CURRENT_ROLE.isAdmin() && dto.getTinhTrang() == 0) {
-            btnThem.setText("Kích hoạt");
-            btnXoa.setText("Xóa");
-            txtLuong.setText("Vô hiệu hóa");
-        } else {
-            btnThem.setText("Thêm");
-            btnXoa.setText("Xóa");
-        }
-    }
-
     JScrollPane jScrollPane;
     TableColumn table;
 
@@ -628,7 +349,7 @@ public class FormNhanVien extends JTablePanel {
     JTextField txtMaNV = new JTextField();
     JTextField txtMaTK = new JTextField();
     JLabel lbLuongUnit = new JLabel();
-    JFormattedTextField txtLuong;
+    JTextField txtLuong = new JTextField();
     JTextField txtSDT = new JTextField();
     JTextField txtHo = new JTextField();
     JTextField txtTen = new JTextField();

@@ -5,37 +5,17 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class FormNhanSu extends JPanel {
-    private final JTabbedPane jTabbedPane = new JTabbedPane();
-    private final JPanel employeePanel = new FormNhanVien();
-    private final JPanel accountPanel = new FormTaiKhoan();
-    private final JPanel rolePanel = new FormPhanQuyen();
-    private final JPanel historyPanel = new FormLichSu();
-
     public FormNhanSu() {
         initComponents();
     }
-
-    public JTabbedPane getJTabbedPane() {
-        return jTabbedPane;
-    }
-
-    public JPanel getEmployeePanel() {
-        return employeePanel;
-    }
-
-    public JPanel getAccountPanel() {
-        return accountPanel;
-    }
-
-    public JPanel getRolePanel() {
-        return rolePanel;
-    }
-
-    public JPanel getHistoryPanel() {
-        return historyPanel;
-    }
-
+    
     private void initComponents() {
+        JTabbedPane jTabbedPane = new JTabbedPane();
+        JPanel employeePanel = new FormNhanVien();
+        JPanel accountPanel = new FormTaiKhoan();
+        JPanel rolePanel = new FormPhanQuyen();
+        JPanel historyPanel = new FormLichSu();
+
         setLayout(null);
 
         employeePanel.setLayout(null);

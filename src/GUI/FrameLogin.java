@@ -7,13 +7,12 @@ import Utils.FileHandler;
 import Utils.General;
 import Utils.Validator;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
+import static Utils.FileHandler.createImageIcon;
+
 import java.awt.*;
 import java.awt.event.*;
-
-import static Utils.FileHandler.createImageIcon;
+import javax.swing.*;
+import javax.swing.border.*;
 
 public class FrameLogin extends JFrame {
 	private boolean isHidePassword = true;
@@ -400,18 +399,18 @@ public class FrameLogin extends JFrame {
 				try {
 					Thread.sleep(2200);
 				} catch (InterruptedException ignored) {}
-				General.frame = new FrameLayout();
+				JFrame frame = new FrameLayout();
 				EventQueue.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						General.frame.setVisible(true);
-						General.frame.toBack();
+						frame.setVisible(true);
+						frame.toBack();
 					}
 				});
 				try {
 					Thread.sleep(400);
 					dispose();
-					General.frame.requestFocusInWindow();
+					frame.requestFocusInWindow();
 				} catch (InterruptedException ignored) {}
 			}
 		}).start();

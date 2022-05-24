@@ -1,12 +1,8 @@
 package GUI;
 
-import BUS.SearchMapper.Interfaces.ISearchMapper;
-import DTO.Interface.IEntity;
-import GUI.Form.Abstract.JTablePanel;
-import GUI.Form.FormNhanSu;
-import GUI.components.Category;
+import DTO.TaiKhoanDTO;
 import GUI.components.MovableJFrame;
-import Utils.General;
+import com.formdev.flatlaf.intellijthemes.FlatLightFlatIJTheme;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
@@ -15,30 +11,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Stack;
 
 public class FrameSearch extends MovableJFrame {
-    private final Class<?> clazz;
-    private final ISearchMapper mapper;
-    private final String[] props;
+    private Class<?> clazz;
+    private String[] props;
     private int conditionCount;
-    private final String target;
-    private final Stack<JComboBox<String>> cbOperatorList = new Stack<JComboBox<String>>();
-    private final Stack<JComboBox<String>> cbConditionList = new Stack<JComboBox<String>>();
-    private final Stack<JTextField> txtSearchList = new Stack<JTextField>();
+    private Stack<JComboBox<String>> cbOperatorList = new Stack<JComboBox<String>>();
+    private Stack<JComboBox<String>> cbConditionList = new Stack<JComboBox<String>>();
+    private Stack<JTextField> txtSearchList = new Stack<JTextField>();
 
-    public FrameSearch(String target, ISearchMapper mapper, Class<?> clazz) throws Exception {
-        Object parent = Class.forName(clazz.getName()).getConstructor().newInstance();
-        if (!(parent instanceof JTablePanel))
-            throw new Exception("Form tìm kiếm không hợp lệ");
+    public FrameSearch(String target, String[] props, Class<?> clazz) {
         this.clazz = clazz;
-        this.mapper = mapper;
-        this.props = getProps();
+        this.props = props;
         this.conditionCount = 1;
-        this.target = target;
         initFrame("Tìm kiếm " + target);
         initComponents();
     }
@@ -51,26 +37,6 @@ public class FrameSearch extends MovableJFrame {
         setResizable(false);
         setTitle(title);
         setIconImage(new ImageIcon("bin/images/logo.png").getImage());
-    }
-
-    private String[] getProps() {
-        ArrayList<Category> formList = ((FrameLayout) General.frame).getCategories();
-        JTablePanel parentPanel = null;
-        for (Category category:formList) {
-            if (category.getForm() instanceof JTablePanel && category.getForm().getClass().equals(clazz)) {
-                parentPanel = (JTablePanel) category.getForm();
-            }
-            else if (category.getForm() instanceof FormNhanSu) {
-                int index = ((FormNhanSu) category.getForm()).getJTabbedPane().getSelectedIndex();
-                if (index == 0)
-                    parentPanel = (JTablePanel) ((FormNhanSu) category.getForm()).getEmployeePanel();
-                else if (index == 1)
-                    parentPanel = (JTablePanel) ((FormNhanSu) category.getForm()).getAccountPanel();
-            }
-        }
-        if (parentPanel != null)
-            return parentPanel.getColumnHeader();
-        return new String[0];
     }
 
     private void initComponents() {
@@ -208,91 +174,7 @@ public class FrameSearch extends MovableJFrame {
     }
 
     private void onClickBtnSearchListener() {
-        final int OR_OPERATOR = 1;
-        ArrayList<IEntity> searchList = new ArrayList<>();
 
-        if (!(General.frame instanceof FrameLayout))
-            return;
-        JPanel currentForm = ((FrameLayout) General.frame).getCurrentItem().getForm();
-        if (currentForm instanceof FormNhanSu) {
-            int index = ((FormNhanSu) currentForm).getJTabbedPane().getSelectedIndex();
-            if (index == 0)
-                currentForm = ((FormNhanSu) currentForm).getEmployeePanel();
-            else if (index == 1)
-                currentForm = ((FormNhanSu) currentForm).getAccountPanel();
-        }
-        if (!currentForm.getClass().equals(clazz)) {
-            JOptionPane.showMessageDialog(FrameSearch.this, "Vui lòng mở " + target + " để tìm kiếm", "Không phù hợp", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        int cursor = 0;
-        while (cursor < txtSearchList.size()) {
-            String value = txtSearchList.get(cursor).getText();
-            Integer conditionIndex = cbConditionList.get(cursor).getSelectedIndex();
-            ArrayList<IEntity> tempSearch = mapper.searchByIndex(conditionIndex, value);
-            if (cursor > 0 && !cbOperatorList.empty()) {
-                int operator = cbOperatorList.get(cursor-1).getSelectedIndex();
-                if (operator == OR_OPERATOR) {
-                    cursor++;
-                    if (cursor < txtSearchList.size()) {
-                        int nextOperator = cbOperatorList.get(cursor-1).getSelectedIndex();
-                        while (nextOperator != OR_OPERATOR) {
-                            String nextValue = txtSearchList.get(cursor).getText();
-                            Integer nextConditionIndex = cbConditionList.get(cursor).getSelectedIndex();
-                            ArrayList<IEntity> nextTempSearch = mapper.searchByIndex(nextConditionIndex, nextValue);
-                            tempSearch = union(tempSearch, nextTempSearch);
-                            cursor++;
-                            if (cursor == txtSearchList.size())
-                                break;
-                            nextOperator = cbOperatorList.get(cursor-1).getSelectedIndex();
-                        }
-                        searchList = intersection(searchList, tempSearch);
-                        continue;
-                    }
-                    else cursor--;
-                }
-            }
-            searchList = union(searchList, tempSearch);
-            cursor++;
-        }
-
-        if (group.getSelection() != null) {
-            ArrayList<IEntity> searchDateList = new ArrayList<>();
-            if (rbOnDay.isSelected()) {
-                searchDateList = mapper.searchByDate(txtDate.getDate(), txtDate.getDate());
-            } else if (rbBeforeDay.isSelected()) {
-                searchDateList = mapper.searchByDate(null, txtDate.getDate());
-            } else if (rbAfterDay.isSelected()) {
-                searchDateList = mapper.searchByDate(txtDate.getDate(), null);
-            } else if (rbFromDay.isSelected()) {
-                searchDateList = mapper.searchByDate(txtFromDate.getDate(), txtToDay.getDate());
-            }
-            searchList = intersection(searchList, searchDateList);
-        }
-
-        searchList.removeIf(entity -> entity == null || entity.getID() == null);
-
-        if (currentForm instanceof JTablePanel)
-            ((JTablePanel) currentForm).fillTable(searchList);
-        else {
-            JOptionPane.showMessageDialog(FrameSearch.this, "Không có bảng để tra cứu", "Không phù hợp", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private ArrayList<IEntity> union(ArrayList<IEntity> list1, ArrayList<IEntity> list2) {
-        Set<IEntity> set = new HashSet<IEntity>();
-        set.addAll(list1);
-        set.addAll(list2);
-        return new ArrayList<IEntity>(set);
-    }
-
-    private ArrayList<IEntity> intersection(ArrayList<IEntity> list1, ArrayList<IEntity> list2) {
-        ArrayList<IEntity> list = new ArrayList<IEntity>();
-        for (IEntity t : list1)
-            if(list2.contains(t))
-                list.add(t);
-        return list;
     }
 
     private void onClickLbAddListener() {
@@ -319,6 +201,7 @@ public class FrameSearch extends MovableJFrame {
         newCbCondition.setBounds(350, 20+(30*conditionCount), 150, 24);
         cbConditionList.push(newCbCondition);
 
+        //setLocation(getX(), getY()-30);
         repaintComponents();
     }
 
@@ -331,6 +214,7 @@ public class FrameSearch extends MovableJFrame {
         mainPanel.remove(txtSearchList.pop());
         mainPanel.remove(cbConditionList.pop());
 
+        //setLocation(getX(), getY()+30);
         repaintComponents();
     }
 
@@ -354,22 +238,30 @@ public class FrameSearch extends MovableJFrame {
         repaint();
     }
 
-    private ButtonGroup group;
-    private final JPanel mainPanel = new JPanel();
-    private final JLabel lbTitle = new JLabel();
-    private final JTextField txtSearch = new JTextField();
-    private final JComboBox<String> cbCondition = new JComboBox<>();
-    private final JLabel lbRemoveSearch = new JLabel();
-    private final JLabel lbAddSearch = new JLabel();
-    private final JLabel lbDateTitle = new JLabel();
-    private final JDateChooser txtToDay = new JDateChooser();
-    private final JDateChooser txtDate = new JDateChooser();
-    private final JDateChooser txtFromDate = new JDateChooser();
-    private final JRadioButton rbBeforeDay = new JRadioButton();
-    private final JRadioButton rbFromDay = new JRadioButton();
-    private final JRadioButton rbAfterDay = new JRadioButton();
-    private final JLabel lbToDay = new JLabel();
-    private final JRadioButton rbOnDay = new JRadioButton();
-    private final JButton btnReset = new JButton();
-    private final JButton btnSearch = new JButton();
+    public static void main(String[] args) {
+        FlatLightFlatIJTheme.setup();
+        String[] list = new String [] {
+                "Mã", "Tên đăng nhập", "Chức vụ", "Sở hữu", "Ngày tạo", "Người tạo", "Tình trạng"};
+        JFrame jFrame = new FrameSearch("Tài khoản", list, TaiKhoanDTO.class);
+        jFrame.setVisible(true);
+    }
+
+    ButtonGroup group;
+    JPanel mainPanel = new JPanel();
+    JLabel lbTitle = new JLabel();
+    JTextField txtSearch = new JTextField();
+    JComboBox<String> cbCondition = new JComboBox<>();
+    JLabel lbRemoveSearch = new JLabel();
+    JLabel lbAddSearch = new JLabel();
+    JLabel lbDateTitle = new JLabel();
+    JDateChooser txtToDay = new JDateChooser();
+    JDateChooser txtDate = new JDateChooser();
+    JDateChooser txtFromDate = new JDateChooser();
+    JRadioButton rbBeforeDay = new JRadioButton();
+    JRadioButton rbFromDay = new JRadioButton();
+    JRadioButton rbAfterDay = new JRadioButton();
+    JLabel lbToDay = new JLabel();
+    JRadioButton rbOnDay = new JRadioButton();
+    JButton btnReset = new JButton();
+    JButton btnSearch = new JButton();
 }

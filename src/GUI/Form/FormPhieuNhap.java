@@ -1,8 +1,6 @@
 package GUI.Form;
 
-import GUI.Form.Abstract.JTablePanel;
-
-public class FormPhieuNhap extends JTablePanel {
+public class FormPhieuNhap extends javax.swing.JPanel {
     public FormPhieuNhap() {
         initComponents();
     }

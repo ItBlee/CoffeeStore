@@ -6,15 +6,12 @@ import GUI.common.Language;
 import GUI.common.Theme;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.Properties;
 
 import static Utils.SystemConstant.*;
 
 public class General {
-    //FRAME
-    public static JFrame frame;
     //USER
     public static NhanVienDTO CURRENT_USER = null;
     public static Role CURRENT_ROLE = null;

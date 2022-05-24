@@ -1,9 +1,7 @@
 package GUI.Form;
 
 
-import GUI.Form.Abstract.JTablePanel;
-
-public class FormHoaDon extends JTablePanel {
+public class FormHoaDon extends javax.swing.JPanel {
     public FormHoaDon() {
         initComponents();
     }
