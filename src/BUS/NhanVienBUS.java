@@ -147,7 +147,7 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
         if (!isExist(nhanVien))
             throw new Exception("Không tồn tại nhân viên (NV" + nhanVien.getMaNV() + ").");
         if (!nhanVienDAO.update(nhanVien))
-            throw new Exception("Phát sinh lỗi trong quá trình thêm nhân viên.");
+            throw new Exception("Phát sinh lỗi trong quá trình sửa nhân viên.");
         nhanVien = nhanVienDAO.findByID(nhanVien.getMaNV());
         for (int i = 0; i < listNhanVien.size(); i++) {
             if (listNhanVien.get(i).getMaNV().equals(nhanVien.getMaNV()))

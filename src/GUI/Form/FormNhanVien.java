@@ -25,10 +25,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class FormNhanVien extends JTablePanel {
     public FormNhanVien() {
@@ -46,6 +46,8 @@ public class FormNhanVien extends JTablePanel {
         ITaiKhoanBUS taiKhoanBUS = new TaiKhoanBUS();
         INhanVienBUS nhanVienBUS = new NhanVienBUS();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
 
         ArrayList<NhanVienDTO> list = new ArrayList<NhanVienDTO>();
         if (idList == null)
@@ -58,14 +60,14 @@ public class FormNhanVien extends JTablePanel {
             if (dto.getMaTK() == Role.DEFAULT_ADMIN_ROLE_ID && !General.CURRENT_ROLE.isAdmin())
                 continue;
             TaiKhoanDTO account = taiKhoanBUS.findByID(dto.getMaTK());
-            String accountName = account != null ? account.getTenDangNhap() : "Chưa có tài khoản";
+            String accountName = account != null ? account.getTenDangNhap() : "Chưa có";
             Object[] row;
             if (General.CURRENT_ROLE.isAdmin())
                 row = new Object[] { "NV" + dto.getMaNV(), accountName, dto.getHoTen(), dateFormat.format(dto.getNgaySinh()),
-                        dto.getSDT(), dto.getEmail(), dto.getGioiTinh() == 1 ? "Nam" : "Nữ", dto.getLuong(),
+                        dto.getSDT(), dto.getEmail(), dto.getGioiTinh() == 1 ? "Nam" : "Nữ", currencyVN.format(dto.getLuong()),
                         dto.getTinhTrang() == 1 ? "Hoạt động" : "Vô hiệu"};
             else row = new Object[] { "NV" + dto.getMaNV(), accountName, dto.getHoTen(), dateFormat.format(dto.getNgaySinh()),
-                    dto.getSDT(), dto.getEmail(), dto.getGioiTinh() == 1 ? "Nam" : "Nữ", dto.getLuong()};
+                    dto.getSDT(), dto.getEmail(), dto.getGioiTinh() == 1 ? "Nam" : "Nữ", currencyVN.format(dto.getLuong())};
             model.addRow(row);
         }
     }
@@ -147,10 +149,8 @@ public class FormNhanVien extends JTablePanel {
         infoPanel.add(lbLuongUnit);
         lbLuongUnit.setBounds(421, 280, 50, 30);
 
-        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-        dfs.setGroupingSeparator('.');
-        DecimalFormat dFormat = new DecimalFormat ("#0", dfs);
-        txtLuong = new JFormattedTextField(dFormat);
+        NumberFormat principleFormat = NumberFormat.getNumberInstance();
+        txtLuong = new JFormattedTextField(principleFormat);
         infoPanel.add(txtLuong);
         txtLuong.setBounds(230, 280, 240, 35);
 
@@ -435,10 +435,11 @@ public class FormNhanVien extends JTablePanel {
         dto.setSDT(txtSDT.getText());
         dto.setEmail(txtEmail.getText());
         dto.setGioiTinh(cbGioiTinh.getSelectedIndex() == 0 ? 1 : 0);
+        dto.setTinhTrang(1);
         try {
             dto.setNgaySinh(new java.sql.Date(txtNgaySinh.getDate().getTime()));
-            dto.setLuong(Integer.valueOf(txtLuong.getText()));
-        } catch (NumberFormatException ignored) {}
+            dto.setLuong(((Number) txtLuong.getValue()).intValue());
+        } catch (Exception ignored) {}
         return dto;
     }
 
@@ -481,6 +482,8 @@ public class FormNhanVien extends JTablePanel {
             NhanVienDTO oldDto = nhanVienBUS.findByID(newDto.getMaNV());
             if (oldDto == null)
                 throw new Exception("Không tìm thấy tài khoản." );
+            if (oldDto.getMaTK() == 0)
+                oldDto.setMaTK(null);
             oldDto.setTinhTrang(1);
             nhanVienBUS.update(oldDto);
         } catch (Exception e) {
@@ -516,6 +519,8 @@ public class FormNhanVien extends JTablePanel {
                     throw new Exception("Tài khoản đã dùng.");
                 }
             }
+            if (newDto.getMaTK() == 0)
+                newDto.setMaTK(null);
             nhanVienBUS.update(newDto);
         } catch (Exception e) {
             e.printStackTrace();
@@ -536,7 +541,7 @@ public class FormNhanVien extends JTablePanel {
             if (dto == null)
                 throw new Exception("Không tìm thấy nhân viên." );
             if (General.CURRENT_ROLE.isAdmin() && dto.getTinhTrang() == 0)
-                nhanVienBUS.delete(dto.getMaTK());
+                nhanVienBUS.delete(dto.getMaNV());
             else {
                 dto.setMaTK(null);
                 dto.setTinhTrang(0);
@@ -581,6 +586,8 @@ public class FormNhanVien extends JTablePanel {
     private void onClickTableRow() {
         int index = table.getSelectedRow();
         INhanVienBUS nhanVienBUS = new NhanVienBUS();
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         int selectedID;
         try {
             selectedID = Integer.parseInt(((String) table.getValueAt(index, 0)).replace("NV", ""));
@@ -593,10 +600,10 @@ public class FormNhanVien extends JTablePanel {
         txtMaNV.setText(String.valueOf(dto.getMaNV()));
         txtHo.setText(dto.getHo());
         txtTen.setText(dto.getTen());
-        txtMaTK.setText(dto.getMaTK() != null ? "TK" + dto.getMaTK() : "Chưa có");
+        txtMaTK.setText(dto.getMaTK() != 0 ? "TK" + dto.getMaTK() : "Chưa có");
         txtSDT.setText(dto.getSDT());
         txtEmail.setText(dto.getEmail());
-        txtLuong.setText(String.valueOf(dto.getLuong()));
+        txtLuong.setText(currencyVN.format(dto.getLuong()).replace(" ₫", ""));
         txtNgaySinh.setDate(dto.getNgaySinh());
         cbGioiTinh.setSelectedIndex(dto.getGioiTinh() == 1 ? 0 : 1);
 

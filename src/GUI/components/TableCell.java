@@ -33,7 +33,7 @@ public class TableCell extends JLabel {
             setForeground(MyColor.GREEN);
         else if (getText().equalsIgnoreCase("Vô hiệu")
                 || getText().equalsIgnoreCase("Chưa sở hữu")
-                || getText().equalsIgnoreCase("Chưa có tài khoản"))
+                || getText().equalsIgnoreCase("Chưa có"))
             setForeground(MyColor.RED);
         else setForeground(new Color(80, 80, 80));
     }
