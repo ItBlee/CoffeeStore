@@ -6,22 +6,25 @@ import GUI.Form.Abstract.JTablePanel;
 import GUI.Form.FormNhanSu;
 import GUI.components.Category;
 import GUI.components.MovableJFrame;
+import GUI.components.TableColumn;
 import Utils.General;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
-public class FrameSearch extends MovableJFrame {
-    private final Class<?> clazz;
+public class FrameSelect extends MovableJFrame {
+    private JTextField targetField;
+    private final Class<?> targetClazz;
+    private final Class<?> parentClazz;
     private final ISearchMapper mapper;
     private final String[] props;
     private int conditionCount;
@@ -30,47 +33,70 @@ public class FrameSearch extends MovableJFrame {
     private final Stack<JComboBox<String>> cbConditionList = new Stack<JComboBox<String>>();
     private final Stack<JTextField> txtSearchList = new Stack<JTextField>();
 
-    public FrameSearch(String target, ISearchMapper mapper, Class<?> clazz) throws Exception {
-        Object parent = Class.forName(clazz.getName()).getConstructor().newInstance();
-        if (!(parent instanceof JTablePanel))
+    public FrameSelect(String target, JTextField targetField, ISearchMapper mapper, Class<?> targetClazz, Class<?> parentClazz) throws Exception {
+        Object targetObj = Class.forName(targetClazz.getName()).getConstructor().newInstance();
+        if (!(targetObj instanceof JTablePanel))
             throw new Exception("Form tìm kiếm không hợp lệ");
-        this.clazz = clazz;
+        Object parentObj = Class.forName(parentClazz.getName()).getConstructor().newInstance();
+        if (!(parentObj instanceof JTablePanel))
+            throw new Exception("Form để tìm kiếm không hợp lệ");
+        this.targetClazz = targetClazz;
+        this.parentClazz = parentClazz;
+        this.targetField = targetField;
         this.mapper = mapper;
         this.props = getProps();
         this.conditionCount = 1;
         this.target = target;
-        initFrame("Tìm kiếm " + target);
+        initFrame("Chọn " + target);
         initComponents();
+        fillTable(null);
+    }
+
+    private void fillTable(ArrayList<IEntity> idList) {
+        JTablePanel parentPanel = getParentTable();
+        if (parentPanel != null) {
+            parentPanel.fillTable(idList);
+            DefaultTableModel currentModel = (DefaultTableModel) table.getModel();
+            currentModel.setRowCount(0);
+            DefaultTableModel newModel = (DefaultTableModel) parentPanel.getTable().getModel();
+            for (Vector vector:newModel.getDataVector())
+                currentModel.addRow(vector);
+            parentPanel.fillTable();
+        }
+    }
+
+    private String[] getProps() {
+        JTablePanel parentPanel = getParentTable();
+        if (parentPanel != null)
+            return parentPanel.getColumnHeader();
+        return new String[0];
+    }
+
+    private JTablePanel getParentTable() {
+        ArrayList<Category> formList = ((FrameLayout) General.frame).getCategories();
+        JTablePanel parentPanel = null;
+        for (Category category:formList) {
+            if (category.getForm() instanceof JTablePanel && category.getForm().getClass().equals(targetClazz)) {
+                parentPanel = (JTablePanel) category.getForm();
+            }
+            else if (category.getForm() instanceof FormNhanSu) {
+                if (((FormNhanSu) category.getForm()).getEmployeePanel().getClass().equals(targetClazz))
+                    parentPanel = (JTablePanel) ((FormNhanSu) category.getForm()).getEmployeePanel();
+                else if (((FormNhanSu) category.getForm()).getAccountPanel().getClass().equals(targetClazz))
+                    parentPanel = (JTablePanel) ((FormNhanSu) category.getForm()).getAccountPanel();
+            }
+        }
+        return parentPanel;
     }
 
     private void initFrame(String title) {
-        setSize(530, 310);
+        setSize(530+940+30, 370);
         getContentPane().setLayout(null);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
         setTitle(title);
         setIconImage(new ImageIcon("bin/images/logo.png").getImage());
-    }
-
-    private String[] getProps() {
-        ArrayList<Category> formList = ((FrameLayout) General.frame).getCategories();
-        JTablePanel parentPanel = null;
-        for (Category category:formList) {
-            if (category.getForm() instanceof JTablePanel && category.getForm().getClass().equals(clazz)) {
-                parentPanel = (JTablePanel) category.getForm();
-            }
-            else if (category.getForm() instanceof FormNhanSu) {
-                int index = ((FormNhanSu) category.getForm()).getJTabbedPane().getSelectedIndex();
-                if (index == 0)
-                    parentPanel = (JTablePanel) ((FormNhanSu) category.getForm()).getEmployeePanel();
-                else if (index == 1)
-                    parentPanel = (JTablePanel) ((FormNhanSu) category.getForm()).getAccountPanel();
-            }
-        }
-        if (parentPanel != null)
-            return parentPanel.getColumnHeader();
-        return new String[0];
     }
 
     private void initComponents() {
@@ -193,8 +219,61 @@ public class FrameSearch extends MovableJFrame {
         mainPanel.add(btnSearch);
         btnSearch.setBounds(350, 80, 90, 30);
 
+        jScrollPane = new JScrollPane();
+        jScrollPane.setBackground(Color.white);
+        jScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        jScrollPane.setFocusable(false);
+
+        table = new TableColumn() {};
+        table.setModel(new DefaultTableModel(
+                new Object [][] {},
+                props
+        ) {
+            final boolean[] canEdit = new boolean [props.length];
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane.setViewportView(table);
+        if (table.getColumnModel().getColumnCount() > 0) {
+            table.getColumnModel().getColumn(0).setPreferredWidth(50);
+        }
+
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                onClickTableRow();
+            }
+        });
+
+        mainPanel.add(jScrollPane);
+        jScrollPane.setBounds(530, 0, 940, 350);
+
+        btnSelectedID.setBackground(new Color(229, 239, 255));
+        btnSelectedID.setForeground(new Color(54, 123, 245));
+        btnSelectedID.setText("Chọn " + target);
+        btnSelectedID.setBorderPainted(false);
+        btnSelectedID.setFocusPainted(false);
+        btnSelectedID.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnSelectedIDListener();
+            }
+        });
+        mainPanel.add(btnSelectedID);
+        btnSelectedID.setBounds(130, 280, 370, 35);
+
+        txtSelectedID.setBackground(new Color(245, 245, 245));
+        txtSelectedID.setEnabled(false);
+        mainPanel.add(txtSelectedID);
+        txtSelectedID.setBounds(10, 280, 110, 35);
+
+        lbSelectedID.setText("Mã " + target);
+        mainPanel.add(lbSelectedID);
+        lbSelectedID.setBounds(11, 260, 110, 18);
+
         getContentPane().add(mainPanel);
-        mainPanel.setBounds(0, 0, 530, 270);
+        mainPanel.setBounds(0, 0, getWidth(), getHeight());
     }
 
     private void onClickBtnResetListener() {
@@ -205,26 +284,12 @@ public class FrameSearch extends MovableJFrame {
                 ((JDateChooser) component).setCalendar(null);
         }
         group.clearSelection();
+        fillTable(null);
     }
 
     private void onClickBtnSearchListener() {
         final int OR_OPERATOR = 1;
         ArrayList<IEntity> searchList = new ArrayList<>();
-
-        if (!(General.frame instanceof FrameLayout))
-            return;
-        JPanel currentForm = ((FrameLayout) General.frame).getCurrentItem().getForm();
-        if (currentForm instanceof FormNhanSu) {
-            int index = ((FormNhanSu) currentForm).getJTabbedPane().getSelectedIndex();
-            if (index == 0)
-                currentForm = ((FormNhanSu) currentForm).getEmployeePanel();
-            else if (index == 1)
-                currentForm = ((FormNhanSu) currentForm).getAccountPanel();
-        }
-        if (!currentForm.getClass().equals(clazz)) {
-            JOptionPane.showMessageDialog(FrameSearch.this, "Vui lòng mở " + target + " để tìm kiếm", "Không phù hợp", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
 
         int cursor = 0;
         while (cursor < txtSearchList.size()) {
@@ -273,11 +338,7 @@ public class FrameSearch extends MovableJFrame {
 
         searchList.removeIf(entity -> entity == null || entity.getID() == null);
 
-        if (currentForm instanceof JTablePanel)
-            ((JTablePanel) currentForm).fillTable(searchList);
-        else {
-            JOptionPane.showMessageDialog(FrameSearch.this, "Không có bảng để tra cứu", "Không phù hợp", JOptionPane.ERROR_MESSAGE);
-        }
+        fillTable(searchList);
     }
 
     private ArrayList<IEntity> union(ArrayList<IEntity> list1, ArrayList<IEntity> list2) {
@@ -326,16 +387,39 @@ public class FrameSearch extends MovableJFrame {
         if (conditionCount == 1)
             return;
         conditionCount--;
-
         mainPanel.remove(cbOperatorList.pop());
         mainPanel.remove(txtSearchList.pop());
         mainPanel.remove(cbConditionList.pop());
-
         repaintComponents();
     }
 
+    private void onClickTableRow() {
+        int index = table.getSelectedRow();
+        txtSelectedID.setText((String) table.getValueAt(index, 0));
+    }
+
+    private void onClickBtnSelectedIDListener() {
+        if (!(General.frame instanceof FrameLayout))
+            return;
+        JPanel currentForm = ((FrameLayout) General.frame).getCurrentItem().getForm();
+        if (currentForm instanceof FormNhanSu) {
+            int index = ((FormNhanSu) currentForm).getJTabbedPane().getSelectedIndex();
+            if (index == 0)
+                currentForm = ((FormNhanSu) currentForm).getEmployeePanel();
+            else if (index == 1)
+                currentForm = ((FormNhanSu) currentForm).getAccountPanel();
+        }
+        if (!currentForm.getClass().equals(parentClazz)) {
+            JOptionPane.showMessageDialog(FrameSelect.this, "Vui lòng đúng form", "Không phù hợp", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        targetField.setText(txtSelectedID.getText());
+        dispose();
+    }
+
     private void repaintComponents() {
-        setSize(getWidth(), 280+(30*conditionCount));
+        setSize(getWidth(), 340+(30*conditionCount));
         mainPanel.setSize(getWidth(), getHeight());
         lbAddSearch.setBounds(lbAddSearch.getX(), 55+(30*conditionCount), lbAddSearch.getWidth(), lbAddSearch.getHeight());
         lbRemoveSearch.setBounds(lbRemoveSearch.getX(), 55+(30*conditionCount), lbRemoveSearch.getWidth(), lbRemoveSearch.getHeight());
@@ -350,10 +434,16 @@ public class FrameSearch extends MovableJFrame {
         rbOnDay.setBounds(rbOnDay.getX(), 150+(30*conditionCount), rbOnDay.getWidth(), rbOnDay.getHeight());
         btnReset.setBounds(btnReset.getX(), 50+(30*conditionCount), btnReset.getWidth(), btnReset.getHeight());
         btnSearch.setBounds(btnSearch.getX(), 50+(30*conditionCount), btnSearch.getWidth(), btnSearch.getHeight());
+        lbSelectedID.setBounds(lbSelectedID.getX(), 230+(30*conditionCount), btnSearch.getWidth(), lbSelectedID.getHeight());
+        txtSelectedID.setBounds(txtSelectedID.getX(), 250+(30*conditionCount), txtSelectedID.getWidth(), txtSelectedID.getHeight());
+        btnSelectedID.setBounds(btnSelectedID.getX(), 250+(30*conditionCount), btnSelectedID.getWidth(), btnSelectedID.getHeight());
+        jScrollPane.setBounds(jScrollPane.getX(), jScrollPane.getY(), jScrollPane.getWidth(), getHeight());
         revalidate();
         repaint();
     }
 
+    private JScrollPane jScrollPane = new JScrollPane();
+    private TableColumn table;
     private ButtonGroup group;
     private final JPanel mainPanel = new JPanel();
     private final JLabel lbTitle = new JLabel();
@@ -372,4 +462,7 @@ public class FrameSearch extends MovableJFrame {
     private final JRadioButton rbOnDay = new JRadioButton();
     private final JButton btnReset = new JButton();
     private final JButton btnSearch = new JButton();
+    private final JButton btnSelectedID = new JButton();
+    private final JTextField txtSelectedID = new JTextField();
+    private final JLabel lbSelectedID = new JLabel();
 }

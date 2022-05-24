@@ -14,4 +14,8 @@ public class StringUtils {
         }
         return false;
     }
+
+    public static String removeLetter(String str) {
+        return str.replaceAll("[^\\d.]", "");
+    }
 }

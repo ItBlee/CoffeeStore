@@ -1,7 +1,9 @@
 package GUI.Form;
 
 
-public class FormSanPham extends javax.swing.JPanel {
+import GUI.Form.Abstract.JTablePanel;
+
+public class FormSanPham extends JTablePanel {
     public FormSanPham() {
         initComponents();
     }

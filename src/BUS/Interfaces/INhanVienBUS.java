@@ -8,11 +8,14 @@ import java.sql.Date;
 import java.util.ArrayList;
 
 public interface INhanVienBUS extends ISearchableBUS<NhanVienDTO>, ICrudBUS<NhanVienDTO> {
-    NhanVienDTO findByMaTK(Integer maTK);
+    NhanVienDTO findByTaiKhoan(Integer maTK);
+    NhanVienDTO findByTaiKhoan(String tenTK);
     ArrayList<NhanVienDTO> findByHoTen(String hoTen);
-    ArrayList<NhanVienDTO> findByNgaySinh(Date ngaySinh);
+    ArrayList<NhanVienDTO> findByNgaySinh(Date tuNgay, Date denNgay);
     ArrayList<NhanVienDTO> findBySDT(Integer sdt);
     ArrayList<NhanVienDTO> findByEmail(String email);
     ArrayList<NhanVienDTO> findByGioiTinh(Integer gioiTinh);
     ArrayList<NhanVienDTO> findByLuong(Integer luong);
+    ArrayList<NhanVienDTO> findByTinhTrang(Integer TinhTrang);
+
 }
