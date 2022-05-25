@@ -363,8 +363,8 @@ public class FormTaiKhoan extends JTablePanel {
         dto.setMaTK(id);
         dto.setTenDangNhap(txtTenTenDangNhap.getText());
         dto.setMaPQ(roleID);
-        dto.setMatKhauHash(txtNewPassword.getText());
-        dto.setMatKhauSalt(txtNewPassword2.getText());
+        dto.setMatKhauHash(String.valueOf(txtNewPassword.getPassword()));
+        dto.setMatKhauSalt(String.valueOf(txtNewPassword2.getPassword()));
         return dto;
     }
 

@@ -1,7 +1,7 @@
 package BUS.SearchMapper;
 
-import BUS.Interfaces.INhaCungCapBUS;
-import BUS.NhaCungCapBUS;
+import BUS.Interfaces.IKhachHangBUS;
+import BUS.KhachHangBUS;
 import BUS.SearchMapper.Interfaces.ISearchMapper;
 import DTO.Interface.IEntity;
 import Utils.StringUtils;
@@ -9,10 +9,10 @@ import Utils.StringUtils;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class NhaCungCapSearchMapper implements ISearchMapper {
+public class KhachHangSearchMapper implements ISearchMapper {
     @Override
     public ArrayList<IEntity> searchByIndex(Integer index, String value) {
-        INhaCungCapBUS bus = new NhaCungCapBUS();
+        IKhachHangBUS bus = new KhachHangBUS();
         ArrayList<IEntity> result = new ArrayList<IEntity>();
         try {
             switch (index) {
@@ -21,7 +21,7 @@ public class NhaCungCapSearchMapper implements ISearchMapper {
                     return result;
 
                 case 1:
-                    return new ArrayList<IEntity>(bus.findByTenNCC(value));
+                    return new ArrayList<IEntity>(bus.findByHoTen(value));
 
                 case 2:
                     return new ArrayList<IEntity>(bus.findBySDT(value));
@@ -30,7 +30,7 @@ public class NhaCungCapSearchMapper implements ISearchMapper {
                     return new ArrayList<IEntity>(bus.findByDiaChi(value));
 
                 case 4:
-                    return new ArrayList<IEntity>(bus.findBySoTaiKhoan(value));
+                    return new ArrayList<IEntity>(bus.findByEmail(value));
 
                 case 5:
                     try {
@@ -53,7 +53,7 @@ public class NhaCungCapSearchMapper implements ISearchMapper {
 
     @Override
     public ArrayList<IEntity> searchByDate(Date from, Date to) {
-        INhaCungCapBUS bus = new NhaCungCapBUS();
+        IKhachHangBUS bus = new KhachHangBUS();
         return new ArrayList<IEntity>(bus.findAll());
     }
 }

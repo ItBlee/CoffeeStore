@@ -47,7 +47,7 @@ public class FormNCC extends JTablePanel {
             if (General.CURRENT_ROLE.isAdmin())
                 row = new Object[] { "NCC" + dto.getMaNCC(), dto.getTenNCC(), dto.getSDT(),
                         dto.getDiaChi(), dto.getSoTaiKhoan(), dto.getTinhTrang() == 1 ? "Hoạt động" : "Vô hiệu"};
-            else row = new Object[] {  "NCC" + dto.getMaNCC(), dto.getTenNCC(), dto.getSDT(), dto.getDiaChi(), dto.getSoTaiKhoan(),};
+            else row = new Object[] {  "NCC" + dto.getMaNCC(), dto.getTenNCC(), dto.getSDT(), dto.getDiaChi(), dto.getSoTaiKhoan()};
             model.addRow(row);
         }
     }

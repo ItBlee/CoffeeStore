@@ -163,7 +163,7 @@ public class FileHandler {
         }
         else if (reportInstance instanceof PhieuNhapDTO) {
             PhieuNhapDTO phieuNhap = (PhieuNhapDTO) reportInstance;
-            title = "Phiếu Nhậpl";
+            title = "Phiếu Nhập";
             NhanVienDTO nhanVien = nhanVienBUS.findByID(phieuNhap.getMaNV());
             employeeDetail = nhanVien.getHoTen() + " - SĐT: " + nhanVien.getSDT();
             INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();

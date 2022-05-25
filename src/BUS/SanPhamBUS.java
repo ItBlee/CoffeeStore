@@ -5,7 +5,6 @@ import BUS.Interfaces.ISanPhamBUS;
 import DAO.Interfaces.ISanPhamDAO;
 import DAO.SanPhamDAO;
 import DTO.SanPhamDTO;
-import DTO.TaiKhoanDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,12 +30,22 @@ public class SanPhamBUS extends AbstractHistoricBUS implements ISanPhamBUS {
     }
 
     @Override
-    public ArrayList<SanPhamDTO> findByMaNCC(Integer maNCC) {
+    public ArrayList<SanPhamDTO> findByNhaCungCap(Integer MaNCC) {
         return null;
     }
 
     @Override
-    public ArrayList<SanPhamDTO> findByMaLoai(Integer maLoai) {
+    public ArrayList<SanPhamDTO> findByNhaCungCap(String TenNCC) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<SanPhamDTO> findByLoaiSP(Integer MaLoai) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<SanPhamDTO> findByLoaiSP(String TenLoai) {
         return null;
     }
 

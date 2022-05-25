@@ -8,9 +8,12 @@ import java.sql.Date;
 import java.util.ArrayList;
 
 public interface IHoaDonBUS extends ISearchableBUS<HoaDonDTO>, ICrudBUS<HoaDonDTO> {
-    HoaDonDTO findByMaKH(Integer maKH);
-    HoaDonDTO findByMaNV(Integer maNV);
+    ArrayList<HoaDonDTO> findByKhachHang(Integer MaKH);
+    ArrayList<HoaDonDTO> findByKhachHang(String TenKH);
+    ArrayList<HoaDonDTO> findByNhanVien(Integer MaNV);
+    ArrayList<HoaDonDTO> findByNhanVien(String TenNV);
     ArrayList<HoaDonDTO> findByNgayLap(Date tuNgay, Date denNgay);
-    ArrayList<HoaDonDTO> findByTongTien(Integer from, Integer to);
-    ArrayList<HoaDonDTO> findByThanhTien(Integer from, Integer to);
+    ArrayList<HoaDonDTO> findByTongTien(Integer tien);
+    ArrayList<HoaDonDTO> findByTienKhuyenMai(Integer tien);
+    ArrayList<HoaDonDTO> findByTinhTrang(Integer TinhTrang);
 }

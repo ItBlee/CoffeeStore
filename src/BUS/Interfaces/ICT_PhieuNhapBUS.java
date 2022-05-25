@@ -3,10 +3,8 @@ package BUS.Interfaces;
 import BUS.Interfaces.common.ICrudBUS;
 import BUS.Interfaces.common.ISearchableBUS;
 import DTO.CT_PhieuNhapDTO;
-import DTO.PhieuNhapDTO;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public interface ICT_PhieuNhapBUS extends ISearchableBUS<CT_PhieuNhapDTO>, ICrudBUS<CT_PhieuNhapDTO> {
     CT_PhieuNhapDTO findByMaSP(Integer maSP);

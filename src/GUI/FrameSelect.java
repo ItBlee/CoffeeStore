@@ -110,13 +110,13 @@ public class FrameSelect extends MovableJFrame {
         lbTitle.setBounds(10, 10, 180, 30);
 
         mainPanel.add(txtSearch);
-        txtSearch.setBounds(10, 50, 330, 24);
+        txtSearch.setBounds(10, 50, 330, 30);
         txtSearchList.add(txtSearch);
 
         cbCondition.setModel(new DefaultComboBoxModel<String>(props));
         cbCondition.setBackground(Color.white);
         mainPanel.add(cbCondition);
-        cbCondition.setBounds(350, 50, 150, 24);
+        cbCondition.setBounds(350, 50, 150, 30);
         cbConditionList.add(cbCondition);
 
         lbRemoveSearch.setForeground(new Color(102, 102, 102));
@@ -129,7 +129,7 @@ public class FrameSelect extends MovableJFrame {
             }
         });
         mainPanel.add(lbRemoveSearch);
-        lbRemoveSearch.setBounds(200, 85, 100, 18);
+        lbRemoveSearch.setBounds(200, 90, 100, 18);
 
         lbAddSearch.setForeground(new Color(102, 153, 255));
         lbAddSearch.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -141,7 +141,7 @@ public class FrameSelect extends MovableJFrame {
             }
         });
         mainPanel.add(lbAddSearch);
-        lbAddSearch.setBounds(90, 85, 110, 18);
+        lbAddSearch.setBounds(90, 90, 110, 18);
 
         lbDateTitle.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbDateTitle.setText("Theo ngày:");
@@ -203,7 +203,7 @@ public class FrameSelect extends MovableJFrame {
             }
         });
         mainPanel.add(btnReset);
-        btnReset.setBounds(450, 80, 50, 30);
+        btnReset.setBounds(450, 85, 50, 30);
 
         btnSearch.setBackground(new Color(229, 239, 255));
         btnSearch.setForeground(new Color(54, 123, 245));
@@ -217,7 +217,7 @@ public class FrameSelect extends MovableJFrame {
             }
         });
         mainPanel.add(btnSearch);
-        btnSearch.setBounds(350, 80, 90, 30);
+        btnSearch.setBounds(350, 85, 90, 30);
 
         jScrollPane = new JScrollPane();
         jScrollPane.setBackground(Color.white);
@@ -306,19 +306,19 @@ public class FrameSelect extends MovableJFrame {
                             String nextValue = txtSearchList.get(cursor).getText();
                             Integer nextConditionIndex = cbConditionList.get(cursor).getSelectedIndex();
                             ArrayList<IEntity> nextTempSearch = mapper.searchByIndex(nextConditionIndex, nextValue);
-                            tempSearch = union(tempSearch, nextTempSearch);
+                            tempSearch = intersection(tempSearch, nextTempSearch);
                             cursor++;
                             if (cursor == txtSearchList.size())
                                 break;
                             nextOperator = cbOperatorList.get(cursor-1).getSelectedIndex();
                         }
-                        searchList = intersection(searchList, tempSearch);
+                        searchList = union(searchList, tempSearch);
                         continue;
                     }
                     else cursor--;
                 }
             }
-            searchList = union(searchList, tempSearch);
+            searchList = intersection(searchList, tempSearch);
             cursor++;
         }
 
@@ -365,19 +365,19 @@ public class FrameSelect extends MovableJFrame {
         newCbOperator.setBackground(Color.white);
         newCbOperator.setModel(new DefaultComboBoxModel<String>(new String[] { "Và", "Hoặc" }));
         mainPanel.add(newCbOperator);
-        newCbOperator.setBounds(10, 20+(30*conditionCount), 72, 24);
+        newCbOperator.setBounds(10, 20+(35*conditionCount), 72, 30);
         cbOperatorList.push(newCbOperator);
 
         JTextField newTxtSearch = new JTextField();
         mainPanel.add(newTxtSearch);
-        newTxtSearch.setBounds(90, 20+(30*conditionCount), 250, 24);
+        newTxtSearch.setBounds(90, 20+(35*conditionCount), 250, 30);
         txtSearchList.push(newTxtSearch);
 
         JComboBox<String> newCbCondition = new JComboBox<>();
         newCbCondition.setBackground(Color.white);
         newCbCondition.setModel(new DefaultComboBoxModel<>(props));
         mainPanel.add(newCbCondition);
-        newCbCondition.setBounds(350, 20+(30*conditionCount), 150, 24);
+        newCbCondition.setBounds(350, 20+(35*conditionCount), 150, 30);
         cbConditionList.push(newCbCondition);
 
         repaintComponents();
@@ -419,24 +419,24 @@ public class FrameSelect extends MovableJFrame {
     }
 
     private void repaintComponents() {
-        setSize(getWidth(), 340+(30*conditionCount));
+        setSize(getWidth(), 340+(35*conditionCount));
         mainPanel.setSize(getWidth(), getHeight());
-        lbAddSearch.setBounds(lbAddSearch.getX(), 55+(30*conditionCount), lbAddSearch.getWidth(), lbAddSearch.getHeight());
-        lbRemoveSearch.setBounds(lbRemoveSearch.getX(), 55+(30*conditionCount), lbRemoveSearch.getWidth(), lbRemoveSearch.getHeight());
-        lbDateTitle.setBounds(lbDateTitle.getX(), 150+(30*conditionCount), lbDateTitle.getWidth(), lbDateTitle.getHeight());
-        txtToDay.setBounds(txtToDay.getX(), 190+(30*conditionCount), txtToDay.getWidth(), txtToDay.getHeight());
-        txtDate.setBounds(txtDate.getX(), 150+(30*conditionCount), txtDate.getWidth(), txtDate.getHeight());
-        txtFromDate.setBounds(txtFromDate.getX(), 190+(30*conditionCount), txtFromDate.getWidth(), txtFromDate.getHeight());
-        rbBeforeDay.setBounds(rbBeforeDay.getX(), 150+(30*conditionCount), rbBeforeDay.getWidth(), rbBeforeDay.getHeight());
-        rbFromDay.setBounds(rbFromDay.getX(), 190+(30*conditionCount), rbFromDay.getWidth(), rbFromDay.getHeight());
-        rbAfterDay.setBounds(rbAfterDay.getX(), 150+(30*conditionCount), rbAfterDay.getWidth(), rbAfterDay.getHeight());
-        lbToDay.setBounds(lbToDay.getX(), 190+(30*conditionCount), lbToDay.getWidth(), lbToDay.getHeight());
-        rbOnDay.setBounds(rbOnDay.getX(), 150+(30*conditionCount), rbOnDay.getWidth(), rbOnDay.getHeight());
-        btnReset.setBounds(btnReset.getX(), 50+(30*conditionCount), btnReset.getWidth(), btnReset.getHeight());
-        btnSearch.setBounds(btnSearch.getX(), 50+(30*conditionCount), btnSearch.getWidth(), btnSearch.getHeight());
-        lbSelectedID.setBounds(lbSelectedID.getX(), 230+(30*conditionCount), btnSearch.getWidth(), lbSelectedID.getHeight());
-        txtSelectedID.setBounds(txtSelectedID.getX(), 250+(30*conditionCount), txtSelectedID.getWidth(), txtSelectedID.getHeight());
-        btnSelectedID.setBounds(btnSelectedID.getX(), 250+(30*conditionCount), btnSelectedID.getWidth(), btnSelectedID.getHeight());
+        lbAddSearch.setBounds(lbAddSearch.getX(), 55+(35*conditionCount), lbAddSearch.getWidth(), lbAddSearch.getHeight());
+        lbRemoveSearch.setBounds(lbRemoveSearch.getX(), 55+(35*conditionCount), lbRemoveSearch.getWidth(), lbRemoveSearch.getHeight());
+        lbDateTitle.setBounds(lbDateTitle.getX(), 150+(35*conditionCount), lbDateTitle.getWidth(), lbDateTitle.getHeight());
+        txtToDay.setBounds(txtToDay.getX(), 190+(35*conditionCount), txtToDay.getWidth(), txtToDay.getHeight());
+        txtDate.setBounds(txtDate.getX(), 150+(35*conditionCount), txtDate.getWidth(), txtDate.getHeight());
+        txtFromDate.setBounds(txtFromDate.getX(), 190+(35*conditionCount), txtFromDate.getWidth(), txtFromDate.getHeight());
+        rbBeforeDay.setBounds(rbBeforeDay.getX(), 150+(35*conditionCount), rbBeforeDay.getWidth(), rbBeforeDay.getHeight());
+        rbFromDay.setBounds(rbFromDay.getX(), 190+(35*conditionCount), rbFromDay.getWidth(), rbFromDay.getHeight());
+        rbAfterDay.setBounds(rbAfterDay.getX(), 150+(35*conditionCount), rbAfterDay.getWidth(), rbAfterDay.getHeight());
+        lbToDay.setBounds(lbToDay.getX(), 190+(35*conditionCount), lbToDay.getWidth(), lbToDay.getHeight());
+        rbOnDay.setBounds(rbOnDay.getX(), 150+(35*conditionCount), rbOnDay.getWidth(), rbOnDay.getHeight());
+        btnReset.setBounds(btnReset.getX(), 50+(35*conditionCount), btnReset.getWidth(), btnReset.getHeight());
+        btnSearch.setBounds(btnSearch.getX(), 50+(35*conditionCount), btnSearch.getWidth(), btnSearch.getHeight());
+        lbSelectedID.setBounds(lbSelectedID.getX(), 230+(35*conditionCount), btnSearch.getWidth(), lbSelectedID.getHeight());
+        txtSelectedID.setBounds(txtSelectedID.getX(), 250+(35*conditionCount), txtSelectedID.getWidth(), txtSelectedID.getHeight());
+        btnSelectedID.setBounds(btnSelectedID.getX(), 250+(35*conditionCount), btnSelectedID.getWidth(), btnSelectedID.getHeight());
         jScrollPane.setBounds(jScrollPane.getX(), jScrollPane.getY(), jScrollPane.getWidth(), getHeight());
         revalidate();
         repaint();

@@ -1,6 +1,5 @@
 package BUS;
 
-import BUS.Abstract.AbstractHistoricBUS;
 import BUS.Interfaces.ICT_PhieuNhapBUS;
 import DAO.CT_PhieuNhapDAO;
 import DAO.Interfaces.ICT_PhieuNhapDAO;

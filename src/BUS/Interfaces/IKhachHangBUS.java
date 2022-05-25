@@ -10,6 +10,6 @@ public interface IKhachHangBUS extends ISearchableBUS<KhachHangDTO>, ICrudBUS<Kh
     ArrayList<KhachHangDTO> findByHoTen(String hoTen);
     ArrayList<KhachHangDTO> findBySDT(String sdt);
     ArrayList<KhachHangDTO> findByDiaChi(String diaChi);
-    ArrayList<KhachHangDTO> findBySoTaiKhoan(String soTaiKhoan);
-    ArrayList<KhachHangDTO> findByTinhTrang(String tinhTrang);
+    ArrayList<KhachHangDTO> findByEmail(String mail);
+    ArrayList<KhachHangDTO> findByTinhTrang(Integer tinhTrang);
 }
