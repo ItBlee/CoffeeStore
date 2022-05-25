@@ -2,9 +2,11 @@ package BUS;
 
 import BUS.Abstract.AbstractHistoricBUS;
 import BUS.Interfaces.INhaCungCapBUS;
+import BUS.Interfaces.IPhieuNhapBUS;
 import DAO.Interfaces.INhaCungCapDAO;
 import DAO.NhaCungCapDAO;
 import DTO.NhaCungCapDTO;
+import DTO.PhieuNhapDTO;
 import DTO.TaiKhoanDTO;
 import Utils.StringUtils;
 
@@ -110,6 +112,10 @@ public class NhaCungCapBUS extends AbstractHistoricBUS implements INhaCungCapBUS
 
     @Override
     public void delete(int id) throws Exception {
+        IPhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
+        ArrayList<PhieuNhapDTO> containerDto = phieuNhapBUS.findByNCC(id);
+        for (PhieuNhapDTO dto:containerDto)
+            phieuNhapBUS.delete(dto.getID());
         if (!nhaCungCapDAO.delete(id))
             throw new Exception("Không thể xóa nhà cung cấp (NCC" + id + ").");
         listNhaCungCap.removeIf(nhaCungCapDTO -> nhaCungCapDTO.getMaNCC() == id);

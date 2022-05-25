@@ -1,10 +1,13 @@
 package BUS;
 
 import BUS.Abstract.AbstractHistoricBUS;
+import BUS.Interfaces.ICT_PhanQuyenBUS;
 import BUS.Interfaces.IPhanQuyenBUS;
+import BUS.Interfaces.ITaiKhoanBUS;
 import DAO.Interfaces.IPhanQuyenDAO;
 import DAO.PhanQuyenDAO;
 import DTO.PhanQuyenDTO;
+import DTO.TaiKhoanDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,9 +74,32 @@ public class PhanQuyenBUS extends AbstractHistoricBUS implements IPhanQuyenBUS {
 
     @Override
     public void delete(int id) throws Exception {
-        if (!phanQuyenDAO.delete(id))
-            throw new Exception("Không thể xóa quyền (PQ" + id + ").");
-        listPhanQuyen.removeIf(PhanQuyenDTO -> PhanQuyenDTO.getMaPQ() == id);
+        ITaiKhoanBUS taiKhoanBUS = new TaiKhoanBUS();
+        ICT_PhanQuyenBUS ctPhanQuyenBUS = new CT_PhanQuyenBUS();
+        PhanQuyenDTO dto = findByID(id);
+        if (dto == null)
+            throw new Exception("Không tìm thấy quyền (PQ" + id + ").");
+        for (TaiKhoanDTO taiKhoanDTO :taiKhoanBUS.findAll()) {
+            if (taiKhoanDTO.getMaPQ().equals(dto.getMaPQ())) {
+                final int DEFAULT_EMPLOYEE_ROLE_ID = 2;
+                taiKhoanDTO.setMaPQ(DEFAULT_EMPLOYEE_ROLE_ID);
+                taiKhoanBUS.update(taiKhoanDTO);
+            }
+        }
+        if (!phanQuyenDAO.delete(dto.getMaPQ()))
+            throw new Exception("Không thể xóa quyền (PQ" + dto.getMaPQ() + ").");
+        listPhanQuyen.removeIf(PhanQuyenDTO -> PhanQuyenDTO.getMaPQ().equals(dto.getMaPQ()));
+        int[] deleteList = new int[9];
+        deleteList[0] = dto.getQuyenHD();
+        deleteList[1] = dto.getQuyenSP();
+        deleteList[2] = dto.getQuyenPN();
+        deleteList[3] = dto.getQuyenNCC();
+        deleteList[4] = dto.getQuyenKH();
+        deleteList[5] = dto.getQuyenKM();
+        deleteList[6] = dto.getQuyenTK();
+        deleteList[7] = dto.getQuyenExcel();
+        deleteList[8] = dto.getQuyenNV();
+        ctPhanQuyenBUS.delete(deleteList);
         super.delete(PhanQuyenDTO.class, id);
     }
 

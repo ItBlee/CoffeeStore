@@ -1,11 +1,13 @@
 package BUS;
 
 import BUS.Abstract.AbstractHistoricBUS;
+import BUS.Interfaces.ICT_HoaDonBUS;
 import BUS.Interfaces.IHoaDonBUS;
 import BUS.Interfaces.IKhachHangBUS;
 import BUS.Interfaces.INhanVienBUS;
 import DAO.HoaDonDAO;
 import DAO.Interfaces.IHoaDonDAO;
+import DTO.CT_HoaDonDTO;
 import DTO.HoaDonDTO;
 import DTO.KhachHangDTO;
 import DTO.NhanVienDTO;
@@ -153,6 +155,9 @@ public class HoaDonBUS extends AbstractHistoricBUS implements IHoaDonBUS {
 
     @Override
     public void delete(int id) throws Exception {
+        ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
+        for (CT_HoaDonDTO dto:ctHoaDonBUS.findByMaHD(id))
+            ctHoaDonBUS.delete(dto.getID());
         if (!hoaDonDAO.delete(id))
             throw new Exception("Không thể xóa hóa đơn (HD" + id + ").");
         listHoaDon.removeIf(hoaDonDTO -> hoaDonDTO.getMaHD() == id);

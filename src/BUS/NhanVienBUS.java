@@ -1,11 +1,15 @@
 package BUS;
 
 import BUS.Abstract.AbstractHistoricBUS;
+import BUS.Interfaces.IHoaDonBUS;
 import BUS.Interfaces.INhanVienBUS;
+import BUS.Interfaces.IPhieuNhapBUS;
 import BUS.Interfaces.ITaiKhoanBUS;
 import DAO.Interfaces.INhanVienDAO;
 import DAO.NhanVienDAO;
+import DTO.HoaDonDTO;
 import DTO.NhanVienDTO;
+import DTO.PhieuNhapDTO;
 import DTO.TaiKhoanDTO;
 import Utils.StringUtils;
 
@@ -158,6 +162,12 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
 
     @Override
     public void delete(int id) throws Exception {
+        IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        for (HoaDonDTO dto:hoaDonBUS.findByNhanVien(id))
+            hoaDonBUS.delete(dto.getID());
+        IPhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
+        for (PhieuNhapDTO dto:phieuNhapBUS.findByNhanVien(id))
+            phieuNhapBUS.delete(dto.getID());
         if (!nhanVienDAO.delete(id))
             throw new Exception("Không thể xóa nhân viên (NV" + id + ").");
         listNhanVien.removeIf(NhanVienDTO -> NhanVienDTO.getMaNV() == id);

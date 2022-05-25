@@ -8,8 +8,10 @@ import java.sql.Date;
 import java.util.ArrayList;
 
 public interface IPhieuNhapBUS extends ISearchableBUS<PhieuNhapDTO>, ICrudBUS<PhieuNhapDTO> {
-    ArrayList<PhieuNhapDTO> findByMaNCC(Integer maNCC);
-    ArrayList<PhieuNhapDTO> findByMaNV(Integer maNV);
+    ArrayList<PhieuNhapDTO> findByNCC(Integer maNCC);
+    ArrayList<PhieuNhapDTO> findByNCC(String TenNCC);
+    ArrayList<PhieuNhapDTO> findByNhanVien(Integer maNV);
+    ArrayList<PhieuNhapDTO> findByNhanVien(String TenNV);
     ArrayList<PhieuNhapDTO> findBySDT(String sdt);
     ArrayList<PhieuNhapDTO> findByNgayTao(Date tuNgay, Date denNgay);
     ArrayList<PhieuNhapDTO> findByTongTien(Integer from, Integer to);

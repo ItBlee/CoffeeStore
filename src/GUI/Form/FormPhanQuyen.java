@@ -795,31 +795,11 @@ public class FormPhanQuyen extends JPanel {
 
     private void onClickBtnXoaListener() {
         IPhanQuyenBUS phanQuyenBUS = new PhanQuyenBUS();
-        ICT_PhanQuyenBUS ctPhanQuyenBUS = new CT_PhanQuyenBUS();
-        ITaiKhoanBUS taiKhoanBUS = new TaiKhoanBUS();
         try {
             Role role = getRole();
             if (role.getPhanQuyen().getMaPQ() == null)
                 throw new Exception("Không tìm thấy quyền." );
             phanQuyenBUS.delete(role.getPhanQuyen().getMaPQ());
-            for (TaiKhoanDTO dto:taiKhoanBUS.findAll()) {
-                if (dto.getMaPQ().equals(role.getPhanQuyen().getMaPQ())) {
-                    final int DEFAULT_EMPLOYEE_ROLE_ID = 2;
-                    dto.setMaPQ(DEFAULT_EMPLOYEE_ROLE_ID);
-                    taiKhoanBUS.update(dto);
-                }
-            }
-            int[] deleteList = new int[9];
-            deleteList[0] = role.getQuyenHD().getMaCTPQ();
-            deleteList[1] = role.getQuyenSP().getMaCTPQ();
-            deleteList[2] = role.getQuyenPN().getMaCTPQ();
-            deleteList[3] = role.getQuyenNCC().getMaCTPQ();
-            deleteList[4] = role.getQuyenKH().getMaCTPQ();
-            deleteList[5] = role.getQuyenKM().getMaCTPQ();
-            deleteList[6] = role.getQuyenTK().getMaCTPQ();
-            deleteList[7] = role.getQuyenExcel().getMaCTPQ();
-            deleteList[8] = role.getQuyenNV().getMaCTPQ();
-            ctPhanQuyenBUS.delete(deleteList);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(FormPhanQuyen.this, "Xóa quyền thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);

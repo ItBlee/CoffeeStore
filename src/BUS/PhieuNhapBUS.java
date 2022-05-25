@@ -31,12 +31,22 @@ public class PhieuNhapBUS extends AbstractHistoricBUS implements IPhieuNhapBUS {
     }
 
     @Override
-    public ArrayList<PhieuNhapDTO> findByMaNCC(Integer maNCC) {
+    public ArrayList<PhieuNhapDTO> findByNCC(Integer maNCC) {
         return null;
     }
 
     @Override
-    public ArrayList<PhieuNhapDTO> findByMaNV(Integer maNV) {
+    public ArrayList<PhieuNhapDTO> findByNCC(String TenNCC) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<PhieuNhapDTO> findByNhanVien(Integer maNV) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<PhieuNhapDTO> findByNhanVien(String TenNV) {
         return null;
     }
 

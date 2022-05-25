@@ -1,9 +1,11 @@
 package BUS;
 
 import BUS.Abstract.AbstractHistoricBUS;
+import BUS.Interfaces.ICT_KhuyenMaiBUS;
 import BUS.Interfaces.IKhuyenMaiBUS;
 import DAO.Interfaces.IKhuyenMaiDAO;
 import DAO.KhuyenMaiDAO;
+import DTO.CT_KhuyenMaiDTO;
 import DTO.HoaDonDTO;
 import DTO.KhuyenMaiDTO;
 import Utils.StringUtils;
@@ -110,6 +112,9 @@ public class KhuyenMaiBUS extends AbstractHistoricBUS implements IKhuyenMaiBUS {
 
     @Override
     public void delete(int id) throws Exception {
+        ICT_KhuyenMaiBUS ctKhuyenMaiBUS = new CT_KhuyenMaiBUS();
+        for (CT_KhuyenMaiDTO dto:ctKhuyenMaiBUS.findByMaKM(id))
+            ctKhuyenMaiBUS.delete(dto.getID());
         if (!khuyenMaiDAO.delete(id))
             throw new Exception("Không thể xóa khuyến mãi (KM" + id + ").");
         listKhuyenMai.removeIf(khuyenMaiDTO -> khuyenMaiDTO.getMaKM() == id);

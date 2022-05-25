@@ -156,6 +156,14 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
     public void update(TaiKhoanDTO taiKhoan) throws Exception {
         if (!isExist(taiKhoan))
             throw new Exception("Không tồn tại tài khoản (TK" + taiKhoan.getMaTK() + ").");
+        if (taiKhoan.getTinhTrang() == 0) {
+            INhanVienBUS nhanVienBUS = new NhanVienBUS();
+            NhanVienDTO ownerDto = nhanVienBUS.findByTaiKhoan(taiKhoan.getMaTK());
+            if (ownerDto != null) {
+                ownerDto.setMaTK(null);
+                nhanVienBUS.update(ownerDto);
+            }
+        }
         if (!taiKhoanDAO.update(taiKhoan))
             throw new Exception("Phát sinh lỗi trong quá trình thêm tài khoản.");
         taiKhoan = taiKhoanDAO.findByID(taiKhoan.getMaTK());
@@ -168,6 +176,12 @@ public class TaiKhoanBUS extends AbstractHistoricBUS implements ITaiKhoanBUS {
 
     @Override
     public void delete(int id) throws Exception {
+        INhanVienBUS nhanVienBUS = new NhanVienBUS();
+        NhanVienDTO ownerDto = nhanVienBUS.findByTaiKhoan(id);
+        if (ownerDto != null) {
+            ownerDto.setMaTK(null);
+            nhanVienBUS.update(ownerDto);
+        }
         if (!taiKhoanDAO.delete(id))
             throw new Exception("Không thể xóa tài khoản (TK" + id + ").");
         listTaiKhoan.removeIf(taiKhoanDTO -> taiKhoanDTO.getMaTK() == id);

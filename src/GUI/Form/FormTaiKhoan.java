@@ -444,16 +444,10 @@ public class FormTaiKhoan extends JTablePanel {
 
     private void onClickBtnXoaListener() {
         ITaiKhoanBUS taiKhoanBUS = new TaiKhoanBUS();
-        INhanVienBUS nhanVienBUS = new NhanVienBUS();
         try {
             TaiKhoanDTO userInput = getUserInput();
             if (userInput.getMaTK() == null)
                 throw new Exception("Vui lòng chọn tài khoản.");
-            NhanVienDTO ownerDto = nhanVienBUS.findByTaiKhoan(userInput.getMaTK());
-            if (ownerDto != null) {
-                ownerDto.setMaTK(null);
-                nhanVienBUS.update(ownerDto);
-            }
             TaiKhoanDTO dto = taiKhoanBUS.findByID(userInput.getMaTK());
             if (dto == null)
                 throw new Exception("Không tìm thấy tài khoản.");
