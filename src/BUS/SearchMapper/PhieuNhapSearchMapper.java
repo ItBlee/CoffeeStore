@@ -1,7 +1,7 @@
 package BUS.SearchMapper;
 
-import BUS.Interfaces.ISanPhamBUS;
-import BUS.SanPhamBUS;
+import BUS.Interfaces.IPhieuNhapBUS;
+import BUS.PhieuNhapBUS;
 import BUS.SearchMapper.Interfaces.ISearchMapper;
 import DTO.Interface.IEntity;
 import Utils.StringUtils;
@@ -9,10 +9,10 @@ import Utils.StringUtils;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class SanPhamSearchMapper implements ISearchMapper {
+public class PhieuNhapSearchMapper implements ISearchMapper {
     @Override
     public ArrayList<IEntity> searchByIndex(Integer index, String value) {
-        ISanPhamBUS bus = new SanPhamBUS();
+        IPhieuNhapBUS bus = new PhieuNhapBUS();
         ArrayList<IEntity> result = new ArrayList<IEntity>();
         try {
             switch (index) {
@@ -22,31 +22,29 @@ public class SanPhamSearchMapper implements ISearchMapper {
 
                 case 1:
                     try {
-                        return new ArrayList<IEntity>(bus.findByNhaCungCap(Integer.valueOf(value)));
+                        return new ArrayList<IEntity>(bus.findByNCC(Integer.valueOf(value)));
                     } catch (Exception ignored) {
-                        return new ArrayList<IEntity>(bus.findByNhaCungCap(value));
+                        return new ArrayList<IEntity>(bus.findByNCC(value));
                     }
 
                 case 2:
                     try {
-                        return new ArrayList<IEntity>(bus.findByLoaiSP(Integer.valueOf(value)));
+                        return new ArrayList<IEntity>(bus.findByNhanVien(Integer.valueOf(value)));
                     } catch (Exception ignored) {
-                        return new ArrayList<IEntity>(bus.findByLoaiSP(value));
+                        return new ArrayList<IEntity>(bus.findByNhanVien(value));
                     }
 
                 case 3:
-                    return new ArrayList<IEntity>(bus.findByTenSP(value));
+                    return new ArrayList<IEntity>(bus.findBySDT(value));
 
                 case 4:
-                    return new ArrayList<IEntity>(bus.findByDonGia(Integer.valueOf(value)));
+                    java.sql.Date sqlDate = java.sql.Date.valueOf(value);
+                    return new ArrayList<IEntity>(bus.findByNgayTao(sqlDate, sqlDate));
 
                 case 5:
-                    return new ArrayList<IEntity>(bus.findByDonVi(value));
+                    return new ArrayList<IEntity>(bus.findByTongTien(Integer.valueOf(value)));
 
                 case 6:
-                    return new ArrayList<IEntity>(bus.findBySoLuong(Integer.valueOf(value)));
-
-                case 7:
                     try {
                         return new ArrayList<IEntity>(bus.findByTinhTrang(Integer.valueOf(value)));
                     } catch (Exception ignored) {
@@ -67,7 +65,9 @@ public class SanPhamSearchMapper implements ISearchMapper {
 
     @Override
     public ArrayList<IEntity> searchByDate(Date from, Date to) {
-        ISanPhamBUS bus = new SanPhamBUS();
-        return new ArrayList<IEntity>(bus.findAll());
+        IPhieuNhapBUS bus = new PhieuNhapBUS();
+        java.sql.Date convertFrom = new java.sql.Date(from.getTime());
+        java.sql.Date convertTo = new java.sql.Date(to.getTime());
+        return new ArrayList<IEntity>(bus.findByNgayTao(convertFrom, convertTo));
     }
 }

@@ -170,7 +170,7 @@ public class FileHandler {
             NhaCungCapDTO nhaCungCap = nhaCungCapBUS.findByID(phieuNhap.getMaNCC());
             cooperatorLabel = "Nhà cung cấp";
             cooperatorDetail = nhaCungCap.getTenNCC() + " - SĐT: " + nhaCungCap.getSDT();
-            timestamp = String.valueOf(phieuNhap.getNgayLap());
+            timestamp = String.valueOf(phieuNhap.getNgayTao());
             totalPrice = String.valueOf(phieuNhap.getTongTien());
         }
         else

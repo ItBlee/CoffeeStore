@@ -3,7 +3,7 @@ package DTO;
 import DTO.Interface.IEntity;
 
 public class CT_PhieuNhapDTO implements IEntity {
-    private Integer MaTK;
+    private Integer MaCTPN;
     private Integer MaPN;
     private Integer MaSP;
     private Integer SoLuong;
@@ -16,49 +16,59 @@ public class CT_PhieuNhapDTO implements IEntity {
         
     @Override
     public Integer getID() {
-        return this.MaTK;
+        return this.MaCTPN;
     }
 
     @Override
     public void setID(Integer id) {
-        this.MaTK = id;
+        this.MaCTPN = id;
     }
 
-    public Integer getMaTK() {
-        return this.MaTK;
+    public Integer getMaCTPN() {
+        return MaCTPN;
     }
 
-    public void setMaTK(Integer maTK) {
-        this.MaTK = maTK;
+    public void setMaCTPN(Integer maCTPN) {
+        MaCTPN = maCTPN;
     }
+
     public Integer getMaPN() {
-        return this.MaPN;
+        return MaPN;
     }
-    public void setMaPN(Integer maPN){
-        this.MaPN = maPN;
+
+    public void setMaPN(Integer maPN) {
+        MaPN = maPN;
     }
+
     public Integer getMaSP() {
-        return this.MaSP;
+        return MaSP;
     }
-    public void setMaSP(Integer maSP){
-        this.MaSP = maSP;
+
+    public void setMaSP(Integer maSP) {
+        MaSP = maSP;
     }
+
     public Integer getSoLuong() {
-        return this.SoLuong;
+        return SoLuong;
     }
-    public void setSoLuong(Integer soLuong){
-        this.SoLuong = soLuong;
+
+    public void setSoLuong(Integer soLuong) {
+        SoLuong = soLuong;
     }
+
     public Integer getDonGia() {
-        return this.DonGia;
+        return DonGia;
     }
-    public void setDonGia(Integer donGia){
-        this.DonGia = donGia;
+
+    public void setDonGia(Integer donGia) {
+        DonGia = donGia;
     }
+
     public Integer getThanhTien() {
-        return this.ThanhTien;
+        return ThanhTien;
     }
-    public void setThanhTien(Integer thanhTien){
-        this.ThanhTien = thanhTien;
-    }    
+
+    public void setThanhTien(Integer thanhTien) {
+        ThanhTien = thanhTien;
+    }
 }

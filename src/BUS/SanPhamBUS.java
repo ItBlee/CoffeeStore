@@ -55,7 +55,7 @@ public class SanPhamBUS extends AbstractHistoricBUS implements ISanPhamBUS {
     }
 
     @Override
-    public ArrayList<SanPhamDTO> findByDonGia(Integer from, Integer to) {
+    public ArrayList<SanPhamDTO> findByDonGia(Integer tien) {
         return null;
     }
 
@@ -65,7 +65,7 @@ public class SanPhamBUS extends AbstractHistoricBUS implements ISanPhamBUS {
     }
 
     @Override
-    public ArrayList<SanPhamDTO> findBySoLuong(Integer from, Integer to) {
+    public ArrayList<SanPhamDTO> findBySoLuong(Integer soluong) {
         return null;
     }
 

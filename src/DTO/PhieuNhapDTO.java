@@ -5,61 +5,71 @@ import DTO.Interface.IEntity;
 import java.sql.Timestamp;
 
 public class PhieuNhapDTO implements IEntity {
-    private Integer MaTK;
     private Integer MaPN;
     private Integer MaNCC;
     private Integer MaNV;    
-    private Timestamp NgayLap;
+    private Timestamp NgayTao;
     private Integer TongTien;
-    
+    private Integer TinhTrang;
+
     public PhieuNhapDTO(){
     }
     
     @Override
     public Integer getID() {
-        return this.MaTK;
+        return this.MaPN;
     }
 
     @Override
     public void setID(Integer id) {
-        this.MaTK = id;
+        this.MaPN = id;
     }
 
-    public Integer getMaTK() {
-        return this.MaTK;
-    }
-
-    public void setMaTK(Integer maTK) {
-        this.MaTK = maTK;
-    }
     public Integer getMaPN() {
-        return this.MaPN;
+        return MaPN;
     }
-    public void setMaPN(Integer maPN){
-        this.MaPN = maPN;
+
+    public void setMaPN(Integer maPN) {
+        MaPN = maPN;
     }
+
     public Integer getMaNCC() {
-        return this.MaNCC;
+        return MaNCC;
     }
-    public void setMaNCC(Integer maNCC){
-        this.MaNCC = maNCC;
-    }    
+
+    public void setMaNCC(Integer maNCC) {
+        MaNCC = maNCC;
+    }
+
     public Integer getMaNV() {
-        return this.MaNV;
+        return MaNV;
     }
-    public void setMaNV(Integer maNV){
-        this.MaNV = maNV;
+
+    public void setMaNV(Integer maNV) {
+        MaNV = maNV;
     }
-    public Timestamp getNgayLap() {
-        return this.NgayLap;
+
+    public Timestamp getNgayTao() {
+        return NgayTao;
     }
-    public void setNgayLap(Timestamp ngayLap){
-        this.NgayLap = ngayLap;
+
+    public void setNgayTao(Timestamp ngayTao) {
+        NgayTao = ngayTao;
     }
+
     public Integer getTongTien() {
-        return this.TongTien;
+        return TongTien;
     }
-    public void setTongTien(Integer tongTien){
-        this.TongTien = tongTien;
+
+    public void setTongTien(Integer tongTien) {
+        TongTien = tongTien;
+    }
+
+    public Integer getTinhTrang() {
+        return TinhTrang;
+    }
+
+    public void setTinhTrang(Integer tinhTrang) {
+        TinhTrang = tinhTrang;
     }
 }

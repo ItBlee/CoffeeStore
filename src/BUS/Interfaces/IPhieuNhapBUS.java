@@ -14,5 +14,6 @@ public interface IPhieuNhapBUS extends ISearchableBUS<PhieuNhapDTO>, ICrudBUS<Ph
     ArrayList<PhieuNhapDTO> findByNhanVien(String TenNV);
     ArrayList<PhieuNhapDTO> findBySDT(String sdt);
     ArrayList<PhieuNhapDTO> findByNgayTao(Date tuNgay, Date denNgay);
-    ArrayList<PhieuNhapDTO> findByTongTien(Integer from, Integer to);
+    ArrayList<PhieuNhapDTO> findByTongTien(Integer tien);
+    ArrayList<PhieuNhapDTO> findByTinhTrang(Integer tinhTrang);
 }

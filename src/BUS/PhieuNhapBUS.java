@@ -61,7 +61,12 @@ public class PhieuNhapBUS extends AbstractHistoricBUS implements IPhieuNhapBUS {
     }
 
     @Override
-    public ArrayList<PhieuNhapDTO> findByTongTien(Integer from, Integer to) {
+    public ArrayList<PhieuNhapDTO> findByTongTien(Integer tien) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<PhieuNhapDTO> findByTinhTrang(Integer tinhTrang) {
         return null;
     }
 

@@ -13,44 +13,6 @@ public class FormKhachHang extends JTablePanel {
     }
     
     private void initComponents() {
-        JPanel infoPanel = new JPanel();
-        JLabel lbDetailTitle = new JLabel();
-        JLabel lbMaKH = new JLabel();
-        JLabel lbHo = new JLabel();
-        JLabel lbTen = new JLabel();
-        JLabel lbSDT = new JLabel();
-        JLabel lbEmail = new JLabel();
-        JTextField txtMaKH = new JTextField();
-        JTextField txtSDT = new JTextField();
-        JTextField txtHo = new JTextField();
-        JTextField txtTen = new JTextField();
-        JTextField txtEmail = new JTextField();
-        JButton btnThem = new JButton();
-        JButton btnSua = new JButton();
-        JButton btnXoa = new JButton();
-        JLabel lbDiaChi = new JLabel();
-        JTextField txtDiaChi = new JTextField();
-        JPanel tablePanel = new JPanel();
-        JLabel lbTableTitle = new JLabel();
-        JButton btnTimKiem = new JButton();
-        JButton btnReset = new JButton();
-        JPanel taskPanel = new JPanel();
-        JLabel lbTaskTitle = new JLabel();
-        JLabel lbBought = new JLabel();
-        JPanel progressBought = new JPanel();
-        JLabel progressBoughtText = new JLabel();
-        JPanel progressBoughtValue = new JPanel();
-        JLabel lbPay = new JLabel();
-        JPanel progressPay = new JPanel();
-        JLabel progressPayText = new JLabel();
-        JPanel progressPayValue = new JPanel();
-        JLabel lbTime = new JLabel();
-        JLabel lbFavoriteValue = new JLabel();
-        JLabel lbFavorite = new JLabel();
-        JLabel lbTimeValue = new JLabel();
-        JLabel lbFavoriteCategory = new JLabel();
-        JLabel lbFavoriteCategoryValue = new JLabel();
-
         setLayout(null);
 
         infoPanel.setBackground(new Color(255, 255, 255));
@@ -300,4 +262,42 @@ public class FormKhachHang extends JTablePanel {
         add(taskPanel);
         taskPanel.setBounds(520, 10, 470, 380);
     }
+
+    private final JPanel infoPanel = new JPanel();
+    private final JLabel lbDetailTitle = new JLabel();
+    private final JLabel lbMaKH = new JLabel();
+    private final JLabel lbHo = new JLabel();
+    private final JLabel lbTen = new JLabel();
+    private final JLabel lbSDT = new JLabel();
+    private final JLabel lbEmail = new JLabel();
+    private final JTextField txtMaKH = new JTextField();
+    private final JTextField txtSDT = new JTextField();
+    private final JTextField txtHo = new JTextField();
+    private final JTextField txtTen = new JTextField();
+    private final JTextField txtEmail = new JTextField();
+    private final JButton btnThem = new JButton();
+    private final JButton btnSua = new JButton();
+    private final JButton btnXoa = new JButton();
+    private final JLabel lbDiaChi = new JLabel();
+    private final JTextField txtDiaChi = new JTextField();
+    private final JPanel tablePanel = new JPanel();
+    private final JLabel lbTableTitle = new JLabel();
+    private final JButton btnTimKiem = new JButton();
+    private final JButton btnReset = new JButton();
+    private final JPanel taskPanel = new JPanel();
+    private final JLabel lbTaskTitle = new JLabel();
+    private final JLabel lbBought = new JLabel();
+    private final JPanel progressBought = new JPanel();
+    private final JLabel progressBoughtText = new JLabel();
+    private final JPanel progressBoughtValue = new JPanel();
+    private final JLabel lbPay = new JLabel();
+    private final JPanel progressPay = new JPanel();
+    private final JLabel progressPayText = new JLabel();
+    private final JPanel progressPayValue = new JPanel();
+    private final JLabel lbTime = new JLabel();
+    private final JLabel lbFavoriteValue = new JLabel();
+    private final JLabel lbFavorite = new JLabel();
+    private final JLabel lbTimeValue = new JLabel();
+    private final JLabel lbFavoriteCategory = new JLabel();
+    private final JLabel lbFavoriteCategoryValue = new JLabel();
 }

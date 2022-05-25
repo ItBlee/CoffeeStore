@@ -29,7 +29,7 @@ public class CT_PhieuNhapBUS implements ICT_PhieuNhapBUS {
     }
 
     @Override
-    public CT_PhieuNhapDTO findByMaSP(Integer maSP) {
+    public ArrayList<CT_PhieuNhapDTO> findByMaSP(Integer maSP) {
         return null;
     }
 

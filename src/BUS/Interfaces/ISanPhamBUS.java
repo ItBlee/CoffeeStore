@@ -12,8 +12,8 @@ public interface ISanPhamBUS extends ISearchableBUS<SanPhamDTO>, ICrudBUS<SanPha
     ArrayList<SanPhamDTO> findByLoaiSP(Integer MaLoai);
     ArrayList<SanPhamDTO> findByLoaiSP(String TenLoai);
     ArrayList<SanPhamDTO> findByTenSP(String tenSP);
-    ArrayList<SanPhamDTO> findByDonGia(Integer from, Integer to);
+    ArrayList<SanPhamDTO> findByDonGia(Integer tien);
     ArrayList<SanPhamDTO> findByDonVi(String donVi);
-    ArrayList<SanPhamDTO> findBySoLuong(Integer from, Integer to);
+    ArrayList<SanPhamDTO> findBySoLuong(Integer soluong);
     ArrayList<SanPhamDTO> findByTinhTrang(Integer tinhTrang);
 }
