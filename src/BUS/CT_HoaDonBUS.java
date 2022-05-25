@@ -1,9 +1,13 @@
 package BUS;
 
 import BUS.Interfaces.ICT_HoaDonBUS;
+import BUS.Interfaces.IHoaDonBUS;
+import BUS.Interfaces.ISanPhamBUS;
 import DAO.CT_HoaDonDAO;
 import DAO.Interfaces.ICT_HoaDonDAO;
 import DTO.CT_HoaDonDTO;
+import DTO.HoaDonDTO;
+import DTO.SanPhamDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,11 +59,32 @@ public class CT_HoaDonBUS implements ICT_HoaDonBUS {
     public Integer save(CT_HoaDonDTO ctHoaDon) throws Exception {
         if (isExist(ctHoaDon))
             throw new Exception("Đã tồn tại chi tiết hóa đơn này.");
+        for (CT_HoaDonDTO dto:listCTHoaDon) {
+            if (dto.getMaHD().equals(ctHoaDon.getMaHD())
+            && dto.getMaSP().equals(ctHoaDon.getMaSP()))
+                throw new Exception("Đã tồn tại sản phẩm ở hóa đơn này.");
+        }
         Integer newID = ctHoaDonDAO.save(ctHoaDon);
         if (newID == null)
             throw new Exception("Phát sinh lỗi trong quá trình thêm chi tiết hóa đơn.");
         ctHoaDon = ctHoaDonDAO.findByID(newID);
         listCTHoaDon.add(ctHoaDon);
+
+        ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+        SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(ctHoaDon.getMaSP());
+        int newSL = sanPhamDTO.getSoLuong() + ctHoaDon.getSoLuong();
+        sanPhamDTO.setSoLuong(newSL);
+        sanPhamBUS.update(sanPhamDTO);
+
+        IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        HoaDonDTO parent = hoaDonBUS.findByID(ctHoaDon.getMaHD());
+        int newSale = parent.getTienKhuyenMai() + ctHoaDon.getTienKhuyenMai();
+        parent.setTienKhuyenMai(newSale);
+        int newTotal = parent.getTongTien() + ctHoaDon.getThanhTien();
+        parent.setTongTien(newTotal);
+        int newPay = parent.getTongTien() - parent.getTienKhuyenMai();
+        parent.setTienThanhToan(newPay);
+        hoaDonBUS.update(parent);
         return newID;
     }
 
@@ -67,6 +92,10 @@ public class CT_HoaDonBUS implements ICT_HoaDonBUS {
     public void update(CT_HoaDonDTO ctHoaDon) throws Exception {
         if (!isExist(ctHoaDon))
             throw new Exception("Không tồn tại chi tiết hóa đơn (CTHD" + ctHoaDon.getMaCTHD() + ").");
+        CT_HoaDonDTO oldDto = findByID(ctHoaDon.getID());
+        int oldSLSP = oldDto.getSoLuong();
+        int oldSale = oldDto.getTienKhuyenMai();
+        int oldTotal = oldDto.getThanhTien();
         if (!ctHoaDonDAO.update(ctHoaDon))
             throw new Exception("Phát sinh lỗi trong quá trình thêm chi tiết hóa đơn.");
         ctHoaDon = ctHoaDonDAO.findByID(ctHoaDon.getMaCTHD());
@@ -74,13 +103,45 @@ public class CT_HoaDonBUS implements ICT_HoaDonBUS {
             if (listCTHoaDon.get(i).getMaCTHD().equals(ctHoaDon.getMaCTHD()))
                 listCTHoaDon.set(i, ctHoaDon);
         }
+        SanPhamBUS sanPhamBUS = new SanPhamBUS();
+        SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(ctHoaDon.getMaSP());
+        int newSL = sanPhamDTO.getSoLuong() - oldSLSP + ctHoaDon.getSoLuong();
+        sanPhamDTO.setSoLuong(newSL);
+        sanPhamBUS.update(sanPhamDTO);
+
+        IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        HoaDonDTO parent = hoaDonBUS.findByID(ctHoaDon.getMaHD());
+        int newSale = parent.getTienKhuyenMai() - oldSale + ctHoaDon.getTienKhuyenMai();
+        parent.setTienKhuyenMai(newSale);
+        int newTotal = parent.getTongTien() - oldTotal + ctHoaDon.getThanhTien();
+        parent.setTongTien(newTotal);
+        int newPay = parent.getTongTien() - parent.getTienKhuyenMai();
+        parent.setTienThanhToan(newPay);
+        hoaDonBUS.update(parent);
     }
 
     @Override
     public void delete(int id) throws Exception {
+        CT_HoaDonDTO temp = findByID(id);
         if (!ctHoaDonDAO.delete(id))
             throw new Exception("Không thể xóa chi tiết hóa đơn (CTHD" + id + ").");
         listCTHoaDon.removeIf(CT_HoaDonDTO -> CT_HoaDonDTO.getMaCTHD() == id);
+
+        ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+        SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(temp.getMaSP());
+        int newSL = sanPhamDTO.getSoLuong() - temp.getSoLuong();
+        sanPhamDTO.setSoLuong(newSL);
+        sanPhamBUS.update(sanPhamDTO);
+
+        IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        HoaDonDTO parent = hoaDonBUS.findByID(temp.getMaHD());
+        int newSale = parent.getTienKhuyenMai() - temp.getTienKhuyenMai();
+        parent.setTienKhuyenMai(newSale);
+        int newTotal = parent.getTongTien() - temp.getThanhTien();
+        parent.setTongTien(newTotal);
+        int newPay = parent.getTongTien() - parent.getTienKhuyenMai();
+        parent.setTienThanhToan(newPay);
+        hoaDonBUS.update(parent);
     }
 
     @Override

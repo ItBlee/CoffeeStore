@@ -1,9 +1,18 @@
-package GUI.Form;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ */
+package com.mycompany.mavenproject1;
 
+/**
+ *
+ * @author ASUS
+ */
+public class FormSanPham extends javax.swing.JPanel {
 
-import GUI.Form.Abstract.JTablePanel;
-
-public class FormSanPham extends JTablePanel {
+    /**
+     * Creates new form FormSanPham
+     */
     public FormSanPham() {
         initComponents();
     }
@@ -17,297 +26,370 @@ public class FormSanPham extends JTablePanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabelQlsp = new javax.swing.JLabel();
-        jLabelMota = new javax.swing.JLabel();
-        jLabelMaloai = new javax.swing.JLabel();
-        jLabelMancc = new javax.swing.JLabel();
-        jLabelTensp = new javax.swing.JLabel();
-        jLabelDongia = new javax.swing.JLabel();
-        jLabelDonvi = new javax.swing.JLabel();
-        jLabelSoluong = new javax.swing.JLabel();
-        labelMasp = new javax.swing.JLabel();
-        bntAnh = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        btnRefresh = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jPanelAnh = new javax.swing.JPanel();
-        jButton7 = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        textMota = new javax.swing.JTextArea();
-        textMasp = new javax.swing.JTextField();
-        textTensp = new javax.swing.JTextField();
-        textDongia = new javax.swing.JTextField();
-        textMancc = new javax.swing.JComboBox<>();
-        textSoluong = new javax.swing.JTextField();
-        textDonvi = new javax.swing.JTextField();
-        textMaloai = new javax.swing.JComboBox<>();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTableQlsp = new javax.swing.JTable();
+        javax.swing.JPanel tablePanel = new javax.swing.JPanel();
+        javax.swing.JLabel lbTableTitle = new javax.swing.JLabel();
+        javax.swing.JButton btnTimKiem = new javax.swing.JButton();
+        javax.swing.JButton btnReset = new javax.swing.JButton();
+        javax.swing.JPanel pluginPanel = new javax.swing.JPanel();
+        javax.swing.JPanel CategoryPanel = new javax.swing.JPanel();
+        javax.swing.JLabel lbCategoryTitle = new javax.swing.JLabel();
+        javax.swing.JTextField txtMaLoaiSP = new javax.swing.JTextField();
+        javax.swing.JLabel lbMaLoaiSP = new javax.swing.JLabel();
+        javax.swing.JLabel lbMota = new javax.swing.JLabel();
+        javax.swing.JTextField txtTenLoaiSP = new javax.swing.JTextField();
+        javax.swing.JLabel lbTenLoaiSP = new javax.swing.JLabel();
+        javax.swing.JButton btnThemLoaiSP = new javax.swing.JButton();
+        javax.swing.JButton btnSuaLoaiSP = new javax.swing.JButton();
+        javax.swing.JButton btnXoaLoaiSP = new javax.swing.JButton();
+        javax.swing.JScrollPane jScrollPane2 = new javax.swing.JScrollPane();
+        javax.swing.JTextArea taMota = new javax.swing.JTextArea();
+        javax.swing.JPanel detailSPPanel = new javax.swing.JPanel();
+        javax.swing.JLabel lbDetailSPTitle = new javax.swing.JLabel();
+        javax.swing.JPanel imagePanel = new javax.swing.JPanel();
+        javax.swing.JLabel imgSP = new javax.swing.JLabel();
+        javax.swing.JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
+        javax.swing.JTextArea taMotaSP = new javax.swing.JTextArea();
+        javax.swing.JLabel lbMotaSP = new javax.swing.JLabel();
+        javax.swing.JButton btnLuu = new javax.swing.JButton();
+        javax.swing.JPanel infoPanel = new javax.swing.JPanel();
+        javax.swing.JLabel lbDonGiaUnit = new javax.swing.JLabel();
+        javax.swing.JLabel lbDetailTitle = new javax.swing.JLabel();
+        javax.swing.JLabel lbMaSP = new javax.swing.JLabel();
+        javax.swing.JLabel lbLoaiSP = new javax.swing.JLabel();
+        javax.swing.JTextField txtMaSP = new javax.swing.JTextField();
+        javax.swing.JTextField txtLoaiPS = new javax.swing.JTextField();
+        javax.swing.JButton btnThem = new javax.swing.JButton();
+        javax.swing.JButton btnSua = new javax.swing.JButton();
+        javax.swing.JButton btnXoa = new javax.swing.JButton();
+        javax.swing.JTextField txtTenSP = new javax.swing.JTextField();
+        javax.swing.JLabel lbTenSP = new javax.swing.JLabel();
+        javax.swing.JLabel lbMaNCC = new javax.swing.JLabel();
+        javax.swing.JTextField txtMaNCC = new javax.swing.JTextField();
+        javax.swing.JTextField txtDonVi = new javax.swing.JTextField();
+        javax.swing.JLabel lbDonVi = new javax.swing.JLabel();
+        javax.swing.JLabel lbDonGia = new javax.swing.JLabel();
+        javax.swing.JTextField txtDonGia = new javax.swing.JTextField();
+        javax.swing.JLabel lbSoLuong = new javax.swing.JLabel();
+        javax.swing.JTextField txtSoLuong = new javax.swing.JTextField();
+        javax.swing.JButton btnSelectKH = new javax.swing.JButton();
+        javax.swing.JButton btnSelectKH1 = new javax.swing.JButton();
+        javax.swing.JPanel tableLoaiSPPanel = new javax.swing.JPanel();
+        javax.swing.JButton btnResetCategory = new javax.swing.JButton();
+        javax.swing.JLabel lbCategoryTableTitle = new javax.swing.JLabel();
 
         setLayout(null);
 
-        jLabelQlsp.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        jLabelQlsp.setText("QUẢN LÝ SẢN PHẨM");
-        add(jLabelQlsp);
-        jLabelQlsp.setBounds(390, 20, 280, 20);
+        tablePanel.setBackground(new java.awt.Color(255, 255, 255));
+        tablePanel.setLayout(null);
 
-        jLabelMota.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabelMota.setText("Mô Tả");
-        add(jLabelMota);
-        jLabelMota.setBounds(40, 170, 100, 20);
+        lbTableTitle.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lbTableTitle.setForeground(new java.awt.Color(37, 57, 111));
+        lbTableTitle.setText("Danh sách");
+        tablePanel.add(lbTableTitle);
+        lbTableTitle.setBounds(30, 10, 240, 40);
 
-        jLabelMaloai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabelMaloai.setText("Mã Loại");
-        add(jLabelMaloai);
-        jLabelMaloai.setBounds(490, 200, 80, 20);
-
-        jLabelMancc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabelMancc.setText("Mã NCC");
-        add(jLabelMancc);
-        jLabelMancc.setBounds(490, 250, 100, 20);
-
-        jLabelTensp.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabelTensp.setText("Tên Sản Phẩm");
-        add(jLabelTensp);
-        jLabelTensp.setBounds(40, 120, 120, 20);
-
-        jLabelDongia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabelDongia.setText("Đơn Giá");
-        add(jLabelDongia);
-        jLabelDongia.setBounds(490, 70, 80, 20);
-
-        jLabelDonvi.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabelDonvi.setText("Đơn Vị");
-        add(jLabelDonvi);
-        jLabelDonvi.setBounds(490, 120, 80, 20);
-
-        jLabelSoluong.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabelSoluong.setText("Số Lượng");
-        add(jLabelSoluong);
-        jLabelSoluong.setBounds(490, 160, 80, 20);
-
-        labelMasp.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        labelMasp.setText("Mã Sản Phẩm");
-        add(labelMasp);
-        labelMasp.setBounds(40, 70, 120, 20);
-
-        bntAnh.setText("Chọn Ảnh");
-        bntAnh.addActionListener(new java.awt.event.ActionListener() {
+        btnTimKiem.setBackground(new java.awt.Color(229, 239, 255));
+        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnTimKiem.setForeground(new java.awt.Color(54, 123, 245));
+        btnTimKiem.setText("Tìm kiếm");
+        btnTimKiem.setBorderPainted(false);
+        btnTimKiem.setFocusPainted(false);
+        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bntAnhActionPerformed(evt);
+                btnTimKiemActionPerformed(evt);
             }
         });
-        add(bntAnh);
-        bntAnh.setBounds(800, 260, 130, 22);
+        tablePanel.add(btnTimKiem);
+        btnTimKiem.setBounds(410, 20, 170, 35);
 
-        jButton2.setText("Thêm");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnReset.setText("jButton3");
+        tablePanel.add(btnReset);
+        btnReset.setBounds(590, 20, 40, 35);
+
+        add(tablePanel);
+        tablePanel.setBounds(10, 400, 650, 410);
+
+        pluginPanel.setBackground(new java.awt.Color(255, 255, 255));
+        pluginPanel.setLayout(null);
+
+        CategoryPanel.setBackground(new java.awt.Color(255, 255, 255));
+        CategoryPanel.setLayout(null);
+
+        lbCategoryTitle.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lbCategoryTitle.setForeground(new java.awt.Color(37, 57, 111));
+        lbCategoryTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbCategoryTitle.setText("Loại sản phẩm");
+        CategoryPanel.add(lbCategoryTitle);
+        lbCategoryTitle.setBounds(110, 20, 270, 40);
+
+        txtMaLoaiSP.setBackground(new java.awt.Color(245, 245, 245));
+        txtMaLoaiSP.setEnabled(false);
+        CategoryPanel.add(txtMaLoaiSP);
+        txtMaLoaiSP.setBounds(30, 100, 70, 35);
+
+        lbMaLoaiSP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbMaLoaiSP.setText("Mã");
+        CategoryPanel.add(lbMaLoaiSP);
+        lbMaLoaiSP.setBounds(31, 80, 70, 20);
+
+        lbMota.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbMota.setText("Mô tả");
+        CategoryPanel.add(lbMota);
+        lbMota.setBounds(31, 150, 120, 20);
+
+        txtTenLoaiSP.setBackground(new java.awt.Color(255, 255, 255));
+        CategoryPanel.add(txtTenLoaiSP);
+        txtTenLoaiSP.setBounds(110, 100, 330, 35);
+
+        lbTenLoaiSP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbTenLoaiSP.setText("Tên");
+        CategoryPanel.add(lbTenLoaiSP);
+        lbTenLoaiSP.setBounds(111, 80, 130, 20);
+
+        btnThemLoaiSP.setBackground(new java.awt.Color(220, 247, 227));
+        btnThemLoaiSP.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnThemLoaiSP.setForeground(new java.awt.Color(47, 168, 79));
+        btnThemLoaiSP.setText("Thêm");
+        btnThemLoaiSP.setBorderPainted(false);
+        btnThemLoaiSP.setFocusPainted(false);
+        btnThemLoaiSP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnThemLoaiSPActionPerformed(evt);
             }
         });
-        add(jButton2);
-        jButton2.setBounds(160, 340, 80, 22);
+        CategoryPanel.add(btnThemLoaiSP);
+        btnThemLoaiSP.setBounds(30, 280, 410, 35);
 
-        jButton3.setText("Xóa");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnSuaLoaiSP.setBackground(new java.awt.Color(252, 243, 215));
+        btnSuaLoaiSP.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnSuaLoaiSP.setForeground(new java.awt.Color(243, 170, 24));
+        btnSuaLoaiSP.setText("Sửa");
+        btnSuaLoaiSP.setBorderPainted(false);
+        btnSuaLoaiSP.setFocusPainted(false);
+        CategoryPanel.add(btnSuaLoaiSP);
+        btnSuaLoaiSP.setBounds(30, 330, 270, 40);
+
+        btnXoaLoaiSP.setBackground(new java.awt.Color(254, 228, 226));
+        btnXoaLoaiSP.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnXoaLoaiSP.setForeground(new java.awt.Color(234, 61, 47));
+        btnXoaLoaiSP.setText("Xóa");
+        btnXoaLoaiSP.setBorderPainted(false);
+        btnXoaLoaiSP.setFocusPainted(false);
+        CategoryPanel.add(btnXoaLoaiSP);
+        btnXoaLoaiSP.setBounds(310, 330, 130, 40);
+
+        taMota.setColumns(20);
+        taMota.setRows(5);
+        jScrollPane2.setViewportView(taMota);
+
+        CategoryPanel.add(jScrollPane2);
+        jScrollPane2.setBounds(30, 170, 410, 96);
+
+        pluginPanel.add(CategoryPanel);
+        CategoryPanel.setBounds(0, 0, 470, 380);
+
+        add(pluginPanel);
+        pluginPanel.setBounds(520, 10, 470, 380);
+
+        detailSPPanel.setBackground(new java.awt.Color(255, 255, 255));
+        detailSPPanel.setLayout(null);
+
+        lbDetailSPTitle.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lbDetailSPTitle.setForeground(new java.awt.Color(37, 57, 111));
+        lbDetailSPTitle.setText("Nội dung sản phẩm");
+        detailSPPanel.add(lbDetailSPTitle);
+        lbDetailSPTitle.setBounds(130, 20, 290, 40);
+
+        imagePanel.setLayout(null);
+        imagePanel.add(imgSP);
+        imgSP.setBounds(0, 0, 170, 170);
+
+        detailSPPanel.add(imagePanel);
+        imagePanel.setBounds(30, 100, 170, 170);
+
+        taMotaSP.setColumns(20);
+        taMotaSP.setRows(5);
+        jScrollPane1.setViewportView(taMotaSP);
+
+        detailSPPanel.add(jScrollPane1);
+        jScrollPane1.setBounds(210, 100, 240, 170);
+
+        lbMotaSP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbMotaSP.setText("Mô tả");
+        detailSPPanel.add(lbMotaSP);
+        lbMotaSP.setBounds(211, 80, 70, 20);
+
+        btnLuu.setBackground(new java.awt.Color(252, 243, 215));
+        btnLuu.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnLuu.setForeground(new java.awt.Color(243, 170, 24));
+        btnLuu.setText("Lưu");
+        btnLuu.setBorderPainted(false);
+        btnLuu.setFocusPainted(false);
+        btnLuu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnLuuActionPerformed(evt);
             }
         });
-        add(jButton3);
-        jButton3.setBounds(270, 340, 80, 22);
+        detailSPPanel.add(btnLuu);
+        btnLuu.setBounds(30, 280, 420, 40);
 
-        jButton5.setText("Sửa");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        add(detailSPPanel);
+        detailSPPanel.setBounds(520, 10, 470, 380);
+
+        infoPanel.setBackground(new java.awt.Color(255, 255, 255));
+        infoPanel.setLayout(null);
+
+        lbDonGiaUnit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbDonGiaUnit.setText("đồng");
+        infoPanel.add(lbDonGiaUnit);
+        lbDonGiaUnit.setBounds(150, 220, 50, 40);
+
+        lbDetailTitle.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lbDetailTitle.setForeground(new java.awt.Color(37, 57, 111));
+        lbDetailTitle.setText("Thông tin sản phẩm");
+        infoPanel.add(lbDetailTitle);
+        lbDetailTitle.setBounds(130, 20, 290, 40);
+
+        lbMaSP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbMaSP.setText("Mã");
+        infoPanel.add(lbMaSP);
+        lbMaSP.setBounds(31, 80, 70, 20);
+
+        lbLoaiSP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbLoaiSP.setText("Loại");
+        infoPanel.add(lbLoaiSP);
+        lbLoaiSP.setBounds(311, 80, 120, 20);
+
+        txtMaSP.setBackground(new java.awt.Color(245, 245, 245));
+        txtMaSP.setEnabled(false);
+        infoPanel.add(txtMaSP);
+        txtMaSP.setBounds(30, 100, 70, 35);
+
+        txtLoaiPS.setBackground(new java.awt.Color(245, 245, 245));
+        txtLoaiPS.setEnabled(false);
+        infoPanel.add(txtLoaiPS);
+        txtLoaiPS.setBounds(310, 100, 120, 35);
+
+        btnThem.setBackground(new java.awt.Color(220, 247, 227));
+        btnThem.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnThem.setForeground(new java.awt.Color(47, 168, 79));
+        btnThem.setText("Thêm");
+        btnThem.setBorderPainted(false);
+        btnThem.setFocusPainted(false);
+        infoPanel.add(btnThem);
+        btnThem.setBounds(310, 280, 160, 40);
+
+        btnSua.setBackground(new java.awt.Color(252, 243, 215));
+        btnSua.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnSua.setForeground(new java.awt.Color(243, 170, 24));
+        btnSua.setText("Sửa");
+        btnSua.setBorderPainted(false);
+        btnSua.setFocusPainted(false);
+        infoPanel.add(btnSua);
+        btnSua.setBounds(30, 280, 260, 40);
+
+        btnXoa.setBackground(new java.awt.Color(254, 228, 226));
+        btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnXoa.setForeground(new java.awt.Color(234, 61, 47));
+        btnXoa.setText("Xóa");
+        btnXoa.setBorderPainted(false);
+        btnXoa.setFocusPainted(false);
+        infoPanel.add(btnXoa);
+        btnXoa.setBounds(310, 330, 160, 40);
+        infoPanel.add(txtTenSP);
+        txtTenSP.setBounds(30, 160, 260, 35);
+
+        lbTenSP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbTenSP.setText("Tên");
+        infoPanel.add(lbTenSP);
+        lbTenSP.setBounds(31, 140, 80, 20);
+
+        lbMaNCC.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbMaNCC.setText("Nhà cung cấp");
+        infoPanel.add(lbMaNCC);
+        lbMaNCC.setBounds(311, 140, 120, 20);
+
+        txtMaNCC.setBackground(new java.awt.Color(245, 245, 245));
+        txtMaNCC.setEnabled(false);
+        txtMaNCC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                txtMaNCCActionPerformed(evt);
             }
         });
-        add(jButton5);
-        jButton5.setBounds(390, 340, 80, 22);
+        infoPanel.add(txtMaNCC);
+        txtMaNCC.setBounds(310, 160, 120, 35);
 
-        btnRefresh.setText("Tải Lại");
-        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshActionPerformed(evt);
-            }
-        });
-        add(btnRefresh);
-        btnRefresh.setBounds(510, 340, 80, 22);
+        txtDonVi.setBackground(new java.awt.Color(255, 255, 255));
+        infoPanel.add(txtDonVi);
+        txtDonVi.setBounds(220, 220, 70, 35);
 
-        jButton6.setText("Xuất");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
-        add(jButton6);
-        jButton6.setBounds(630, 340, 80, 22);
+        lbDonVi.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbDonVi.setText("Đơn vị");
+        infoPanel.add(lbDonVi);
+        lbDonVi.setBounds(221, 200, 60, 20);
 
-        jPanelAnh.setBackground(new java.awt.Color(255, 255, 255));
-        jPanelAnh.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 4));
+        lbDonGia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbDonGia.setText("Đơn giá");
+        infoPanel.add(lbDonGia);
+        lbDonGia.setBounds(31, 200, 130, 20);
+        infoPanel.add(txtDonGia);
+        txtDonGia.setBounds(30, 220, 170, 35);
 
-        javax.swing.GroupLayout jPanelAnhLayout = new javax.swing.GroupLayout(jPanelAnh);
-        jPanelAnh.setLayout(jPanelAnhLayout);
-        jPanelAnhLayout.setHorizontalGroup(
-            jPanelAnhLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 172, Short.MAX_VALUE)
-        );
-        jPanelAnhLayout.setVerticalGroup(
-            jPanelAnhLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 172, Short.MAX_VALUE)
-        );
+        lbSoLuong.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbSoLuong.setText("Số lượng");
+        infoPanel.add(lbSoLuong);
+        lbSoLuong.setBounds(311, 200, 90, 20);
 
-        add(jPanelAnh);
-        jPanelAnh.setBounds(780, 70, 180, 180);
+        txtSoLuong.setBackground(new java.awt.Color(245, 245, 245));
+        txtSoLuong.setEnabled(false);
+        infoPanel.add(txtSoLuong);
+        txtSoLuong.setBounds(310, 220, 120, 35);
 
-        jButton7.setText("Nhập");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
-        add(jButton7);
-        jButton7.setBounds(750, 340, 80, 22);
+        btnSelectKH.setText("jButton1");
+        infoPanel.add(btnSelectKH);
+        btnSelectKH.setBounds(440, 100, 35, 35);
 
-        textMota.setColumns(20);
-        textMota.setRows(5);
-        jScrollPane2.setViewportView(textMota);
+        btnSelectKH1.setText("jButton1");
+        infoPanel.add(btnSelectKH1);
+        btnSelectKH1.setBounds(440, 160, 35, 35);
 
-        add(jScrollPane2);
-        jScrollPane2.setBounds(150, 170, 310, 110);
+        add(infoPanel);
+        infoPanel.setBounds(10, 10, 500, 380);
 
-        textMasp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textMaspActionPerformed(evt);
-            }
-        });
-        add(textMasp);
-        textMasp.setBounds(150, 70, 310, 30);
-        add(textTensp);
-        textTensp.setBounds(150, 120, 310, 30);
-        add(textDongia);
-        textDongia.setBounds(570, 70, 160, 30);
+        tableLoaiSPPanel.setBackground(new java.awt.Color(255, 255, 255));
+        tableLoaiSPPanel.setLayout(null);
 
-        textMancc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chọn NCC", "Đại Lý Cà Phê", "Đại Lý Đường", "Đại Lý Sữa", "Đại Lý Kem", "Đại Lý Nước", "Đại Lý Đá", "Đại Lý Giấy In Bill", "Đại Lý Cà Phê Hạt", "Đại Lý Bao Đựng Ly", "Đại Lý Hộp Nhựa" }));
-        add(textMancc);
-        textMancc.setBounds(570, 250, 160, 30);
-        add(textSoluong);
-        textSoluong.setBounds(570, 160, 160, 30);
-        add(textDonvi);
-        textDonvi.setBounds(570, 120, 160, 30);
+        btnResetCategory.setText("jButton3");
+        tableLoaiSPPanel.add(btnResetCategory);
+        btnResetCategory.setBounds(250, 20, 40, 35);
 
-        textMaloai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chọn Loại", "CAFE", "Nước Ngọt", "Matcha\t", "Cà Phê Phin", "Cà Phê Pha Máy", "Cà Phê Nguyên Chất", "Cà Phê Latte", "Capuchino", "Matchiato" }));
-        add(textMaloai);
-        textMaloai.setBounds(570, 200, 160, 30);
+        lbCategoryTableTitle.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lbCategoryTableTitle.setForeground(new java.awt.Color(37, 57, 111));
+        lbCategoryTableTitle.setText("Loại");
+        tableLoaiSPPanel.add(lbCategoryTableTitle);
+        lbCategoryTableTitle.setBounds(30, 10, 130, 40);
 
-        jTableQlsp.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Mã Sản Phẩm", "Tên Sản Phẩm", "Mã Loại", "Mã NCC", "Hình Ảnh", "Đơn Giá", "Đơn Vị", "Số lượng", "Mô Tả"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTableQlsp.setColumnSelectionAllowed(true);
-        jTableQlsp.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTableQlsp);
-
-        add(jScrollPane1);
-        jScrollPane1.setBounds(12, 390, 980, 420);
+        add(tableLoaiSPPanel);
+        tableLoaiSPPanel.setBounds(670, 400, 320, 410);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bntAnhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAnhActionPerformed
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_bntAnhActionPerformed
+    }//GEN-LAST:event_btnTimKiemActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnThemLoaiSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemLoaiSPActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnThemLoaiSPActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void txtMaNCCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaNCCActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_txtMaNCCActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRefreshActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
-
-    private void textMaspActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textMaspActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textMaspActionPerformed
+    }//GEN-LAST:event_btnLuuActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bntAnh;
-    private javax.swing.JButton btnRefresh;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JLabel jLabelDongia;
-    private javax.swing.JLabel jLabelDonvi;
-    private javax.swing.JLabel jLabelMaloai;
-    private javax.swing.JLabel jLabelMancc;
-    private javax.swing.JLabel jLabelMota;
-    private javax.swing.JLabel jLabelQlsp;
-    private javax.swing.JLabel jLabelSoluong;
-    private javax.swing.JLabel jLabelTensp;
-    private javax.swing.JPanel jPanelAnh;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTableQlsp;
-    private javax.swing.JLabel labelMasp;
-    private javax.swing.JTextField textDongia;
-    private javax.swing.JTextField textDonvi;
-    private javax.swing.JComboBox<String> textMaloai;
-    private javax.swing.JComboBox<String> textMancc;
-    private javax.swing.JTextField textMasp;
-    private javax.swing.JTextArea textMota;
-    private javax.swing.JTextField textSoluong;
-    private javax.swing.JTextField textTensp;
     // End of variables declaration//GEN-END:variables
 }

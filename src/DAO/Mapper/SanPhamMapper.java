@@ -15,7 +15,6 @@ public class SanPhamMapper implements IRowMapper<SanPhamDTO>, IExcelRowMapper<Sa
     public SanPhamDTO mapRow(ResultSet resultSet) {
         try {
             SanPhamDTO sanPham = new SanPhamDTO();
-            sanPham.setMaTK(resultSet.getInt("MaTK"));
             sanPham.setMaSP(resultSet.getInt("MaSP"));
             sanPham.setMaLoai(resultSet.getInt("MaLoai"));
             sanPham.setMaNCC(resultSet.getInt("MaNCC"));

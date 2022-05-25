@@ -3,7 +3,6 @@ package BUS;
 import BUS.Interfaces.ICT_KhuyenMaiBUS;
 import DAO.CT_KhuyenMaiDAO;
 import DAO.Interfaces.ICT_KhuyenMaiDAO;
-import DTO.CT_HoaDonDTO;
 import DTO.CT_KhuyenMaiDTO;
 
 import java.util.ArrayList;
@@ -44,18 +43,21 @@ public class CT_KhuyenMaiBUS implements ICT_KhuyenMaiBUS {
     }
 
     @Override
-    public ArrayList<CT_KhuyenMaiDTO> findByMaSP(Integer MaSP) {
-        ArrayList<CT_KhuyenMaiDTO> result = new ArrayList<CT_KhuyenMaiDTO>();
+    public CT_KhuyenMaiDTO findByMaSP(Integer MaSP) {
         for (CT_KhuyenMaiDTO ctKhuyenMaiDTO : listCTKhuyenMai)
             if (ctKhuyenMaiDTO.getMaSP().equals(MaSP))
-                result.add(ctKhuyenMaiDTO);
-        return result;
+                return ctKhuyenMaiDTO;
+        return null;
     }
 
     @Override
     public Integer save(CT_KhuyenMaiDTO ctKhuyenMai) throws Exception {
         if (isExist(ctKhuyenMai))
             throw new Exception("Đã tồn tại chi tiết khuyến mãi này.");
+        for (CT_KhuyenMaiDTO dto:listCTKhuyenMai) {
+            if (dto.getMaSP().equals(ctKhuyenMai.getMaSP()))
+                throw new Exception("Sản phẩm này đã được khuyến mãi.");
+        }
         Integer newID = ctKhuyenMaiDAO.save(ctKhuyenMai);
         if (newID == null)
             throw new Exception("Phát sinh lỗi trong quá trình thêm chi tiết khuyến mãi.");

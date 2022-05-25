@@ -2,30 +2,31 @@ package GUI.Form;
 
 import BUS.*;
 import BUS.Interfaces.*;
-import BUS.SearchMapper.NhaCungCapSearchMapper;
-import BUS.SearchMapper.TaiKhoanSearchMapper;
-import DTO.CT_HoaDonDTO;
-import DTO.HoaDonDTO;
+import BUS.SearchMapper.HoaDonSearchMapper;
+import BUS.SearchMapper.KhachHangSearchMapper;
+import DTO.*;
 import DTO.Interface.IEntity;
-import DTO.NhaCungCapDTO;
-import DTO.SanPhamDTO;
 import GUI.Form.Abstract.JTablePanel;
 import GUI.FrameSearch;
 import GUI.FrameSelect;
 import GUI.components.TableColumn;
 import Utils.General;
-import Utils.Validator;
+import Utils.StringUtils;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 public class FormHoaDon extends JTablePanel {
@@ -62,9 +63,11 @@ public class FormHoaDon extends JTablePanel {
         }
     }
 
-    public void fillTableDetail(int id) {
+    public void fillTableDetail(Integer id) {
         DefaultTableModel model = (DefaultTableModel) tableDetail.getModel();
         model.setRowCount(0);
+        if (id == null)
+            return;
         ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
 
         ArrayList<CT_HoaDonDTO> list = ctHoaDonBUS.findByMaHD(id);
@@ -93,6 +96,12 @@ public class FormHoaDon extends JTablePanel {
         btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.setBorderPainted(false);
         btnTimKiem.setFocusPainted(false);
+        btnTimKiem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnTimKiemListener();
+            }
+        });
         tablePanel.add(btnTimKiem);
         btnTimKiem.setBounds(410, 20, 170, 35);
 
@@ -114,7 +123,7 @@ public class FormHoaDon extends JTablePanel {
         table = new TableColumn();
         if (General.CURRENT_ROLE.isAdmin())
             columnHeader = new String [] {
-                    "Mã", "Khách hàng", "Nhân viên", "Ngày lập", "Tổng tiền", "Tiền khuyến mãi", "Tình trạng"
+                    "Mã", "Khách hàng", "Nhân viên", "Ngày lập", "Tổng tiền", "Khuyến mãi", "Tình trạng"
             };
         else columnHeader = new String [] {
                     "Mã", "Khách hàng", "Nhân viên", "Ngày lập", "Tổng tiền", "Tiền khuyến mãi",
@@ -169,6 +178,13 @@ public class FormHoaDon extends JTablePanel {
         detailCTHDPanel.add(lbCTHDTitle);
         lbCTHDTitle.setBounds(110, 20, 270, 40);
 
+        idHolderCT = new JLabel();
+        idHolderCT.setEnabled(false);
+        idHolderCT.setFocusable(false);
+        idHolderCT.setVisible(false);
+        detailCTHDPanel.add(idHolderCT);
+        lbCTHDTitle.setBounds(0, 0, 20, 20);
+
         txtMaHDCT.setEnabled(false);
         txtMaHDCT.setBackground(new Color(245, 245, 245));
         detailCTHDPanel.add(txtMaHDCT);
@@ -189,8 +205,23 @@ public class FormHoaDon extends JTablePanel {
         detailCTHDPanel.add(lbSanPham);
         lbSanPham.setBounds(31, 200, 120, 20);
 
-        txtSoLuong.setEnabled(false);
         txtSoLuong.setBackground(new Color(255, 255, 255));
+        txtSoLuong.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                calculateTotalCTListener();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                calculateTotalCTListener();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+
+            }
+        });
         detailCTHDPanel.add(txtSoLuong);
         txtSoLuong.setBounds(220, 220, 80, 35);
 
@@ -200,7 +231,22 @@ public class FormHoaDon extends JTablePanel {
         lbSoLuong.setBounds(221, 200, 80, 20);
 
         txtMaSP.setEnabled(false);
-        txtMaSP.setBackground(new Color(255, 255, 255));
+        txtMaSP.setBackground(new Color(245, 245, 245));
+        txtMaSP.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                fillSanPhamDetailListener();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                fillSanPhamDetailListener();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
         detailCTHDPanel.add(txtMaSP);
         txtMaSP.setBounds(30, 160, 70, 35);
 
@@ -246,6 +292,12 @@ public class FormHoaDon extends JTablePanel {
         txtDonGia.setBounds(310, 220, 130, 35);
 
         btnSelectSP.setText("jButton1");
+        btnSelectSP.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnSelectMaSPListener();
+            }
+        });
         detailCTHDPanel.add(btnSelectSP);
         btnSelectSP.setBounds(110, 160, 35, 35);
 
@@ -255,6 +307,12 @@ public class FormHoaDon extends JTablePanel {
         btnThemCT.setText("Thêm");
         btnThemCT.setBorderPainted(false);
         btnThemCT.setFocusPainted(false);
+        btnThemCT.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnThemCTListener();
+            }
+        });
         detailCTHDPanel.add(btnThemCT);
         btnThemCT.setBounds(30, 280, 410, 35);
 
@@ -264,6 +322,12 @@ public class FormHoaDon extends JTablePanel {
         btnSuaCT.setText("Sửa");
         btnSuaCT.setBorderPainted(false);
         btnSuaCT.setFocusPainted(false);
+        btnSuaCT.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnSuaCTListener();
+            }
+        });
         detailCTHDPanel.add(btnSuaCT);
         btnSuaCT.setBounds(30, 330, 270, 40);
 
@@ -273,6 +337,12 @@ public class FormHoaDon extends JTablePanel {
         btnXoaCT.setText("Xóa");
         btnXoaCT.setBorderPainted(false);
         btnXoaCT.setFocusPainted(false);
+        btnXoaCT.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnXoaCTListener();
+            }
+        });
         detailCTHDPanel.add(btnXoaCT);
         btnXoaCT.setBounds(310, 330, 130, 40);
 
@@ -324,7 +394,7 @@ public class FormHoaDon extends JTablePanel {
         txtMaKH.setEnabled(false);
         txtMaKH.setBackground(new Color(245, 245, 245));
         infoPanel.add(txtMaKH);
-        txtMaKH.setBounds(120, 100, 130, 35);
+        txtMaKH.setBounds(120, 100, 170, 35);
 
         btnThem.setBackground(new Color(220, 247, 227));
         btnThem.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -332,6 +402,14 @@ public class FormHoaDon extends JTablePanel {
         btnThem.setText("Thêm");
         btnThem.setBorderPainted(false);
         btnThem.setFocusPainted(false);
+        btnThem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btnThem.getText().equalsIgnoreCase("Thêm"))
+                    onClickBtnThemListener();
+                else onClickBtnKichHoatListener();
+            }
+        });
         infoPanel.add(btnThem);
         btnThem.setBounds(310, 280, 160, 35);
 
@@ -341,6 +419,12 @@ public class FormHoaDon extends JTablePanel {
         btnSua.setText("Sửa");
         btnSua.setBorderPainted(false);
         btnSua.setFocusPainted(false);
+        btnSua.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnSuaListener();
+            }
+        });
         infoPanel.add(btnSua);
         btnSua.setBounds(30, 330, 260, 40);
 
@@ -350,11 +434,18 @@ public class FormHoaDon extends JTablePanel {
         btnXoa.setText("Xóa");
         btnXoa.setBorderPainted(false);
         btnXoa.setFocusPainted(false);
+        btnXoa.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnXoaListener();
+            }
+        });
         infoPanel.add(btnXoa);
         btnXoa.setBounds(310, 330, 160, 40);
 
         txtTotal = new JFormattedTextField(principleFormat);
         txtTotal.setBackground(new Color(245, 245, 245));
+        txtTotal.setEnabled(false);
         infoPanel.add(txtTotal);
         txtTotal.setBounds(30, 160, 260, 35);
 
@@ -366,22 +457,25 @@ public class FormHoaDon extends JTablePanel {
         lbMaNV.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbMaNV.setText("Nhân viên");
         infoPanel.add(lbMaNV);
-        lbMaNV.setBounds(311, 80, 120, 20);
+        lbMaNV.setBounds(311, 140, 120, 20);
 
+        txtMaNV.setText("NV" + General.CURRENT_USER.getMaNV());
         txtMaNV.setEnabled(false);
         txtMaNV.setBackground(new Color(245, 245, 245));
         infoPanel.add(txtMaNV);
-        txtMaNV.setBounds(310, 100, 120, 35);
+        txtMaNV.setBounds(310, 160, 160, 35);
 
+
+        txtNgayLap.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis())));
         txtNgayLap.setEnabled(false);
         txtNgayLap.setBackground(new Color(245, 245, 245));
         infoPanel.add(txtNgayLap);
-        txtNgayLap.setBounds(310, 160, 160, 35);
+        txtNgayLap.setBounds(310, 220, 160, 35);
 
         lbNgayLap.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbNgayLap.setText("Ngày lập");
         infoPanel.add(lbNgayLap);
-        lbNgayLap.setBounds(311, 140, 150, 20);
+        lbNgayLap.setBounds(311, 200, 150, 20);
 
         lbKhuyenMai.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbKhuyenMai.setText("Khuyến mãi");
@@ -389,6 +483,8 @@ public class FormHoaDon extends JTablePanel {
         lbKhuyenMai.setBounds(31, 200, 130, 20);
 
         txtKhuyenMai = new JFormattedTextField(principleFormat);
+        txtKhuyenMai.setBackground(new Color(245, 245, 245));
+        txtKhuyenMai.setEnabled(false);
         infoPanel.add(txtKhuyenMai);
         txtKhuyenMai.setBounds(30, 220, 260, 35);
 
@@ -403,17 +499,15 @@ public class FormHoaDon extends JTablePanel {
         infoPanel.add(txtThanhTien);
         txtThanhTien.setBounds(30, 280, 260, 35);
 
-        btnSelectNV.setText("jButton1");
-        infoPanel.add(btnSelectNV);
-        btnSelectNV.setBounds(440, 100, 35, 35);
-
         btnSelectKH.setText("jButton1");
+        btnSelectKH.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnSelectMaKHListener();
+            }
+        });
         infoPanel.add(btnSelectKH);
-        btnSelectKH.setBounds(260, 100, 35, 35);
-
-        btnSelectKhuyenMai.setText("jButton1");
-        infoPanel.add(btnSelectKhuyenMai);
-        btnSelectKhuyenMai.setBounds(310, 220, 35, 35);
+        btnSelectKH.setBounds(310, 100, 35, 35);
 
         add(infoPanel);
         infoPanel.setBounds(10, 10, 500, 380);
@@ -454,13 +548,6 @@ public class FormHoaDon extends JTablePanel {
         ctHDPanel.add(jScrollPaneDetail);
         jScrollPaneDetail.setBounds(22, 60, 280, 350);
 
-        idHolder = new JLabel("0");
-        idHolder.setEnabled(false);
-        idHolder.setFocusable(false);
-        idHolder.setVisible(false);
-        ctHDPanel.add(idHolder);
-        idHolder.setBounds(0, 0, 50, 20);
-
         btnResetCT.setIcon(new ImageIcon("bin/images/components/reset.png"));
         btnResetCT.addActionListener(new ActionListener() {
             @Override
@@ -468,31 +555,16 @@ public class FormHoaDon extends JTablePanel {
                 onClickBtnResetCTListener();
             }
         });
-        tablePanel.add(btnResetCT);
+        ctHDPanel.add(btnResetCT);
         btnResetCT.setBounds(250, 20, 40, 35);
 
         add(ctHDPanel);
         ctHDPanel.setBounds(670, 400, 320, 410);
     }
 
-    private void onClickBtnSelectMaKMListener() {
-        try {
-            JFrame frame = new FrameSelect("tài khoản", txtMaTK, new TaiKhoanSearchMapper(), FormTaiKhoan.class, FormNhanVien.class);
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    frame.setVisible(true);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNhanVien.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
     private void onClickBtnSelectMaKHListener() {
         try {
-            JFrame frame = new FrameSelect("tài khoản", txtMaTK, new TaiKhoanSearchMapper(), FormTaiKhoan.class, FormNhanVien.class);
+            JFrame frame = new FrameSelect("khách hàng", txtMaKH, new KhachHangSearchMapper(), FormKhachHang.class, FormHoaDon.class);
             EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -501,87 +573,122 @@ public class FormHoaDon extends JTablePanel {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNhanVien.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void onClickBtnSelectMaNVListener() {
-        try {
-            JFrame frame = new FrameSelect("tài khoản", txtMaTK, new TaiKhoanSearchMapper(), FormTaiKhoan.class, FormNhanVien.class);
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    frame.setVisible(true);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNhanVien.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(FormHoaDon.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void onClickBtnSelectMaSPListener() {
-        try {
-            JFrame frame = new FrameSelect("tài khoản", txtMaTK, new TaiKhoanSearchMapper(), FormTaiKhoan.class, FormNhanVien.class);
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    frame.setVisible(true);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNhanVien.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
-        }
     }
 
-    private NhaCungCapDTO getUserInput() {
-        Integer idNCC = null;
+    private void fillSanPhamDetailListener() {
+        int idSP;
         try {
-            idNCC = Integer.valueOf(txtMaNCC.getText().replace("NCC", ""));
+            idSP = Integer.parseInt(txtMaSP.getText().replace("SP", ""));
+        } catch (Exception e) {
+            txtMaSP.setText("Lỗi");
+            return;
+        }
+        ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+        ICT_KhuyenMaiBUS khuyenMaiBUS = new CT_KhuyenMaiBUS();
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+        SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(idSP);
+        txtSanPham.setText(sanPhamDTO != null ? sanPhamDTO.getTenSP() : "Không tìm thấy");
+        txtDonGia.setText(sanPhamDTO != null ?
+                currencyVN.format(sanPhamDTO.getDonGia()).replace(" ₫", "") + "đ/" + sanPhamDTO.getDonVi()
+                : currencyVN.format(sanPhamDTO.getDonGia()).replace(" ₫", "") + "đ");
+        txtKhuyenMaiCT.setText(currencyVN.format(khuyenMaiBUS.findByMaSP(idSP).getGiamGia()).replace(" ₫", ""));
+    }
+
+    private void calculateTotalCTListener() {
+        int dg, sl, km;
+        try {
+            dg = Integer.parseInt(StringUtils.removeLetter(txtDonGia.getText()));
+            sl = Integer.parseInt(StringUtils.removeLetter(txtSoLuong.getText()));
+            km = ((Number) txtKhuyenMaiCT.getValue()).intValue();
+        } catch (Exception ignored) {
+            return;
+        }
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+        int total = (dg * sl) - km;
+        txtThanhTienCT.setText(currencyVN.format(total).replace(" ₫", ""));
+    }
+
+    private HoaDonDTO getUserInput() {
+        Integer idHD = null;
+        Integer idNV = null;
+        Integer idKH = null;
+        try {
+            idHD = Integer.valueOf(txtMaHD.getText().replace("HD", ""));
+            idNV = Integer.valueOf(txtMaNV.getText().replace("NV", ""));
+            idKH = Integer.valueOf(txtMaKH.getText().replace("KH", ""));
         } catch (NumberFormatException ignored) {}
 
-        NhaCungCapDTO dto = new NhaCungCapDTO();
-        dto.setMaNCC(idNCC);
-        dto.setTenNCC(txtTenNCC.getText());
-        dto.setSDT(txtSDT.getText());
-        dto.setDiaChi(txtDiaChi.getText());
-        dto.setSoTaiKhoan(txtSTK.getText());
+        HoaDonDTO dto = new HoaDonDTO();
+        dto.setMaHD(idHD);
+        dto.setMaNV(idNV);
+        dto.setMaKH(idKH);
+        try {
+            dto.setNgayLap(Timestamp.valueOf(txtNgayLap.getText()));
+            dto.setTongTien(((Number) txtTotal.getValue()).intValue());
+            dto.setTienKhuyenMai(((Number) txtKhuyenMai.getValue()).intValue());
+            dto.setTienThanhToan(((Number) txtThanhTien.getValue()).intValue());
+        } catch (Exception ignored) {}
         dto.setTinhTrang(1);
         return dto;
     }
 
-    private NhaCungCapDTO getUserInputCT() {
-        Integer idNCC = null;
+    private CT_HoaDonDTO getUserInputCT() {
+        Integer idHD = null;
+        Integer idSP = null;
         try {
-            idNCC = Integer.valueOf(txtMaNCC.getText().replace("NCC", ""));
+            idHD = Integer.valueOf(txtMaHD.getText().replace("HD", ""));
+            idSP = Integer.valueOf(txtMaSP.getText().replace("SP", ""));
         } catch (NumberFormatException ignored) {}
 
-        NhaCungCapDTO dto = new NhaCungCapDTO();
-        dto.setMaNCC(idNCC);
-        dto.setTenNCC(txtTenNCC.getText());
-        dto.setSDT(txtSDT.getText());
-        dto.setDiaChi(txtDiaChi.getText());
-        dto.setSoTaiKhoan(txtSTK.getText());
-        dto.setTinhTrang(1);
+        CT_HoaDonDTO dto = new CT_HoaDonDTO();
+        dto.setMaHD(idHD);
+        dto.setMaSP(idSP);
+        try {
+            dto.setMaCTHD(Integer.valueOf(idHolderCT.getText()));
+            dto.setDonGia(Integer.valueOf(StringUtils.removeLetter(txtDonGia.getText())));
+            dto.setSoLuong(Integer.valueOf(StringUtils.removeLetter(txtSoLuong.getText())));
+            dto.setTienKhuyenMai(((Number) txtKhuyenMaiCT.getValue()).intValue());
+            dto.setThanhTien(((Number) txtThanhTienCT.getValue()).intValue());
+        } catch (Exception ignored) {}
         return dto;
     }
 
     private void onClickBtnThemListener() {
-        INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();
+        IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        INhanVienBUS nhanVienBUS = new NhanVienBUS();
+        IKhachHangBUS khachHangBUS = new KhachHangBUS();
         try {
-            NhaCungCapDTO dto = getUserInput();
-            if (!Validator.isValidName(dto.getTenNCC()))
-                throw new Exception("Tên không hợp lệ.");
-            if (!Validator.isValidPhone(dto.getSDT()))
-                throw new Exception("Số điện thoại không hợp lệ.");
-            nhaCungCapBUS.save(dto);
+            HoaDonDTO dto = getUserInput();
+            if (dto.getMaNV() == null)
+                throw new Exception("Vui lòng chọn nhân viên.");
+            if (nhanVienBUS.findByID(dto.getMaNV()) == null)
+                throw new Exception("Không tìm thấy nhân viên.");
+            if (dto.getMaKH() == null)
+                throw new Exception("Vui lòng chọn khách hàng.");
+            if (khachHangBUS.findByID(dto.getMaKH()) == null)
+                throw new Exception("Không tìm thấy khách hàng.");
+            if (dto.getNgayLap() == null)
+                dto.setNgayLap(new Timestamp(System.currentTimeMillis()));
+            if (dto.getTongTien() == null)
+                dto.setTongTien(0);
+            if (dto.getTienKhuyenMai() == null)
+                dto.setTienKhuyenMai(0);
+            if (dto.getTienThanhToan() == null)
+                dto.setTienThanhToan(0);
+            hoaDonBUS.save(dto);
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNCC.this, "Thêm nhà cung cấp thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(FormHoaDon.this, "Thêm hóa đơn thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        JOptionPane.showMessageDialog(FormNCC.this, "Thêm nhà cung cấp thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(FormHoaDon.this, "Thêm hóa đơn thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
         onClickBtnResetListener();
         int newIndex = table.getRowCount()-1;
         table.setRowSelectionInterval(newIndex, newIndex);
@@ -589,74 +696,169 @@ public class FormHoaDon extends JTablePanel {
         bar.setValue(bar.getMaximum());
     }
 
-    private void onClickBtnKichHoatListener() {
-        INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();
+    private void onClickBtnThemCTListener() {
+        ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
+        IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        ISanPhamBUS sanPhamBUS = new SanPhamBUS();
         try {
-            NhaCungCapDTO newDto = getUserInput();
-            NhaCungCapDTO oldDto = nhaCungCapBUS.findByID(newDto.getMaNCC());
-            if (oldDto == null)
-                throw new Exception("Không tìm thấy nhà cung cấp." );
-            oldDto.setTinhTrang(1);
-            nhaCungCapBUS.update(oldDto);
+            CT_HoaDonDTO dto = getUserInputCT();
+            if (dto.getMaHD() == null)
+                throw new Exception("Vui lòng chọn hóa đơn.");
+            if (hoaDonBUS.findByID(dto.getMaHD()) == null)
+                throw new Exception("Không tìm thấy hóa đơn.");
+            if (dto.getMaSP() == null)
+                throw new Exception("Vui lòng chọn sản phẩm.");
+            if (sanPhamBUS.findByID(dto.getMaSP()) == null)
+                throw new Exception("Không tìm thấy sản phẩm.");
+            if (dto.getSoLuong() == null)
+                throw new Exception("Vui lòng nhập số lượng.");
+            if (dto.getDonGia() == null)
+                dto.setDonGia(0);
+            if (dto.getTienKhuyenMai() == null)
+                dto.setTienKhuyenMai(0);
+            if (dto.getThanhTien() == null)
+                dto.setThanhTien(0);
+            ctHoaDonBUS.save(dto);
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNCC.this, "Kích hoạt nhà cung cấp thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(FormHoaDon.this, "Thêm chi tiết hóa đơn thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        JOptionPane.showMessageDialog(FormNCC.this, "Kích hoạt nhà cung cấp thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(FormHoaDon.this, "Thêm chi tiết hóa đơn thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        onClickBtnResetCTListener();
+        int newIndex = tableDetail.getRowCount()-1;
+        tableDetail.setRowSelectionInterval(newIndex, newIndex);
+        JScrollBar bar = jScrollPaneDetail.getVerticalScrollBar();
+        bar.setValue(bar.getMaximum());
+    }
+
+    private void onClickBtnKichHoatListener() {
+        IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        try {
+            HoaDonDTO newDto = getUserInput();
+            HoaDonDTO oldDto = hoaDonBUS.findByID(newDto.getMaHD());
+            if (oldDto == null)
+                throw new Exception("Không tìm thấy hóa đơn.");
+            oldDto.setTinhTrang(1);
+            hoaDonBUS.update(oldDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormHoaDon.this, "Kích hoạt hóa đơn thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(FormHoaDon.this, "Kích hoạt hóa đơn thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
         fillTable();
     }
 
 
     private void onClickBtnSuaListener() {
-        INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();
+        IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        IKhachHangBUS khachHangBUS = new KhachHangBUS();
         try {
-            NhaCungCapDTO newDto = getUserInput();
-            if (newDto.getMaNCC() == null)
-                throw new Exception("Vui lòng chọn nhà cung cấp.");
-            if (nhaCungCapBUS.findByID(newDto.getMaNCC()) == null)
-                throw new Exception("Không tìm thấy nhà cung cấp." );
-            if (!Validator.isValidName(newDto.getTenNCC()))
-                throw new Exception("Tên không hợp lệ.");
-            if (!Validator.isValidPhone(newDto.getSDT()))
-                throw new Exception("Số điện thoại không hợp lệ.");
-            nhaCungCapBUS.update(newDto);
+            HoaDonDTO newDto = getUserInput();
+            if (newDto.getMaHD() == null)
+                throw new Exception("Vui lòng chọn hóa đơn.");
+            HoaDonDTO oldDto = hoaDonBUS.findByID(newDto.getID());
+            if (oldDto == null)
+                throw new Exception("Không tìm thấy hóa đơn.");
+            if (newDto.getMaKH() == null)
+                throw new Exception("Vui lòng chọn khách hàng.");
+            if (khachHangBUS.findByID(newDto.getMaKH()) == null)
+                throw new Exception("Không tìm thấy khách hàng.");
+            oldDto.setMaKH(newDto.getMaKH());
+            hoaDonBUS.update(oldDto);
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNCC.this, "Sửa nhà cung cấp thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(FormHoaDon.this, "Sửa hóa đơn thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        JOptionPane.showMessageDialog(FormNCC.this, "Sửa nhà cung cấp thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(FormHoaDon.this, "Sửa hóa đơn thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
         fillTable();
     }
 
-    private void onClickBtnXoaListener() {
-        INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();
+    private void onClickBtnSuaCTListener() {
+        ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
+        ISanPhamBUS sanPhamBUS = new SanPhamBUS();
         try {
-            NhaCungCapDTO userInput = getUserInput();
-            if (userInput.getMaNCC() == null)
-                throw new Exception("Vui lòng chọn nhà cung cấp.");
-            NhaCungCapDTO dto = nhaCungCapBUS.findByID(userInput.getMaNCC());
+            CT_HoaDonDTO newDto = getUserInputCT();
+            if (newDto.getMaCTHD() == null)
+                throw new Exception("Vui lòng chọn chi tiết hóa đơn.");
+            CT_HoaDonDTO oldDto = ctHoaDonBUS.findByID(newDto.getID());
+            if (oldDto == null)
+                throw new Exception("Không tìm thấy chi tiết hóa đơn.");
+            if (newDto.getMaSP() == null)
+                throw new Exception("Vui lòng chọn sản phẩm.");
+            if (sanPhamBUS.findByID(newDto.getMaSP()) == null)
+                throw new Exception("Không tìm thấy sản phẩm.");
+            if (newDto.getSoLuong() == null)
+                throw new Exception("Vui lòng nhập số lượng.");
+            if (newDto.getDonGia() == null)
+                newDto.setDonGia(0);
+            if (newDto.getTienKhuyenMai() == null)
+                newDto.setTienKhuyenMai(0);
+            if (newDto.getThanhTien() == null)
+                newDto.setThanhTien(0);
+            oldDto = newDto;
+            ctHoaDonBUS.update(oldDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormHoaDon.this, "Sửa chi tiết hóa đơn thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(FormHoaDon.this, "Sửa chi tiết hóa đơn thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        Integer idHD = null;
+        try {
+            idHD = Integer.valueOf(txtMaHD.getText());
+        } catch (Exception ignored) {}
+        fillTableDetail(idHD);
+    }
+
+    private void onClickBtnXoaListener() {
+        IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        try {
+            HoaDonDTO userInput = getUserInput();
+            if (userInput.getMaHD() == null)
+                throw new Exception("Vui lòng chọn hóa đơn.");
+            HoaDonDTO dto = hoaDonBUS.findByID(userInput.getMaHD());
             if (dto == null)
-                throw new Exception("Không tìm thấy nhà cung cấp." );
+                throw new Exception("Không tìm thấy hóa đơn.");
             if (General.CURRENT_ROLE.isAdmin() && dto.getTinhTrang() == 0)
-                nhaCungCapBUS.delete(dto.getMaNCC());
+                hoaDonBUS.delete(dto.getMaHD());
             else {
                 dto.setTinhTrang(0);
-                nhaCungCapBUS.update(dto);
+                hoaDonBUS.update(dto);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNCC.this, "Xóa nhà cung cấp thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(FormHoaDon.this, "Xóa hóa đơn thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        JOptionPane.showMessageDialog(FormNCC.this, "Xóa nhà cung cấp thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(FormHoaDon.this, "Xóa hóa đơn thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
         onClickBtnResetListener();
+    }
+
+    private void onClickBtnXoaCTListener() {
+        ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
+        try {
+            CT_HoaDonDTO userInput = getUserInputCT();
+            if (userInput.getMaCTHD() == null)
+                throw new Exception("Vui lòng chọn chi tiết hóa đơn.");
+            CT_HoaDonDTO dto = ctHoaDonBUS.findByID(userInput.getMaCTHD());
+            if (dto == null)
+                throw new Exception("Không tìm thấy chi tiết hóa đơn.");
+            ctHoaDonBUS.delete(dto.getMaCTHD());
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormHoaDon.this, "Xóa chi tiết hóa đơn thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(FormHoaDon.this, "Xóa chi tiết hóa đơn thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        onClickBtnResetCTListener();
     }
 
     private void onClickBtnTimKiemListener() {
         try {
-            JFrame frame = new FrameSearch("nhà cung cấp", new NhaCungCapSearchMapper(), FormNCC.class);
+            JFrame frame = new FrameSearch("hóa đơn", new HoaDonSearchMapper(), FormHoaDon.class);
             EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -665,7 +867,7 @@ public class FormHoaDon extends JTablePanel {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(FormNCC.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(FormHoaDon.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -675,18 +877,24 @@ public class FormHoaDon extends JTablePanel {
             if (component instanceof JTextField)
                 ((JTextField) component).setText("");
         }
+        txtMaNV.setText("NV" + General.CURRENT_USER.getMaNV());
+        txtNgayLap.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis())));
         btnThem.setText("Thêm");
         btnXoa.setText("Xóa");
+        onClickBtnResetCTListener();
     }
 
     private void onClickBtnResetCTListener() {
-        fillTable();
-        for (Component component:infoPanel.getComponents()) {
+        Integer idCTHD = null;
+        try {
+            idCTHD = Integer.parseInt(idHolderCT.getText());
+        } catch (Exception ignored) {}
+        fillTableDetail(idCTHD);
+        for (Component component:detailCTHDPanel.getComponents()) {
             if (component instanceof JTextField)
                 ((JTextField) component).setText("");
         }
-        btnThem.setText("Thêm");
-        btnXoa.setText("Xóa");
+        idHolderCT.setText("");
     }
 
     private void onClickTableRow() {
@@ -705,6 +913,7 @@ public class FormHoaDon extends JTablePanel {
         if (dto == null)
             return;
         txtMaHD.setText("HD" + dto.getMaHD());
+        txtMaHDCT.setText("HD" + dto.getMaHD());
         txtMaKH.setText("KH" + dto.getMaKH());
         txtMaNV.setText("NV" + dto.getMaNV());
         txtNgayLap.setText(dateFormat.format(dto.getNgayLap()));
@@ -730,7 +939,7 @@ public class FormHoaDon extends JTablePanel {
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         int selectedID;
         try {
-            selectedID = Integer.parseInt(idHolder.getText());
+            selectedID = Integer.parseInt(txtMaHD.getText());
         } catch (Exception e) {
             return;
         }
@@ -739,6 +948,7 @@ public class FormHoaDon extends JTablePanel {
             return;
         CT_HoaDonDTO dto = dtoList.get(index);
         SanPhamDTO product = sanPhamBUS.findByID(dto.getMaSP());
+        idHolderCT.setText(String.valueOf(dto.getMaCTHD()));
         txtMaHDCT.setText("HD" + dto.getMaHD());
         txtMaSP.setText("SP" + dto.getMaSP());
         txtSanPham.setText(product != null ? product.getTenSP() : "Không tìm thấy");
@@ -754,7 +964,7 @@ public class FormHoaDon extends JTablePanel {
     private JScrollPane jScrollPaneDetail;
     private TableColumn tableDetail;
 
-    private JLabel idHolder;
+    private JLabel idHolderCT;
     private final JPanel tablePanel = new JPanel();
     private final JLabel lbTableTitle = new JLabel();
     private final JButton btnTimKiem = new JButton();
@@ -773,7 +983,6 @@ public class FormHoaDon extends JTablePanel {
     private final JLabel lbMaSP = new JLabel();
     private JFormattedTextField txtThanhTienCT;
     private final JLabel lbThanhTienCT = new JLabel();
-    private final JButton btnSelectHD = new JButton();
     private JFormattedTextField txtKhuyenMaiCT;
     private final JLabel lbKhuyenMaiCT = new JLabel();
     private final JLabel lbDonGia = new JLabel();
@@ -801,9 +1010,7 @@ public class FormHoaDon extends JTablePanel {
     private JFormattedTextField txtKhuyenMai;
     private final JLabel lbThanhTien = new JLabel();
     private JFormattedTextField txtThanhTien;
-    private final JButton btnSelectNV = new JButton();
     private final JButton btnSelectKH = new JButton();
-    private final JButton btnSelectKhuyenMai = new JButton();
     private final JPanel ctHDPanel = new JPanel();
     private final JLabel lbThanhTienCTUnit = new JLabel();
     private final JLabel lbKhuyenMaiCTUnit = new JLabel();

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 25, 2022 lúc 09:24 AM
+-- Thời gian đã tạo: Th5 25, 2022 lúc 05:14 PM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.3
 
@@ -45,6 +45,7 @@ CREATE TABLE `ct_hoadon` (
 --
 
 CREATE TABLE `ct_khuyenmai` (
+  `MaCTKM` int(11) NOT NULL,
   `MaKM` int(10) UNSIGNED NOT NULL,
   `MaSP` int(10) UNSIGNED NOT NULL,
   `GiamGia` int(10) NOT NULL
@@ -131,6 +132,7 @@ INSERT INTO `ct_phanquyen` (`MaCTPQ`, `QuyenDoc`, `QuyenTao`, `QuyenSua`, `Quyen
 --
 
 CREATE TABLE `ct_phieunhap` (
+  `MaCTPN` int(11) NOT NULL,
   `MaPN` int(10) UNSIGNED NOT NULL,
   `MaSP` int(10) UNSIGNED NOT NULL,
   `SoLuong` int(10) NOT NULL,
@@ -149,9 +151,9 @@ CREATE TABLE `hoadon` (
   `MaKH` int(10) UNSIGNED NOT NULL,
   `MaNV` int(10) UNSIGNED NOT NULL,
   `NgayLap` timestamp NOT NULL DEFAULT current_timestamp(),
-  `TongTien` int(10) NOT NULL,
-  `TienKhuyenMai` int(10) NOT NULL,
-  `TienThanhToan` int(10) NOT NULL,
+  `TongTien` int(20) NOT NULL,
+  `TienKhuyenMai` int(20) NOT NULL,
+  `TienThanhToan` int(20) NOT NULL,
   `TinhTrang` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -165,27 +167,11 @@ CREATE TABLE `khachhang` (
   `MaKH` int(10) UNSIGNED NOT NULL,
   `Ho` varchar(50) NOT NULL,
   `Ten` varchar(50) NOT NULL,
-  `SDT` int(20) UNSIGNED NOT NULL,
+  `SDT` varchar(20) NOT NULL,
   `DiaChi` varchar(200) NOT NULL,
-  `Email` varchar(100) NOT NULL
+  `Email` varchar(100) NOT NULL,
+  `TinhTrang` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Đang đổ dữ liệu cho bảng `khachhang`
---
-
-INSERT INTO `khachhang` (`MaKH`, `Ho`, `Ten`, `SDT`, `DiaChi`, `Email`) VALUES
-(0, 'Nguyễn Bình ', 'Minh', 961197985, '128 Bàu cát', 'binhminhdaw@gmail.com'),
-(1, 'Nguyễn Bình ', 'Minhh', 961197985, '125 Bàu Sờ Cát', 'binhminhdaw@gmail.com'),
-(2, 'Nguyễn Bình ', 'Bình', 961197985, '125 Bàu Sô Cát', 'binhminhdaw@gmail.com'),
-(3, 'Trần Long Tuấn', 'Vũ ', 961666333, 'An Dương Vương', 'tuanvu@gmail.com'),
-(4, 'Hoàng ', 'Đại', 988877755, '123 lê hồng phong', 'hoangdai@gmail.com'),
-(5, 'Thành', 'Lộc', 977755511, '257 lê hồng phong', 'thanhloc@gmail.com'),
-(6, 'Nguyễn Bình', 'Minh', 944466622, '963 lê hồng phong', 'binhminh@gmail.com'),
-(7, 'Nguyễn Bình', 'Minh', 944466633, '963 lý thường', 'binhminh@gmail.com'),
-(8, 'Nguyễn Bình', 'Minh', 944466644, '963 âu sờ cơ', 'binhminh@gmail.com'),
-(9, 'Nguyễn Bình', 'Minh', 944466655, '963 lê duẩn', 'binhminh@gmail.com'),
-(10, 'Nguyễn Bình', 'Minh', 944466666, '963 lê đại thành', 'binhminh@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -198,7 +184,8 @@ CREATE TABLE `khuyenmai` (
   `TieuDe` varchar(100) NOT NULL,
   `NoiDung` text NOT NULL,
   `NgayBD` timestamp NULL DEFAULT NULL,
-  `NgayKT` timestamp NULL DEFAULT NULL
+  `NgayKT` timestamp NULL DEFAULT NULL,
+  `TinhTrang` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -402,7 +389,8 @@ CREATE TABLE `phieunhap` (
   `MaNCC` int(10) UNSIGNED NOT NULL,
   `MaNV` int(10) UNSIGNED NOT NULL,
   `NgayTao` timestamp NOT NULL DEFAULT current_timestamp(),
-  `TongTien` int(10) NOT NULL
+  `TongTien` int(20) NOT NULL,
+  `TinhTrang` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -418,7 +406,7 @@ CREATE TABLE `sanpham` (
   `TenSP` varchar(100) NOT NULL,
   `MoTa` text NOT NULL,
   `HinhAnh` varchar(200) NOT NULL,
-  `DonGia` int(10) UNSIGNED NOT NULL,
+  `DonGia` int(20) UNSIGNED NOT NULL,
   `DonVi` varchar(50) NOT NULL,
   `SoLuong` int(10) UNSIGNED NOT NULL,
   `TinhTrang` tinyint(1) NOT NULL
@@ -465,7 +453,8 @@ ALTER TABLE `ct_hoadon`
 -- Chỉ mục cho bảng `ct_khuyenmai`
 --
 ALTER TABLE `ct_khuyenmai`
-  ADD PRIMARY KEY (`MaKM`,`MaSP`),
+  ADD PRIMARY KEY (`MaCTKM`,`MaSP`),
+  ADD KEY `FK_CTKM_KM` (`MaKM`),
   ADD KEY `FK_CTKM_SP` (`MaSP`);
 
 --
@@ -478,7 +467,8 @@ ALTER TABLE `ct_phanquyen`
 -- Chỉ mục cho bảng `ct_phieunhap`
 --
 ALTER TABLE `ct_phieunhap`
-  ADD PRIMARY KEY (`MaPN`,`MaSP`),
+  ADD PRIMARY KEY (`MaCTPN`),
+  ADD KEY `FK_CTPN_PN` (`MaPN`),
   ADD KEY `FK_CTPN_SP` (`MaSP`);
 
 --
@@ -580,16 +570,34 @@ ALTER TABLE `ct_hoadon`
   MODIFY `MaCTHD` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT cho bảng `ct_khuyenmai`
+--
+ALTER TABLE `ct_khuyenmai`
+  MODIFY `MaCTKM` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT cho bảng `ct_phanquyen`
 --
 ALTER TABLE `ct_phanquyen`
   MODIFY `MaCTPQ` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
+-- AUTO_INCREMENT cho bảng `ct_phieunhap`
+--
+ALTER TABLE `ct_phieunhap`
+  MODIFY `MaCTPN` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT cho bảng `hoadon`
 --
 ALTER TABLE `hoadon`
   MODIFY `MaHD` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `khachhang`
+--
+ALTER TABLE `khachhang`
+  MODIFY `MaKH` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `khuyenmai`

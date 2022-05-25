@@ -370,6 +370,7 @@ public class FormTaiKhoan extends JTablePanel {
 
     private void onClickBtnThemListener() {
         ITaiKhoanBUS taiKhoanBUS = new TaiKhoanBUS();
+        IPhanQuyenBUS phanQuyenBUS = new PhanQuyenBUS();
         try {
             String initPassword = "nhanvien";
             String passwordSalt = Security.getSalt();
@@ -382,7 +383,9 @@ public class FormTaiKhoan extends JTablePanel {
             if (!Validator.isValidUsername(dto.getTenDangNhap()))
                 throw new Exception("Tên đăng nhập không hợp lệ.");
             if (dto.getMaPQ() == null)
-                throw new Exception("Vui lòng phân quyền cho tài khoản");
+                throw new Exception("Vui lòng phân quyền cho tài khoản.");
+            if (phanQuyenBUS.findByID(dto.getMaPQ()) == null)
+                throw new Exception("Không tìm thấy phân quyền này.");
 
             taiKhoanBUS.save(dto);
         } catch (Exception e) {

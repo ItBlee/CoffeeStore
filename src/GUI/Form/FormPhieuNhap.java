@@ -1,8 +1,18 @@
-package GUI.Form;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ */
+package com.mycompany.mavenproject1;
 
-import GUI.Form.Abstract.JTablePanel;
+/**
+ *
+ * @author ASUS
+ */
+public class FormPhieuNhap extends javax.swing.JPanel {
 
-public class FormPhieuNhap extends JTablePanel {
+    /**
+     * Creates new form FormPhieuNhap
+     */
     public FormPhieuNhap() {
         initComponents();
     }
@@ -16,411 +26,328 @@ public class FormPhieuNhap extends JTablePanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        textMapn = new javax.swing.JTextField();
-        textMancc = new javax.swing.JTextField();
-        javax.swing.JLabel labelMapn = new javax.swing.JLabel();
-        javax.swing.JLabel labelManv = new javax.swing.JLabel();
-        javax.swing.JLabel labelMancc = new javax.swing.JLabel();
-        textManv = new javax.swing.JTextField();
-        javax.swing.JLabel labelNgaytao = new javax.swing.JLabel();
-        textNgaytao = new javax.swing.JTextField();
-        jLabelTtpn = new javax.swing.JLabel();
-        textMahd1 = new javax.swing.JTextField();
-        textMakh1 = new javax.swing.JTextField();
-        textThanhtien1 = new javax.swing.JTextField();
-        javax.swing.JLabel labelMapn1 = new javax.swing.JLabel();
-        javax.swing.JLabel labelMasl1 = new javax.swing.JLabel();
-        javax.swing.JLabel labelMasp1 = new javax.swing.JLabel();
-        javax.swing.JLabel labelThanhtien1 = new javax.swing.JLabel();
-        textManv1 = new javax.swing.JTextField();
-        javax.swing.JLabel labelDongia1 = new javax.swing.JLabel();
-        textNgaylap1 = new javax.swing.JTextField();
-        javax.swing.JLabel labelTongtien = new javax.swing.JLabel();
-        textTongtien = new javax.swing.JTextField();
-        bntThem = new javax.swing.JButton();
-        btnSua = new javax.swing.JButton();
-        bntXoa = new javax.swing.JButton();
-        btnTim = new javax.swing.JButton();
-        btnRefresh = new javax.swing.JButton();
-        jLabelCtpn = new javax.swing.JLabel();
-        bntThem1 = new javax.swing.JButton();
-        btnSua1 = new javax.swing.JButton();
-        bntXoa1 = new javax.swing.JButton();
-        btnTim1 = new javax.swing.JButton();
-        btnRefresh1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTableTtpn = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTableCtpn = new javax.swing.JTable();
+        javax.swing.JPanel tablePanel2 = new javax.swing.JPanel();
+        javax.swing.JLabel lbTableTitle2 = new javax.swing.JLabel();
+        javax.swing.JButton btnTimKiem2 = new javax.swing.JButton();
+        javax.swing.JButton btnReset = new javax.swing.JButton();
+        javax.swing.JPanel pluginPanel = new javax.swing.JPanel();
+        javax.swing.JPanel detailPanel = new javax.swing.JPanel();
+        javax.swing.JLabel lbThanhTienCTUnit = new javax.swing.JLabel();
+        javax.swing.JLabel lbPasswordTitle = new javax.swing.JLabel();
+        javax.swing.JTextField txtMaPNCT = new javax.swing.JTextField();
+        javax.swing.JLabel lbMaPNCT = new javax.swing.JLabel();
+        javax.swing.JTextField txtSanPham = new javax.swing.JTextField();
+        javax.swing.JLabel lbSanPham = new javax.swing.JLabel();
+        javax.swing.JTextField txtSoLuong = new javax.swing.JTextField();
+        javax.swing.JLabel lbSoLuong = new javax.swing.JLabel();
+        javax.swing.JTextField txtMaSP = new javax.swing.JTextField();
+        javax.swing.JLabel lbMaSP = new javax.swing.JLabel();
+        javax.swing.JTextField txtThanhTienCT = new javax.swing.JTextField();
+        javax.swing.JLabel lbThanhTienCT = new javax.swing.JLabel();
+        javax.swing.JLabel lbDonGia = new javax.swing.JLabel();
+        javax.swing.JTextField txtDonGia = new javax.swing.JTextField();
+        javax.swing.JButton btnSelectSP = new javax.swing.JButton();
+        javax.swing.JButton btnThemCT = new javax.swing.JButton();
+        javax.swing.JButton btnSuaCT = new javax.swing.JButton();
+        javax.swing.JButton btnXoaCT = new javax.swing.JButton();
+        javax.swing.JPanel infoPanel = new javax.swing.JPanel();
+        javax.swing.JLabel lbTongTienUnit = new javax.swing.JLabel();
+        javax.swing.JLabel lbDetailTitle = new javax.swing.JLabel();
+        javax.swing.JLabel lbMaPN = new javax.swing.JLabel();
+        javax.swing.JLabel lbMaNCC = new javax.swing.JLabel();
+        javax.swing.JTextField txtMaHD = new javax.swing.JTextField();
+        javax.swing.JTextField txtMaNCC = new javax.swing.JTextField();
+        javax.swing.JButton btnThem = new javax.swing.JButton();
+        javax.swing.JButton btnSua = new javax.swing.JButton();
+        javax.swing.JButton btnXoa = new javax.swing.JButton();
+        javax.swing.JTextField txtTotal = new javax.swing.JTextField();
+        javax.swing.JLabel lbTotal = new javax.swing.JLabel();
+        javax.swing.JLabel lbMaNV = new javax.swing.JLabel();
+        javax.swing.JTextField txtMaNV = new javax.swing.JTextField();
+        javax.swing.JTextField txtNgayLap = new javax.swing.JTextField();
+        javax.swing.JLabel lbNgayLap = new javax.swing.JLabel();
+        javax.swing.JButton btnSelectNCC = new javax.swing.JButton();
+        javax.swing.JPanel detailTablePanel = new javax.swing.JPanel();
+        javax.swing.JButton btnReset1 = new javax.swing.JButton();
 
         setLayout(null);
 
-        textMapn.setToolTipText("");
-        add(textMapn);
-        textMapn.setBounds(130, 50, 150, 22);
+        tablePanel2.setBackground(new java.awt.Color(255, 255, 255));
+        tablePanel2.setLayout(null);
 
-        textMancc.setToolTipText("");
-        add(textMancc);
-        textMancc.setBounds(130, 80, 150, 22);
+        lbTableTitle2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lbTableTitle2.setForeground(new java.awt.Color(37, 57, 111));
+        lbTableTitle2.setText("Danh sách");
+        tablePanel2.add(lbTableTitle2);
+        lbTableTitle2.setBounds(30, 10, 240, 40);
 
-        labelMapn.setText("Mã Phiếu Nhập");
-        add(labelMapn);
-        labelMapn.setBounds(20, 50, 160, 16);
-
-        labelManv.setText("Mã Nhân Viên");
-        add(labelManv);
-        labelManv.setBounds(20, 110, 160, 16);
-
-        labelMancc.setText("Mã Cung Cấp");
-        add(labelMancc);
-        labelMancc.setBounds(20, 80, 150, 16);
-
-        textManv.setToolTipText("");
-        add(textManv);
-        textManv.setBounds(130, 110, 150, 22);
-
-        labelNgaytao.setText("Ngày Tạo");
-        add(labelNgaytao);
-        labelNgaytao.setBounds(20, 140, 88, 16);
-
-        textNgaytao.setToolTipText("");
-        textNgaytao.addActionListener(new java.awt.event.ActionListener() {
+        btnTimKiem2.setBackground(new java.awt.Color(229, 239, 255));
+        btnTimKiem2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnTimKiem2.setForeground(new java.awt.Color(54, 123, 245));
+        btnTimKiem2.setText("Tìm kiếm");
+        btnTimKiem2.setBorderPainted(false);
+        btnTimKiem2.setFocusPainted(false);
+        btnTimKiem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textNgaytaoActionPerformed(evt);
+                btnTimKiem2ActionPerformed(evt);
             }
         });
-        add(textNgaytao);
-        textNgaytao.setBounds(130, 140, 150, 22);
+        tablePanel2.add(btnTimKiem2);
+        btnTimKiem2.setBounds(410, 20, 170, 35);
 
-        jLabelTtpn.setText("THÔNG TIN PHIẾU NHẬP");
-        add(jLabelTtpn);
-        jLabelTtpn.setBounds(130, 20, 240, 16);
+        btnReset.setText("jButton3");
+        tablePanel2.add(btnReset);
+        btnReset.setBounds(590, 20, 40, 35);
 
-        textMahd1.setToolTipText("");
-        add(textMahd1);
-        textMahd1.setBounds(730, 50, 150, 22);
+        add(tablePanel2);
+        tablePanel2.setBounds(10, 400, 650, 410);
 
-        textMakh1.setToolTipText("");
-        add(textMakh1);
-        textMakh1.setBounds(730, 80, 150, 22);
+        pluginPanel.setBackground(new java.awt.Color(255, 255, 255));
+        pluginPanel.setLayout(null);
 
-        textThanhtien1.setToolTipText("");
-        textThanhtien1.addActionListener(new java.awt.event.ActionListener() {
+        detailPanel.setBackground(new java.awt.Color(255, 255, 255));
+        detailPanel.setLayout(null);
+
+        lbThanhTienCTUnit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbThanhTienCTUnit.setText("đồng");
+        detailPanel.add(lbThanhTienCTUnit);
+        lbThanhTienCTUnit.setBounds(390, 100, 50, 40);
+
+        lbPasswordTitle.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lbPasswordTitle.setForeground(new java.awt.Color(37, 57, 111));
+        lbPasswordTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbPasswordTitle.setText("Chi tiết phiếu nhập");
+        detailPanel.add(lbPasswordTitle);
+        lbPasswordTitle.setBounds(110, 20, 270, 40);
+
+        txtMaPNCT.setBackground(new java.awt.Color(245, 245, 245));
+        txtMaPNCT.setEnabled(false);
+        detailPanel.add(txtMaPNCT);
+        txtMaPNCT.setBounds(30, 100, 70, 35);
+
+        lbMaPNCT.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbMaPNCT.setText("Mã PN");
+        detailPanel.add(lbMaPNCT);
+        lbMaPNCT.setBounds(30, 80, 70, 20);
+
+        txtSanPham.setBackground(new java.awt.Color(245, 245, 245));
+        txtSanPham.setEnabled(false);
+        detailPanel.add(txtSanPham);
+        txtSanPham.setBounds(160, 160, 280, 35);
+
+        lbSanPham.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbSanPham.setText("Sản phẩm");
+        detailPanel.add(lbSanPham);
+        lbSanPham.setBounds(160, 140, 120, 20);
+
+        txtSoLuong.setBackground(new java.awt.Color(255, 255, 255));
+        txtSoLuong.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textThanhtien1ActionPerformed(evt);
+                txtSoLuongActionPerformed(evt);
             }
         });
-        add(textThanhtien1);
-        textThanhtien1.setBounds(730, 170, 150, 22);
+        detailPanel.add(txtSoLuong);
+        txtSoLuong.setBounds(160, 220, 80, 35);
 
-        labelMapn1.setText("Mã Phiếu Nhập");
-        add(labelMapn1);
-        labelMapn1.setBounds(620, 50, 170, 16);
+        lbSoLuong.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbSoLuong.setText("Số lượng");
+        detailPanel.add(lbSoLuong);
+        lbSoLuong.setBounds(160, 200, 80, 20);
 
-        labelMasl1.setText("Số Lượng");
-        add(labelMasl1);
-        labelMasl1.setBounds(620, 110, 88, 16);
+        txtMaSP.setBackground(new java.awt.Color(245, 245, 245));
+        txtMaSP.setEnabled(false);
+        detailPanel.add(txtMaSP);
+        txtMaSP.setBounds(30, 160, 70, 35);
 
-        labelMasp1.setText("Mã Sản Phẩm");
-        add(labelMasp1);
-        labelMasp1.setBounds(620, 80, 180, 16);
+        lbMaSP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbMaSP.setText("Mã SP");
+        detailPanel.add(lbMaSP);
+        lbMaSP.setBounds(30, 140, 70, 20);
 
-        labelThanhtien1.setText("Thành Tiền");
-        add(labelThanhtien1);
-        labelThanhtien1.setBounds(620, 170, 88, 16);
+        txtThanhTienCT.setBackground(new java.awt.Color(245, 245, 245));
+        txtThanhTienCT.setEnabled(false);
+        detailPanel.add(txtThanhTienCT);
+        txtThanhTienCT.setBounds(160, 100, 280, 35);
 
-        textManv1.setToolTipText("");
-        add(textManv1);
-        textManv1.setBounds(730, 110, 150, 22);
+        lbThanhTienCT.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbThanhTienCT.setText("Thành tiền");
+        detailPanel.add(lbThanhTienCT);
+        lbThanhTienCT.setBounds(160, 80, 130, 20);
 
-        labelDongia1.setText("Đơn Giá");
-        add(labelDongia1);
-        labelDongia1.setBounds(620, 140, 88, 16);
+        lbDonGia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbDonGia.setText("Đơn giá");
+        detailPanel.add(lbDonGia);
+        lbDonGia.setBounds(260, 200, 100, 20);
 
-        textNgaylap1.setToolTipText("");
-        textNgaylap1.addActionListener(new java.awt.event.ActionListener() {
+        txtDonGia.setBackground(new java.awt.Color(245, 245, 245));
+        txtDonGia.setEnabled(false);
+        detailPanel.add(txtDonGia);
+        txtDonGia.setBounds(260, 220, 180, 35);
+
+        btnSelectSP.setText("jButton1");
+        detailPanel.add(btnSelectSP);
+        btnSelectSP.setBounds(110, 160, 40, 35);
+
+        btnThemCT.setBackground(new java.awt.Color(220, 247, 227));
+        btnThemCT.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnThemCT.setForeground(new java.awt.Color(47, 168, 79));
+        btnThemCT.setText("Thêm");
+        btnThemCT.setBorderPainted(false);
+        btnThemCT.setFocusPainted(false);
+        btnThemCT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textNgaylap1ActionPerformed(evt);
+                btnThemCTActionPerformed(evt);
             }
         });
-        add(textNgaylap1);
-        textNgaylap1.setBounds(730, 140, 150, 22);
+        detailPanel.add(btnThemCT);
+        btnThemCT.setBounds(160, 280, 280, 40);
 
-        labelTongtien.setText("Tổng Tiền");
-        add(labelTongtien);
-        labelTongtien.setBounds(20, 170, 88, 16);
+        btnSuaCT.setBackground(new java.awt.Color(252, 243, 215));
+        btnSuaCT.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnSuaCT.setForeground(new java.awt.Color(243, 170, 24));
+        btnSuaCT.setText("Sửa");
+        btnSuaCT.setBorderPainted(false);
+        btnSuaCT.setFocusPainted(false);
+        detailPanel.add(btnSuaCT);
+        btnSuaCT.setBounds(260, 330, 180, 40);
 
-        textTongtien.setToolTipText("");
-        textTongtien.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textTongtienActionPerformed(evt);
-            }
-        });
-        add(textTongtien);
-        textTongtien.setBounds(130, 170, 150, 22);
+        btnXoaCT.setBackground(new java.awt.Color(254, 228, 226));
+        btnXoaCT.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnXoaCT.setForeground(new java.awt.Color(234, 61, 47));
+        btnXoaCT.setText("Xóa");
+        btnXoaCT.setBorderPainted(false);
+        btnXoaCT.setFocusPainted(false);
+        detailPanel.add(btnXoaCT);
+        btnXoaCT.setBounds(160, 330, 80, 40);
 
-        bntThem.setText("Thêm");
-        bntThem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bntThemActionPerformed(evt);
-            }
-        });
-        add(bntThem);
-        bntThem.setBounds(290, 50, 80, 22);
+        pluginPanel.add(detailPanel);
+        detailPanel.setBounds(0, 0, 470, 380);
 
+        add(pluginPanel);
+        pluginPanel.setBounds(520, 10, 470, 380);
+
+        infoPanel.setBackground(new java.awt.Color(255, 255, 255));
+        infoPanel.setLayout(null);
+
+        lbTongTienUnit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbTongTienUnit.setText("đồng");
+        infoPanel.add(lbTongTienUnit);
+        lbTongTienUnit.setBounds(380, 100, 50, 40);
+
+        lbDetailTitle.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lbDetailTitle.setForeground(new java.awt.Color(37, 57, 111));
+        lbDetailTitle.setText("Thông tin phiếu nhập");
+        infoPanel.add(lbDetailTitle);
+        lbDetailTitle.setBounds(130, 20, 290, 40);
+
+        lbMaPN.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbMaPN.setText("Mã");
+        infoPanel.add(lbMaPN);
+        lbMaPN.setBounds(80, 80, 70, 20);
+
+        lbMaNCC.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbMaNCC.setText("Nhà cung cấp");
+        infoPanel.add(lbMaNCC);
+        lbMaNCC.setBounds(80, 140, 120, 20);
+
+        txtMaHD.setBackground(new java.awt.Color(245, 245, 245));
+        txtMaHD.setEnabled(false);
+        infoPanel.add(txtMaHD);
+        txtMaHD.setBounds(80, 100, 70, 35);
+
+        txtMaNCC.setBackground(new java.awt.Color(245, 245, 245));
+        txtMaNCC.setEnabled(false);
+        infoPanel.add(txtMaNCC);
+        txtMaNCC.setBounds(80, 160, 290, 35);
+
+        btnThem.setBackground(new java.awt.Color(220, 247, 227));
+        btnThem.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnThem.setForeground(new java.awt.Color(47, 168, 79));
+        btnThem.setText("Thêm");
+        btnThem.setBorderPainted(false);
+        btnThem.setFocusPainted(false);
+        infoPanel.add(btnThem);
+        btnThem.setBounds(80, 280, 350, 40);
+
+        btnSua.setBackground(new java.awt.Color(252, 243, 215));
+        btnSua.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnSua.setForeground(new java.awt.Color(243, 170, 24));
         btnSua.setText("Sửa");
-        btnSua.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSuaActionPerformed(evt);
-            }
-        });
-        add(btnSua);
-        btnSua.setBounds(290, 80, 80, 22);
+        btnSua.setBorderPainted(false);
+        btnSua.setFocusPainted(false);
+        infoPanel.add(btnSua);
+        btnSua.setBounds(80, 330, 170, 40);
 
-        bntXoa.setText("Xóa");
-        bntXoa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bntXoaActionPerformed(evt);
-            }
-        });
-        add(bntXoa);
-        bntXoa.setBounds(290, 110, 80, 22);
+        btnXoa.setBackground(new java.awt.Color(254, 228, 226));
+        btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnXoa.setForeground(new java.awt.Color(234, 61, 47));
+        btnXoa.setText("Xóa");
+        btnXoa.setBorderPainted(false);
+        btnXoa.setFocusPainted(false);
+        infoPanel.add(btnXoa);
+        btnXoa.setBounds(270, 330, 160, 40);
 
-        btnTim.setText("Tìm");
-        btnTim.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTimActionPerformed(evt);
-            }
-        });
-        add(btnTim);
-        btnTim.setBounds(290, 140, 80, 22);
+        txtTotal.setBackground(new java.awt.Color(245, 245, 245));
+        txtTotal.setEnabled(false);
+        infoPanel.add(txtTotal);
+        txtTotal.setBounds(170, 100, 260, 35);
 
-        btnRefresh.setText("Tải Lại");
-        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshActionPerformed(evt);
-            }
-        });
-        add(btnRefresh);
-        btnRefresh.setBounds(290, 170, 80, 22);
+        lbTotal.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbTotal.setText("Tổng tiền");
+        infoPanel.add(lbTotal);
+        lbTotal.setBounds(170, 80, 130, 20);
 
-        jLabelCtpn.setText("CHI TIẾT PHIẾU NHẬP");
-        add(jLabelCtpn);
-        jLabelCtpn.setBounds(730, 20, 240, 16);
+        lbMaNV.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbMaNV.setText("Nhân viên");
+        infoPanel.add(lbMaNV);
+        lbMaNV.setBounds(80, 200, 120, 20);
 
-        bntThem1.setText("Thêm");
-        bntThem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bntThem1ActionPerformed(evt);
-            }
-        });
-        add(bntThem1);
-        bntThem1.setBounds(890, 50, 80, 22);
+        txtMaNV.setBackground(new java.awt.Color(245, 245, 245));
+        txtMaNV.setEnabled(false);
+        infoPanel.add(txtMaNV);
+        txtMaNV.setBounds(80, 220, 170, 35);
 
-        btnSua1.setText("Sửa");
-        btnSua1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSua1ActionPerformed(evt);
-            }
-        });
-        add(btnSua1);
-        btnSua1.setBounds(890, 80, 80, 22);
+        txtNgayLap.setBackground(new java.awt.Color(245, 245, 245));
+        txtNgayLap.setEnabled(false);
+        infoPanel.add(txtNgayLap);
+        txtNgayLap.setBounds(270, 220, 160, 35);
 
-        bntXoa1.setText("Xóa");
-        bntXoa1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bntXoa1ActionPerformed(evt);
-            }
-        });
-        add(bntXoa1);
-        bntXoa1.setBounds(890, 110, 80, 22);
+        lbNgayLap.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbNgayLap.setText("Ngày lập");
+        infoPanel.add(lbNgayLap);
+        lbNgayLap.setBounds(270, 200, 150, 20);
 
-        btnTim1.setText("Tìm");
-        btnTim1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTim1ActionPerformed(evt);
-            }
-        });
-        add(btnTim1);
-        btnTim1.setBounds(890, 140, 80, 22);
+        btnSelectNCC.setText("jButton1");
+        infoPanel.add(btnSelectNCC);
+        btnSelectNCC.setBounds(390, 160, 40, 35);
 
-        btnRefresh1.setText("Tải Lại");
-        btnRefresh1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefresh1ActionPerformed(evt);
-            }
-        });
-        add(btnRefresh1);
-        btnRefresh1.setBounds(890, 170, 80, 22);
+        add(infoPanel);
+        infoPanel.setBounds(10, 10, 500, 380);
 
-        jTableTtpn.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Mã Phiếu Nhập", "Mã Cung Cấp", "Mã Nhân Viên", "Ngày Tạo", "Tổng Tiền"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
+        detailTablePanel.setBackground(new java.awt.Color(255, 255, 255));
+        detailTablePanel.setLayout(null);
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTableTtpn.setColumnSelectionAllowed(true);
-        jTableTtpn.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTableTtpn);
+        btnReset1.setText("jButton3");
+        detailTablePanel.add(btnReset1);
+        btnReset1.setBounds(250, 20, 40, 35);
 
-        add(jScrollPane1);
-        jScrollPane1.setBounds(10, 250, 980, 300);
-
-        jTableCtpn.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Mã Phiếu Nhập", "Mã Sản Phẩm", "Số Lượng", "Đơn Giá", "Thành Tiền"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTableCtpn.setColumnSelectionAllowed(true);
-        jTableCtpn.getTableHeader().setReorderingAllowed(false);
-        jScrollPane2.setViewportView(jTableCtpn);
-
-        add(jScrollPane2);
-        jScrollPane2.setBounds(10, 560, 980, 250);
+        add(detailTablePanel);
+        detailTablePanel.setBounds(670, 400, 320, 410);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void textNgaytaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNgaytaoActionPerformed
+    private void btnTimKiem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiem2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textNgaytaoActionPerformed
+    }//GEN-LAST:event_btnTimKiem2ActionPerformed
 
-    private void textThanhtien1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textThanhtien1ActionPerformed
+    private void txtSoLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoLuongActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textThanhtien1ActionPerformed
+    }//GEN-LAST:event_txtSoLuongActionPerformed
 
-    private void textNgaylap1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNgaylap1ActionPerformed
+    private void btnThemCTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemCTActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textNgaylap1ActionPerformed
-
-    private void textTongtienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textTongtienActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textTongtienActionPerformed
-
-    private void bntThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntThemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bntThemActionPerformed
-
-    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSuaActionPerformed
-
-    private void bntXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntXoaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bntXoaActionPerformed
-
-    private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnTimActionPerformed
-
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRefreshActionPerformed
-
-    private void bntThem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntThem1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bntThem1ActionPerformed
-
-    private void btnSua1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSua1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSua1ActionPerformed
-
-    private void bntXoa1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntXoa1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bntXoa1ActionPerformed
-
-    private void btnTim1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTim1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnTim1ActionPerformed
-
-    private void btnRefresh1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefresh1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRefresh1ActionPerformed
+    }//GEN-LAST:event_btnThemCTActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bntThem;
-    private javax.swing.JButton bntThem1;
-    private javax.swing.JButton bntXoa;
-    private javax.swing.JButton bntXoa1;
-    private javax.swing.JButton btnRefresh;
-    private javax.swing.JButton btnRefresh1;
-    private javax.swing.JButton btnSua;
-    private javax.swing.JButton btnSua1;
-    private javax.swing.JButton btnTim;
-    private javax.swing.JButton btnTim1;
-    private javax.swing.JLabel jLabelCtpn;
-    private javax.swing.JLabel jLabelTtpn;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTableCtpn;
-    private javax.swing.JTable jTableTtpn;
-    private javax.swing.JTextField textMahd1;
-    private javax.swing.JTextField textMakh1;
-    private javax.swing.JTextField textMancc;
-    private javax.swing.JTextField textManv;
-    private javax.swing.JTextField textManv1;
-    private javax.swing.JTextField textMapn;
-    private javax.swing.JTextField textNgaylap1;
-    private javax.swing.JTextField textNgaytao;
-    private javax.swing.JTextField textThanhtien1;
-    private javax.swing.JTextField textTongtien;
     // End of variables declaration//GEN-END:variables
 }

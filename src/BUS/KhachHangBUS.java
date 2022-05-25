@@ -1,9 +1,11 @@
 package BUS;
 
 import BUS.Abstract.AbstractHistoricBUS;
+import BUS.Interfaces.IHoaDonBUS;
 import BUS.Interfaces.IKhachHangBUS;
 import DAO.Interfaces.IKhachHangDAO;
 import DAO.KhachHangDAO;
+import DTO.HoaDonDTO;
 import DTO.KhachHangDTO;
 import DTO.TaiKhoanDTO;
 import Utils.StringUtils;
@@ -110,6 +112,9 @@ public class KhachHangBUS extends AbstractHistoricBUS implements IKhachHangBUS {
 
     @Override
     public void delete(int id) throws Exception {
+        IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        for (HoaDonDTO dto:hoaDonBUS.findByKhachHang(id))
+            hoaDonBUS.delete(dto.getID());
         if (!khachHangDAO.delete(id))
             throw new Exception("Không thể xóa khách hàng (KH" + id + ").");
         listKhachHang.removeIf(khachHangDTO -> khachHangDTO.getMaKH() == id);
