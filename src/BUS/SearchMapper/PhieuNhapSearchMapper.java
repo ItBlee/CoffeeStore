@@ -35,16 +35,13 @@ public class PhieuNhapSearchMapper implements ISearchMapper {
                     }
 
                 case 3:
-                    return new ArrayList<IEntity>(bus.findBySDT(value));
-
-                case 4:
                     java.sql.Date sqlDate = java.sql.Date.valueOf(value);
                     return new ArrayList<IEntity>(bus.findByNgayTao(sqlDate, sqlDate));
 
-                case 5:
+                case 4:
                     return new ArrayList<IEntity>(bus.findByTongTien(Integer.valueOf(value)));
 
-                case 6:
+                case 5:
                     try {
                         return new ArrayList<IEntity>(bus.findByTinhTrang(Integer.valueOf(value)));
                     } catch (Exception ignored) {

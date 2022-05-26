@@ -7,7 +7,6 @@ import DAO.Interfaces.IKhachHangDAO;
 import DAO.KhachHangDAO;
 import DTO.HoaDonDTO;
 import DTO.KhachHangDTO;
-import DTO.TaiKhoanDTO;
 import Utils.StringUtils;
 
 import java.util.ArrayList;
@@ -118,7 +117,7 @@ public class KhachHangBUS extends AbstractHistoricBUS implements IKhachHangBUS {
         if (!khachHangDAO.delete(id))
             throw new Exception("Không thể xóa khách hàng (KH" + id + ").");
         listKhachHang.removeIf(khachHangDTO -> khachHangDTO.getMaKH() == id);
-        super.delete(TaiKhoanDTO.class, id);
+        super.delete(KhachHangDTO.class, id);
     }
 
     @Override

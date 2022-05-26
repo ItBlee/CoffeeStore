@@ -72,7 +72,8 @@ public class CT_HoaDonBUS implements ICT_HoaDonBUS {
 
         ISanPhamBUS sanPhamBUS = new SanPhamBUS();
         SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(ctHoaDon.getMaSP());
-        int newSL = sanPhamDTO.getSoLuong() + ctHoaDon.getSoLuong();
+        int newSL = sanPhamDTO.getSoLuong() - ctHoaDon.getSoLuong();
+        if (newSL < 0) newSL = 0;
         sanPhamDTO.setSoLuong(newSL);
         sanPhamBUS.update(sanPhamDTO);
 
@@ -105,7 +106,7 @@ public class CT_HoaDonBUS implements ICT_HoaDonBUS {
         }
         SanPhamBUS sanPhamBUS = new SanPhamBUS();
         SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(ctHoaDon.getMaSP());
-        int newSL = sanPhamDTO.getSoLuong() - oldSLSP + ctHoaDon.getSoLuong();
+        int newSL = sanPhamDTO.getSoLuong() + oldSLSP - ctHoaDon.getSoLuong();
         sanPhamDTO.setSoLuong(newSL);
         sanPhamBUS.update(sanPhamDTO);
 
@@ -129,7 +130,7 @@ public class CT_HoaDonBUS implements ICT_HoaDonBUS {
 
         ISanPhamBUS sanPhamBUS = new SanPhamBUS();
         SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(temp.getMaSP());
-        int newSL = sanPhamDTO.getSoLuong() - temp.getSoLuong();
+        int newSL = sanPhamDTO.getSoLuong() + temp.getSoLuong();
         sanPhamDTO.setSoLuong(newSL);
         sanPhamBUS.update(sanPhamDTO);
 

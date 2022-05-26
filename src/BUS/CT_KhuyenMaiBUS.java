@@ -43,11 +43,12 @@ public class CT_KhuyenMaiBUS implements ICT_KhuyenMaiBUS {
     }
 
     @Override
-    public CT_KhuyenMaiDTO findByMaSP(Integer MaSP) {
+    public ArrayList<CT_KhuyenMaiDTO> findByMaSP(Integer MaSP) {
+        ArrayList<CT_KhuyenMaiDTO> result = new ArrayList<CT_KhuyenMaiDTO>();
         for (CT_KhuyenMaiDTO ctKhuyenMaiDTO : listCTKhuyenMai)
             if (ctKhuyenMaiDTO.getMaSP().equals(MaSP))
-                return ctKhuyenMaiDTO;
-        return null;
+                result.add(ctKhuyenMaiDTO);
+        return result;
     }
 
     @Override

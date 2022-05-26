@@ -7,7 +7,6 @@ import DAO.Interfaces.INhaCungCapDAO;
 import DAO.NhaCungCapDAO;
 import DTO.NhaCungCapDTO;
 import DTO.PhieuNhapDTO;
-import DTO.TaiKhoanDTO;
 import Utils.StringUtils;
 
 import java.util.ArrayList;
@@ -119,7 +118,7 @@ public class NhaCungCapBUS extends AbstractHistoricBUS implements INhaCungCapBUS
         if (!nhaCungCapDAO.delete(id))
             throw new Exception("Không thể xóa nhà cung cấp (NCC" + id + ").");
         listNhaCungCap.removeIf(nhaCungCapDTO -> nhaCungCapDTO.getMaNCC() == id);
-        super.delete(TaiKhoanDTO.class, id);
+        super.delete(NhaCungCapDTO.class, id);
     }
 
     @Override
