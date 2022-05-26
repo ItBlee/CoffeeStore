@@ -49,13 +49,15 @@ public class FrameSelect extends MovableJFrame {
         fillTable(null);
     }
 
-    private void fillTable(ArrayList<IEntity> idList) {
+    private void fillTable(ArrayList<IEntity> idList) throws Exception {
         JTablePanel parentPanel = getParentTable();
         if (parentPanel != null) {
             parentPanel.fillTable(idList);
             DefaultTableModel currentModel = (DefaultTableModel) table.getModel();
             currentModel.setRowCount(0);
             DefaultTableModel newModel = (DefaultTableModel) parentPanel.getTable().getModel();
+            if (newModel.getRowCount() <=0)
+                throw new Exception("Không có " + target + " nào để chọn.");
             for (Vector vector:newModel.getDataVector())
                 currentModel.addRow(vector);
             parentPanel.fillTable();
@@ -281,7 +283,11 @@ public class FrameSelect extends MovableJFrame {
                 ((JDateChooser) component).setCalendar(null);
         }
         group.clearSelection();
-        fillTable(null);
+        try {
+            fillTable(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void onClickBtnSearchListener() {
@@ -335,7 +341,11 @@ public class FrameSelect extends MovableJFrame {
 
         searchList.removeIf(entity -> entity == null || entity.getID() == null);
 
-        fillTable(searchList);
+        try {
+            fillTable(searchList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private ArrayList<IEntity> union(ArrayList<IEntity> list1, ArrayList<IEntity> list2) {
