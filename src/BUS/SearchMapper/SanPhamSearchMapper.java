@@ -21,11 +21,7 @@ public class SanPhamSearchMapper implements ISearchMapper {
                     return result;
 
                 case 1:
-                    try {
-                        return new ArrayList<IEntity>(bus.findByNhaCungCap(Integer.valueOf(value)));
-                    } catch (Exception ignored) {
-                        return new ArrayList<IEntity>(bus.findByNhaCungCap(value));
-                    }
+                    return new ArrayList<IEntity>(bus.findByTenSP(value));
 
                 case 2:
                     try {
@@ -35,7 +31,11 @@ public class SanPhamSearchMapper implements ISearchMapper {
                     }
 
                 case 3:
-                    return new ArrayList<IEntity>(bus.findByTenSP(value));
+                    try {
+                        return new ArrayList<IEntity>(bus.findByNhaCungCap(Integer.valueOf(value)));
+                    } catch (Exception ignored) {
+                        return new ArrayList<IEntity>(bus.findByNhaCungCap(value));
+                    }
 
                 case 4:
                     return new ArrayList<IEntity>(bus.findByDonGia(Integer.valueOf(value)));

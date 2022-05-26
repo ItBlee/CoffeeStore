@@ -1,15 +1,55 @@
 package GUI.Form;
 
+import BUS.Interfaces.IKhachHangBUS;
+import BUS.KhachHangBUS;
+import BUS.SearchMapper.KhachHangSearchMapper;
+import DTO.Interface.IEntity;
+import DTO.KhachHangDTO;
 import GUI.Form.Abstract.JTablePanel;
+import GUI.FrameSearch;
 import GUI.components.TableColumn;
+import Utils.General;
+import Utils.Validator;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class FormKhachHang extends JTablePanel {
     public FormKhachHang() {
         initComponents();
+        fillTable();
+    }
+
+    public void fillTable() {
+        fillTable(null);
+    }
+
+    public void fillTable(ArrayList<IEntity> idList) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
+        IKhachHangBUS khachHangBUS = new KhachHangBUS();
+
+        ArrayList<KhachHangDTO> list = new ArrayList<KhachHangDTO>();
+        if (idList == null)
+            list = khachHangBUS.findAll();
+        else
+            for (IEntity entity:idList)
+                list.add(khachHangBUS.findByID(entity.getID()));
+
+        for (KhachHangDTO dto: list) {
+            Object[] row;
+            if (General.CURRENT_ROLE.isAdmin())
+                row = new Object[] { "KH" + dto.getMaKH(), dto.getHoTen(), dto.getSDT(), dto.getDiaChi(), dto.getEmail(),
+                        dto.getTinhTrang() == 1 ? "Hoạt động" : "Vô hiệu"};
+            else row = new Object[] { "KH" + dto.getMaKH(), dto.getHoTen(), dto.getSDT(), dto.getDiaChi(), dto.getEmail() };
+            model.addRow(row);
+        }
     }
     
     private void initComponents() {
@@ -68,6 +108,14 @@ public class FormKhachHang extends JTablePanel {
         btnThem.setText("Thêm");
         btnThem.setBorderPainted(false);
         btnThem.setFocusPainted(false);
+        btnThem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (btnThem.getText().equalsIgnoreCase("Thêm"))
+                    onClickBtnThemListener();
+                else onClickBtnKichHoatListener();
+            }
+        });
         infoPanel.add(btnThem);
         btnThem.setBounds(30, 320, 170, 35);
 
@@ -77,6 +125,12 @@ public class FormKhachHang extends JTablePanel {
         btnSua.setText("Sửa");
         btnSua.setBorderPainted(false);
         btnSua.setFocusPainted(false);
+        btnSua.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnSuaListener();
+            }
+        });
         infoPanel.add(btnSua);
         btnSua.setBounds(30, 280, 440, 35);
 
@@ -86,6 +140,12 @@ public class FormKhachHang extends JTablePanel {
         btnXoa.setText("Xóa");
         btnXoa.setBorderPainted(false);
         btnXoa.setFocusPainted(false);
+        btnXoa.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnXoaListener();
+            }
+        });
         infoPanel.add(btnXoa);
         btnXoa.setBounds(230, 320, 240, 35);
 
@@ -114,52 +174,59 @@ public class FormKhachHang extends JTablePanel {
         btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.setBorderPainted(false);
         btnTimKiem.setFocusPainted(false);
+        btnTimKiem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnTimKiemListener();
+            }
+        });
         tablePanel.add(btnTimKiem);
         btnTimKiem.setBounds(750, 20, 170, 40);
 
         btnReset.setIcon(new ImageIcon("bin/images/components/reset.png"));
+        btnReset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnResetListener();
+            }
+        });
         tablePanel.add(btnReset);
         btnReset.setBounds(923, 20, 40, 40);
 
-        JScrollPane jScrollPane = new JScrollPane();
+        jScrollPane = new JScrollPane();
         jScrollPane.setBackground(Color.white);
         jScrollPane.setBorder(BorderFactory.createEmptyBorder());
         jScrollPane.setFocusable(false);
 
-        TableColumn table = new TableColumn();
-        table.setModel(new DefaultTableModel(
-                new Object [][] {
-
-                },
-                new String [] {
-                        "Mã", "Họ tên", "Giới tính", "Tuổi", "Email", "Số điện thoại"
-                }
-        ) {
-            final boolean[] canEdit = new boolean [] {
-                    false, false, false, false, false, false
+        table = new TableColumn();
+        if (General.CURRENT_ROLE.isAdmin())
+            columnHeader = new String [] {
+                    "Mã", "Họ tên", "Số điện thoại", "Địa chỉ", "Email", "Tình trạng"
             };
+        else columnHeader = new String [] {
+                "Mã", "Họ tên", "Số điện thoại", "Địa chỉ", "Email"
+        };
+        table.setModel(new DefaultTableModel(
+                new Object [][] {},
+                columnHeader
+        ) {
+            final boolean[] canEdit = new boolean [columnHeader.length];
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+
         jScrollPane.setViewportView(table);
         if (table.getColumnModel().getColumnCount() > 0) {
             table.getColumnModel().getColumn(0).setPreferredWidth(50);
         }
 
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        model.addRow(new Object[]{1, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{2, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{3, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{4, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{5, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{6, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{7, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{8, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{9, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{10, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
-        model.addRow(new Object[]{11, "Trần Long Tuấn Vũ", "Nam", "22", "tranlongtuanvu@gmail.com", "+099 966 666 333"});
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                onClickTableRow();
+            }
+        });
 
         tablePanel.add(jScrollPane);
         jScrollPane.setBounds(22, 60, 940, 350);
@@ -261,6 +328,168 @@ public class FormKhachHang extends JTablePanel {
 
         add(taskPanel);
         taskPanel.setBounds(520, 10, 470, 380);
+    }
+
+    private KhachHangDTO getUserInput() {
+        Integer idNCC = null;
+        try {
+            idNCC = Integer.valueOf(txtMaKH.getText().replace("KH", ""));
+        } catch (NumberFormatException ignored) {}
+
+        KhachHangDTO dto = new KhachHangDTO();
+        dto.setMaKH(idNCC);
+        dto.setHo(txtHo.getText());
+        dto.setTen(txtTen.getText());
+        dto.setSDT(txtSDT.getText());
+        dto.setDiaChi(txtDiaChi.getText());
+        dto.setTinhTrang(1);
+        return dto;
+    }
+
+    private void onClickBtnThemListener() {
+        IKhachHangBUS khachHangBUS = new KhachHangBUS();
+        try {
+            KhachHangDTO dto = getUserInput();
+            if (!Validator.isValidName(dto.getHoTen()))
+                throw new Exception("Tên không hợp lệ.");
+            if (!Validator.isValidPhone(dto.getSDT()))
+                throw new Exception("Số điện thoại không hợp lệ.");
+            if (!Validator.isValidEmail(dto.getEmail()))
+                throw new Exception("Email không hợp lệ.");
+            khachHangBUS.save(dto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormKhachHang.this, "Thêm khách hàng thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(FormKhachHang.this, "Thêm khách hàng thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        onClickBtnResetListener();
+        int newIndex = table.getRowCount()-1;
+        table.setRowSelectionInterval(newIndex, newIndex);
+        JScrollBar bar = jScrollPane.getVerticalScrollBar();
+        bar.setValue(bar.getMaximum());
+    }
+
+    private void onClickBtnKichHoatListener() {
+        IKhachHangBUS khachHangBUS = new KhachHangBUS();
+        try {
+            KhachHangDTO newDto = getUserInput();
+            KhachHangDTO oldDto = khachHangBUS.findByID(newDto.getMaKH());
+            if (oldDto == null)
+                throw new Exception("Không tìm thấy khách hàng." );
+            oldDto.setTinhTrang(1);
+            khachHangBUS.update(oldDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormKhachHang.this, "Kích hoạt khách hàng thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(FormKhachHang.this, "Kích hoạt khách hàng thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        fillTable();
+    }
+
+
+    private void onClickBtnSuaListener() {
+        IKhachHangBUS khachHangBUS = new KhachHangBUS();
+        try {
+            KhachHangDTO newDto = getUserInput();
+            if (newDto.getMaKH() == null)
+                throw new Exception("Vui lòng chọn khách hàng.");
+            if (khachHangBUS.findByID(newDto.getMaKH()) == null)
+                throw new Exception("Không tìm thấy khách hàng." );
+            if (!Validator.isValidName(newDto.getHoTen()))
+                throw new Exception("Tên không hợp lệ.");
+            if (!Validator.isValidPhone(newDto.getSDT()))
+                throw new Exception("Số điện thoại không hợp lệ.");
+            if (!Validator.isValidEmail(newDto.getEmail()))
+                throw new Exception("Email không hợp lệ.");
+            khachHangBUS.update(newDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormKhachHang.this, "Sửa khách hàng thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(FormKhachHang.this, "Sửa khách hàng thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        fillTable();
+    }
+
+    private void onClickBtnXoaListener() {
+        IKhachHangBUS khachHangBUS = new KhachHangBUS();
+        try {
+            KhachHangDTO userInput = getUserInput();
+            if (userInput.getMaKH() == null)
+                throw new Exception("Vui lòng chọn khách hàng.");
+            KhachHangDTO dto = khachHangBUS.findByID(userInput.getMaKH());
+            if (dto == null)
+                throw new Exception("Không tìm thấy khách hàng." );
+            if (General.CURRENT_ROLE.isAdmin() && dto.getTinhTrang() == 0)
+                khachHangBUS.delete(dto.getMaKH());
+            else {
+                dto.setTinhTrang(0);
+                khachHangBUS.update(dto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormKhachHang.this, "Xóa khách hàng thất bại!\n" + (e.getMessage() == null || e.getMessage().isEmpty() ? "" : e.getMessage()), "Thất bại", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(FormKhachHang.this, "Xóa khách hàng thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        onClickBtnResetListener();
+    }
+
+    private void onClickBtnTimKiemListener() {
+        try {
+            JFrame frame = new FrameSearch("khách hàng", new KhachHangSearchMapper(), FormKhachHang.class);
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    frame.setVisible(true);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormKhachHang.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void onClickBtnResetListener() {
+        fillTable();
+        for (Component component:infoPanel.getComponents()) {
+            if (component instanceof JTextField)
+                ((JTextField) component).setText("");
+        }
+        btnThem.setText("Thêm");
+        btnXoa.setText("Xóa");
+    }
+
+    private void onClickTableRow() {
+        int index = table.getSelectedRow();
+        IKhachHangBUS khachHangBUS = new KhachHangBUS();
+        int selectedID;
+        try {
+            selectedID = Integer.parseInt(((String) table.getValueAt(index, 0)).replace("KH", ""));
+        } catch (Exception e) {
+            return;
+        }
+        KhachHangDTO dto = khachHangBUS.findByID(selectedID);
+        if (dto == null)
+            return;
+
+        txtMaKH.setText("KH" + dto.getMaKH());
+        txtHo.setText(dto.getHo());
+        txtTen.setText(dto.getTen());
+        txtSDT.setText(dto.getSDT());
+        txtEmail.setText(dto.getEmail());
+        txtDiaChi.setText(dto.getDiaChi());
+
+        if (General.CURRENT_ROLE.isAdmin() && dto.getTinhTrang() == 0) {
+            btnThem.setText("Kích hoạt");
+            btnXoa.setText("Xóa");
+            txtDiaChi.setText("Vô hiệu hóa");
+        } else {
+            btnThem.setText("Thêm");
+            btnXoa.setText("Xóa");
+        }
     }
 
     private final JPanel infoPanel = new JPanel();

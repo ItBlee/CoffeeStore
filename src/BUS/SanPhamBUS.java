@@ -155,8 +155,7 @@ public class SanPhamBUS extends AbstractHistoricBUS implements ISanPhamBUS {
         for (CT_PhieuNhapDTO dto: ctPhieuNhapBUS.findByMaSP(id))
             ctPhieuNhapBUS.delete(dto.getID());
         ICT_KhuyenMaiBUS ctKhuyenMaiBUS = new CT_KhuyenMaiBUS();
-        for (CT_KhuyenMaiDTO dto: ctKhuyenMaiBUS.findByMaSP(id))
-            ctKhuyenMaiBUS.delete(dto.getID());
+        ctKhuyenMaiBUS.delete(ctKhuyenMaiBUS.findByMaSP(id).getID());
         if (!sanPhamDAO.delete(id))
             throw new Exception("Không thể xóa sản phẩm (SP" + id + ").");
         listSanPham.removeIf(sanPhamDTO -> sanPhamDTO.getMaSP() == id);

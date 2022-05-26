@@ -22,6 +22,12 @@ public class KhuyenMaiSearchMapper implements ISearchMapper {
                 case 1:
                     return new ArrayList<IEntity>(bus.findByTieuDe(value));
 
+                case 2:
+
+                case 3:
+                    java.sql.Date sqlDate = java.sql.Date.valueOf(value);
+                    return new ArrayList<IEntity>(bus.findByThoiGian(sqlDate, sqlDate));
+
                 default:
                     return result;
             }

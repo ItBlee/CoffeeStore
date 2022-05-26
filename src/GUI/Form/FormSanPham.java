@@ -1,9 +1,15 @@
 package GUI.Form;
 
 import GUI.Form.Abstract.JTablePanel;
+import GUI.components.TableColumn;
+import Utils.General;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.text.NumberFormat;
 
 public class FormSanPham extends JTablePanel {
     public FormSanPham() {
@@ -34,6 +40,43 @@ public class FormSanPham extends JTablePanel {
         btnReset.setText("jButton3");
         tablePanel.add(btnReset);
         btnReset.setBounds(590, 20, 40, 35);
+
+        jScrollPane = new JScrollPane();
+        jScrollPane.setBackground(Color.white);
+        jScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        jScrollPane.setFocusable(false);
+
+        table = new TableColumn();
+        if (General.CURRENT_ROLE.isAdmin())
+            columnHeader = new String [] {
+                    "Mã", "Tên", "Loại", "Nguồn", "Đơn giá", "Đơn vị", "Số lượng", "Tình trạng"
+            };
+        else columnHeader = new String [] {
+                "Mã", "Tên", "Loại", "Nguồn", "Đơn giá", "Đơn vị", "Số lượng"
+        };
+        table.setModel(new DefaultTableModel(
+                new Object [][] {},
+                columnHeader
+        ) {
+            final boolean[] canEdit = new boolean [columnHeader.length];
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+
+        jScrollPane.setViewportView(table);
+        if (table.getColumnModel().getColumnCount() > 0) {
+            table.getColumnModel().getColumn(0).setPreferredWidth(50);
+        }
+
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                //onClickTableRow();
+            }
+        });
+        tablePanel.add(jScrollPane);
+        jScrollPane.setBounds(22, 60, 630, 350);
 
         add(tablePanel);
         tablePanel.setBounds(10, 400, 650, 410);
@@ -246,6 +289,9 @@ public class FormSanPham extends JTablePanel {
         lbDonGia.setText("Đơn giá");
         infoPanel.add(lbDonGia);
         lbDonGia.setBounds(31, 200, 130, 20);
+
+        NumberFormat principleFormat = NumberFormat.getNumberInstance();
+        txtDonGia = new JFormattedTextField(principleFormat);
         infoPanel.add(txtDonGia);
         txtDonGia.setBounds(30, 220, 170, 35);
 
@@ -283,9 +329,46 @@ public class FormSanPham extends JTablePanel {
         tableLoaiSPPanel.add(lbCategoryTableTitle);
         lbCategoryTableTitle.setBounds(30, 10, 130, 40);
 
+        jScrollPaneDetail = new JScrollPane();
+        jScrollPaneDetail.setBackground(Color.white);
+        jScrollPaneDetail.setBorder(BorderFactory.createEmptyBorder());
+        jScrollPaneDetail.setFocusable(false);
+
+        tableDetail = new TableColumn();
+        columnHeaderDetail = new String [] {
+                "Mã", "Tên"
+        };
+        tableDetail.setModel(new DefaultTableModel(
+                new Object [][] {},
+                columnHeaderDetail
+        ) {
+            final boolean[] canEdit = new boolean [columnHeaderDetail.length];
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+
+        jScrollPaneDetail.setViewportView(tableDetail);
+        if (tableDetail.getColumnModel().getColumnCount() > 0) {
+            tableDetail.getColumnModel().getColumn(0).setPreferredWidth(50);
+        }
+
+        tableDetail.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                //onClickTableDetailRow();
+            }
+        });
+        tableLoaiSPPanel.add(jScrollPaneDetail);
+        jScrollPaneDetail.setBounds(22, 60, 280, 350);
+
         add(tableLoaiSPPanel);
         tableLoaiSPPanel.setBounds(670, 400, 320, 410);
     }
+
+    private String[] columnHeaderDetail;
+    private JScrollPane jScrollPaneDetail;
+    private TableColumn tableDetail;
 
     private final JPanel tablePanel = new JPanel();
     private final JLabel lbTableTitle = new JLabel();
@@ -329,7 +412,7 @@ public class FormSanPham extends JTablePanel {
     private final JTextField txtDonVi = new JTextField();
     private final JLabel lbDonVi = new JLabel();
     private final JLabel lbDonGia = new JLabel();
-    private final JTextField txtDonGia = new JTextField();
+    private JFormattedTextField txtDonGia;
     private final JLabel lbSoLuong = new JLabel();
     private final JTextField txtSoLuong = new JTextField();
     private final JButton btnSelectKH = new JButton();

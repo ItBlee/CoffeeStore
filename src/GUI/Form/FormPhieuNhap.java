@@ -1,9 +1,15 @@
 package GUI.Form;
 
 import GUI.Form.Abstract.JTablePanel;
+import GUI.components.TableColumn;
+import Utils.General;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.text.NumberFormat;
 
 public class FormPhieuNhap extends JTablePanel {
     public FormPhieuNhap() {
@@ -11,6 +17,7 @@ public class FormPhieuNhap extends JTablePanel {
     }
     
     private void initComponents() {
+        NumberFormat principleFormat = NumberFormat.getNumberInstance();
         setLayout(null);
 
         tablePanel2.setBackground(new Color(255, 255, 255));
@@ -34,6 +41,43 @@ public class FormPhieuNhap extends JTablePanel {
         btnReset.setText("jButton3");
         tablePanel2.add(btnReset);
         btnReset.setBounds(590, 20, 40, 35);
+
+        jScrollPane = new JScrollPane();
+        jScrollPane.setBackground(Color.white);
+        jScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        jScrollPane.setFocusable(false);
+
+        table = new TableColumn();
+        if (General.CURRENT_ROLE.isAdmin())
+            columnHeader = new String [] {
+                    "Mã", "Nguồn cung", "Nhân viên", "Ngày lập", "Tổng tiền", "Tình trạng"
+            };
+        else columnHeader = new String [] {
+                "Mã", "Nguồn cung", "Nhân viên", "Ngày lập", "Tổng tiền"
+        };
+        table.setModel(new DefaultTableModel(
+                new Object [][] {},
+                columnHeader
+        ) {
+            final boolean[] canEdit = new boolean [columnHeader.length];
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+
+        jScrollPane.setViewportView(table);
+        if (table.getColumnModel().getColumnCount() > 0) {
+            table.getColumnModel().getColumn(0).setPreferredWidth(50);
+        }
+
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+               // onClickTableRow();
+            }
+        });
+        tablePanel2.add(jScrollPane);
+        jScrollPane.setBounds(22, 60, 630, 350);
 
         add(tablePanel2);
         tablePanel2.setBounds(10, 400, 650, 410);
@@ -95,6 +139,7 @@ public class FormPhieuNhap extends JTablePanel {
         detailPanel.add(lbMaSP);
         lbMaSP.setBounds(30, 140, 70, 20);
 
+        txtThanhTienCT = new JFormattedTextField(principleFormat);
         txtThanhTienCT.setBackground(new Color(245, 245, 245));
         txtThanhTienCT.setEnabled(false);
         detailPanel.add(txtThanhTienCT);
@@ -110,6 +155,7 @@ public class FormPhieuNhap extends JTablePanel {
         detailPanel.add(lbDonGia);
         lbDonGia.setBounds(260, 200, 100, 20);
 
+        txtDonGia = new JFormattedTextField(principleFormat);
         txtDonGia.setBackground(new Color(245, 245, 245));
         txtDonGia.setEnabled(false);
         detailPanel.add(txtDonGia);
@@ -213,6 +259,7 @@ public class FormPhieuNhap extends JTablePanel {
         infoPanel.add(btnXoa);
         btnXoa.setBounds(270, 330, 160, 40);
 
+        txtTotal = new JFormattedTextField(principleFormat);
         txtTotal.setBackground(new Color(245, 245, 245));
         txtTotal.setEnabled(false);
         infoPanel.add(txtTotal);
@@ -257,9 +304,46 @@ public class FormPhieuNhap extends JTablePanel {
         detailTablePanel.add(btnReset1);
         btnReset1.setBounds(250, 20, 40, 35);
 
+        jScrollPaneDetail = new JScrollPane();
+        jScrollPaneDetail.setBackground(Color.white);
+        jScrollPaneDetail.setBorder(BorderFactory.createEmptyBorder());
+        jScrollPaneDetail.setFocusable(false);
+
+        tableDetail = new TableColumn();
+        columnHeaderDetail = new String [] {
+                "Mã SP", "Số lượng", "Đơn giá"
+        };
+        tableDetail.setModel(new DefaultTableModel(
+                new Object [][] {},
+                columnHeaderDetail
+        ) {
+            final boolean[] canEdit = new boolean [columnHeaderDetail.length];
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+
+        jScrollPaneDetail.setViewportView(tableDetail);
+        if (tableDetail.getColumnModel().getColumnCount() > 0) {
+            tableDetail.getColumnModel().getColumn(0).setPreferredWidth(50);
+        }
+
+        tableDetail.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                //onClickTableDetailRow();
+            }
+        });
+        detailTablePanel.add(jScrollPaneDetail);
+        jScrollPaneDetail.setBounds(22, 60, 280, 350);
+
         add(detailTablePanel);
         detailTablePanel.setBounds(670, 400, 320, 410);
     }
+
+    private String[] columnHeaderDetail;
+    private JScrollPane jScrollPaneDetail;
+    private TableColumn tableDetail;
 
     private final JPanel tablePanel2 = new JPanel();
     private final JLabel lbTableTitle2 = new JLabel();
@@ -277,10 +361,10 @@ public class FormPhieuNhap extends JTablePanel {
     private final JLabel lbSoLuong = new JLabel();
     private final JTextField txtMaSP = new JTextField();
     private final JLabel lbMaSP = new JLabel();
-    private final JTextField txtThanhTienCT = new JTextField();
+    private JFormattedTextField txtThanhTienCT;
     private final JLabel lbThanhTienCT = new JLabel();
     private final JLabel lbDonGia = new JLabel();
-    private final JTextField txtDonGia = new JTextField();
+    private JFormattedTextField txtDonGia;
     private final JButton btnSelectSP = new JButton();
     private final JButton btnThemCT = new JButton();
     private final JButton btnSuaCT = new JButton();
@@ -295,7 +379,7 @@ public class FormPhieuNhap extends JTablePanel {
     private final JButton btnThem = new JButton();
     private final JButton btnSua = new JButton();
     private final JButton btnXoa = new JButton();
-    private final JTextField txtTotal = new JTextField();
+    private JFormattedTextField txtTotal;
     private final JLabel lbTotal = new JLabel();
     private final JLabel lbMaNV = new JLabel();
     private final JTextField txtMaNV = new JTextField();

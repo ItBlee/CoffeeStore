@@ -43,6 +43,8 @@ public class FormHoaDon extends JTablePanel {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
         IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
 
         ArrayList<HoaDonDTO> list = new ArrayList<HoaDonDTO>();
         if (idList == null)
@@ -55,15 +57,17 @@ public class FormHoaDon extends JTablePanel {
             Object[] row;
             if (General.CURRENT_ROLE.isAdmin())
                 row = new Object[] { "HD" + dto.getMaHD(), "KH" + dto.getMaKH(), "NV" + dto.getMaNV(),
-                        dto.getNgayLap(), dto.getTongTien(), dto.getTienKhuyenMai(),
+                        dto.getNgayLap(), currencyVN.format(dto.getTongTien()), currencyVN.format(dto.getTienKhuyenMai()),
                         dto.getTinhTrang() == 1 ? "Hoạt động" : "Vô hiệu"};
             else row = new Object[] { "HD" + dto.getMaHD(), "KH" + dto.getMaKH(), "NV" + dto.getMaNV(),
-                        dto.getNgayLap(), dto.getTongTien(), dto.getTienKhuyenMai()};
+                        dto.getNgayLap(), currencyVN.format(dto.getTongTien()), currencyVN.format(dto.getTienKhuyenMai())};
             model.addRow(row);
         }
     }
 
     public void fillTableDetail(Integer id) {
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         DefaultTableModel model = (DefaultTableModel) tableDetail.getModel();
         model.setRowCount(0);
         if (id == null)
@@ -72,7 +76,7 @@ public class FormHoaDon extends JTablePanel {
 
         ArrayList<CT_HoaDonDTO> list = ctHoaDonBUS.findByMaHD(id);
         for (CT_HoaDonDTO dto: list) {
-            Object[] row = new Object[] { "SP" + dto.getMaSP(), dto.getSoLuong(), dto.getTienKhuyenMai()};
+            Object[] row = new Object[] { "SP" + dto.getMaSP(), dto.getSoLuong(), currencyVN.format(dto.getTienKhuyenMai())};
             model.addRow(row);
         }
     }
@@ -183,7 +187,7 @@ public class FormHoaDon extends JTablePanel {
         idHolderCT.setFocusable(false);
         idHolderCT.setVisible(false);
         detailCTHDPanel.add(idHolderCT);
-        lbCTHDTitle.setBounds(0, 0, 20, 20);
+        idHolderCT.setBounds(0, 0, 20, 20);
 
         txtMaHDCT.setEnabled(false);
         txtMaHDCT.setBackground(new Color(245, 245, 245));
@@ -464,7 +468,6 @@ public class FormHoaDon extends JTablePanel {
         txtMaNV.setBackground(new Color(245, 245, 245));
         infoPanel.add(txtMaNV);
         txtMaNV.setBounds(310, 160, 160, 35);
-
 
         txtNgayLap.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis())));
         txtNgayLap.setEnabled(false);
@@ -778,20 +781,25 @@ public class FormHoaDon extends JTablePanel {
 
     private void onClickBtnSuaCTListener() {
         ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
+        IHoaDonBUS hoaDonBUS = new HoaDonBUS();
         ISanPhamBUS sanPhamBUS = new SanPhamBUS();
         try {
             CT_HoaDonDTO newDto = getUserInputCT();
             if (newDto.getMaCTHD() == null)
                 throw new Exception("Vui lòng chọn chi tiết hóa đơn.");
-            CT_HoaDonDTO oldDto = ctHoaDonBUS.findByID(newDto.getID());
-            if (oldDto == null)
-                throw new Exception("Không tìm thấy chi tiết hóa đơn.");
+            if (newDto.getMaHD() == null)
+                throw new Exception("Vui lòng chọn hóa đơn.");
+            if (hoaDonBUS.findByID(newDto.getMaHD()) == null)
+                throw new Exception("Không tìm thấy hóa đơn.");
             if (newDto.getMaSP() == null)
                 throw new Exception("Vui lòng chọn sản phẩm.");
             if (sanPhamBUS.findByID(newDto.getMaSP()) == null)
                 throw new Exception("Không tìm thấy sản phẩm.");
             if (newDto.getSoLuong() == null)
                 throw new Exception("Vui lòng nhập số lượng.");
+            CT_HoaDonDTO oldDto = ctHoaDonBUS.findByID(newDto.getID());
+            if (oldDto == null)
+                throw new Exception("Không tìm thấy chi tiết hóa đơn.");
             if (newDto.getDonGia() == null)
                 newDto.setDonGia(0);
             if (newDto.getTienKhuyenMai() == null)
