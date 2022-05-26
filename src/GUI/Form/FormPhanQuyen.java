@@ -11,7 +11,7 @@ import DTO.PhanQuyenDTO;
 import DTO.Role;
 import DTO.TaiKhoanDTO;
 import GUI.components.IEventSwitchSelected;
-import GUI.components.MyColor;
+import GUI.common.MyColor;
 import GUI.components.SwitchJButton;
 import Utils.Validator;
 

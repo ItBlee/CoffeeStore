@@ -463,7 +463,7 @@ public class FormHoaDon extends JTablePanel {
         infoPanel.add(lbMaNV);
         lbMaNV.setBounds(311, 140, 120, 20);
 
-        txtMaNV.setText("NV" + General.CURRENT_USER.getMaNV());
+        txtMaNV.setText(new NhanVienBUS().findByID(General.CURRENT_USER.getMaNV()).getHoTen());
         txtMaNV.setEnabled(false);
         txtMaNV.setBackground(new Color(245, 245, 245));
         infoPanel.add(txtMaNV);
@@ -679,11 +679,11 @@ public class FormHoaDon extends JTablePanel {
                 throw new Exception("Không tìm thấy khách hàng.");
             if (dto.getNgayLap() == null)
                 dto.setNgayLap(new Timestamp(System.currentTimeMillis()));
-            if (dto.getTongTien() == null)
+            if (dto.getTongTien() == null || dto.getTongTien() < 0)
                 dto.setTongTien(0);
-            if (dto.getTienKhuyenMai() == null)
+            if (dto.getTienKhuyenMai() == null || dto.getTienKhuyenMai() < 0)
                 dto.setTienKhuyenMai(0);
-            if (dto.getTienThanhToan() == null)
+            if (dto.getTienThanhToan() == null || dto.getTienThanhToan() < 0)
                 dto.setTienThanhToan(0);
             hoaDonBUS.save(dto);
         } catch (Exception e) {
@@ -713,13 +713,13 @@ public class FormHoaDon extends JTablePanel {
                 throw new Exception("Vui lòng chọn sản phẩm.");
             if (sanPhamBUS.findByID(dto.getMaSP()) == null)
                 throw new Exception("Không tìm thấy sản phẩm.");
-            if (dto.getSoLuong() == null)
+            if (dto.getSoLuong() == null || dto.getSoLuong() <= 0)
                 throw new Exception("Vui lòng nhập số lượng.");
-            if (dto.getDonGia() == null)
-                dto.setDonGia(0);
-            if (dto.getTienKhuyenMai() == null)
+            if (dto.getDonGia() == null || dto.getDonGia() <= 0)
+                throw new Exception("Vui lòng nhập đơn giá.");
+            if (dto.getTienKhuyenMai() == null || dto.getTienKhuyenMai() < 0)
                 dto.setTienKhuyenMai(0);
-            if (dto.getThanhTien() == null)
+            if (dto.getThanhTien() == null || dto.getThanhTien() < 0)
                 dto.setThanhTien(0);
             ctHoaDonBUS.save(dto);
         } catch (Exception e) {
@@ -795,16 +795,16 @@ public class FormHoaDon extends JTablePanel {
                 throw new Exception("Vui lòng chọn sản phẩm.");
             if (sanPhamBUS.findByID(newDto.getMaSP()) == null)
                 throw new Exception("Không tìm thấy sản phẩm.");
-            if (newDto.getSoLuong() == null)
+            if (newDto.getSoLuong() == null || newDto.getSoLuong() <= 0)
                 throw new Exception("Vui lòng nhập số lượng.");
             CT_HoaDonDTO oldDto = ctHoaDonBUS.findByID(newDto.getID());
             if (oldDto == null)
                 throw new Exception("Không tìm thấy chi tiết hóa đơn.");
-            if (newDto.getDonGia() == null)
-                newDto.setDonGia(0);
-            if (newDto.getTienKhuyenMai() == null)
+            if (newDto.getDonGia() == null || newDto.getDonGia() <= 0)
+                throw new Exception("Vui lòng nhập đơn giá.");
+            if (newDto.getTienKhuyenMai() == null || newDto.getTienKhuyenMai() < 0)
                 newDto.setTienKhuyenMai(0);
-            if (newDto.getThanhTien() == null)
+            if (newDto.getThanhTien() == null || newDto.getThanhTien() < 0)
                 newDto.setThanhTien(0);
             oldDto = newDto;
             ctHoaDonBUS.update(oldDto);
@@ -885,7 +885,7 @@ public class FormHoaDon extends JTablePanel {
             if (component instanceof JTextField)
                 ((JTextField) component).setText("");
         }
-        txtMaNV.setText("NV" + General.CURRENT_USER.getMaNV());
+        txtMaNV.setText(new NhanVienBUS().findByID(General.CURRENT_USER.getMaNV()).getHoTen());
         txtNgayLap.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis())));
         btnThem.setText("Thêm");
         btnXoa.setText("Xóa");
@@ -908,6 +908,8 @@ public class FormHoaDon extends JTablePanel {
     private void onClickTableRow() {
         int index = table.getSelectedRow();
         IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        INhanVienBUS nhanVienBUS = new NhanVienBUS();
+        IKhachHangBUS khachHangBUS = new KhachHangBUS();
         Locale localeVN = new Locale("vi", "VN");
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -920,10 +922,12 @@ public class FormHoaDon extends JTablePanel {
         HoaDonDTO dto = hoaDonBUS.findByID(selectedID);
         if (dto == null)
             return;
+        NhanVienDTO worker = nhanVienBUS.findByID(dto.getMaNV());
+        KhachHangDTO customer = khachHangBUS.findByID(dto.getMaKH());
         txtMaHD.setText("HD" + dto.getMaHD());
         txtMaHDCT.setText("HD" + dto.getMaHD());
-        txtMaKH.setText("KH" + dto.getMaKH());
-        txtMaNV.setText("NV" + dto.getMaNV());
+        txtMaKH.setText(customer != null ? customer.getHoTen() : "Không xác định");
+        txtMaNV.setText(worker != null ? worker.getHoTen() : "Không xác định");
         txtNgayLap.setText(dateFormat.format(dto.getNgayLap()));
         txtTotal.setText(currencyVN.format(dto.getTongTien()).replace(" ₫", ""));
         txtKhuyenMai.setText(currencyVN.format(dto.getTienKhuyenMai()).replace(" ₫", ""));

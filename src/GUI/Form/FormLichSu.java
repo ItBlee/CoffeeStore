@@ -4,7 +4,7 @@ import BUS.Abstract.AbstractHistoricBUS;
 import BUS.Interfaces.ILichSuBUS;
 import BUS.LichSuBUS;
 import DTO.LichSuDTO;
-import GUI.components.MyColor;
+import GUI.common.MyColor;
 
 import java.awt.*;
 import java.awt.event.AdjustmentEvent;

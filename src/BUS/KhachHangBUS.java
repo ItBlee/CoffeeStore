@@ -1,10 +1,12 @@
 package BUS;
 
 import BUS.Abstract.AbstractHistoricBUS;
+import BUS.Interfaces.ICT_HoaDonBUS;
 import BUS.Interfaces.IHoaDonBUS;
 import BUS.Interfaces.IKhachHangBUS;
 import DAO.Interfaces.IKhachHangDAO;
 import DAO.KhachHangDAO;
+import DTO.CT_HoaDonDTO;
 import DTO.HoaDonDTO;
 import DTO.KhachHangDTO;
 import Utils.StringUtils;
@@ -111,9 +113,13 @@ public class KhachHangBUS extends AbstractHistoricBUS implements IKhachHangBUS {
 
     @Override
     public void delete(int id) throws Exception {
+        ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
         IHoaDonBUS hoaDonBUS = new HoaDonBUS();
-        for (HoaDonDTO dto:hoaDonBUS.findByKhachHang(id))
+        for (HoaDonDTO dto:hoaDonBUS.findByKhachHang(id)) {
+            for (CT_HoaDonDTO child : ctHoaDonBUS.findByMaHD(dto.getMaHD()))
+                ctHoaDonBUS.delete(child.getID());
             hoaDonBUS.delete(dto.getID());
+        }
         if (!khachHangDAO.delete(id))
             throw new Exception("Không thể xóa khách hàng (KH" + id + ").");
         listKhachHang.removeIf(khachHangDTO -> khachHangDTO.getMaKH() == id);

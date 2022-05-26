@@ -37,9 +37,6 @@ public class FrameSelect extends MovableJFrame {
         Object targetObj = Class.forName(targetClazz.getName()).getConstructor().newInstance();
         if (!(targetObj instanceof JTablePanel))
             throw new Exception("Form tìm kiếm không hợp lệ");
-        Object parentObj = Class.forName(parentClazz.getName()).getConstructor().newInstance();
-        if (!(parentObj instanceof JTablePanel))
-            throw new Exception("Form để tìm kiếm không hợp lệ");
         this.targetClazz = targetClazz;
         this.parentClazz = parentClazz;
         this.targetField = targetField;
@@ -247,7 +244,7 @@ public class FrameSelect extends MovableJFrame {
         });
 
         mainPanel.add(jScrollPane);
-        jScrollPane.setBounds(530, 0, 940, 350);
+        jScrollPane.setBounds(530, 0, 940, getHeight());
 
         btnSelectedID.setBackground(new Color(229, 239, 255));
         btnSelectedID.setForeground(new Color(54, 123, 245));
@@ -437,7 +434,7 @@ public class FrameSelect extends MovableJFrame {
         lbSelectedID.setBounds(lbSelectedID.getX(), 230+(35*conditionCount), btnSearch.getWidth(), lbSelectedID.getHeight());
         txtSelectedID.setBounds(txtSelectedID.getX(), 250+(35*conditionCount), txtSelectedID.getWidth(), txtSelectedID.getHeight());
         btnSelectedID.setBounds(btnSelectedID.getX(), 250+(35*conditionCount), btnSelectedID.getWidth(), btnSelectedID.getHeight());
-        jScrollPane.setBounds(jScrollPane.getX(), jScrollPane.getY(), jScrollPane.getWidth(), getHeight());
+        jScrollPane.setBounds(jScrollPane.getX(), jScrollPane.getY(), jScrollPane.getWidth(), mainPanel.getHeight());
         revalidate();
         repaint();
     }

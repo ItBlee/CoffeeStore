@@ -1,8 +1,8 @@
 package DTO;
 
-import DTO.Interface.IEntity;
+import DTO.Interface.IDetailEntity;
 
-public class CT_HoaDonDTO implements IEntity {
+public class CT_HoaDonDTO implements IDetailEntity {
     private Integer MaCTHD;
     private Integer MaHD;
     private Integer MaSP;
@@ -21,6 +21,16 @@ public class CT_HoaDonDTO implements IEntity {
     @Override
     public void setID(Integer id) {
         this.MaCTHD = id;
+    }
+
+    @Override
+    public Integer getForeignID() {
+        return MaHD;
+    }
+
+    @Override
+    public void setForeignID(Integer foreignID) {
+        MaHD = foreignID;
     }
 
     public Integer getMaCTHD() {

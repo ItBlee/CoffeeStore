@@ -1,5 +1,8 @@
 package Utils;
 
+import java.sql.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,7 +50,19 @@ public class Validator {
         return false;
     }
 
-    public static void main(String[] args) {
-        System.out.println(isValidPhone("0397361223"));
+    public static boolean isValidBirthday(Date date) {
+        if (date == null)
+            return false;
+        java.util.Date current = new java.util.Date(System.currentTimeMillis());
+        if (date.after(current))
+            return false;
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(current);
+        int currentYear = calendar.get(Calendar.YEAR);
+        calendar.setTime(date);
+        int dateYear = calendar.get(Calendar.YEAR);
+        final int min_age = 18;
+        final int max_age = 70;
+        return (currentYear - dateYear) > min_age && (currentYear - dateYear) <= max_age;
     }
 }

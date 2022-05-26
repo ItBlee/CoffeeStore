@@ -1,8 +1,8 @@
 package DTO;
 
-import DTO.Interface.IEntity;
+import DTO.Interface.IDetailEntity;
 
-public class CT_PhieuNhapDTO implements IEntity {
+public class CT_PhieuNhapDTO implements IDetailEntity {
     private Integer MaCTPN;
     private Integer MaPN;
     private Integer MaSP;
@@ -22,6 +22,16 @@ public class CT_PhieuNhapDTO implements IEntity {
     @Override
     public void setID(Integer id) {
         this.MaCTPN = id;
+    }
+
+    @Override
+    public Integer getForeignID() {
+        return MaPN;
+    }
+
+    @Override
+    public void setForeignID(Integer foreignID) {
+        MaPN = foreignID;
     }
 
     public Integer getMaCTPN() {

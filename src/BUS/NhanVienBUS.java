@@ -1,16 +1,10 @@
 package BUS;
 
 import BUS.Abstract.AbstractHistoricBUS;
-import BUS.Interfaces.IHoaDonBUS;
-import BUS.Interfaces.INhanVienBUS;
-import BUS.Interfaces.IPhieuNhapBUS;
-import BUS.Interfaces.ITaiKhoanBUS;
+import BUS.Interfaces.*;
 import DAO.Interfaces.INhanVienDAO;
 import DAO.NhanVienDAO;
-import DTO.HoaDonDTO;
-import DTO.NhanVienDTO;
-import DTO.PhieuNhapDTO;
-import DTO.TaiKhoanDTO;
+import DTO.*;
 import Utils.StringUtils;
 
 import java.sql.Date;
@@ -89,10 +83,10 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
     }
 
     @Override
-    public ArrayList<NhanVienDTO> findBySDT(Integer sdt) {
+    public ArrayList<NhanVienDTO> findBySDT(String sdt) {
         ArrayList<NhanVienDTO> result = new ArrayList<NhanVienDTO>();
         for (NhanVienDTO nhanVienDTO : listNhanVien)
-            if (StringUtils.containsIgnoreCase(nhanVienDTO.getSDT(), String.valueOf(sdt)))
+            if (StringUtils.containsIgnoreCase(nhanVienDTO.getSDT(), sdt))
                 result.add(nhanVienDTO);
         return result;
     }
@@ -162,12 +156,20 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
 
     @Override
     public void delete(int id) throws Exception {
+        ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
         IHoaDonBUS hoaDonBUS = new HoaDonBUS();
-        for (HoaDonDTO dto:hoaDonBUS.findByNhanVien(id))
+        for (HoaDonDTO dto:hoaDonBUS.findByNhanVien(id)) {
+            for (CT_HoaDonDTO child : ctHoaDonBUS.findByMaHD(dto.getMaHD()))
+                ctHoaDonBUS.delete(child.getID());
             hoaDonBUS.delete(dto.getID());
+        }
+        ICT_PhieuNhapBUS ctPhieuNhapBUS = new CT_PhieuNhapBUS();
         IPhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
-        for (PhieuNhapDTO dto:phieuNhapBUS.findByNhanVien(id))
+        for (PhieuNhapDTO dto:phieuNhapBUS.findByNhanVien(id)) {
+            for (CT_PhieuNhapDTO child : ctPhieuNhapBUS.findByMaPN(dto.getMaPN()))
+                ctHoaDonBUS.delete(child.getID());
             phieuNhapBUS.delete(dto.getID());
+        }
         if (!nhanVienDAO.delete(id))
             throw new Exception("Không thể xóa nhân viên (NV" + id + ").");
         listNhanVien.removeIf(NhanVienDTO -> NhanVienDTO.getMaNV() == id);

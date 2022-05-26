@@ -39,12 +39,20 @@ public class CT_PhieuNhapBUS implements ICT_PhieuNhapBUS {
 
     @Override
     public ArrayList<CT_PhieuNhapDTO> findByMaPN(Integer MaPN) {
-        return null;
+        ArrayList<CT_PhieuNhapDTO> result = new ArrayList<CT_PhieuNhapDTO>();
+        for (CT_PhieuNhapDTO ctPhieuNhapDTO : listCTPhieuNhap)
+            if (ctPhieuNhapDTO.getMaPN().equals(MaPN))
+                result.add(ctPhieuNhapDTO);
+        return result;
     }
 
     @Override
     public ArrayList<CT_PhieuNhapDTO> findByMaSP(Integer maSP) {
-        return null;
+        ArrayList<CT_PhieuNhapDTO> result = new ArrayList<CT_PhieuNhapDTO>();
+        for (CT_PhieuNhapDTO ctPhieuNhapDTO : listCTPhieuNhap)
+            if (ctPhieuNhapDTO.getMaSP().equals(maSP))
+                result.add(ctPhieuNhapDTO);
+        return result;
     }
 
     @Override

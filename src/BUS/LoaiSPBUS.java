@@ -38,12 +38,11 @@ public class LoaiSPBUS extends AbstractHistoricBUS implements ILoaiSPBUS {
     }
 
     @Override
-    public ArrayList<LoaiSPDTO> findByTenLoai(String tenLoai) {
-        ArrayList<LoaiSPDTO> result = new ArrayList<LoaiSPDTO>();
+    public LoaiSPDTO findByTenLoai(String tenLoai) {
         for (LoaiSPDTO loaiSPDTO : listLoaiSP)
             if (StringUtils.containsIgnoreCase(loaiSPDTO.getTenLoai(), tenLoai))
-                result.add(loaiSPDTO);
-        return result;
+                return loaiSPDTO;
+        return null;
     }
 
     @Override

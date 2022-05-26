@@ -59,13 +59,18 @@ public class FrameSearch extends MovableJFrame {
         for (Category category:formList) {
             if (category.getForm() instanceof JTablePanel && category.getForm().getClass().equals(clazz)) {
                 parentPanel = (JTablePanel) category.getForm();
+                break;
             }
             else if (category.getForm() instanceof FormNhanSu) {
                 int index = ((FormNhanSu) category.getForm()).getJTabbedPane().getSelectedIndex();
-                if (index == 0)
+                if (index == 0 && ((FormNhanSu) category.getForm()).getEmployeePanel().getClass().equals(clazz)) {
                     parentPanel = (JTablePanel) ((FormNhanSu) category.getForm()).getEmployeePanel();
-                else if (index == 1)
+                    break;
+                }
+                else if (index == 1 && ((FormNhanSu) category.getForm()).getAccountPanel().getClass().equals(clazz)) {
                     parentPanel = (JTablePanel) ((FormNhanSu) category.getForm()).getAccountPanel();
+                    break;
+                }
             }
         }
         if (parentPanel != null)

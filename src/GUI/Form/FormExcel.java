@@ -1,88 +1,47 @@
 package GUI.Form;
 
-import java.awt.*;
+import BUS.*;
+import BUS.Interfaces.*;
+import BUS.SearchMapper.HoaDonSearchMapper;
+import BUS.SearchMapper.PhieuNhapSearchMapper;
+import DAO.Mapper.*;
+import DTO.*;
+import DTO.Interface.IDetailEntity;
+import GUI.FrameSelect;
+import GUI.common.MyColor;
+import GUI.components.ChooserJDialog;
+import Utils.FileHandler;
+import Utils.StringUtils;
+import net.iharder.dnd.FileDrop;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class FormExcel extends JPanel {
+    private File importExcelFile;
+    private boolean selectedHD = false;
+    private boolean selectedNCC = false;
+    private boolean selectedPN = false;
+    private boolean selectedSP = false;
+    private boolean selectedKH = false;
+    private boolean selectedNS = false;
+    private boolean selectedKM = false;
+    private boolean selectedTK = false;
+
     public FormExcel() {
         initComponents();
     }
     
     private void initComponents() {
-        JPanel importPanel = new JPanel();
-        JPanel dragDropPanel = new JPanel();
-        JLabel lbDragDrop = new JLabel();
-        JLabel lbDragDrop2 = new JLabel();
-        JLabel lbDragDrop3 = new JLabel();
-        JButton btnImport = new JButton();
-        JLabel icFile = new JLabel();
-        JLabel lbPercentUpload = new JLabel();
-        JPanel progressUpload = new JPanel();
-        JPanel progressUploadHolder = new JPanel();
-        JLabel lbFileName = new JLabel();
-        JComboBox<String> cbTarget = new JComboBox<>();
-        JLabel lbTarget = new JLabel();
-        JLabel lbTitleImport = new JLabel();
-        JPanel exportPanel = new JPanel();
-        JLabel lbTitleExport = new JLabel();
-        JLabel lbTickHD = new JLabel();
-        JPanel exportHDPanel = new JPanel();
-        JLabel lbIconHD = new JLabel();
-        JLabel lbNameHD = new JLabel();
-        JLabel lbSubHD = new JLabel();
-        JLabel lbQuantityHD = new JLabel();
-        JButton btnImport2 = new JButton();
-        JLabel lbTickPN = new JLabel();
-        JPanel exportPNPanel = new JPanel();
-        JLabel jLabel8 = new JLabel();
-        JLabel jLabel9 = new JLabel();
-        JLabel jLabel11 = new JLabel();
-        JLabel jLabel12 = new JLabel();
-        JLabel lbTickKH = new JLabel();
-        JPanel exportKHPanel = new JPanel();
-        JLabel jLabel14 = new JLabel();
-        JLabel jLabel15 = new JLabel();
-        JLabel jLabel16 = new JLabel();
-        JLabel jLabel17 = new JLabel();
-        JLabel lbTickKM = new JLabel();
-        JPanel exportKMPanel = new JPanel();
-        JLabel jLabel19 = new JLabel();
-        JLabel jLabel20 = new JLabel();
-        JLabel jLabel21 = new JLabel();
-        JLabel jLabel22 = new JLabel();
-        JLabel jLabel28 = new JLabel();
-        JPanel exportHDPanel4 = new JPanel();
-        JLabel jLabel24 = new JLabel();
-        JLabel jLabel25 = new JLabel();
-        JLabel jLabel26 = new JLabel();
-        JLabel jLabel27 = new JLabel();
-        JLabel lbTickNV = new JLabel();
-        JPanel exportNVPanel = new JPanel();
-        JLabel jLabel29 = new JLabel();
-        JLabel jLabel30 = new JLabel();
-        JLabel jLabel31 = new JLabel();
-        JLabel jLabel32 = new JLabel();
-        JLabel lbTickSP = new JLabel();
-        JPanel exportSPPanel = new JPanel();
-        JLabel jLabel34 = new JLabel();
-        JLabel jLabel35 = new JLabel();
-        JLabel jLabel36 = new JLabel();
-        JLabel jLabel37 = new JLabel();
-        JLabel lbTickNCC = new JLabel();
-        JPanel exportNCCPanel = new JPanel();
-        JLabel jLabel39 = new JLabel();
-        JLabel jLabel40 = new JLabel();
-        JLabel jLabel41 = new JLabel();
-        JLabel jLabel42 = new JLabel();
-        JPanel mainPanel = new JPanel();
-        JLabel lbTitlePDF = new JLabel();
-        JButton btnExportPDF = new JButton();
-        JTextField txtDetailPDF = new JTextField();
-        JButton btnSelectHDPDF = new JButton();
-        JButton btnSelectPNPDF = new JButton();
-        JLabel lbCTExportPDF = new JLabel();
-
         setFont(new Font("Segoe UI", Font.BOLD, 13));
         setLayout(null);
 
@@ -108,6 +67,14 @@ public class FormExcel extends JPanel {
         lbDragDrop3.setForeground(new Color(72, 139, 255));
         lbDragDrop3.setText("duyệt");
         lbDragDrop3.setAlignmentX(CENTER_ALIGNMENT);
+        lbDragDrop3.setFont(lbDragDrop3.getFont().deriveFont(Font.BOLD).deriveFont(18f));
+        lbDragDrop3.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        lbDragDrop3.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                onClickBrowser();
+            }
+        });
         dragDropPanel.add(lbDragDrop3);
         dragDropPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         dragDropPanel.add(Box.createVerticalGlue());
@@ -120,6 +87,12 @@ public class FormExcel extends JPanel {
         btnImport.setForeground(new Color(255, 255, 255));
         btnImport.setText("Nhập");
         btnImport.setActionCommand("Duyệt");
+        btnImport.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnImport();
+            }
+        });
         importPanel.add(btnImport);
         btnImport.setBounds(20, 420, 360, 40);
 
@@ -147,7 +120,10 @@ public class FormExcel extends JPanel {
         importPanel.add(lbFileName);
         lbFileName.setBounds(70, 160, 360, 18);
 
-        cbTarget.setModel(new DefaultComboBoxModel<>(new String[] { "Hóa đơn", "Item 2", "Item 3", "Item 4" }));
+        cbTarget.setModel(new DefaultComboBoxModel<>(
+                new String[] { "Hóa đơn", "Chi tiết hóa đơn", "Sản phẩm", "Loại sản phẩm", "Phiếu nhập",
+                        "Chi tiết phiếu nhập", "Nhà cung cấp", "Khuyến mãi", "Chi tiết khuyến mãi", "Khách hàng",
+                        "Nhân viên", "Tài khoản", "Phân quyền", "Chi tiết phân quyền",  }));
         importPanel.add(cbTarget);
         cbTarget.setBounds(20, 100, 360, 40);
 
@@ -174,14 +150,21 @@ public class FormExcel extends JPanel {
         exportPanel.add(lbTitleExport);
         lbTitleExport.setBounds(195, 20, 250, 25);
 
-        Image tickImage = new ImageIcon("bin/images/components/check.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
         lbTickHD.setIcon(new ImageIcon(tickImage));
+        lbTickHD.setVisible(false);
         exportPanel.add(lbTickHD);
         lbTickHD.setBounds(235, 68, 40, 40);
 
         exportHDPanel.setBackground(new Color(51, 196, 129));
         exportHDPanel.setForeground(new Color(255, 255, 255));
         exportHDPanel.setLayout(null);
+        exportHDPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        exportHDPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setSelectedHD(!isSelectedHD());
+            }
+        });
 
         Image IconHD = new ImageIcon("bin/images/components/HD.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
         lbIconHD.setIcon(new ImageIcon(IconHD));
@@ -202,28 +185,42 @@ public class FormExcel extends JPanel {
 
         lbQuantityHD.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         lbQuantityHD.setForeground(new Color(255, 255, 255));
-        lbQuantityHD.setText("Số lượng: 10");
+        lbQuantityHD.setText("Số lượng: " + new HoaDonBUS().getTotalCount());
         exportHDPanel.add(lbQuantityHD);
         lbQuantityHD.setBounds(80, 60, 140, 16);
 
         exportPanel.add(exportHDPanel);
         exportHDPanel.setBounds(30, 90, 230, 125);
 
-        btnImport2.setBackground(new Color(1, 114, 58));
-        btnImport2.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        btnImport2.setForeground(new Color(255, 255, 255));
-        btnImport2.setText("Xuất");
-        btnImport2.setActionCommand("Duyệt");
-        exportPanel.add(btnImport2);
-        btnImport2.setBounds(20, 720, 500, 40);
+        btnExportExcel.setBackground(new Color(1, 114, 58));
+        btnExportExcel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        btnExportExcel.setForeground(new Color(255, 255, 255));
+        btnExportExcel.setText("Xuất");
+        btnExportExcel.setActionCommand("Duyệt");
+        btnExportExcel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnExportExcel();
+            }
+        });
+        exportPanel.add(btnExportExcel);
+        btnExportExcel.setBounds(20, 720, 500, 40);
 
         lbTickPN.setIcon(new ImageIcon(tickImage));
+        lbTickPN.setVisible(false);
         exportPanel.add(lbTickPN);
         lbTickPN.setBounds(235, 218, 40, 40);
 
         exportPNPanel.setBackground(new Color(51, 196, 129));
         exportPNPanel.setForeground(new Color(255, 255, 255));
         exportPNPanel.setLayout(null);
+        exportPNPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        exportPNPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setSelectedPN(!isSelectedPN());
+            }
+        });
 
         Image IconPN = new ImageIcon("bin/images/components/PN.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
         jLabel8.setIcon(new ImageIcon(IconPN));
@@ -238,13 +235,13 @@ public class FormExcel extends JPanel {
 
         jLabel11.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel11.setForeground(new Color(255, 255, 255));
-        jLabel11.setText("Kèm theo DS CT HĐ ");
+        jLabel11.setText("Kèm theo DS CT PN ");
         exportPNPanel.add(jLabel11);
         jLabel11.setBounds(80, 80, 140, 18);
 
         jLabel12.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel12.setForeground(new Color(255, 255, 255));
-        jLabel12.setText("Số lượng: 10");
+        jLabel12.setText("Số lượng: " + new PhieuNhapBUS().getTotalCount());
         exportPNPanel.add(jLabel12);
         jLabel12.setBounds(80, 60, 140, 16);
 
@@ -252,12 +249,20 @@ public class FormExcel extends JPanel {
         exportPNPanel.setBounds(30, 240, 230, 125);
 
         lbTickKH.setIcon(new ImageIcon(tickImage));
+        lbTickKH.setVisible(false);
         exportPanel.add(lbTickKH);
         lbTickKH.setBounds(235, 368, 40, 40);
 
         exportKHPanel.setBackground(new Color(51, 196, 129));
         exportKHPanel.setForeground(new Color(255, 255, 255));
         exportKHPanel.setLayout(null);
+        exportKHPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        exportKHPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setSelectedKH(!isSelectedKH());
+            }
+        });
 
         Image IconKH = new ImageIcon("bin/images/components/KH.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
         jLabel14.setIcon(new ImageIcon(IconKH));
@@ -270,15 +275,15 @@ public class FormExcel extends JPanel {
         exportKHPanel.add(jLabel15);
         jLabel15.setBounds(80, 20, 150, 30);
 
-        jLabel16.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        /*jLabel16.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel16.setForeground(new Color(255, 255, 255));
         jLabel16.setText("Kèm theo DS CT HĐ ");
         exportKHPanel.add(jLabel16);
-        jLabel16.setBounds(80, 80, 140, 18);
+        jLabel16.setBounds(80, 80, 140, 18);*/
 
         jLabel17.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel17.setForeground(new Color(255, 255, 255));
-        jLabel17.setText("Số lượng: 10");
+        jLabel17.setText("Số lượng: " + new KhachHangBUS().getTotalCount());
         exportKHPanel.add(jLabel17);
         jLabel17.setBounds(80, 60, 140, 16);
 
@@ -286,12 +291,20 @@ public class FormExcel extends JPanel {
         exportKHPanel.setBounds(30, 390, 230, 125);
 
         lbTickKM.setIcon(new ImageIcon(tickImage));
+        lbTickKM.setVisible(false);
         exportPanel.add(lbTickKM);
         lbTickKM.setBounds(235, 518, 40, 40);
 
         exportKMPanel.setBackground(new Color(51, 196, 129));
         exportKMPanel.setForeground(new Color(255, 255, 255));
         exportKMPanel.setLayout(null);
+        exportKMPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        exportKMPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setSelectedKM(!isSelectedKM());
+            }
+        });
 
         Image IconKM = new ImageIcon("bin/images/components/KM.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
         jLabel19.setIcon(new ImageIcon(IconKM));
@@ -306,60 +319,68 @@ public class FormExcel extends JPanel {
 
         jLabel21.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel21.setForeground(new Color(255, 255, 255));
-        jLabel21.setText("Kèm theo DS CT HĐ ");
+        jLabel21.setText("Kèm theo DS CT KM ");
         exportKMPanel.add(jLabel21);
         jLabel21.setBounds(80, 80, 140, 18);
 
         jLabel22.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel22.setForeground(new Color(255, 255, 255));
-        jLabel22.setText("Số lượng: 10");
+        jLabel22.setText("Số lượng: " + new KhachHangBUS().getTotalCount());
         exportKMPanel.add(jLabel22);
         jLabel22.setBounds(80, 60, 140, 16);
 
         exportPanel.add(exportKMPanel);
         exportKMPanel.setBounds(30, 540, 230, 125);
 
-        jLabel28.setIcon(new ImageIcon(tickImage));
+        /*jLabel28.setIcon(new ImageIcon(tickImage));
         exportPanel.add(jLabel28);
-        jLabel28.setBounds(485, 518, 40, 40);
+        jLabel28.setBounds(485, 518, 40, 40);*/
 
-        exportHDPanel4.setBackground(new Color(51, 196, 129));
-        exportHDPanel4.setForeground(new Color(255, 255, 255));
-        exportHDPanel4.setLayout(null);
+        exportTKPanel.setBackground(new Color(51, 196, 129));
+        exportTKPanel.setForeground(new Color(255, 255, 255));
+        exportTKPanel.setLayout(null);
 
         Image IconTK = new ImageIcon("bin/images/components/TK.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
         jLabel24.setIcon(new ImageIcon(IconTK));
-        exportHDPanel4.add(jLabel24);
+        exportTKPanel.add(jLabel24);
         jLabel24.setBounds(20, 50, 40, 40);
 
         jLabel25.setFont(new Font("Segoe UI", Font.BOLD, 24));
         jLabel25.setForeground(new Color(255, 255, 255));
         jLabel25.setText("Thống kê");
-        exportHDPanel4.add(jLabel25);
+        exportTKPanel.add(jLabel25);
         jLabel25.setBounds(80, 20, 130, 30);
 
-        jLabel26.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        /*jLabel26.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel26.setForeground(new Color(255, 255, 255));
         jLabel26.setText("Kèm theo DS CT HĐ ");
-        exportHDPanel4.add(jLabel26);
-        jLabel26.setBounds(80, 80, 140, 18);
+        exportTKPanel.add(jLabel26);
+        jLabel26.setBounds(80, 80, 140, 18);*/
 
         jLabel27.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel27.setForeground(new Color(255, 255, 255));
-        jLabel27.setText("Số lượng: 10");
-        exportHDPanel4.add(jLabel27);
+        jLabel27.setText("Số lượng: 0");
+        exportTKPanel.add(jLabel27);
         jLabel27.setBounds(80, 60, 140, 16);
 
-        exportPanel.add(exportHDPanel4);
-        exportHDPanel4.setBounds(280, 540, 230, 125);
+        exportPanel.add(exportTKPanel);
+        exportTKPanel.setBounds(280, 540, 230, 125);
 
         lbTickNV.setIcon(new ImageIcon(tickImage));
+        lbTickNV.setVisible(false);
         exportPanel.add(lbTickNV);
         lbTickNV.setBounds(485, 368, 40, 40);
 
         exportNVPanel.setBackground(new Color(51, 196, 129));
         exportNVPanel.setForeground(new Color(255, 255, 255));
         exportNVPanel.setLayout(null);
+        exportNVPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        exportNVPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setSelectedNS(!isSelectedNS());
+            }
+        });
 
         Image IconNV = new ImageIcon("bin/images/components/NV.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
         jLabel29.setIcon(new ImageIcon(IconNV));
@@ -374,13 +395,13 @@ public class FormExcel extends JPanel {
 
         jLabel31.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel31.setForeground(new Color(255, 255, 255));
-        jLabel31.setText("Kèm theo DS CT HĐ ");
+        jLabel31.setText("Kèm theo DS NV,TK,PQ ");
         exportNVPanel.add(jLabel31);
         jLabel31.setBounds(80, 80, 140, 18);
 
         jLabel32.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel32.setForeground(new Color(255, 255, 255));
-        jLabel32.setText("Số lượng: 10");
+        jLabel32.setText("Số lượng: " + new NhanVienBUS().getTotalCount());
         exportNVPanel.add(jLabel32);
         jLabel32.setBounds(80, 60, 140, 16);
 
@@ -388,12 +409,20 @@ public class FormExcel extends JPanel {
         exportNVPanel.setBounds(280, 390, 230, 125);
 
         lbTickSP.setIcon(new ImageIcon(tickImage));
+        lbTickSP.setVisible(false);
         exportPanel.add(lbTickSP);
         lbTickSP.setBounds(485, 218, 40, 40);
 
         exportSPPanel.setBackground(new Color(51, 196, 129));
         exportSPPanel.setForeground(new Color(255, 255, 255));
         exportSPPanel.setLayout(null);
+        exportSPPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        exportSPPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setSelectedSP(!isSelectedSP());
+            }
+        });
 
         Image IconSP = new ImageIcon("bin/images/components/SP.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
         jLabel34.setIcon(new ImageIcon(IconSP));
@@ -408,13 +437,13 @@ public class FormExcel extends JPanel {
 
         jLabel36.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel36.setForeground(new Color(255, 255, 255));
-        jLabel36.setText("Kèm theo DS CT HĐ ");
+        jLabel36.setText("Kèm theo DS Loai SP ");
         exportSPPanel.add(jLabel36);
         jLabel36.setBounds(80, 80, 140, 18);
 
         jLabel37.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel37.setForeground(new Color(255, 255, 255));
-        jLabel37.setText("Số lượng: 10");
+        jLabel37.setText("Số lượng: " + new SanPhamBUS().getTotalCount());
         exportSPPanel.add(jLabel37);
         jLabel37.setBounds(80, 60, 140, 16);
 
@@ -422,12 +451,20 @@ public class FormExcel extends JPanel {
         exportSPPanel.setBounds(280, 240, 230, 125);
 
         lbTickNCC.setIcon(new ImageIcon(tickImage));
+        lbTickNCC.setVisible(false);
         exportPanel.add(lbTickNCC);
         lbTickNCC.setBounds(485, 68, 40, 40);
 
         exportNCCPanel.setBackground(new Color(51, 196, 129));
         exportNCCPanel.setForeground(new Color(255, 255, 255));
         exportNCCPanel.setLayout(null);
+        exportNCCPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        exportNCCPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setSelectedNCC(!isSelectedNCC());
+            }
+        });
 
         Image IconNCC = new ImageIcon("bin/images/components/NCC.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
         jLabel39.setIcon(new ImageIcon(IconNCC));
@@ -440,15 +477,15 @@ public class FormExcel extends JPanel {
         exportNCCPanel.add(jLabel40);
         jLabel40.setBounds(80, 20, 150, 30);
 
-        jLabel41.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        /*jLabel41.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel41.setForeground(new Color(255, 255, 255));
         jLabel41.setText("Kèm theo DS CT HĐ ");
         exportNCCPanel.add(jLabel41);
-        jLabel41.setBounds(80, 80, 140, 18);
+        jLabel41.setBounds(80, 80, 140, 18);*/
 
         jLabel42.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel42.setForeground(new Color(255, 255, 255));
-        jLabel42.setText("Số lượng: 10");
+        jLabel42.setText("Số lượng: " + new NhaCungCapBUS().getTotalCount());
         exportNCCPanel.add(jLabel42);
         jLabel42.setBounds(80, 60, 140, 16);
 
@@ -473,24 +510,46 @@ public class FormExcel extends JPanel {
         btnExportPDF.setForeground(new Color(255, 255, 255));
         btnExportPDF.setText("Xuất");
         btnExportPDF.setActionCommand("Duyệt");
+        btnExportPDF.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnExportPDF();
+            }
+        });
         mainPanel.add(btnExportPDF);
         btnExportPDF.setBounds(20, 220, 360, 40);
 
-        txtDetailPDF.setEditable(false);
+        txtDetailPDF.setEnabled(false);
         txtDetailPDF.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         txtDetailPDF.setRequestFocusEnabled(false);
         mainPanel.add(txtDetailPDF);
         txtDetailPDF.setBounds(20, 90, 360, 40);
 
-        btnSelectHDPDF.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        btnSelectHDPDF.setBackground(Color.white);
+        btnSelectHDPDF.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnSelectHDPDF.setText("Chọn hóa đơn");
         btnSelectHDPDF.setBorder(new LineBorder(new Color(244, 15, 2), 1, true));
+        btnSelectHDPDF.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnSelectHDPDF.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnSelectHDPDF();
+            }
+        });
         mainPanel.add(btnSelectHDPDF);
         btnSelectHDPDF.setBounds(210, 140, 170, 40);
 
-        btnSelectPNPDF.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        btnSelectPNPDF.setBackground(Color.white);
+        btnSelectPNPDF.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnSelectPNPDF.setText("Chọn phiếu nhập");
         btnSelectPNPDF.setBorder(new LineBorder(new Color(244, 15, 2), 1, true));
+        btnSelectPNPDF.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnSelectPNPDF.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnSelectPNPDF();
+            }
+        });
         mainPanel.add(btnSelectPNPDF);
         btnSelectPNPDF.setBounds(20, 140, 170, 40);
 
@@ -502,4 +561,494 @@ public class FormExcel extends JPanel {
         mainPanel.setBounds(20, 520, 400, 280);
     }
 
+    private final JPanel dragDropPanel = new JPanel();
+    FileDrop drop = new FileDrop(dragDropPanel, new FileDrop.Listener() {
+        public void  filesDropped(java.io.File[] files ) {
+            File file = files[0];
+            if (file != null && file.isFile()) {
+                lbFileName.setText(file.getName());
+                animatedProgressUpload();
+                importExcelFile = file;
+            }
+        }
+    });
+
+    private void onClickBrowser() {
+        File file = ChooserJDialog.showFileChooser("export");
+        if (file != null && file.isFile()) {
+            lbFileName.setText(file.getName());
+            animatedProgressUpload();
+            importExcelFile = file;
+        }
+    }
+
+    private void onClickBtnImport() {
+        try {
+            String path = importExcelFile.getAbsolutePath();
+            String targetName = String.valueOf(cbTarget.getSelectedItem());
+
+            switch (targetName) {
+                case "Hóa đơn":
+                    IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+                    ArrayList<HoaDonDTO> listHD = FileHandler.importExcel(path, new HoaDonMapper());
+                    for (HoaDonDTO dto: listHD) {
+                        if (hoaDonBUS.isExist(dto))
+                            hoaDonBUS.update(dto);
+                        else hoaDonBUS.save(dto);
+                    }
+                    break;
+
+                case "Chi tiết hóa đơn":
+                    ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
+                    ArrayList<CT_HoaDonDTO> listCTHD = FileHandler.importExcel(path, new CT_HoaDonMapper());
+                    for (CT_HoaDonDTO dto: listCTHD) {
+                        if (ctHoaDonBUS.isExist(dto))
+                            ctHoaDonBUS.update(dto);
+                        else ctHoaDonBUS.save(dto);
+                    }
+                    break;
+
+                case "Sản phẩm":
+                    ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+                    ArrayList<SanPhamDTO> listSP = FileHandler.importExcel(path, new SanPhamMapper());
+                    for (SanPhamDTO dto: listSP) {
+                        if (sanPhamBUS.isExist(dto))
+                            sanPhamBUS.update(dto);
+                        else sanPhamBUS.save(dto);
+                    }
+                    break;
+
+                case "Loại sản phẩm":
+                    ILoaiSPBUS loaiSPBUS = new LoaiSPBUS();
+                    ArrayList<LoaiSPDTO> listLSP = FileHandler.importExcel(path, new LoaiSPMapper());
+                    for (LoaiSPDTO dto: listLSP) {
+                        if (loaiSPBUS.isExist(dto))
+                            loaiSPBUS.update(dto);
+                        else loaiSPBUS.save(dto);
+                    }
+                    break;
+
+                case "Phiếu nhập":
+                    IPhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
+                    ArrayList<PhieuNhapDTO> listPN = FileHandler.importExcel(path, new PhieuNhapMapper());
+                    for (PhieuNhapDTO dto: listPN) {
+                        if (phieuNhapBUS.isExist(dto))
+                            phieuNhapBUS.update(dto);
+                        else phieuNhapBUS.save(dto);
+                    }
+                    break;
+
+                case "Chi tiết phiếu nhập":
+                    ICT_PhieuNhapBUS ctPhieuNhapBUS = new CT_PhieuNhapBUS();
+                    ArrayList<CT_PhieuNhapDTO> listCTPN = FileHandler.importExcel(path, new CT_PhieuNhapMapper());
+                    for (CT_PhieuNhapDTO dto: listCTPN) {
+                        if (ctPhieuNhapBUS.isExist(dto))
+                            ctPhieuNhapBUS.update(dto);
+                        else ctPhieuNhapBUS.save(dto);
+                    }
+                    break;
+
+                case "Nhà cung cấp":
+                    INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();
+                    ArrayList<NhaCungCapDTO> listNCC = FileHandler.importExcel(path, new NhaCungCapMapper());
+                    for (NhaCungCapDTO dto: listNCC) {
+                        if (nhaCungCapBUS.isExist(dto))
+                            nhaCungCapBUS.update(dto);
+                        else nhaCungCapBUS.save(dto);
+                    }
+                    break;
+
+                case "Khuyến mãi":
+                    IKhuyenMaiBUS khuyenMaiBUS = new KhuyenMaiBUS();
+                    ArrayList<KhuyenMaiDTO> listKM = FileHandler.importExcel(path, new KhuyenMaiMapper());
+                    for (KhuyenMaiDTO dto: listKM) {
+                        if (khuyenMaiBUS.isExist(dto))
+                            khuyenMaiBUS.update(dto);
+                        else khuyenMaiBUS.save(dto);
+                    }
+                    break;
+
+                case "Chi tiết khuyến mãi":
+                    ICT_KhuyenMaiBUS ctKhuyenMaiBUS = new CT_KhuyenMaiBUS();
+                    ArrayList<CT_KhuyenMaiDTO> listCTKM = FileHandler.importExcel(path, new CT_KhuyenMaiMapper());
+                    for (CT_KhuyenMaiDTO dto: listCTKM) {
+                        if (ctKhuyenMaiBUS.isExist(dto))
+                            ctKhuyenMaiBUS.update(dto);
+                        else ctKhuyenMaiBUS.save(dto);
+                    }
+                    break;
+
+                case "Khách hàng":
+                    IKhachHangBUS khachHangBUS = new KhachHangBUS();
+                    ArrayList<KhachHangDTO> listKH = FileHandler.importExcel(path, new KhachHangMapper());
+                    for (KhachHangDTO dto: listKH) {
+                        if (khachHangBUS.isExist(dto))
+                            khachHangBUS.update(dto);
+                        else khachHangBUS.save(dto);
+                    }
+                    break;
+
+                case "Nhân viên":
+                    INhanVienBUS nhanVienBUS = new NhanVienBUS();
+                    ArrayList<NhanVienDTO> listNV = FileHandler.importExcel(path, new NhanVienMapper());
+                    for (NhanVienDTO dto: listNV) {
+                        if (nhanVienBUS.isExist(dto))
+                            nhanVienBUS.update(dto);
+                        else nhanVienBUS.save(dto);
+                    }
+                    break;
+
+                case "Tài khoản":
+                    ITaiKhoanBUS taiKhoanBUS = new TaiKhoanBUS();
+                    ArrayList<TaiKhoanDTO> listTK = FileHandler.importExcel(path, new TaiKhoanMapper());
+                    for (TaiKhoanDTO dto: listTK) {
+                        if (taiKhoanBUS.isExist(dto))
+                            taiKhoanBUS.update(dto);
+                        else taiKhoanBUS.save(dto);
+                    }
+                    break;
+
+                case "Phân quyền":
+                    IPhanQuyenBUS phanQuyenBUS = new PhanQuyenBUS();
+                    ArrayList<PhanQuyenDTO> listPQ = FileHandler.importExcel(path, new PhanQuyenMapper());
+                    for (PhanQuyenDTO dto: listPQ) {
+                        if (phanQuyenBUS.isExist(dto))
+                            phanQuyenBUS.update(dto);
+                        else phanQuyenBUS.save(dto);
+                    }
+                    break;
+
+                case "Chi tiết phân quyền":
+                    ICT_PhanQuyenBUS ctPhanQuyenBUS = new CT_PhanQuyenBUS();
+                    ArrayList<CT_PhanQuyenDTO> listCTPQ = FileHandler.importExcel(path, new CT_PhanQuyenMapper());
+                    for (CT_PhanQuyenDTO dto: listCTPQ) {
+                        if (ctPhanQuyenBUS.isExist(dto))
+                            ctPhanQuyenBUS.update(dto);
+                        else ctPhanQuyenBUS.save(dto);
+                    }
+                    break;
+
+                default:
+                    throw new Exception("Đối tượng nhập không đúng.");
+            }
+            JOptionPane.showMessageDialog(FormExcel.this, "Nhập file thành công.\n", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormExcel.this, "Nhập file thất bại.\n" + e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void onClickBtnExportExcel() {
+        String exportPath = "export/";
+        try {
+            if (isSelectedHD()) {
+                FileHandler.exportExcel(exportPath, new HoaDonBUS().findAll(), new HoaDonMapper());
+                FileHandler.exportExcel(exportPath, new CT_HoaDonBUS().findAll(), new CT_HoaDonMapper());
+            }
+
+            if (isSelectedSP()) {
+                FileHandler.exportExcel(exportPath, new SanPhamBUS().findAll(), new SanPhamMapper());
+                FileHandler.exportExcel(exportPath, new LoaiSPBUS().findAll(), new LoaiSPMapper());
+            }
+
+            if (isSelectedPN()) {
+                FileHandler.exportExcel(exportPath, new PhieuNhapBUS().findAll(), new PhieuNhapMapper());
+                FileHandler.exportExcel(exportPath, new CT_PhieuNhapBUS().findAll(), new CT_PhieuNhapMapper());
+            }
+
+            if (isSelectedNCC())
+                FileHandler.exportExcel(exportPath, new HoaDonBUS().findAll(), new HoaDonMapper());
+
+            if (isSelectedNS()) {
+                FileHandler.exportExcel(exportPath, new NhanVienBUS().findAll(), new NhanVienMapper());
+                FileHandler.exportExcel(exportPath, new TaiKhoanBUS().findAll(), new TaiKhoanMapper());
+                FileHandler.exportExcel(exportPath, new PhanQuyenBUS().findAll(), new PhanQuyenMapper());
+                FileHandler.exportExcel(exportPath, new CT_PhanQuyenBUS().findAll(), new CT_PhanQuyenMapper());
+            }
+
+            if (isSelectedKM()) {
+                FileHandler.exportExcel(exportPath, new KhuyenMaiBUS().findAll(), new KhuyenMaiMapper());
+                FileHandler.exportExcel(exportPath, new CT_KhuyenMaiBUS().findAll(), new CT_KhuyenMaiMapper());
+            }
+
+            if (isSelectedKH())
+                FileHandler.exportExcel(exportPath, new KhachHangBUS().findAll(), new KhachHangMapper());
+
+            JOptionPane.showMessageDialog(FormExcel.this, "Xuất file thành công.\n", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormExcel.this, "Xuất file thất bại.\n" + e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void onClickBtnExportPDF() {
+        int id;
+        try {
+            id = Integer.parseInt(StringUtils.removeLetter(txtDetailPDF.getText()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(FormExcel.this, "Đối tượng xuất PDF không đúng.", "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (txtDetailPDF.getText().startsWith("HD")) {
+            IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+            ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
+            HoaDonDTO dto = hoaDonBUS.findByID(id);
+            if (dto == null)
+                return;
+            ArrayList<CT_HoaDonDTO> list = ctHoaDonBUS.findByMaHD(dto.getMaHD());
+            String path = "export/" + dto.getMaHD() + " " + new Date(dto.getNgayLap().getTime()) + ".xls";
+            if (FileHandler.exportPDFReport(path, dto, new ArrayList<IDetailEntity>(list))) {
+                JOptionPane.showMessageDialog(FormExcel.this, "Xuất PDF hóa đơn thành công.", "Không hợp lệ", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(FormExcel.this, "Xuất PDF hóa đơn thất bại.", "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else if (txtDetailPDF.getText().startsWith("PN")) {
+            IPhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
+            ICT_PhieuNhapBUS ctPhieuNhapBUS = new CT_PhieuNhapBUS();
+            PhieuNhapDTO dto = phieuNhapBUS.findByID(id);
+            if (dto == null)
+                return;
+            ArrayList<CT_PhieuNhapDTO> list = ctPhieuNhapBUS.findByMaPN(dto.getMaPN());
+            String path = "export/" + dto.getMaPN() + " " + new Date(dto.getNgayTao().getTime()) + ".xls";
+            if (FileHandler.exportPDFReport(path, dto, new ArrayList<IDetailEntity>(list))) {
+                JOptionPane.showMessageDialog(FormExcel.this, "Xuất PDF phiếu nhập thành công.", "Không hợp lệ", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(FormExcel.this, "Xuất PDF phiếu nhập thất bại.", "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void onClickBtnSelectHDPDF() {
+        try {
+            JFrame frame = new FrameSelect("hóa đơn", txtDetailPDF, new HoaDonSearchMapper(), FormHoaDon.class, FormExcel.class);
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    frame.setVisible(true);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormExcel.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void onClickBtnSelectPNPDF() {
+        try {
+            JFrame frame = new FrameSelect("phiếu nhập", txtDetailPDF, new PhieuNhapSearchMapper(), FormPhieuNhap.class, FormExcel.class);
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    frame.setVisible(true);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormExcel.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void animatedProgressUpload() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int currentPercent = 0;
+                while (currentPercent <= 100) {
+                    lbPercentUpload.setText(currentPercent + "%");
+                    progressUpload.setSize(10 + (3 * currentPercent), progressUpload.getHeight());
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException ignored) {}
+                    currentPercent += 2;
+                }
+            }
+        }).start();
+    }
+
+    private boolean isSelectedHD() {
+        return selectedHD;
+    }
+
+    private void setSelectedHD(boolean selectedHD) {
+        this.selectedHD = selectedHD;
+        if (selectedHD) {
+            exportHDPanel.setBorder(new MatteBorder(5,5,5,5, MyColor.LIGHTGREEN));
+            lbTickHD.setVisible(true);
+        } else {
+            exportHDPanel.setBorder(null);
+            lbTickHD.setVisible(false);
+        }
+    }
+
+    private boolean isSelectedNCC() {
+        return selectedNCC;
+    }
+
+    private void setSelectedNCC(boolean selectedNCC) {
+        this.selectedNCC = selectedNCC;
+        if (selectedNCC) {
+            exportNCCPanel.setBorder(new MatteBorder(5,5,5,5, MyColor.LIGHTGREEN));
+            lbTickNCC.setVisible(true);
+        } else {
+            exportNCCPanel.setBorder(null);
+            lbTickNCC.setVisible(false);
+        }
+    }
+
+    private boolean isSelectedPN() {
+        return selectedPN;
+    }
+
+    private void setSelectedPN(boolean selectedPN) {
+        this.selectedPN = selectedPN;
+        if (selectedPN) {
+            exportPNPanel.setBorder(new MatteBorder(5,5,5,5, MyColor.LIGHTGREEN));
+            lbTickPN.setVisible(true);
+        } else {
+            exportPNPanel.setBorder(null);
+            lbTickPN.setVisible(false);
+        }
+    }
+
+    private boolean isSelectedSP() {
+        return selectedSP;
+    }
+
+    private void setSelectedSP(boolean selectedSP) {
+        this.selectedSP = selectedSP;
+        if (selectedSP) {
+            exportSPPanel.setBorder(new MatteBorder(5,5,5,5, MyColor.LIGHTGREEN));
+            lbTickSP.setVisible(true);
+        } else {
+            exportSPPanel.setBorder(null);
+            lbTickSP.setVisible(false);
+        }
+    }
+
+    private boolean isSelectedKH() {
+        return selectedKH;
+    }
+
+    private void setSelectedKH(boolean selectedKH) {
+        this.selectedKH = selectedKH;
+        if (selectedKH) {
+            exportKHPanel.setBorder(new MatteBorder(5,5,5,5, MyColor.LIGHTGREEN));
+            lbTickKH.setVisible(true);
+        } else {
+            exportKHPanel.setBorder(null);
+            lbTickKH.setVisible(false);
+        }
+    }
+
+    private boolean isSelectedNS() {
+        return selectedNS;
+    }
+
+    private void setSelectedNS(boolean selectedNS) {
+        this.selectedNS = selectedNS;
+        if (selectedNS) {
+            exportNVPanel.setBorder(new MatteBorder(5,5,5,5, MyColor.LIGHTGREEN));
+            lbTickNV.setVisible(true);
+        } else {
+            exportNVPanel.setBorder(null);
+            lbTickNV.setVisible(false);
+        }
+    }
+
+    private boolean isSelectedKM() {
+        return selectedKM;
+    }
+
+    private void setSelectedKM(boolean selectedKM) {
+        this.selectedKM = selectedKM;
+        if (selectedKM) {
+            exportKMPanel.setBorder(new MatteBorder(5,5,5,5, MyColor.LIGHTGREEN));
+            lbTickKM.setVisible(true);
+        } else {
+            exportKMPanel.setBorder(null);
+            lbTickKM.setVisible(false);
+        }
+    }
+
+    private boolean isSelectedTK() {
+        return selectedTK;
+    }
+
+    private void setSelectedTK(boolean selectedTK) {
+        this.selectedTK = selectedTK;
+    }
+
+    private final Image tickImage = new ImageIcon("bin/images/components/check.png").getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH);
+    private final JPanel importPanel = new JPanel();
+    private final JLabel lbDragDrop = new JLabel();
+    private final JLabel lbDragDrop2 = new JLabel();
+    private final JLabel lbDragDrop3 = new JLabel();
+    private final JButton btnImport = new JButton();
+    private final JLabel icFile = new JLabel();
+    private final JLabel lbPercentUpload = new JLabel();
+    private final JPanel progressUpload = new JPanel();
+    private final JPanel progressUploadHolder = new JPanel();
+    private final JLabel lbFileName = new JLabel();
+    private final JComboBox<String> cbTarget = new JComboBox<>();
+    private final JLabel lbTarget = new JLabel();
+    private final JLabel lbTitleImport = new JLabel();
+    private final JPanel exportPanel = new JPanel();
+    private final JLabel lbTitleExport = new JLabel();
+    private final JLabel lbTickHD = new JLabel();
+    private final JPanel exportHDPanel = new JPanel();
+    private final JLabel lbIconHD = new JLabel();
+    private final JLabel lbNameHD = new JLabel();
+    private final JLabel lbSubHD = new JLabel();
+    private final JLabel lbQuantityHD = new JLabel();
+    private final JButton btnExportExcel = new JButton();
+    private final JLabel lbTickPN = new JLabel();
+    private final JPanel exportPNPanel = new JPanel();
+    private final JLabel jLabel8 = new JLabel();
+    private final JLabel jLabel9 = new JLabel();
+    private final JLabel jLabel11 = new JLabel();
+    private final JLabel jLabel12 = new JLabel();
+    private final JLabel lbTickKH = new JLabel();
+    private final JPanel exportKHPanel = new JPanel();
+    private final JLabel jLabel14 = new JLabel();
+    private final JLabel jLabel15 = new JLabel();
+    private final JLabel jLabel16 = new JLabel();
+    private final JLabel jLabel17 = new JLabel();
+    private final JLabel lbTickKM = new JLabel();
+    private final JPanel exportKMPanel = new JPanel();
+    private final JLabel jLabel19 = new JLabel();
+    private final JLabel jLabel20 = new JLabel();
+    private final JLabel jLabel21 = new JLabel();
+    private final JLabel jLabel22 = new JLabel();
+    private final JLabel jLabel28 = new JLabel();
+    private final JPanel exportTKPanel = new JPanel();
+    private final JLabel jLabel24 = new JLabel();
+    private final JLabel jLabel25 = new JLabel();
+    private final JLabel jLabel26 = new JLabel();
+    private final JLabel jLabel27 = new JLabel();
+    private final JLabel lbTickNV = new JLabel();
+    private final JPanel exportNVPanel = new JPanel();
+    private final JLabel jLabel29 = new JLabel();
+    private final JLabel jLabel30 = new JLabel();
+    private final JLabel jLabel31 = new JLabel();
+    private final JLabel jLabel32 = new JLabel();
+    private final JLabel lbTickSP = new JLabel();
+    private final JPanel exportSPPanel = new JPanel();
+    private final JLabel jLabel34 = new JLabel();
+    private final JLabel jLabel35 = new JLabel();
+    private final JLabel jLabel36 = new JLabel();
+    private final JLabel jLabel37 = new JLabel();
+    private final JLabel lbTickNCC = new JLabel();
+    private final JPanel exportNCCPanel = new JPanel();
+    private final JLabel jLabel39 = new JLabel();
+    private final JLabel jLabel40 = new JLabel();
+    private final JLabel jLabel41 = new JLabel();
+    private final JLabel jLabel42 = new JLabel();
+    private final JPanel mainPanel = new JPanel();
+    private final JLabel lbTitlePDF = new JLabel();
+    private final JButton btnExportPDF = new JButton();
+    private final JTextField txtDetailPDF = new JTextField();
+    private final JButton btnSelectHDPDF = new JButton();
+    private final JButton btnSelectPNPDF = new JButton();
+    private final JLabel lbCTExportPDF = new JLabel();
 }

@@ -123,7 +123,7 @@ public class FileHandler {
         return list;
     }
 
-    public static void exportPDFReport(String path, IEntity reportInstance, ArrayList<IDetailEntity> list) {
+    public static boolean exportPDFReport(String path, IEntity reportInstance, ArrayList<IDetailEntity> list) {
         ISanPhamBUS sanPhamBUS = new SanPhamBUS();
         INhanVienBUS nhanVienBUS = new NhanVienBUS();
 
@@ -174,7 +174,7 @@ public class FileHandler {
             totalPrice = String.valueOf(phieuNhap.getTongTien());
         }
         else
-            return;
+            return false;
 
 
         PDDocument document = new PDDocument();
@@ -309,8 +309,10 @@ public class FileHandler {
 
             content.close();
             document.save(path);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
 

@@ -1,5 +1,7 @@
 package GUI.components;
 
+import GUI.common.MyColor;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;

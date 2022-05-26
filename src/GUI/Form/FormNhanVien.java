@@ -453,9 +453,9 @@ public class FormNhanVien extends JTablePanel {
                 throw new Exception("Số điện thoại không hợp lệ.");
             if (!Validator.isValidEmail(dto.getEmail()))
                 throw new Exception("Email không hợp lệ.");
-            if (dto.getNgaySinh() == null)
+            if (Validator.isValidBirthday(dto.getNgaySinh()))
                 throw new Exception("Ngày sinh không hợp lệ.");
-            if (dto.getLuong() == null)
+            if (dto.getLuong() == null || dto.getLuong() <=0)
                 throw new Exception("Lương không hợp lệ.");
             for (NhanVienDTO nhanVienDTO:nhanVienBUS.findAll()) {
                 if (nhanVienDTO.getMaTK().equals(dto.getMaTK()) && !nhanVienDTO.getMaNV().equals(dto.getMaNV())) {
@@ -511,9 +511,9 @@ public class FormNhanVien extends JTablePanel {
                 throw new Exception("Số điện thoại không hợp lệ.");
             if (!Validator.isValidEmail(newDto.getEmail()))
                 throw new Exception("Email không hợp lệ.");
-            if (newDto.getNgaySinh() == null)
+            if (Validator.isValidBirthday(newDto.getNgaySinh()))
                 throw new Exception("Ngày sinh không hợp lệ.");
-            if (newDto.getLuong() == null)
+            if (newDto.getLuong() == null || newDto.getLuong() <=0)
                 throw new Exception("Lương không hợp lệ.");
             for (NhanVienDTO nhanVienDTO:nhanVienBUS.findAll()) {
                 if (nhanVienDTO.getMaTK().equals(newDto.getMaTK()) && !nhanVienDTO.getMaNV().equals(newDto.getMaNV())) {

@@ -37,7 +37,7 @@ public class NhanVienSearchMapper implements ISearchMapper {
                     return new ArrayList<IEntity>(bus.findByNgaySinh(sqlDate, sqlDate));
 
                 case 4:
-                    return new ArrayList<IEntity>(bus.findBySDT(Integer.valueOf(value)));
+                    return new ArrayList<IEntity>(bus.findBySDT(value));
 
                 case 5:
                     return new ArrayList<IEntity>(bus.findByEmail(value));

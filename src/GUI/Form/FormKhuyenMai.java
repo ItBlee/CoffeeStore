@@ -557,7 +557,7 @@ public class FormKhuyenMai extends JTablePanel {
                 throw new Exception("Vui lòng chọn sản phẩm.");
             if (sanPhamBUS.findByID(dto.getMaSP()) == null)
                 throw new Exception("Không tìm thấy sản phẩm.");
-            if (dto.getGiamGia() == null || dto.getGiamGia() >= 0)
+            if (dto.getGiamGia() == null || dto.getGiamGia() <= 0)
                 throw new Exception("Tiền giảm không hợp lệ.");
             ctKhuyenMaiBUS.save(dto);
         } catch (Exception e) {
@@ -632,7 +632,7 @@ public class FormKhuyenMai extends JTablePanel {
                 throw new Exception("Vui lòng chọn sản phẩm.");
             if (sanPhamBUS.findByID(newDto.getMaSP()) == null)
                 throw new Exception("Không tìm thấy sản phẩm.");
-            if (newDto.getGiamGia() == null || newDto.getGiamGia() >= 0)
+            if (newDto.getGiamGia() == null || newDto.getGiamGia() <= 0)
                 throw new Exception("Tiền giảm không hợp lệ.");
             CT_KhuyenMaiDTO oldDto = ctKhuyenMaiBUS.findByID(newDto.getID());
             if (oldDto == null)

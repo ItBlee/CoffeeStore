@@ -12,7 +12,7 @@ public interface INhanVienBUS extends ISearchableBUS<NhanVienDTO>, ICrudBUS<Nhan
     NhanVienDTO findByTaiKhoan(String tenTK);
     ArrayList<NhanVienDTO> findByHoTen(String hoTen);
     ArrayList<NhanVienDTO> findByNgaySinh(Date tuNgay, Date denNgay);
-    ArrayList<NhanVienDTO> findBySDT(Integer sdt);
+    ArrayList<NhanVienDTO> findBySDT(String sdt);
     ArrayList<NhanVienDTO> findByEmail(String email);
     ArrayList<NhanVienDTO> findByGioiTinh(Integer gioiTinh);
     ArrayList<NhanVienDTO> findByLuong(Integer luong);

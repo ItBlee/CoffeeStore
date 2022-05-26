@@ -43,4 +43,12 @@ public class LoaiSPDTO implements IEntity {
     public void setMoTa(String moTa) {
         MoTa = moTa;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LoaiSPDTO)) return false;
+        LoaiSPDTO loaiSPDTO = (LoaiSPDTO) o;
+        return getMaLoai().equals(loaiSPDTO.getMaLoai()) || getTenLoai().equals(loaiSPDTO.getTenLoai());
+    }
 }

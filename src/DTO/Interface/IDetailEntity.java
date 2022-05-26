@@ -1,6 +1,6 @@
 package DTO.Interface;
 
-public interface IDetailEntity extends  IEntity{
+public interface IDetailEntity extends IEntity{
     Integer getForeignID();
     void setForeignID(Integer foreignID);
     Integer getSoLuong();
