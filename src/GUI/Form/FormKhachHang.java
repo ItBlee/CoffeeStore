@@ -1,12 +1,16 @@
 package GUI.Form;
 
-import BUS.Interfaces.IKhachHangBUS;
-import BUS.KhachHangBUS;
+import BUS.*;
+import BUS.Interfaces.*;
 import BUS.SearchMapper.KhachHangSearchMapper;
+import DTO.CT_HoaDonDTO;
+import DTO.HoaDonDTO;
 import DTO.Interface.IEntity;
 import DTO.KhachHangDTO;
+import DTO.SanPhamDTO;
 import GUI.Form.Abstract.JTablePanel;
 import GUI.FrameSearch;
+import GUI.common.MyColor;
 import GUI.components.TableColumn;
 import Utils.General;
 import Utils.Validator;
@@ -18,7 +22,13 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class FormKhachHang extends JTablePanel {
     public FormKhachHang() {
@@ -252,17 +262,13 @@ public class FormKhachHang extends JTablePanel {
         progressBought.setLayout(null);
 
         progressBoughtText.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        progressBoughtText.setForeground(new Color(47, 168, 79));
         progressBoughtText.setHorizontalAlignment(SwingConstants.CENTER);
-        progressBoughtText.setText("64 sản phẩm (80%)");
         progressBought.add(progressBoughtText);
         progressBoughtText.setBounds(0, 0, 370, 30);
 
-        progressBoughtValue.setBackground(new Color(153, 255, 153));
         progressBoughtValue.setLayout(null);
-
         progressBought.add(progressBoughtValue);
-        progressBoughtValue.setBounds(0, 0, 310, 30);
+        progressBoughtValue.setBounds(0, 0, 0, 30);
 
         taskPanel.add(progressBought);
         progressBought.setBounds(90, 100, 370, 30);
@@ -275,17 +281,13 @@ public class FormKhachHang extends JTablePanel {
         progressPay.setLayout(null);
 
         progressPayText.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        progressPayText.setForeground(new Color(243, 170, 24));
         progressPayText.setHorizontalAlignment(SwingConstants.CENTER);
-        progressPayText.setText("23.000.000 đ (40%)");
         progressPay.add(progressPayText);
         progressPayText.setBounds(0, 0, 370, 30);
 
-        progressPayValue.setBackground(new Color(255, 231, 153));
         progressPayValue.setLayout(null);
-
         progressPay.add(progressPayValue);
-        progressPayValue.setBounds(0, 0, 140, 30);
+        progressPayValue.setBounds(0, 0, 0, 30);
 
         taskPanel.add(progressPay);
         progressPay.setBounds(90, 160, 370, 30);
@@ -298,7 +300,6 @@ public class FormKhachHang extends JTablePanel {
 
         lbFavoriteValue.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lbFavoriteValue.setForeground(new Color(155, 84, 225));
-        lbFavoriteValue.setText("Cafe Trung Nguyên");
         taskPanel.add(lbFavoriteValue);
         lbFavoriteValue.setBounds(190, 280, 180, 30);
 
@@ -310,7 +311,6 @@ public class FormKhachHang extends JTablePanel {
 
         lbTimeValue.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lbTimeValue.setForeground(new Color(155, 84, 225));
-        lbTimeValue.setText("10/09/2021 - 23/05/2022");
         taskPanel.add(lbTimeValue);
         lbTimeValue.setBounds(150, 220, 310, 30);
 
@@ -322,7 +322,6 @@ public class FormKhachHang extends JTablePanel {
 
         lbFavoriteCategoryValue.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lbFavoriteCategoryValue.setForeground(new Color(155, 84, 225));
-        lbFavoriteCategoryValue.setText("Cafe đen");
         taskPanel.add(lbFavoriteCategoryValue);
         lbFavoriteCategoryValue.setBounds(190, 320, 180, 30);
 
@@ -342,6 +341,7 @@ public class FormKhachHang extends JTablePanel {
         dto.setTen(txtTen.getText());
         dto.setSDT(txtSDT.getText());
         dto.setDiaChi(txtDiaChi.getText());
+        dto.setEmail(txtEmail.getText());
         dto.setTinhTrang(1);
         return dto;
     }
@@ -490,6 +490,116 @@ public class FormKhachHang extends JTablePanel {
             btnThem.setText("Thêm");
             btnXoa.setText("Xóa");
         }
+        calculateWorkStat(dto.getMaKH());
+    }
+
+    private void calculateWorkStat(int MaKH) {
+        IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
+        ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+        ILoaiSPBUS loaiSPBUS = new LoaiSPBUS();
+
+        double totalBought = 0;
+        for (CT_HoaDonDTO dto:ctHoaDonBUS.findAll())
+            totalBought += dto.getSoLuong();
+        double bought = 0;
+        for (HoaDonDTO dto:hoaDonBUS.findByKhachHang(MaKH))
+            for (CT_HoaDonDTO child :ctHoaDonBUS.findByMaHD(dto.getMaHD()))
+                bought += child.getSoLuong();
+        int percentBought = 0;
+        try {
+            percentBought = (int) ((bought/totalBought)*100);
+        } catch (Exception ignored) {}
+
+        double totalPay = 0;
+        for (CT_HoaDonDTO dto:ctHoaDonBUS.findAll())
+            totalPay += dto.getThanhTien();
+        double pay = 0;
+        for (HoaDonDTO dto:hoaDonBUS.findByKhachHang(MaKH))
+            for (CT_HoaDonDTO child :ctHoaDonBUS.findByMaHD(dto.getMaHD()))
+                pay += child.getThanhTien();
+        int percentPay = 0;
+        try {
+            percentPay = (int) ((pay / totalPay)*100);
+        } catch (Exception ignored) {}
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+        String paySTR = currencyVN.format((int) pay).replace(" ₫", "").replace(".",",") + " đ";
+
+        progressBoughtText.setText("");
+        progressBoughtValue.setSize(0, progressBoughtValue.getHeight());
+        progressPayText.setText("");
+        progressPayValue.setSize(0, progressPayValue.getHeight());
+        animatedProgress("sản phẩm", percentBought, String.valueOf((int) bought), progressBoughtText, progressBoughtValue);
+        animatedProgress("", percentPay, paySTR, progressPayText, progressPayValue);
+
+        Date min = null;
+        Date max = null;
+        HashMap<Integer, Integer> boughtMap = new HashMap<Integer, Integer>();
+        ArrayList<SanPhamDTO> boughtList = new ArrayList<SanPhamDTO>();
+        for (HoaDonDTO dto:hoaDonBUS.findByKhachHang(MaKH)) {
+            if (min == null)
+                min = new Date(dto.getNgayLap().getTime());
+            else if (dto.getNgayLap().before(min))
+                min = new Date(dto.getNgayLap().getTime());
+            if (max == null)
+                max = new Date(dto.getNgayLap().getTime());
+            else if (dto.getNgayLap().after(max))
+                max = new Date(dto.getNgayLap().getTime());
+            for (CT_HoaDonDTO child :ctHoaDonBUS.findByMaHD(dto.getMaHD()))
+                boughtList.add(sanPhamBUS.findByID(child.getMaSP()));
+        }
+        for (SanPhamDTO dto:boughtList) {
+            if (!boughtMap.containsKey(dto.getMaSP()))
+                boughtMap.put(dto.getMaSP(), dto.getSoLuong());
+            else
+                boughtMap.replace(dto.getMaSP(), boughtMap.get(dto.getMaSP()) + dto.getSoLuong());
+        }
+        String bestSeller = "Chưa xác định";
+        String bestSellerCategory = "Chưa xác định";
+        Integer key = null;
+        int bestSellerCount = 0;
+        for (Map.Entry<Integer, Integer> entry :boughtMap.entrySet()) {
+            if (entry.getValue() > bestSellerCount) {
+                bestSellerCount = entry.getValue();
+                key = entry.getKey();
+            }
+        }
+        if (key != null) {
+            SanPhamDTO dto = sanPhamBUS.findByID(key);
+            bestSeller = dto.getTenSP();
+            bestSellerCategory = loaiSPBUS.findByID(dto.getMaLoai()).getTenLoai();
+        }
+
+        lbFavoriteValue.setText(bestSeller);
+        lbFavoriteCategoryValue.setText(bestSellerCategory);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String activeDate = "Chưa xác định";
+        if (min != null) {
+            if (min.equals(max))
+                activeDate = dateFormat.format(max);
+            if (min.before(max))
+                activeDate = dateFormat.format(min) + " - " + dateFormat.format(max);
+        }
+        lbTimeValue.setText(activeDate);
+    }
+
+    private void animatedProgress(String target, int percent, String worked, JLabel lbText, JPanel progress) {
+        int lowState = 20;
+        int mediumState = 50;
+        if (percent < lowState) {
+            lbText.setForeground(MyColor.RED);
+            progress.setBackground(new Color(255, 153, 153));
+        } else if (percent < mediumState) {
+            lbText.setForeground(MyColor.ORANGE);
+            progress.setBackground(new Color(255, 231, 153));
+        } else {
+            lbText.setForeground(MyColor.GREEN);
+            progress.setBackground(new Color(153, 255, 153));
+        }
+        lbText.setText(worked + " " + target + " (" + percent + "%)");
+        progress.setSize(4 * percent, progress.getHeight());
     }
 
     private final JPanel infoPanel = new JPanel();

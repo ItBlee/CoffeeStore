@@ -14,7 +14,7 @@ public class KhachHangMapper implements IRowMapper<KhachHangDTO>, IExcelRowMappe
     public KhachHangDTO mapRow(ResultSet resultSet) {
         try {
             KhachHangDTO khachHang = new KhachHangDTO();
-            khachHang.setMaKH(resultSet.getInt(""));
+            khachHang.setMaKH(resultSet.getInt("MaKH"));
             khachHang.setHo(resultSet.getString("Ho"));
             khachHang.setTen(resultSet.getString("Ten"));
             khachHang.setSDT(resultSet.getString("SDT"));

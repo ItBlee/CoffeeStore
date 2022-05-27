@@ -22,6 +22,7 @@ public class SanPhamMapper implements IRowMapper<SanPhamDTO>, IExcelRowMapper<Sa
             sanPham.setMoTa(resultSet.getString("MoTa"));
             sanPham.setHinhAnh(resultSet.getString("HinhAnh"));
             sanPham.setDonGia(resultSet.getInt("DonGia"));
+            sanPham.setDonVi(resultSet.getString("DonVi"));
             sanPham.setSoLuong(resultSet.getInt("SoLuong"));
             sanPham.setTinhTrang(resultSet.getInt("TinhTrang"));
             return sanPham;

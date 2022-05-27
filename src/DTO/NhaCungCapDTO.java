@@ -73,6 +73,6 @@ public class NhaCungCapDTO implements IEntity {
         if (this == o) return true;
         if (!(o instanceof NhaCungCapDTO)) return false;
         NhaCungCapDTO that = (NhaCungCapDTO) o;
-        return getMaNCC().equals(that.getMaNCC());
+        return getMaNCC().equals(that.getMaNCC()) || getTenNCC().equals(that.getTenNCC());
     }
 }

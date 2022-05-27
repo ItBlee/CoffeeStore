@@ -25,12 +25,12 @@ public class CT_HoaDonDTO implements IDetailEntity {
 
     @Override
     public Integer getForeignID() {
-        return MaHD;
+        return MaSP;
     }
 
     @Override
     public void setForeignID(Integer foreignID) {
-        MaHD = foreignID;
+        MaSP = foreignID;
     }
 
     public Integer getMaCTHD() {
@@ -87,5 +87,13 @@ public class CT_HoaDonDTO implements IDetailEntity {
 
     public void setThanhTien(Integer thanhTien) {
         ThanhTien = thanhTien;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CT_HoaDonDTO)) return false;
+        CT_HoaDonDTO that = (CT_HoaDonDTO) o;
+        return getMaHD().equals(that.getMaHD()) && getMaSP().equals(that.getMaSP());
     }
 }

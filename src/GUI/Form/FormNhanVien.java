@@ -1,11 +1,10 @@
 package GUI.Form;
 
-import BUS.Interfaces.INhanVienBUS;
-import BUS.Interfaces.ITaiKhoanBUS;
-import BUS.NhanVienBUS;
+import BUS.*;
+import BUS.Interfaces.*;
 import BUS.SearchMapper.NhanVienSearchMapper;
 import BUS.SearchMapper.TaiKhoanSearchMapper;
-import BUS.TaiKhoanBUS;
+import DTO.HoaDonDTO;
 import DTO.Interface.IEntity;
 import DTO.NhanVienDTO;
 import DTO.Role;
@@ -13,6 +12,7 @@ import DTO.TaiKhoanDTO;
 import GUI.Form.Abstract.JTablePanel;
 import GUI.FrameSearch;
 import GUI.FrameSelect;
+import GUI.common.MyColor;
 import GUI.components.TableColumn;
 import Utils.General;
 import Utils.Validator;
@@ -28,7 +28,9 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 public class FormNhanVien extends JTablePanel {
     public FormNhanVien() {
@@ -320,16 +322,13 @@ public class FormNhanVien extends JTablePanel {
         progressHD.setLayout(null);
 
         progressHDText.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        progressHDText.setForeground(new Color(47, 168, 79));
         progressHDText.setHorizontalAlignment(SwingConstants.CENTER);
-        progressHDText.setText("15 hóa đơn (80%)");
         progressHD.add(progressHDText);
         progressHDText.setBounds(0, 0, 370, 30);
 
-        progressHDValue.setBackground(new Color(153, 255, 153));
         progressHDValue.setLayout(null);
         progressHD.add(progressHDValue);
-        progressHDValue.setBounds(0, 0, 310, 30);
+        progressHDValue.setBounds(0, 0, 0, 30);
 
         taskPanel.add(progressHD);
         progressHD.setBounds(90, 100, 370, 30);
@@ -342,16 +341,13 @@ public class FormNhanVien extends JTablePanel {
         progressPN.setLayout(null);
 
         progressPNText.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        progressPNText.setForeground(new Color(243, 170, 24));
         progressPNText.setHorizontalAlignment(SwingConstants.CENTER);
-        progressPNText.setText("8 phiếu nhập (40%)");
         progressPN.add(progressPNText);
         progressPNText.setBounds(0, 0, 370, 30);
 
-        progressPNValue.setBackground(new Color(255, 231, 153));
         progressPNValue.setLayout(null);
         progressPN.add(progressPNValue);
-        progressPNValue.setBounds(0, 0, 140, 30);
+        progressPNValue.setBounds(0, 0, 0, 30);
 
         taskPanel.add(progressPN);
         progressPN.setBounds(90, 160, 370, 30);
@@ -364,16 +360,13 @@ public class FormNhanVien extends JTablePanel {
         progressKH.setLayout(null);
 
         progressKHText.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        progressKHText.setForeground(new Color(47, 168, 79));
         progressKHText.setHorizontalAlignment(SwingConstants.CENTER);
-        progressKHText.setText("37 khách hàng (65%)");
         progressKH.add(progressKHText);
         progressKHText.setBounds(0, 0, 370, 30);
 
-        progressKHValue.setBackground(new Color(153, 255, 153));
         progressKHValue.setLayout(null);
         progressKH.add(progressKHValue);
-        progressKHValue.setBounds(0, 0, 230, 30);
+        progressKHValue.setBounds(0, 0, 0, 30);
 
         taskPanel.add(progressKH);
         progressKH.setBounds(90, 220, 370, 30);
@@ -381,16 +374,13 @@ public class FormNhanVien extends JTablePanel {
         progressLS.setLayout(null);
 
         progressLSText.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        progressLSText.setForeground(new Color(234, 61, 47));
         progressLSText.setHorizontalAlignment(SwingConstants.CENTER);
-        progressLSText.setText("2 thao tác (20%)");
         progressLS.add(progressLSText);
         progressLSText.setBounds(0, 0, 370, 30);
 
-        progressLSValue.setBackground(new Color(255, 153, 153));
         progressLSValue.setLayout(null);
         progressLS.add(progressLSValue);
-        progressLSValue.setBounds(0, 0, 50, 30);
+        progressLSValue.setBounds(0, 0, 0, 30);
 
         taskPanel.add(progressLS);
         progressLS.setBounds(90, 280, 370, 30);
@@ -423,8 +413,8 @@ public class FormNhanVien extends JTablePanel {
         Integer idNV = null;
         Integer idTK = null;
         try {
-            idNV = Integer.valueOf(txtMaNV.getText().replace("NV", ""));
             idTK = Integer.valueOf(txtMaTK.getText().replace("TK", ""));
+            idNV = Integer.valueOf(txtMaNV.getText().replace("NV", ""));
         } catch (NumberFormatException ignored) {}
 
         NhanVienDTO dto = new NhanVienDTO();
@@ -453,7 +443,7 @@ public class FormNhanVien extends JTablePanel {
                 throw new Exception("Số điện thoại không hợp lệ.");
             if (!Validator.isValidEmail(dto.getEmail()))
                 throw new Exception("Email không hợp lệ.");
-            if (Validator.isValidBirthday(dto.getNgaySinh()))
+            if (!Validator.isValidBirthday(dto.getNgaySinh()))
                 throw new Exception("Ngày sinh không hợp lệ.");
             if (dto.getLuong() == null || dto.getLuong() <=0)
                 throw new Exception("Lương không hợp lệ.");
@@ -511,16 +501,18 @@ public class FormNhanVien extends JTablePanel {
                 throw new Exception("Số điện thoại không hợp lệ.");
             if (!Validator.isValidEmail(newDto.getEmail()))
                 throw new Exception("Email không hợp lệ.");
-            if (Validator.isValidBirthday(newDto.getNgaySinh()))
+            if (!Validator.isValidBirthday(newDto.getNgaySinh()))
                 throw new Exception("Ngày sinh không hợp lệ.");
             if (newDto.getLuong() == null || newDto.getLuong() <=0)
                 throw new Exception("Lương không hợp lệ.");
-            for (NhanVienDTO nhanVienDTO:nhanVienBUS.findAll()) {
-                if (nhanVienDTO.getMaTK().equals(newDto.getMaTK()) && !nhanVienDTO.getMaNV().equals(newDto.getMaNV())) {
-                    throw new Exception("Tài khoản đã dùng.");
+            if (newDto.getMaTK() != null) {
+                for (NhanVienDTO nhanVienDTO : nhanVienBUS.findAll()) {
+                    if (nhanVienDTO.getMaTK().equals(newDto.getMaTK()) && !nhanVienDTO.getMaNV().equals(newDto.getMaNV())) {
+                        throw new Exception("Tài khoản đã dùng.");
+                    }
                 }
             }
-            if (newDto.getMaTK() == 0)
+            if (newDto.getMaTK() != null && newDto.getMaTK() == 0)
                 newDto.setMaTK(null);
             nhanVienBUS.update(newDto);
         } catch (Exception e) {
@@ -582,6 +574,15 @@ public class FormNhanVien extends JTablePanel {
         cbGioiTinh.setSelectedIndex(0);
         btnThem.setText("Thêm");
         btnXoa.setText("Xóa");
+
+        progressHDText.setText("");
+        progressHDValue.setSize(0, progressHDValue.getHeight());
+        progressPNText.setText("");
+        progressPNValue.setSize(0, progressPNValue.getHeight());
+        progressKHText.setText("");
+        progressKHValue.setSize(0, progressKHValue.getHeight());
+        progressLSText.setText("");
+        progressLSValue.setSize(0, progressLSValue.getHeight());
     }
 
     private void onClickTableRow() {
@@ -604,7 +605,7 @@ public class FormNhanVien extends JTablePanel {
         txtMaTK.setText(dto.getMaTK() != 0 ? "TK" + dto.getMaTK() : "Chưa có");
         txtSDT.setText(dto.getSDT());
         txtEmail.setText(dto.getEmail());
-        txtLuong.setText(currencyVN.format(dto.getLuong()).replace(" ₫", ""));
+        txtLuong.setText(currencyVN.format(dto.getLuong()).replace(" ₫", "").replace(".",","));
         txtNgaySinh.setDate(dto.getNgaySinh());
         cbGioiTinh.setSelectedIndex(dto.getGioiTinh() == 1 ? 0 : 1);
 
@@ -616,6 +617,74 @@ public class FormNhanVien extends JTablePanel {
             btnThem.setText("Thêm");
             btnXoa.setText("Xóa");
         }
+        calculateWorkStat(dto.getMaNV());
+    }
+
+    private void calculateWorkStat(int MaNV) {
+        IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        double totalHD = hoaDonBUS.getTotalCount();
+        double workedHD = hoaDonBUS.findByNhanVien(MaNV).size();
+        int percentHD = 0;
+        try {
+            percentHD = (int) ((workedHD/totalHD)*100);
+        } catch (Exception ignored) {}
+
+        IPhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
+        double totalPN = phieuNhapBUS.getTotalCount();
+        double workedPN = phieuNhapBUS.findByNhanVien(MaNV).size();
+        int percentPN = 0;
+        try {
+            percentPN = (int) ((workedPN/totalPN)*100);
+        } catch (Exception ignored) {}
+
+        IKhachHangBUS khachHangBUS = new KhachHangBUS();
+        Set<Integer> supported = new HashSet<Integer>();
+        for (HoaDonDTO dto:hoaDonBUS.findByNhanVien(MaNV))
+            supported.add(dto.getMaKH());
+        double totalKH = khachHangBUS.getTotalCount();
+        double supportedKH = supported.size();
+        int percentKH = 0;
+        try {
+            percentKH = (int) ((supportedKH/totalKH)*100);
+        } catch (Exception ignored) {}
+
+        ILichSuBUS lichSuBUS = new LichSuBUS();
+        double totalLS = lichSuBUS.getTotalCount();
+        double workedLS = lichSuBUS.findByNguoiThucHien(MaNV).size();
+        int percentLS = 0;
+        try {
+            percentLS = (int) ((workedLS/totalLS)*100);
+        } catch (Exception ignored) {}
+
+        progressHDText.setText("");
+        progressHDValue.setSize(0, progressHDValue.getHeight());
+        progressPNText.setText("");
+        progressPNValue.setSize(0, progressPNValue.getHeight());
+        progressKHText.setText("");
+        progressKHValue.setSize(0, progressKHValue.getHeight());
+        progressLSText.setText("");
+        progressLSValue.setSize(0, progressLSValue.getHeight());
+        animatedProgress("hóa đơn", percentHD, (int) workedHD, progressHDText, progressHDValue);
+        animatedProgress("phiếu nhập", percentPN, (int) workedPN, progressPNText, progressPNValue);
+        animatedProgress("khách hàng", percentKH, (int) supportedKH, progressKHText, progressKHValue);
+        animatedProgress("thao tác", percentLS, (int) workedLS, progressLSText, progressLSValue);
+    }
+
+    private void animatedProgress(String target, int percent, int worked, JLabel lbText, JPanel progress) {
+        int lowState = 20;
+        int mediumState = 50;
+        if (percent < lowState) {
+            lbText.setForeground(MyColor.RED);
+            progress.setBackground(new Color(255, 153, 153));
+        } else if (percent < mediumState) {
+            lbText.setForeground(MyColor.ORANGE);
+            progress.setBackground(new Color(255, 231, 153));
+        } else {
+            lbText.setForeground(MyColor.GREEN);
+            progress.setBackground(new Color(153, 255, 153));
+        }
+        lbText.setText(worked + " " + target + " (" + percent + "%)");
+        progress.setSize(4 * percent, progress.getHeight());
     }
 
     private JScrollPane jScrollPane;
@@ -632,7 +701,7 @@ public class FormNhanVien extends JTablePanel {
     private final JLabel lbNgaySinh = new JLabel();
     private final JLabel lbGioiTinh = new JLabel();
     private final JLabel lbMaTK = new JLabel();
-    private final  JLabel lbEmail = new JLabel();
+    private final JLabel lbEmail = new JLabel();
     private final JTextField txtMaNV = new JTextField();
     private final JTextField txtMaTK = new JTextField();
     private final JLabel lbLuongUnit = new JLabel();

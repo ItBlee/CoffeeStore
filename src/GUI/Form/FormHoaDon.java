@@ -4,6 +4,7 @@ import BUS.*;
 import BUS.Interfaces.*;
 import BUS.SearchMapper.HoaDonSearchMapper;
 import BUS.SearchMapper.KhachHangSearchMapper;
+import BUS.SearchMapper.SanPhamSearchMapper;
 import DTO.*;
 import DTO.Interface.IEntity;
 import GUI.Form.Abstract.JTablePanel;
@@ -463,7 +464,7 @@ public class FormHoaDon extends JTablePanel {
         infoPanel.add(lbMaNV);
         lbMaNV.setBounds(311, 140, 120, 20);
 
-        txtMaNV.setText(new NhanVienBUS().findByID(General.CURRENT_USER.getMaNV()).getHoTen());
+        txtMaNV.setText("NV" + General.CURRENT_USER.getMaNV());
         txtMaNV.setEnabled(false);
         txtMaNV.setBackground(new Color(245, 245, 245));
         infoPanel.add(txtMaNV);
@@ -581,6 +582,18 @@ public class FormHoaDon extends JTablePanel {
     }
 
     private void onClickBtnSelectMaSPListener() {
+        try {
+            JFrame frame = new FrameSelect("sản phẩm", txtMaSP, new SanPhamSearchMapper(), FormSanPham.class, FormHoaDon.class);
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    frame.setVisible(true);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormHoaDon.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void fillSanPhamDetailListener() {
@@ -588,19 +601,28 @@ public class FormHoaDon extends JTablePanel {
         try {
             idSP = Integer.parseInt(txtMaSP.getText().replace("SP", ""));
         } catch (Exception e) {
-            txtMaSP.setText("Lỗi");
             return;
         }
         ISanPhamBUS sanPhamBUS = new SanPhamBUS();
-        ICT_KhuyenMaiBUS khuyenMaiBUS = new CT_KhuyenMaiBUS();
+        IKhuyenMaiBUS khuyenMaiBUS = new KhuyenMaiBUS();
+        ICT_KhuyenMaiBUS ctkhuyenMaiBUS = new CT_KhuyenMaiBUS();
         Locale localeVN = new Locale("vi", "VN");
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(idSP);
         txtSanPham.setText(sanPhamDTO != null ? sanPhamDTO.getTenSP() : "Không tìm thấy");
         txtDonGia.setText(sanPhamDTO != null ?
-                currencyVN.format(sanPhamDTO.getDonGia()).replace(" ₫", "") + "đ/" + sanPhamDTO.getDonVi()
-                : currencyVN.format(sanPhamDTO.getDonGia()).replace(" ₫", "") + "đ");
-        txtKhuyenMaiCT.setText(currencyVN.format(khuyenMaiBUS.findByMaSP(idSP).getGiamGia()).replace(" ₫", ""));
+                currencyVN.format(sanPhamDTO.getDonGia()).replace(" ₫", "").replace(".",",") + "đ/" + sanPhamDTO.getDonVi()
+                : "0đ");
+        txtKhuyenMaiCT.setText("0");
+        CT_KhuyenMaiDTO ctKhuyenMaiDTO = ctkhuyenMaiBUS.findByMaSP(idSP);
+        if (ctKhuyenMaiDTO == null)
+            return;
+        KhuyenMaiDTO khuyenMaiDTO = khuyenMaiBUS.findByID(ctKhuyenMaiDTO.getMaKM());
+        if (khuyenMaiDTO == null)
+            return;
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        if (khuyenMaiDTO.getNgayBD().before(currentTime) && khuyenMaiDTO.getNgayKT().after(currentTime))
+            txtKhuyenMaiCT.setText(currencyVN.format(ctKhuyenMaiDTO.getGiamGia()).replace(" ₫", "").replace(".",","));
     }
 
     private void calculateTotalCTListener() {
@@ -608,14 +630,16 @@ public class FormHoaDon extends JTablePanel {
         try {
             dg = Integer.parseInt(StringUtils.removeLetter(txtDonGia.getText()));
             sl = Integer.parseInt(StringUtils.removeLetter(txtSoLuong.getText()));
-            km = ((Number) txtKhuyenMaiCT.getValue()).intValue();
-        } catch (Exception ignored) {
+            km = Integer.parseInt(txtKhuyenMaiCT.getText().replace(",",""));
+        } catch (Exception e) {
             return;
         }
         Locale localeVN = new Locale("vi", "VN");
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         int total = (dg * sl) - km;
-        txtThanhTienCT.setText(currencyVN.format(total).replace(" ₫", ""));
+        if (total < 0)
+            total = 0;
+        txtThanhTienCT.setText(currencyVN.format(total).replace(" ₫", "").replace(".",","));
     }
 
     private HoaDonDTO getUserInput() {
@@ -623,9 +647,9 @@ public class FormHoaDon extends JTablePanel {
         Integer idNV = null;
         Integer idKH = null;
         try {
-            idHD = Integer.valueOf(txtMaHD.getText().replace("HD", ""));
             idNV = Integer.valueOf(txtMaNV.getText().replace("NV", ""));
             idKH = Integer.valueOf(txtMaKH.getText().replace("KH", ""));
+            idHD = Integer.valueOf(txtMaHD.getText().replace("HD", ""));
         } catch (NumberFormatException ignored) {}
 
         HoaDonDTO dto = new HoaDonDTO();
@@ -634,31 +658,31 @@ public class FormHoaDon extends JTablePanel {
         dto.setMaKH(idKH);
         try {
             dto.setNgayLap(Timestamp.valueOf(txtNgayLap.getText()));
-            dto.setTongTien(((Number) txtTotal.getValue()).intValue());
-            dto.setTienKhuyenMai(((Number) txtKhuyenMai.getValue()).intValue());
-            dto.setTienThanhToan(((Number) txtThanhTien.getValue()).intValue());
+            dto.setTongTien(Integer.parseInt(txtTotal.getText().replace(",","")));
+            dto.setTienKhuyenMai(Integer.parseInt(txtKhuyenMai.getText().replace(",","")));
+            dto.setTienThanhToan(Integer.parseInt(txtThanhTien.getText().replace(",","")));
         } catch (Exception ignored) {}
         dto.setTinhTrang(1);
         return dto;
     }
 
     private CT_HoaDonDTO getUserInputCT() {
-        Integer idHD = null;
+        Integer idCTHD = null;
         Integer idSP = null;
         try {
-            idHD = Integer.valueOf(txtMaHD.getText().replace("HD", ""));
             idSP = Integer.valueOf(txtMaSP.getText().replace("SP", ""));
+            idCTHD = Integer.valueOf(txtMaHD.getText().replace("HD", ""));
         } catch (NumberFormatException ignored) {}
 
         CT_HoaDonDTO dto = new CT_HoaDonDTO();
-        dto.setMaHD(idHD);
+        dto.setMaHD(idCTHD);
         dto.setMaSP(idSP);
         try {
-            dto.setMaCTHD(Integer.valueOf(idHolderCT.getText()));
             dto.setDonGia(Integer.valueOf(StringUtils.removeLetter(txtDonGia.getText())));
             dto.setSoLuong(Integer.valueOf(StringUtils.removeLetter(txtSoLuong.getText())));
-            dto.setTienKhuyenMai(((Number) txtKhuyenMaiCT.getValue()).intValue());
-            dto.setThanhTien(((Number) txtThanhTienCT.getValue()).intValue());
+            dto.setTienKhuyenMai(Integer.parseInt(txtKhuyenMaiCT.getText().replace(",","")));
+            dto.setThanhTien(Integer.parseInt(txtThanhTienCT.getText().replace(",","")));
+            dto.setMaCTHD(Integer.valueOf(idHolderCT.getText()));
         } catch (Exception ignored) {}
         return dto;
     }
@@ -711,10 +735,11 @@ public class FormHoaDon extends JTablePanel {
                 throw new Exception("Không tìm thấy hóa đơn.");
             if (dto.getMaSP() == null)
                 throw new Exception("Vui lòng chọn sản phẩm.");
-            if (sanPhamBUS.findByID(dto.getMaSP()) == null)
+            SanPhamDTO sp = sanPhamBUS.findByID(dto.getMaSP());
+            if (sp == null)
                 throw new Exception("Không tìm thấy sản phẩm.");
-            if (dto.getSoLuong() == null || dto.getSoLuong() <= 0)
-                throw new Exception("Vui lòng nhập số lượng.");
+            if (dto.getSoLuong() == null || dto.getSoLuong() <= 0 || dto.getSoLuong() > sp.getSoLuong())
+                throw new Exception("Số lượng không hợp lệ");
             if (dto.getDonGia() == null || dto.getDonGia() <= 0)
                 throw new Exception("Vui lòng nhập đơn giá.");
             if (dto.getTienKhuyenMai() == null || dto.getTienKhuyenMai() < 0)
@@ -742,7 +767,7 @@ public class FormHoaDon extends JTablePanel {
             HoaDonDTO oldDto = hoaDonBUS.findByID(newDto.getMaHD());
             if (oldDto == null)
                 throw new Exception("Không tìm thấy hóa đơn.");
-            oldDto.setTinhTrang(1);
+            oldDto.setTinhTrang(3);
             hoaDonBUS.update(oldDto);
         } catch (Exception e) {
             e.printStackTrace();
@@ -793,9 +818,10 @@ public class FormHoaDon extends JTablePanel {
                 throw new Exception("Không tìm thấy hóa đơn.");
             if (newDto.getMaSP() == null)
                 throw new Exception("Vui lòng chọn sản phẩm.");
-            if (sanPhamBUS.findByID(newDto.getMaSP()) == null)
+            SanPhamDTO sp = sanPhamBUS.findByID(newDto.getMaSP());
+            if (sp == null)
                 throw new Exception("Không tìm thấy sản phẩm.");
-            if (newDto.getSoLuong() == null || newDto.getSoLuong() <= 0)
+            if (newDto.getSoLuong() == null || newDto.getSoLuong() <= 0 || newDto.getSoLuong() > sp.getSoLuong())
                 throw new Exception("Vui lòng nhập số lượng.");
             CT_HoaDonDTO oldDto = ctHoaDonBUS.findByID(newDto.getID());
             if (oldDto == null)
@@ -816,7 +842,7 @@ public class FormHoaDon extends JTablePanel {
         JOptionPane.showMessageDialog(FormHoaDon.this, "Sửa chi tiết hóa đơn thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
         Integer idHD = null;
         try {
-            idHD = Integer.valueOf(txtMaHD.getText());
+            idHD = Integer.valueOf(txtMaHD.getText().replace("HD", ""));
         } catch (Exception ignored) {}
         fillTableDetail(idHD);
     }
@@ -833,7 +859,7 @@ public class FormHoaDon extends JTablePanel {
             if (General.CURRENT_ROLE.isAdmin() && dto.getTinhTrang() == 0)
                 hoaDonBUS.delete(dto.getMaHD());
             else {
-                dto.setTinhTrang(0);
+                dto.setTinhTrang(2);
                 hoaDonBUS.update(dto);
             }
         } catch (Exception e) {
@@ -885,7 +911,7 @@ public class FormHoaDon extends JTablePanel {
             if (component instanceof JTextField)
                 ((JTextField) component).setText("");
         }
-        txtMaNV.setText(new NhanVienBUS().findByID(General.CURRENT_USER.getMaNV()).getHoTen());
+        txtMaNV.setText("NV" + General.CURRENT_USER.getMaNV());
         txtNgayLap.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis())));
         btnThem.setText("Thêm");
         btnXoa.setText("Xóa");
@@ -893,23 +919,22 @@ public class FormHoaDon extends JTablePanel {
     }
 
     private void onClickBtnResetCTListener() {
-        Integer idCTHD = null;
+        Integer idHD = null;
         try {
-            idCTHD = Integer.parseInt(idHolderCT.getText());
+            idHD = Integer.parseInt(txtMaHD.getText().replace("HD", ""));
         } catch (Exception ignored) {}
-        fillTableDetail(idCTHD);
+        fillTableDetail(idHD);
         for (Component component:detailCTHDPanel.getComponents()) {
             if (component instanceof JTextField)
                 ((JTextField) component).setText("");
         }
+        txtMaHDCT.setText("HD" + idHD);
         idHolderCT.setText("");
     }
 
     private void onClickTableRow() {
         int index = table.getSelectedRow();
         IHoaDonBUS hoaDonBUS = new HoaDonBUS();
-        INhanVienBUS nhanVienBUS = new NhanVienBUS();
-        IKhachHangBUS khachHangBUS = new KhachHangBUS();
         Locale localeVN = new Locale("vi", "VN");
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -922,16 +947,15 @@ public class FormHoaDon extends JTablePanel {
         HoaDonDTO dto = hoaDonBUS.findByID(selectedID);
         if (dto == null)
             return;
-        NhanVienDTO worker = nhanVienBUS.findByID(dto.getMaNV());
-        KhachHangDTO customer = khachHangBUS.findByID(dto.getMaKH());
         txtMaHD.setText("HD" + dto.getMaHD());
         txtMaHDCT.setText("HD" + dto.getMaHD());
-        txtMaKH.setText(customer != null ? customer.getHoTen() : "Không xác định");
-        txtMaNV.setText(worker != null ? worker.getHoTen() : "Không xác định");
+        txtMaKH.setText("KH" + dto.getMaKH());
+        txtMaNV.setText("NV" + dto.getMaKH());
         txtNgayLap.setText(dateFormat.format(dto.getNgayLap()));
-        txtTotal.setText(currencyVN.format(dto.getTongTien()).replace(" ₫", ""));
-        txtKhuyenMai.setText(currencyVN.format(dto.getTienKhuyenMai()).replace(" ₫", ""));
-        txtThanhTien.setText(currencyVN.format(dto.getTienThanhToan()).replace(" ₫", ""));
+        txtTotal.setText(currencyVN.format(dto.getTongTien()).replace(" ₫", "").replace(".",","));
+        txtKhuyenMai.setText(currencyVN.format(dto.getTienKhuyenMai()).replace(" ₫", "").replace(".",","));
+        txtThanhTien.setText(currencyVN.format(dto.getTienThanhToan()).replace(" ₫", "").replace(".",","));
+        fillTableDetail(dto.getMaHD());
 
         if (General.CURRENT_ROLE.isAdmin() && dto.getTinhTrang() == 0) {
             btnThem.setText("Kích hoạt");
@@ -951,12 +975,12 @@ public class FormHoaDon extends JTablePanel {
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         int selectedID;
         try {
-            selectedID = Integer.parseInt(txtMaHD.getText());
+            selectedID = Integer.parseInt(txtMaHD.getText().replace("HD", ""));
         } catch (Exception e) {
             return;
         }
         ArrayList<CT_HoaDonDTO> dtoList = ctHoaDonBUS.findByMaHD(selectedID);
-        if (dtoList == null)
+        if (dtoList == null || index == -1)
             return;
         CT_HoaDonDTO dto = dtoList.get(index);
         SanPhamDTO product = sanPhamBUS.findByID(dto.getMaSP());
@@ -966,10 +990,10 @@ public class FormHoaDon extends JTablePanel {
         txtSanPham.setText(product != null ? product.getTenSP() : "Không tìm thấy");
         txtSoLuong.setText(String.valueOf(dto.getSoLuong()));
         txtDonGia.setText(product != null ?
-                currencyVN.format(dto.getDonGia()).replace(" ₫", "") + "đ/" + product.getDonVi()
-                : currencyVN.format(dto.getDonGia()).replace(" ₫", "") + "đ");
-        txtThanhTienCT.setText(currencyVN.format(dto.getThanhTien()).replace(" ₫", ""));
-        txtKhuyenMaiCT.setText(currencyVN.format(dto.getTienKhuyenMai()).replace(" ₫", ""));
+                currencyVN.format(dto.getDonGia()).replace(" ₫", "").replace(".",",") + "đ/" + product.getDonVi()
+                : currencyVN.format(dto.getDonGia()).replace(" ₫", "").replace(".",",") + "đ");
+        txtThanhTienCT.setText(currencyVN.format(dto.getThanhTien()).replace(" ₫", "").replace(".",","));
+        txtKhuyenMaiCT.setText(currencyVN.format(dto.getTienKhuyenMai()).replace(" ₫", "").replace(".",","));
     }
 
     private String[] columnHeaderDetail;

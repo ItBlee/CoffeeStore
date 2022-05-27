@@ -106,4 +106,12 @@ public class SanPhamDTO implements IEntity {
     public void setTinhTrang(Integer tinhTrang) {
         TinhTrang = tinhTrang;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SanPhamDTO)) return false;
+        SanPhamDTO that = (SanPhamDTO) o;
+        return getMaSP().equals(that.getMaSP()) || getTenSP().equals(that.getTenSP());
+    }
 }

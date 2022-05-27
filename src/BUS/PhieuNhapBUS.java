@@ -1,10 +1,7 @@
 package BUS;
 
 import BUS.Abstract.AbstractHistoricBUS;
-import BUS.Interfaces.ICT_PhieuNhapBUS;
-import BUS.Interfaces.INhaCungCapBUS;
-import BUS.Interfaces.INhanVienBUS;
-import BUS.Interfaces.IPhieuNhapBUS;
+import BUS.Interfaces.*;
 import DAO.Interfaces.IPhieuNhapDAO;
 import DAO.PhieuNhapDAO;
 import DTO.*;
@@ -131,6 +128,15 @@ public class PhieuNhapBUS extends AbstractHistoricBUS implements IPhieuNhapBUS {
     public void update(PhieuNhapDTO phieuNhap) throws Exception {
         if (!isExist(phieuNhap))
             throw new Exception("Không tồn tại phiếu nhập (PN" + phieuNhap.getMaPN() + ").");
+        int checkFlag = 0;
+        if (phieuNhap.getTinhTrang() == 2) {
+            phieuNhap.setTinhTrang(0);
+            checkFlag = 1;
+        }
+        if (phieuNhap.getTinhTrang() == 3) {
+            phieuNhap.setTinhTrang(1);
+            checkFlag = 2;
+        }
         if (!phieuNhapDAO.update(phieuNhap))
             throw new Exception("Phát sinh lỗi trong quá trình thêm phiếu nhập.");
         phieuNhap = phieuNhapDAO.findByID(phieuNhap.getMaPN());
@@ -138,11 +144,43 @@ public class PhieuNhapBUS extends AbstractHistoricBUS implements IPhieuNhapBUS {
             if (listPhieuNhap.get(i).getMaPN().equals(phieuNhap.getMaPN()))
                 listPhieuNhap.set(i, phieuNhap);
         }
+        if (checkFlag == 1) {
+            ICT_PhieuNhapBUS ctPhieuNhapBUS = new CT_PhieuNhapBUS();
+            ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+            for (CT_PhieuNhapDTO dto:ctPhieuNhapBUS.findByMaPN(phieuNhap.getMaPN())) {
+                SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(dto.getMaSP());
+                int newSL = sanPhamDTO.getSoLuong() - dto.getSoLuong();
+                sanPhamDTO.setSoLuong(newSL);
+                sanPhamBUS.update(sanPhamDTO);
+            }
+        } else if (checkFlag == 2) {
+            ICT_PhieuNhapBUS ctPhieuNhapBUS = new CT_PhieuNhapBUS();
+            ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+            for (CT_PhieuNhapDTO dto:ctPhieuNhapBUS.findByMaPN(phieuNhap.getMaPN())) {
+                SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(dto.getMaSP());
+                int newSL = sanPhamDTO.getSoLuong() + dto.getSoLuong();
+                sanPhamDTO.setSoLuong(newSL);
+                sanPhamBUS.update(sanPhamDTO);
+            }
+        }
         super.update(phieuNhap);
     }
 
     @Override
     public void delete(int id) throws Exception {
+        Integer status = findByID(id).getTinhTrang();
+        if (status == null)
+            throw new Exception("Không thể xóa phiếu nhập (PN" + id + ").");
+        if (status == 0) {
+            ICT_PhieuNhapBUS ctPhieuNhapBUS = new CT_PhieuNhapBUS();
+            ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+            for (CT_PhieuNhapDTO dto:ctPhieuNhapBUS.findByMaPN(id)) {
+                SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(dto.getMaSP());
+                int newSL = sanPhamDTO.getSoLuong() + dto.getSoLuong();
+                sanPhamDTO.setSoLuong(newSL);
+                sanPhamBUS.update(sanPhamDTO);
+            }
+        }
         ICT_PhieuNhapBUS ctPhieuNhapBUS = new CT_PhieuNhapBUS();
         for (CT_PhieuNhapDTO dto:ctPhieuNhapBUS.findByMaPN(id))
             ctPhieuNhapBUS.delete(dto.getID());

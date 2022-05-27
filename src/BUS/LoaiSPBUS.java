@@ -76,7 +76,8 @@ public class LoaiSPBUS extends AbstractHistoricBUS implements ILoaiSPBUS {
     public void delete(int id) throws Exception {
         ISanPhamBUS sanPhamBUS = new SanPhamBUS();
         for (SanPhamDTO dto:sanPhamBUS.findByLoaiSP(id)) {
-            dto.setMaLoai(null);
+            int DEFAULT_LSP_ID = 2;
+            dto.setMaLoai(DEFAULT_LSP_ID);
             sanPhamBUS.update(dto);
         }
         if (!loaiSPDAO.delete(id))

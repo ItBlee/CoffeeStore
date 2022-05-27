@@ -23,8 +23,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class FormExcel extends JPanel {
     private File importExcelFile;
@@ -739,40 +739,56 @@ public class FormExcel extends JPanel {
     }
 
     private void onClickBtnExportExcel() {
-        String exportPath = "export/";
+        String exportPath = "export";
         try {
             if (isSelectedHD()) {
+                exportPath = "export/HoaDon.xls";
                 FileHandler.exportExcel(exportPath, new HoaDonBUS().findAll(), new HoaDonMapper());
+                exportPath = "export/CT_HoaDon.xls";
                 FileHandler.exportExcel(exportPath, new CT_HoaDonBUS().findAll(), new CT_HoaDonMapper());
             }
 
             if (isSelectedSP()) {
+                exportPath = "export/SanPham.xls";
                 FileHandler.exportExcel(exportPath, new SanPhamBUS().findAll(), new SanPhamMapper());
+                exportPath = "export/LoaiSP.xls";
                 FileHandler.exportExcel(exportPath, new LoaiSPBUS().findAll(), new LoaiSPMapper());
             }
 
             if (isSelectedPN()) {
+                exportPath = "export/PhieuNhap.xls";
                 FileHandler.exportExcel(exportPath, new PhieuNhapBUS().findAll(), new PhieuNhapMapper());
+                exportPath = "export/CT_PhieuNhap.xls";
                 FileHandler.exportExcel(exportPath, new CT_PhieuNhapBUS().findAll(), new CT_PhieuNhapMapper());
             }
 
-            if (isSelectedNCC())
-                FileHandler.exportExcel(exportPath, new HoaDonBUS().findAll(), new HoaDonMapper());
+            if (isSelectedNCC()) {
+                exportPath = "export/NhaCungCap.xls";
+                FileHandler.exportExcel(exportPath, new NhaCungCapBUS().findAll(), new NhaCungCapMapper());
+            }
 
             if (isSelectedNS()) {
+                exportPath = "export/NhanVien.xls";
                 FileHandler.exportExcel(exportPath, new NhanVienBUS().findAll(), new NhanVienMapper());
+                exportPath = "export/TaiKhoan.xls";
                 FileHandler.exportExcel(exportPath, new TaiKhoanBUS().findAll(), new TaiKhoanMapper());
+                exportPath = "export/PhanQuyen.xls";
                 FileHandler.exportExcel(exportPath, new PhanQuyenBUS().findAll(), new PhanQuyenMapper());
+                exportPath = "export/CT_PhanQuyen.xls";
                 FileHandler.exportExcel(exportPath, new CT_PhanQuyenBUS().findAll(), new CT_PhanQuyenMapper());
             }
 
             if (isSelectedKM()) {
+                exportPath = "export/KhuyenMai.xls";
                 FileHandler.exportExcel(exportPath, new KhuyenMaiBUS().findAll(), new KhuyenMaiMapper());
+                exportPath = "export/CT_KhuyenMai.xls";
                 FileHandler.exportExcel(exportPath, new CT_KhuyenMaiBUS().findAll(), new CT_KhuyenMaiMapper());
             }
 
-            if (isSelectedKH())
+            if (isSelectedKH()) {
+                exportPath = "export/KhachHang.xls";
                 FileHandler.exportExcel(exportPath, new KhachHangBUS().findAll(), new KhachHangMapper());
+            }
 
             JOptionPane.showMessageDialog(FormExcel.this, "Xuất file thành công.\n", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
@@ -796,7 +812,9 @@ public class FormExcel extends JPanel {
             if (dto == null)
                 return;
             ArrayList<CT_HoaDonDTO> list = ctHoaDonBUS.findByMaHD(dto.getMaHD());
-            String path = "export/" + dto.getMaHD() + " " + new Date(dto.getNgayLap().getTime()) + ".xls";
+            if (list == null)
+                return;
+            String path = "export/HD" + dto.getMaHD() + "-" + new SimpleDateFormat("dd-MM-yyyy").format(dto.getNgayLap()) + ".pdf";
             if (FileHandler.exportPDFReport(path, dto, new ArrayList<IDetailEntity>(list))) {
                 JOptionPane.showMessageDialog(FormExcel.this, "Xuất PDF hóa đơn thành công.", "Không hợp lệ", JOptionPane.INFORMATION_MESSAGE);
             } else {
@@ -810,7 +828,9 @@ public class FormExcel extends JPanel {
             if (dto == null)
                 return;
             ArrayList<CT_PhieuNhapDTO> list = ctPhieuNhapBUS.findByMaPN(dto.getMaPN());
-            String path = "export/" + dto.getMaPN() + " " + new Date(dto.getNgayTao().getTime()) + ".xls";
+            if (list == null)
+                return;
+            String path = "export/PN" + dto.getMaPN() + "-" + new SimpleDateFormat("dd-MM-yyyy").format(dto.getNgayTao()) + ".pdf";
             if (FileHandler.exportPDFReport(path, dto, new ArrayList<IDetailEntity>(list))) {
                 JOptionPane.showMessageDialog(FormExcel.this, "Xuất PDF phiếu nhập thành công.", "Không hợp lệ", JOptionPane.INFORMATION_MESSAGE);
             } else {

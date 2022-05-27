@@ -1,12 +1,22 @@
 package GUI.Form;
 
+import BUS.CT_PhieuNhapBUS;
+import BUS.Interfaces.ICT_PhieuNhapBUS;
 import BUS.Interfaces.INhaCungCapBUS;
+import BUS.Interfaces.IPhieuNhapBUS;
+import BUS.Interfaces.ISanPhamBUS;
 import BUS.NhaCungCapBUS;
+import BUS.PhieuNhapBUS;
+import BUS.SanPhamBUS;
 import BUS.SearchMapper.NhaCungCapSearchMapper;
+import DTO.CT_PhieuNhapDTO;
 import DTO.Interface.IEntity;
 import DTO.NhaCungCapDTO;
+import DTO.PhieuNhapDTO;
+import DTO.SanPhamDTO;
 import GUI.Form.Abstract.JTablePanel;
 import GUI.FrameSearch;
+import GUI.common.MyColor;
 import GUI.components.TableColumn;
 import Utils.General;
 import Utils.Validator;
@@ -18,7 +28,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class FormNCC extends JTablePanel {
     public FormNCC() {
@@ -244,17 +256,14 @@ public class FormNCC extends JTablePanel {
         progressSPIn.setLayout(null);
 
         progressSPInText.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        progressSPInText.setForeground(new Color(47, 168, 79));
         progressSPInText.setHorizontalAlignment(SwingConstants.CENTER);
-        progressSPInText.setText("120 sản phẩm (80%)");
         progressSPIn.add(progressSPInText);
         progressSPInText.setBounds(0, 0, 370, 30);
 
         progressSPInValue.setBackground(new Color(153, 255, 153));
         progressSPInValue.setLayout(null);
-
         progressSPIn.add(progressSPInValue);
-        progressSPInValue.setBounds(0, 0, 310, 30);
+        progressSPInValue.setBounds(0, 0, 0, 30);
 
         taskPanel.add(progressSPIn);
         progressSPIn.setBounds(90, 100, 370, 30);
@@ -267,16 +276,13 @@ public class FormNCC extends JTablePanel {
         progressPN.setLayout(null);
 
         progressPNText.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        progressPNText.setForeground(new Color(243, 170, 24));
         progressPNText.setHorizontalAlignment(SwingConstants.CENTER);
-        progressPNText.setText("17 lần nhập (40%)");
         progressPN.add(progressPNText);
         progressPNText.setBounds(0, 0, 370, 30);
 
-        progressPNValue.setBackground(new Color(255, 231, 153));
         progressPNValue.setLayout(null);
         progressPN.add(progressPNValue);
-        progressPNValue.setBounds(0, 0, 140, 30);
+        progressPNValue.setBounds(0, 0, 0, 30);
 
         taskPanel.add(progressPN);
         progressPN.setBounds(90, 160, 370, 30);
@@ -289,41 +295,35 @@ public class FormNCC extends JTablePanel {
         progressExpenses.setLayout(null);
 
         progressExpensesText.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        progressExpensesText.setForeground(new Color(47, 168, 79));
         progressExpensesText.setHorizontalAlignment(SwingConstants.CENTER);
-        progressExpensesText.setText("134.522.000 đ (65%)");
         progressExpenses.add(progressExpensesText);
         progressExpensesText.setBounds(0, 0, 370, 30);
 
-        progressExpensesValue.setBackground(new Color(153, 255, 153));
         progressExpensesValue.setLayout(null);
-
         progressExpenses.add(progressExpensesValue);
-        progressExpensesValue.setBounds(0, 0, 222, 30);
+        progressExpensesValue.setBounds(0, 0, 0, 30);
+
         taskPanel.add(progressExpenses);
         progressExpenses.setBounds(90, 220, 370, 30);
 
         progressSold.setLayout(null);
 
         progressSoldText.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        progressSoldText.setForeground(new Color(234, 61, 47));
         progressSoldText.setHorizontalAlignment(SwingConstants.CENTER);
-        progressSoldText.setText("27 SP đã bán (20%)");
         progressSold.add(progressSoldText);
         progressSoldText.setBounds(0, 0, 370, 30);
 
-        progressSoldValue.setBackground(new Color(255, 153, 153));
         progressSoldValue.setLayout(null);
         progressSold.add(progressSoldValue);
-        progressSoldValue.setBounds(0, 0, 50, 30);
+        progressSoldValue.setBounds(0, 0, 0, 30);
 
-        taskPanel.add(progressSold);
-        progressSold.setBounds(90, 280, 370, 30);
+        //taskPanel.add(progressSold);
+        //progressSold.setBounds(90, 280, 370, 30);
 
         lbCountSold.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lbCountSold.setText("Tiêu thụ");
-        taskPanel.add(lbCountSold);
-        lbCountSold.setBounds(10, 280, 70, 30);
+        //taskPanel.add(lbCountSold);
+        //lbCountSold.setBounds(10, 280, 70, 30);
 
         add(taskPanel);
         taskPanel.setBounds(520, 10, 470, 380);
@@ -455,6 +455,15 @@ public class FormNCC extends JTablePanel {
         }
         btnThem.setText("Thêm");
         btnXoa.setText("Xóa");
+
+        progressSPInText.setText("");
+        progressSPInValue.setSize(0, progressSPInValue.getHeight());
+        progressPNText.setText("");
+        progressPNValue.setSize(0, progressPNValue.getHeight());
+        progressExpensesText.setText("");
+        progressExpensesValue.setSize(0, progressExpensesValue.getHeight());
+        progressSoldText.setText("");
+        progressSoldValue.setSize(0, progressSoldValue.getHeight());
     }
 
     private void onClickTableRow() {
@@ -483,6 +492,73 @@ public class FormNCC extends JTablePanel {
             btnThem.setText("Thêm");
             btnXoa.setText("Xóa");
         }
+        calculateWorkStat(dto.getMaNCC());
+    }
+
+    private void calculateWorkStat(int MaNCC) {
+        IPhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
+        ICT_PhieuNhapBUS ctPhieuNhapBUS = new CT_PhieuNhapBUS();
+        ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+        double totalSP = 0;
+        for (SanPhamDTO dto:sanPhamBUS.findAll()) {
+            totalSP += dto.getSoLuong();
+        }
+        double supplySP = 0;
+        for (PhieuNhapDTO dto:phieuNhapBUS.findByNCC(MaNCC))
+            for (CT_PhieuNhapDTO child:ctPhieuNhapBUS.findByMaPN(dto.getMaPN()))
+                supplySP += child.getSoLuong();
+        int percentSP = 0;
+        try {
+            percentSP = (int) ((supplySP/totalSP)*100);
+        } catch (Exception ignored) {}
+
+        double totalPN = phieuNhapBUS.getTotalCount();
+        double workedPN = phieuNhapBUS.findByNCC(MaNCC).size();
+        int percentPN = 0;
+        try {
+            percentPN = (int) ((workedPN/totalPN)*100);
+        } catch (Exception ignored) {}
+
+        double totalExpenses = 0;
+        for (PhieuNhapDTO dto:phieuNhapBUS.findAll())
+            totalExpenses += dto.getTongTien();
+        double thisExpenses = 0;
+        for (PhieuNhapDTO dto:phieuNhapBUS.findByNCC(MaNCC))
+            thisExpenses += dto.getTongTien();
+        int percentExpenses = 0;
+        try {
+            percentExpenses = (int) ((thisExpenses/totalExpenses)*100);
+        } catch (Exception ignored) {}
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+        String thisExpensesSTR = currencyVN.format(thisExpenses).replace(" ₫", "").replace(".",",") + " đ";
+
+        progressSPInText.setText("");
+        progressSPInValue.setSize(0, progressSPInValue.getHeight());
+        progressPNText.setText("");
+        progressPNValue.setSize(0, progressPNValue.getHeight());
+        progressExpensesText.setText("");
+        progressExpensesValue.setSize(0, progressExpensesValue.getHeight());
+        animatedProgress("sản phẩm", percentSP, String.valueOf((int) supplySP), progressSPInText, progressSPInValue);
+        animatedProgress("lần nhập", percentPN, String.valueOf((int) workedPN), progressPNText, progressPNValue);
+        animatedProgress("", percentExpenses, thisExpensesSTR, progressExpensesText, progressExpensesValue);
+    }
+
+    private void animatedProgress(String target, int percent, String worked, JLabel lbText, JPanel progress) {
+        int lowState = 20;
+        int mediumState = 50;
+        if (percent < lowState) {
+            lbText.setForeground(MyColor.RED);
+            progress.setBackground(new Color(255, 153, 153));
+        } else if (percent < mediumState) {
+            lbText.setForeground(MyColor.ORANGE);
+            progress.setBackground(new Color(255, 231, 153));
+        } else {
+            lbText.setForeground(MyColor.GREEN);
+            progress.setBackground(new Color(153, 255, 153));
+        }
+        lbText.setText(worked + " " + target + " (" + percent + "%)");
+        progress.setSize(4 * percent, progress.getHeight());
     }
 
     private final JPanel infoPanel = new JPanel();

@@ -898,12 +898,12 @@ public class FrameLayout extends MovableJFrame {
 					//animated form appear
 					{
 						while (currentItem.getForm().getHeight() < menuPanel.getHeight()) {
-							currentItem.getForm().setBounds(0, 0, formLayoutPanel.getWidth(), currentItem.getForm().getHeight() + 6);
+							currentItem.getForm().setBounds(0, 0, formLayoutPanel.getWidth(), currentItem.getForm().getHeight() + 8);
 							Thread.sleep(1);
 						}
 						currentItem.getForm().setBounds(0, 0, formLayoutPanel.getWidth(), formLayoutPanel.getHeight());
 					}
-					Thread.sleep(1400);
+					Thread.sleep(1200);
 					//remove intro panel after finish
 					menuPanel.setVisible(true);
 					Thread.sleep(200);

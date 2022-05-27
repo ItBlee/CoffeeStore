@@ -72,4 +72,13 @@ public class PhieuNhapDTO implements IEntity {
     public void setTinhTrang(Integer tinhTrang) {
         TinhTrang = tinhTrang;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PhieuNhapDTO)) return false;
+        PhieuNhapDTO that = (PhieuNhapDTO) o;
+        return getMaPN().equals(that.getMaPN());
+    }
+
 }

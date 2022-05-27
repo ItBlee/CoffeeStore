@@ -24,7 +24,7 @@ public class CT_KhuyenMaiDAO extends AbstractDAO<CT_KhuyenMaiDTO> implements ICT
     public Integer save(CT_KhuyenMaiDTO ctKhuyenMai) {
         String sql = "INSERT INTO ct_khuyenmai"
                 + " (MaCTKM, MaKM, MaSP, GiamGia)"
-                + " VALUES(?, ?, ?, ?";
+                + " VALUES(?, ?, ?, ?)";
         return insert(sql, ctKhuyenMai.getMaCTKM(), ctKhuyenMai.getMaKM(), ctKhuyenMai.getMaSP(), ctKhuyenMai.getGiamGia());
     }
 

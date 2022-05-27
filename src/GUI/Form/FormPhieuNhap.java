@@ -4,6 +4,7 @@ import BUS.*;
 import BUS.Interfaces.*;
 import BUS.SearchMapper.NhaCungCapSearchMapper;
 import BUS.SearchMapper.PhieuNhapSearchMapper;
+import BUS.SearchMapper.SanPhamSearchMapper;
 import DTO.*;
 import DTO.Interface.IEntity;
 import GUI.Form.Abstract.JTablePanel;
@@ -32,6 +33,7 @@ import java.util.Locale;
 public class FormPhieuNhap extends JTablePanel {
     public FormPhieuNhap() {
         initComponents();
+        fillTable();
     }
 
     public void fillTable() {
@@ -434,7 +436,7 @@ public class FormPhieuNhap extends JTablePanel {
         infoPanel.add(lbMaNV);
         lbMaNV.setBounds(80, 200, 120, 20);
 
-        txtMaNV.setText(new NhanVienBUS().findByID(General.CURRENT_USER.getMaNV()).getHoTen());
+        txtMaNV.setText("NV" + General.CURRENT_USER.getMaNV());
         txtMaNV.setBackground(new Color(245, 245, 245));
         txtMaNV.setEnabled(false);
         infoPanel.add(txtMaNV);
@@ -530,6 +532,18 @@ public class FormPhieuNhap extends JTablePanel {
     }
 
     private void onClickBtnSelectMaSPListener() {
+        try {
+            JFrame frame = new FrameSelect("sản phẩm", txtMaSP, new SanPhamSearchMapper(), FormSanPham.class, FormPhieuNhap.class);
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    frame.setVisible(true);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormPhieuNhap.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void fillSanPhamDetailListener() {
@@ -537,7 +551,6 @@ public class FormPhieuNhap extends JTablePanel {
         try {
             idSP = Integer.parseInt(txtMaSP.getText().replace("SP", ""));
         } catch (Exception e) {
-            txtMaSP.setText("Lỗi");
             return;
         }
         ISanPhamBUS sanPhamBUS = new SanPhamBUS();
@@ -546,9 +559,10 @@ public class FormPhieuNhap extends JTablePanel {
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(idSP);
         txtSanPham.setText(sanPhamDTO != null ? sanPhamDTO.getTenSP() : "Không tìm thấy");
+        Integer dg = sanPhamDTO.getDonGia() - ((sanPhamDTO.getDonGia()*20)/100);
         txtDonGia.setText(sanPhamDTO != null ?
-                currencyVN.format(sanPhamDTO.getDonGia()).replace(" ₫", "") + "đ/" + sanPhamDTO.getDonVi()
-                : currencyVN.format(sanPhamDTO.getDonGia()).replace(" ₫", "") + "đ");
+                currencyVN.format(dg).replace(" ₫", "").replace(".",",") + "đ/" + sanPhamDTO.getDonVi()
+                : currencyVN.format(dg).replace(" ₫", "").replace(".",",") + "đ");
     }
 
     private void calculateTotalCTListener() {
@@ -562,7 +576,9 @@ public class FormPhieuNhap extends JTablePanel {
         Locale localeVN = new Locale("vi", "VN");
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         int total = dg * sl;
-        txtThanhTienCT.setText(currencyVN.format(total).replace(" ₫", ""));
+        if (total < 0)
+            total = 0;
+        txtThanhTienCT.setText(currencyVN.format(total).replace(" ₫", "").replace(".",","));
     }
 
     private PhieuNhapDTO getUserInput() {
@@ -570,9 +586,9 @@ public class FormPhieuNhap extends JTablePanel {
         Integer idNV = null;
         Integer idNCC = null;
         try {
-            idPN = Integer.valueOf(txtMaPN.getText().replace("PN", ""));
             idNV = Integer.valueOf(txtMaNV.getText().replace("NV", ""));
             idNCC = Integer.valueOf(txtMaNCC.getText().replace("NCC", ""));
+            idPN = Integer.valueOf(txtMaPN.getText().replace("PN", ""));
         } catch (NumberFormatException ignored) {}
 
         PhieuNhapDTO dto = new PhieuNhapDTO();
@@ -581,28 +597,28 @@ public class FormPhieuNhap extends JTablePanel {
         dto.setMaNCC(idNCC);
         try {
             dto.setNgayTao(Timestamp.valueOf(txtNgayLap.getText()));
-            dto.setTongTien(((Number) txtTotal.getValue()).intValue());
+            dto.setTongTien(Integer.parseInt(txtTotal.getText().replace(",","")));
         } catch (Exception ignored) {}
         dto.setTinhTrang(1);
         return dto;
     }
 
     private CT_PhieuNhapDTO getUserInputCT() {
-        Integer idPN = null;
+        Integer idCTPN = null;
         Integer idSP = null;
         try {
-            idPN = Integer.valueOf(txtMaPN.getText().replace("PN", ""));
             idSP = Integer.valueOf(txtMaSP.getText().replace("SP", ""));
+            idCTPN = Integer.valueOf(txtMaPN.getText().replace("PN", ""));
         } catch (NumberFormatException ignored) {}
 
         CT_PhieuNhapDTO dto = new CT_PhieuNhapDTO();
-        dto.setMaPN(idPN);
+        dto.setMaPN(idCTPN);
         dto.setMaSP(idSP);
         try {
-            dto.setMaCTPN(Integer.valueOf(idHolderCT.getText()));
             dto.setDonGia(Integer.valueOf(StringUtils.removeLetter(txtDonGia.getText())));
             dto.setSoLuong(Integer.valueOf(StringUtils.removeLetter(txtSoLuong.getText())));
-            dto.setThanhTien(((Number) txtThanhTienCT.getValue()).intValue());
+            dto.setThanhTien(Integer.parseInt(txtThanhTienCT.getText().replace(",","")));
+            dto.setMaCTPN(Integer.valueOf(idHolderCT.getText()));
         } catch (Exception ignored) {}
         return dto;
     }
@@ -680,7 +696,7 @@ public class FormPhieuNhap extends JTablePanel {
             PhieuNhapDTO oldDto = phieuNhapBUS.findByID(newDto.getMaPN());
             if (oldDto == null)
                 throw new Exception("Không tìm thấy phiếu nhập.");
-            oldDto.setTinhTrang(1);
+            oldDto.setTinhTrang(3);
             phieuNhapBUS.update(oldDto);
         } catch (Exception e) {
             e.printStackTrace();
@@ -752,7 +768,7 @@ public class FormPhieuNhap extends JTablePanel {
         JOptionPane.showMessageDialog(FormPhieuNhap.this, "Sửa chi tiết phiếu nhập thành công!", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
         Integer idPN = null;
         try {
-            idPN = Integer.valueOf(txtMaPN.getText());
+            idPN = Integer.valueOf(txtMaPN.getText().replace("PN", ""));
         } catch (Exception ignored) {}
         fillTableDetail(idPN);
     }
@@ -769,7 +785,7 @@ public class FormPhieuNhap extends JTablePanel {
             if (General.CURRENT_ROLE.isAdmin() && dto.getTinhTrang() == 0)
                 phieuNhapBUS.delete(dto.getMaPN());
             else {
-                dto.setTinhTrang(0);
+                dto.setTinhTrang(2);
                 phieuNhapBUS.update(dto);
             }
         } catch (Exception e) {
@@ -821,7 +837,7 @@ public class FormPhieuNhap extends JTablePanel {
             if (component instanceof JTextField)
                 ((JTextField) component).setText("");
         }
-        txtMaNV.setText(new NhanVienBUS().findByID(General.CURRENT_USER.getMaNV()).getHoTen());
+        txtMaNV.setText("NV" + General.CURRENT_USER.getMaNV());
         txtNgayLap.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis())));
         btnThem.setText("Thêm");
         btnXoa.setText("Xóa");
@@ -829,23 +845,22 @@ public class FormPhieuNhap extends JTablePanel {
     }
 
     private void onClickBtnResetCTListener() {
-        Integer idCTPN = null;
+        Integer idPN = null;
         try {
-            idCTPN = Integer.parseInt(idHolderCT.getText());
+            idPN = Integer.parseInt(txtMaPN.getText().replace("PN", ""));
         } catch (Exception ignored) {}
-        fillTableDetail(idCTPN);
+        fillTableDetail(idPN);
         for (Component component:detailPanel.getComponents()) {
             if (component instanceof JTextField)
                 ((JTextField) component).setText("");
         }
+        txtMaPNCT.setText("PN" + idPN);
         idHolderCT.setText("");
     }
 
     private void onClickTableRow() {
         int index = table.getSelectedRow();
         IPhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
-        INhaCungCapBUS nhaCungCapBUS = new NhaCungCapBUS();
-        INhanVienBUS nhanVienBUS = new NhanVienBUS();
         Locale localeVN = new Locale("vi", "VN");
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -858,14 +873,13 @@ public class FormPhieuNhap extends JTablePanel {
         PhieuNhapDTO dto = phieuNhapBUS.findByID(selectedID);
         if (dto == null)
             return;
-        NhaCungCapDTO supplier = nhaCungCapBUS.findByID(dto.getMaNCC());
-        NhanVienDTO worker = nhanVienBUS.findByID(dto.getMaNV());
         txtMaPN.setText("PN" + dto.getMaPN());
         txtMaPNCT.setText("PN" + dto.getMaPN());
-        txtMaNCC.setText(supplier != null ? supplier.getTenNCC() : "Không xác định");
-        txtMaNV.setText(worker != null ? worker.getHoTen() : "Không xác định");
+        txtMaNCC.setText("NCC" + dto.getMaNCC());
+        txtMaNV.setText("NV" + dto.getMaNV());
         txtNgayLap.setText(dateFormat.format(dto.getNgayTao()));
-        txtTotal.setText(currencyVN.format(dto.getTongTien()).replace(" ₫", ""));
+        txtTotal.setText(currencyVN.format(dto.getTongTien()).replace(" ₫", "").replace(".",","));
+        fillTableDetail(dto.getMaPN());
 
         if (General.CURRENT_ROLE.isAdmin() && dto.getTinhTrang() == 0) {
             btnThem.setText("Kích hoạt");
@@ -885,12 +899,12 @@ public class FormPhieuNhap extends JTablePanel {
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         int selectedID;
         try {
-            selectedID = Integer.parseInt(txtMaPN.getText());
+            selectedID = Integer.parseInt(txtMaPN.getText().replace("PN", ""));
         } catch (Exception e) {
             return;
         }
         ArrayList<CT_PhieuNhapDTO> dtoList = ctPhieuNhapBUS.findByMaPN(selectedID);
-        if (dtoList == null)
+        if (dtoList == null || index == -1)
             return;
         CT_PhieuNhapDTO dto = dtoList.get(index);
         SanPhamDTO product = sanPhamBUS.findByID(dto.getMaSP());
@@ -900,9 +914,9 @@ public class FormPhieuNhap extends JTablePanel {
         txtSanPham.setText(product != null ? product.getTenSP() : "Không tìm thấy");
         txtSoLuong.setText(String.valueOf(dto.getSoLuong()));
         txtDonGia.setText(product != null ?
-                currencyVN.format(dto.getDonGia()).replace(" ₫", "") + "đ/" + product.getDonVi()
-                : currencyVN.format(dto.getDonGia()).replace(" ₫", "") + "đ");
-        txtThanhTienCT.setText(currencyVN.format(dto.getThanhTien()).replace(" ₫", ""));
+                currencyVN.format(dto.getDonGia()).replace(" ₫", "").replace(".",",") + "đ/" + product.getDonVi()
+                : currencyVN.format(dto.getDonGia()).replace(" ₫", "").replace(".",",") + "đ");
+        txtThanhTienCT.setText(currencyVN.format(dto.getThanhTien()).replace(" ₫", "").replace(".",","));
     }
 
     private String[] columnHeaderDetail;

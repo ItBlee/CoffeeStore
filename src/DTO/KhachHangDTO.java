@@ -80,4 +80,12 @@ public class KhachHangDTO implements IEntity {
     public void setTinhTrang(Integer tinhTrang) {
         TinhTrang = tinhTrang;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof KhachHangDTO)) return false;
+        KhachHangDTO that = (KhachHangDTO) o;
+        return getMaKH().equals(that.getMaKH());
+    }
 }

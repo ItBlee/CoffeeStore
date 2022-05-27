@@ -1,87 +1,176 @@
 package GUI.Form;
 
+import BUS.*;
+import BUS.Interfaces.*;
+import DTO.*;
 import GUI.Form.Abstract.JTablePanel;
+import GUI.common.MyColor;
 import GUI.components.chart.Chart;
 import GUI.components.chart.ModelChart;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Timestamp;
+import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class FormThongKe extends JTablePanel {
+    private boolean validate_Flag = false;
+    private static ArrayList<ThongKeDTO> listByDay = null;
+    private static ArrayList<ThongKeDTO> listByMonth = null;
+    private static ArrayList<ThongKeDTO> listByYear = null;
+
     public FormThongKe() {
+        if (listByDay == null)
+            listByDay = new ArrayList<ThongKeDTO>();
+        if (listByMonth == null)
+            listByMonth = new ArrayList<ThongKeDTO>();
+        if (listByYear == null)
+            listByYear = new ArrayList<ThongKeDTO>();
         initComponents();
+        fillFormByCurrentMonth();
+    }
+
+    private void fillFormByCurrentMonth() {
+        INhanVienBUS nhanVienBUS = new NhanVienBUS();
+        ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+        IKhuyenMaiBUS khuyenMaiBUS = new KhuyenMaiBUS();
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+        ThongKeDTO currentMonth = fillThongKeByMonth(YearMonth.now().getMonthValue(), YearMonth.now().getYear());
+        ThongKeDTO lastMonth = fillThongKeByMonth(YearMonth.now().getMonthValue()-1, YearMonth.now().getYear());
+
+        double lastRevenue = lastMonth.getIncome() - lastMonth.getExpenses();
+        double currentRevenue = currentMonth.getIncome() - currentMonth.getExpenses();
+        int percentRevenue = 100;
+        if (lastRevenue != 0)
+            percentRevenue = (int) ((currentRevenue/lastRevenue) * 100);
+
+        lbPercentRevenue.setText(currencyVN.format((int) currentRevenue).replace(" ₫", "").replace(".",",") + "đ" + " (" + percentRevenue +"%)");
+        int lowState = 20;
+        int mediumState = 50;
+        if (percentRevenue < lowState) {
+            lbPercentRevenue.setForeground(MyColor.RED);
+            lbCurrentRevenue.setBackground(new Color(255, 153, 153));
+        } else if (percentRevenue < mediumState) {
+            lbPercentRevenue.setForeground(MyColor.ORANGE);
+            lbCurrentRevenue.setBackground(new Color(255, 231, 153));
+        } else {
+            lbPercentRevenue.setForeground(MyColor.GREEN);
+            lbCurrentRevenue.setBackground(new Color(153, 255, 153));
+        }
+        lbCurrentRevenue.setSize((lbOldRevenue.getWidth() * percentRevenue)/100 , lbCurrentRevenue.getHeight());
+
+        if (lastMonth.getIncome() == 0 || currentMonth.getIncome() == 0) {
+            lbTotalSalesCompare.setForeground(MyColor.RED);
+            lbTotalSalesCompare.setText("+0%");
+        } else if (currentMonth.getIncome() < lastMonth.getIncome()) {
+            double deviant = lastMonth.getIncome() - currentMonth.getIncome();
+            double percent = (deviant/(double)lastMonth.getIncome())*100;
+            lbTotalSalesCompare.setForeground(MyColor.RED);
+            lbTotalSalesCompare.setText("-" + (int) percent + "%");
+        } else {
+            double deviant = currentMonth.getIncome() - lastMonth.getIncome();
+            double percent = (deviant/(double)lastMonth.getIncome())*100;
+            lbTotalSalesCompare.setForeground(MyColor.GREEN);
+            lbTotalSalesCompare.setText("+" + (int) percent + "%");
+        }
+
+        if (lastMonth.getExpenses() == 0 || currentMonth.getExpenses() == 0) {
+            lbTotalExpensesCompare.setForeground(MyColor.RED);
+            lbTotalExpensesCompare.setText("-0%");
+        } else if (currentMonth.getExpenses() < lastMonth.getExpenses()) {
+            double deviant = lastMonth.getExpenses() - currentMonth.getExpenses();
+            double percent = (deviant/(double)lastMonth.getExpenses())*100;
+            lbTotalExpensesCompare.setForeground(MyColor.GREEN);
+            lbTotalExpensesCompare.setText("-" + (int) percent + "%");
+        } else {
+            double deviant = currentMonth.getExpenses() - lastMonth.getExpenses();
+            double percent = (deviant/(double)lastMonth.getExpenses())*100;
+            lbTotalExpensesCompare.setForeground(MyColor.RED);
+            lbTotalExpensesCompare.setText("+" + (int) percent + "%");
+        }
+
+        if (lastMonth.getCustomer() == 0 || currentMonth.getCustomer() == 0) {
+            lbTotalCustomerCompare.setForeground(MyColor.RED);
+            lbTotalCustomerCompare.setText("+0%");
+        } else if (currentMonth.getCustomer() < lastMonth.getCustomer()) {
+            double deviant = lastMonth.getCustomer() - currentMonth.getCustomer();
+            double percent = (deviant/(double)lastMonth.getCustomer())*100;
+            lbTotalCustomerCompare.setForeground(MyColor.RED);
+            lbTotalCustomerCompare.setText("-" + (int) percent + "%");
+        } else {
+            double deviant = currentMonth.getCustomer() - lastMonth.getCustomer();
+            double percent = (deviant/(double)lastMonth.getCustomer())*100;
+            lbTotalCustomerCompare.setForeground(MyColor.GREEN);
+            lbTotalCustomerCompare.setText("+" + (int) percent + "%");
+        }
+
+        if (lastMonth.getInvoice() == 0 || currentMonth.getInvoice() == 0) {
+            lbTotalBillPanelCompare.setForeground(MyColor.RED);
+            lbTotalBillPanelCompare.setText("+0%");
+        } else if (currentMonth.getInvoice() < lastMonth.getInvoice()) {
+            double deviant = lastMonth.getInvoice() - currentMonth.getInvoice();
+            double percent = (deviant/(double)lastMonth.getInvoice())*100;
+            lbTotalBillPanelCompare.setForeground(MyColor.RED);
+            lbTotalBillPanelCompare.setText("-" + (int) percent + "%");
+        } else {
+            double deviant = currentMonth.getInvoice() - lastMonth.getInvoice();
+            double percent = (deviant/(double)lastMonth.getInvoice())*100;
+            lbTotalBillPanelCompare.setForeground(MyColor.GREEN);
+            lbTotalBillPanelCompare.setText("+" + (int) percent + "%");
+        }
+
+        lbTotalSalesValue.setText(currencyVN.format(currentMonth.getIncome()).replace(" ₫", "").replace(".",",") + " đ");
+        lbTotalExpensesValue.setText(currencyVN.format(currentMonth.getExpenses()).replace(" ₫", "").replace(".",",") + " đ");
+        lbTotalCustomerValue.setText(String.valueOf(currentMonth.getCustomer()));
+        lbTotalBillPanelValue.setText(String.valueOf(currentMonth.getInvoice()));
+        lbEmployeeCount.setText(nhanVienBUS.getTotalCount() + " nhân viên");
+
+        int totalEmployeeSalary = 0;
+        for (NhanVienDTO dto:nhanVienBUS.findAll())
+            totalEmployeeSalary += dto.getLuong();
+        lbEmployeeValue.setText(currencyVN.format(totalEmployeeSalary).replace(" ₫", "").replace(".",",") + " đ");
+
+        lbProductCount.setText(sanPhamBUS.getTotalCount() + " sản phẩm");
+        lbProductReceivedValue.setText(currentMonth.getInProduct() + " sp");
+        lbProductSoldValue.setText(currentMonth.getOutProduct() + " sp");
+
+        lbStockReceivedCount.setText(currentMonth.getInput() + " phiếu nhập");
+        lbStockReceivedValue.setText(currencyVN.format(currentMonth.getExpenses()).replace(" ₫", "").replace(".",",") + " đ");
+
+        lbPromotionCount.setText(khuyenMaiBUS.getTotalCount() + " khuyến mãi");
+        lbPromotionValue.setText(currencyVN.format(currentMonth.getSale()).replace(" ₫", "").replace(".",",") + " đ");
+
+        int index = 0;
+        String[] bestName = new String[4];
+        Integer[] bestSold = new Integer[4];
+        for (Map.Entry<String, Integer> entry:currentMonth.getBestSeller().entrySet()) {
+            if (index == 4)
+                break;
+            bestName[index] = entry.getKey();
+            bestSold[index] = entry.getValue();
+            index++;
+        }
+        bestSellNameColumn1.setText(bestName[0]);
+        bestSellNameColumn2.setText(bestName[1]);
+        bestSellNameColumn3.setText(bestName[2]);
+        bestSellNameColumn4.setText(bestName[3]);
+        bestSellSoldColumn1.setText(bestSold[0] != null ? String.valueOf(bestSold[0]) : "");
+        bestSellSoldColumn2.setText(bestSold[1] != null ? String.valueOf(bestSold[1]) : "");
+        bestSellSoldColumn3.setText(bestSold[2] != null ? String.valueOf(bestSold[2]) : "");
+        bestSellSoldColumn4.setText(bestSold[3] != null ? String.valueOf(bestSold[3]) : "");
     }
     
     private void initComponents() {
-        JPanel overviewPanel = new JPanel();
-        JPanel totalExpensesPanel = new JPanel();
-        JLabel lbTotalExpensesCompare = new JLabel();
-        JLabel lbTotalExpensesValue = new JLabel();
-        JLabel lbTotalExpensesLabel = new JLabel();
-        JLabel lbOverviewTitle = new JLabel();
-        JPanel totalSalesPanel = new JPanel();
-        JLabel lbTotalSalesCompare = new JLabel();
-        JLabel lbTotalSalesValue = new JLabel();
-        JLabel lbTotalSalesLabel = new JLabel();
-        JPanel totalBillPanel = new JPanel();
-        JLabel lbTotalBillPanelCompare = new JLabel();
-        JLabel lbTotalBillPanelValue = new JLabel();
-        JLabel lbTotalBillPanelLabel = new JLabel();
-        JPanel totalCustomerPanel = new JPanel();
-        JLabel lbTotalCustomerCompare = new JLabel();
-        JLabel lbTotalCustomerValue = new JLabel();
-        JLabel lbTotalCustomerLabel = new JLabel();
-        JPanel salesPanel = new JPanel();
-        JRadioButton rbSalesByDay = new JRadioButton();
-        JRadioButton rbSalesByYear = new JRadioButton();
-        JRadioButton rbSalesByMonth = new JRadioButton();
-        JComboBox<String> cbSelectDate = new JComboBox<>();
-        JLabel lvSalesTitle = new JLabel();
-        JPanel bestsellerPanel = new JPanel();
-        JLabel lbBestSellTitle = new JLabel();
-        JPanel bestSellHeaderTable = new JPanel();
-        JLabel lbBestsellerProduct = new JLabel();
-        JLabel lbBestsellerSold = new JLabel();
-        JLabel lbBestsellerBest = new JLabel();
-        JPanel bestSellColumnLine = new JPanel();
-        JPanel bestsellerBestRow = new JPanel();
-        JLabel bestSellNameColumn1 = new JLabel();
-        JLabel bestSellSoldColumn1 = new JLabel();
-        JPanel bestsellerRow1 = new JPanel();
-        JLabel bestSellNameColumn2 = new JLabel();
-        JLabel bestSellSoldColumn2 = new JLabel();
-        JPanel bestsellerRow2 = new JPanel();
-        JLabel bestSellNameColumn3 = new JLabel();
-        JLabel bestSellSoldColumn3 = new JLabel();
-        JPanel bestsellerRow3 = new JPanel();
-        JLabel bestSellNameColumn4 = new JLabel();
-        JLabel bestSellSoldColumn4 = new JLabel();
-        JPanel detailPanel = new JPanel();
-        JPanel promotionPanel = new JPanel();
-        JLabel lbPromotionLabel = new JLabel();
-        JLabel lbPromotionCount = new JLabel();
-        JLabel lbPromotionValue = new JLabel();
-        JPanel productPanel = new JPanel();
-        JLabel lbProductSold = new JLabel();
-        JLabel lbProductCount = new JLabel();
-        JLabel lbProductLabelReceived = new JLabel();
-        JLabel lbProductReceivedValue = new JLabel();
-        JLabel lbProductSoldValue = new JLabel();
-        JPanel employeePanel = new JPanel();
-        JLabel lbEmployeeLabel = new JLabel();
-        JLabel lbEmployeeCount = new JLabel();
-        JLabel lbEmployeeValue = new JLabel();
-        JPanel stockReceivedPanel = new JPanel();
-        JLabel lbStockReceivedLabel = new JLabel();
-        JLabel lbStockReceivedCount = new JLabel();
-        JLabel lbStockReceivedValue = new JLabel();
-        JPanel revenuePanel = new JPanel();
-        JLabel lbRevenueTitle = new JLabel();
-        JLabel lbPercentRevenue = new JLabel();
-        JPanel lbCurrentRevenue = new JPanel();
-        JPanel lbOldRevenue = new JPanel();
-
         setLayout(null);
 
         overviewPanel.setBackground(new Color(255, 255, 255));
@@ -210,6 +299,17 @@ public class FormThongKe extends JTablePanel {
         overviewPanel.add(totalCustomerPanel);
         totalCustomerPanel.setBounds(370, 60, 170, 100);
 
+        btnReset.setIcon(new ImageIcon("bin/images/components/reset.png"));
+        btnReset.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnReset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onClickBtnResetListener();
+            }
+        });
+        overviewPanel.add(btnReset);
+        btnReset.setBounds(680, 10, 40, 40);
+
         add(overviewPanel);
         overviewPanel.setBounds(10, 10, 730, 170);
 
@@ -227,6 +327,10 @@ public class FormThongKe extends JTablePanel {
         rbSalesByMonth.setText("Theo tháng");
         salesPanel.add(rbSalesByMonth);
         rbSalesByMonth.setBounds(660, 20, 104, 22);
+
+        group.add(rbSalesByDay);
+        group.add(rbSalesByMonth);
+        group.add(rbSalesByYear);
 
         cbSelectDate.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         salesPanel.add(cbSelectDate);
@@ -515,4 +619,254 @@ public class FormThongKe extends JTablePanel {
         add(revenuePanel);
         revenuePanel.setBounds(10, 190, 730, 50);
     }
+
+    private void onClickBtnResetListener() {
+        validate_Flag = true;
+        fillFormByCurrentMonth();
+        validate_Flag = false;
+    }
+
+    private ThongKeDTO fillThongKeByYear(int year) {
+        if (year > LocalDate.now().getYear())
+            return null;
+        Integer check = isExistYear(year);
+        if (check != null && !validate_Flag)
+            return listByYear.get(check);
+
+        ThongKeDTO yearTK = new ThongKeDTO();
+        yearTK.setYear(year);
+        for (int i = 1; i < 12; i++) {
+            ThongKeDTO dto = fillThongKeByMonth(i, yearTK.getYear());
+            if (dto != null) {
+                Map<String, Integer> tempSeller = yearTK.getBestSeller();
+                yearTK.setIncome(yearTK.getIncome() + dto.getIncome());
+                yearTK.setExpenses(yearTK.getExpenses() + dto.getExpenses());
+                yearTK.setCustomer(yearTK.getCustomer() + dto.getCustomer());
+                yearTK.setInvoice(yearTK.getInvoice() + dto.getInvoice());
+                yearTK.setInput(yearTK.getInput() + dto.getInput());
+                yearTK.setSale(yearTK.getSale() + dto.getSale());
+                yearTK.setInProduct(yearTK.getInProduct() + dto.getInProduct());
+                yearTK.setOutProduct(yearTK.getOutProduct() + dto.getOutProduct());
+                for (Map.Entry<String, Integer> entry : dto.getBestSeller().entrySet()) {
+                    if (!tempSeller.containsKey(entry.getKey())) {
+                        tempSeller.put(entry.getKey(), entry.getValue());
+                    } else
+                        tempSeller.put(entry.getKey(), tempSeller.get(entry.getKey()) + entry.getValue());
+                }
+                yearTK.setBestSeller(sortByValue(tempSeller, false));
+            }
+        }
+        listByYear.add(yearTK);
+        return yearTK;
+    }
+
+    private ThongKeDTO fillThongKeByMonth(int month, int year) {
+        if (month <=0 || month > 12)
+            return null;
+        if (year > LocalDate.now().getYear())
+            return null;
+        Integer check = isExistMonth(month, year);
+        if (check != null && !validate_Flag)
+            return listByMonth.get(check);
+
+        String dateStr = month + "." + year;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M.yyyy");
+        YearMonth ym = YearMonth.parse(dateStr, formatter);
+
+        ThongKeDTO monthTK = new ThongKeDTO();
+        monthTK.setMonth(ym);
+
+        ArrayList<ThongKeDTO> fillAllDateOfMonth = fillThongKeByDate(ym.atDay(1), ym.atEndOfMonth());
+        if (!fillAllDateOfMonth.isEmpty()) {
+            Map<String, Integer> tempSeller = monthTK.getBestSeller();
+            for (ThongKeDTO dto:fillAllDateOfMonth) {
+                monthTK.setIncome(monthTK.getIncome() + dto.getIncome());
+                monthTK.setExpenses(monthTK.getExpenses() + dto.getExpenses());
+                monthTK.setCustomer(monthTK.getCustomer() + dto.getCustomer());
+                monthTK.setInvoice(monthTK.getInvoice() + dto.getInvoice());
+                monthTK.setInput(monthTK.getInput() + dto.getInput());
+                monthTK.setSale(monthTK.getSale() + dto.getSale());
+                monthTK.setInProduct(monthTK.getInProduct() + dto.getInProduct());
+                monthTK.setOutProduct(monthTK.getOutProduct() + dto.getOutProduct());
+                for (Map.Entry<String, Integer> entry:dto.getBestSeller().entrySet()) {
+                    if (!tempSeller.containsKey(entry.getKey())) {
+                        tempSeller.put(entry.getKey(), entry.getValue());
+                    } else
+                        tempSeller.put(entry.getKey(), tempSeller.get(entry.getKey()) + entry.getValue());
+                }
+            }
+            monthTK.setBestSeller(sortByValue(tempSeller, false));
+        }
+        listByMonth.add(monthTK);
+        return monthTK;
+    }
+
+    private ArrayList<ThongKeDTO> fillThongKeByDate(LocalDate from, LocalDate to) {
+        IHoaDonBUS hoaDonBUS = new HoaDonBUS();
+        ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
+        IPhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
+        ICT_PhieuNhapBUS ctPhieuNhapBUS = new CT_PhieuNhapBUS();
+        ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+
+        ArrayList<ThongKeDTO> result = new ArrayList<ThongKeDTO>();
+        for (LocalDate date = from; date.isBefore(to); date = date.plusDays(1)) {
+            Integer check = isExistDay(date);
+            if (check != null && !validate_Flag) {
+                result.add(listByDay.get(check));
+                continue;
+            }
+
+            Integer income = 0;
+            Integer expenses = 0;
+            Set<Integer> customerIDList = new HashSet<Integer>();
+            Integer invoice = 0;
+            Integer input = 0;
+            Integer sale = 0;
+            Integer inProduct = 0;
+            Integer outProduct = 0;
+            HashMap<String, Integer> productSellList = new HashMap<String, Integer>();
+
+            for (HoaDonDTO dto:hoaDonBUS.findAll()) {
+                if (dto.getNgayLap().equals(Timestamp.valueOf(date.atStartOfDay()))) {
+                    invoice++;
+                    income += dto.getTienThanhToan();
+                    sale += dto.getTienKhuyenMai();
+                    customerIDList.add(dto.getMaKH());
+                    for (CT_HoaDonDTO child:ctHoaDonBUS.findByMaHD(dto.getMaHD())) {
+                        outProduct += child.getSoLuong();
+                        SanPhamDTO sp = sanPhamBUS.findByID(child.getMaSP());
+                        if (!productSellList.containsKey(sp.getTenSP()))
+                            productSellList.put(sp.getTenSP(), productSellList.get(sp.getTenSP()) + child.getSoLuong());
+                    }
+                }
+            }
+
+            for (PhieuNhapDTO dto:phieuNhapBUS.findAll()) {
+                if (dto.getNgayTao().equals(Timestamp.valueOf(date.atStartOfDay()))) {
+                    input++;
+                    expenses += dto.getTongTien();
+                    for (CT_PhieuNhapDTO child:ctPhieuNhapBUS.findByMaPN(dto.getMaPN()))
+                        inProduct += child.getSoLuong();
+                }
+            }
+
+            ThongKeDTO dto = new ThongKeDTO(date);
+            dto.setIncome(income);
+            dto.setExpenses(expenses);
+            dto.setCustomer(customerIDList.size());
+            dto.setInvoice(invoice);
+            dto.setInput(input);
+            dto.setSale(sale);
+            dto.setInProduct(inProduct);
+            dto.setOutProduct(outProduct);
+            dto.setBestSeller(sortByValue(productSellList, false));
+            listByDay.add(dto);
+            result.add(dto);
+        }
+        return result;
+    }
+
+    private static Map<String, Integer> sortByValue(Map<String, Integer> unSortMap, final boolean ascOrder) {
+        List<Map.Entry<String, Integer>> list = new LinkedList<>(unSortMap.entrySet());
+        list.sort((o1, o2) -> ascOrder ? o1.getValue().compareTo(o2.getValue()) == 0
+                ? o1.getKey().compareTo(o2.getKey())
+                : o1.getValue().compareTo(o2.getValue()) : o2.getValue().compareTo(o1.getValue()) == 0
+                ? o2.getKey().compareTo(o1.getKey())
+                : o2.getValue().compareTo(o1.getValue()));
+        return list.stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> b, LinkedHashMap::new));
+    }
+
+    private Integer isExistDay(LocalDate date) {
+        for (int i = 0; i < listByDay.size(); i++) {
+            if (listByDay.get(i).equals(date))
+                return i;
+        }
+        return null;
+    }
+
+    private Integer isExistMonth(int month, int year) {
+        for (int i = 0; i < listByDay.size(); i++) {
+            if (listByDay.get(i).getMonth() == month
+            && listByDay.get(i).getYear() == year)
+                return i;
+        }
+        return null;
+    }
+
+    private Integer isExistYear(int year) {
+        for (int i = 0; i < listByDay.size(); i++) {
+            if (listByDay.get(i).getYear() == year)
+                return i;
+        }
+        return null;
+    }
+    private final JButton btnReset = new JButton();
+    private final ButtonGroup group = new ButtonGroup();
+    private final JPanel overviewPanel = new JPanel();
+    private final JPanel totalExpensesPanel = new JPanel();
+    private final JLabel lbTotalExpensesCompare = new JLabel();
+    private final JLabel lbTotalExpensesValue = new JLabel();
+    private final JLabel lbTotalExpensesLabel = new JLabel();
+    private final JLabel lbOverviewTitle = new JLabel();
+    private final JPanel totalSalesPanel = new JPanel();
+    private final JLabel lbTotalSalesCompare = new JLabel();
+    private final JLabel lbTotalSalesValue = new JLabel();
+    private final JLabel lbTotalSalesLabel = new JLabel();
+    private final JPanel totalBillPanel = new JPanel();
+    private final JLabel lbTotalBillPanelCompare = new JLabel();
+    private final JLabel lbTotalBillPanelValue = new JLabel();
+    private final JLabel lbTotalBillPanelLabel = new JLabel();
+    private final JPanel totalCustomerPanel = new JPanel();
+    private final JLabel lbTotalCustomerCompare = new JLabel();
+    private final JLabel lbTotalCustomerValue = new JLabel();
+    private final JLabel lbTotalCustomerLabel = new JLabel();
+    private final JPanel salesPanel = new JPanel();
+    private final JRadioButton rbSalesByDay = new JRadioButton();
+    private final JRadioButton rbSalesByYear = new JRadioButton();
+    private final JRadioButton rbSalesByMonth = new JRadioButton();
+    private final JComboBox<String> cbSelectDate = new JComboBox<>();
+    private final JLabel lvSalesTitle = new JLabel();
+    private final JPanel bestsellerPanel = new JPanel();
+    private final JLabel lbBestSellTitle = new JLabel();
+    private final JPanel bestSellHeaderTable = new JPanel();
+    private final JLabel lbBestsellerProduct = new JLabel();
+    private final JLabel lbBestsellerSold = new JLabel();
+    private final JLabel lbBestsellerBest = new JLabel();
+    private final JPanel bestSellColumnLine = new JPanel();
+    private final JPanel bestsellerBestRow = new JPanel();
+    private final JLabel bestSellNameColumn1 = new JLabel();
+    private final JLabel bestSellSoldColumn1 = new JLabel();
+    private final JPanel bestsellerRow1 = new JPanel();
+    private final JLabel bestSellNameColumn2 = new JLabel();
+    private final JLabel bestSellSoldColumn2 = new JLabel();
+    private final JPanel bestsellerRow2 = new JPanel();
+    private final JLabel bestSellNameColumn3 = new JLabel();
+    private final JLabel bestSellSoldColumn3 = new JLabel();
+    private final JPanel bestsellerRow3 = new JPanel();
+    private final JLabel bestSellNameColumn4 = new JLabel();
+    private final JLabel bestSellSoldColumn4 = new JLabel();
+    private final JPanel detailPanel = new JPanel();
+    private final JPanel promotionPanel = new JPanel();
+    private final JLabel lbPromotionLabel = new JLabel();
+    private final JLabel lbPromotionCount = new JLabel();
+    private final JLabel lbPromotionValue = new JLabel();
+    private final JPanel productPanel = new JPanel();
+    private final JLabel lbProductSold = new JLabel();
+    private final JLabel lbProductCount = new JLabel();
+    private final JLabel lbProductLabelReceived = new JLabel();
+    private final JLabel lbProductReceivedValue = new JLabel();
+    private final JLabel lbProductSoldValue = new JLabel();
+    private final JPanel employeePanel = new JPanel();
+    private final JLabel lbEmployeeLabel = new JLabel();
+    private final JLabel lbEmployeeCount = new JLabel();
+    private final JLabel lbEmployeeValue = new JLabel();
+    private final JPanel stockReceivedPanel = new JPanel();
+    private final JLabel lbStockReceivedLabel = new JLabel();
+    private final JLabel lbStockReceivedCount = new JLabel();
+    private final JLabel lbStockReceivedValue = new JLabel();
+    private final JPanel revenuePanel = new JPanel();
+    private final JLabel lbRevenueTitle = new JLabel();
+    private final JLabel lbPercentRevenue = new JLabel();
+    private final JPanel lbCurrentRevenue = new JPanel();
+    private final JPanel lbOldRevenue = new JPanel();
 }

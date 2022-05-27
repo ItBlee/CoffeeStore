@@ -50,7 +50,7 @@ public class FrameSelect extends MovableJFrame {
     }
 
     private void fillTable(ArrayList<IEntity> idList) throws Exception {
-        JTablePanel parentPanel = getParentTable();
+        JTablePanel parentPanel = getParentPanel();
         if (parentPanel != null) {
             parentPanel.fillTable(idList);
             DefaultTableModel currentModel = (DefaultTableModel) table.getModel();
@@ -65,13 +65,13 @@ public class FrameSelect extends MovableJFrame {
     }
 
     private String[] getProps() {
-        JTablePanel parentPanel = getParentTable();
+        JTablePanel parentPanel = getParentPanel();
         if (parentPanel != null)
             return parentPanel.getColumnHeader();
         return new String[0];
     }
 
-    private JTablePanel getParentTable() {
+    private JTablePanel getParentPanel() {
         ArrayList<Category> formList = ((FrameLayout) General.frame).getCategories();
         JTablePanel parentPanel = null;
         for (Category category:formList) {
@@ -246,7 +246,7 @@ public class FrameSelect extends MovableJFrame {
         });
 
         mainPanel.add(jScrollPane);
-        jScrollPane.setBounds(530, 0, 940, getHeight());
+        jScrollPane.setBounds(530, 0, 940, getHeight()-50);
 
         btnSelectedID.setBackground(new Color(229, 239, 255));
         btnSelectedID.setForeground(new Color(54, 123, 245));
@@ -444,7 +444,7 @@ public class FrameSelect extends MovableJFrame {
         lbSelectedID.setBounds(lbSelectedID.getX(), 230+(35*conditionCount), btnSearch.getWidth(), lbSelectedID.getHeight());
         txtSelectedID.setBounds(txtSelectedID.getX(), 250+(35*conditionCount), txtSelectedID.getWidth(), txtSelectedID.getHeight());
         btnSelectedID.setBounds(btnSelectedID.getX(), 250+(35*conditionCount), btnSelectedID.getWidth(), btnSelectedID.getHeight());
-        jScrollPane.setBounds(jScrollPane.getX(), jScrollPane.getY(), jScrollPane.getWidth(), mainPanel.getHeight());
+        jScrollPane.setBounds(jScrollPane.getX(), jScrollPane.getY(), jScrollPane.getWidth(), mainPanel.getHeight()-50);
         revalidate();
         repaint();
     }

@@ -64,11 +64,9 @@ public class FormSanPham extends JTablePanel {
         for (SanPhamDTO dto: list) {
             Object[] row;
             if (General.CURRENT_ROLE.isAdmin())
-                row = new Object[] { "SP" + dto.getMaSP(), dto.getTenSP(), "LSP" + dto.getMaLoai(),
-                        "NCC" + dto.getMaNCC(), currencyVN.format(dto.getDonGia()), dto.getDonVi(), dto.getSoLuong(),
+                row = new Object[] { "SP" + dto.getMaSP(), dto.getTenSP(), currencyVN.format(dto.getDonGia()), dto.getSoLuong(),
                         dto.getTinhTrang() == 1 ? "Hoạt động" : "Vô hiệu"};
-            else row = new Object[] { "SP" + dto.getMaSP(), dto.getTenSP(), "LSP" + dto.getMaLoai(),
-                        "NCC" + dto.getMaNCC(), currencyVN.format(dto.getDonGia()), dto.getDonVi(), dto.getSoLuong()};
+            else row = new Object[] { "SP" + dto.getMaSP(), dto.getTenSP(), currencyVN.format(dto.getDonGia()), dto.getSoLuong()};
             model.addRow(row);
         }
     }
@@ -141,10 +139,10 @@ public class FormSanPham extends JTablePanel {
         table = new TableColumn();
         if (General.CURRENT_ROLE.isAdmin())
             columnHeader = new String [] {
-                    "Mã", "Tên", "Loại", "Nguồn", "Đơn giá", "Đơn vị", "Số lượng", "Tình trạng"
+                    "Mã", "Tên", "Đơn giá", "Số lượng", "Tình trạng"
             };
         else columnHeader = new String [] {
-                "Mã", "Tên", "Loại", "Nguồn", "Đơn giá", "Đơn vị", "Số lượng"
+                "Mã", "Tên", "Đơn giá", "Số lượng"
         };
         table.setModel(new DefaultTableModel(
                 new Object [][] {},
@@ -255,8 +253,13 @@ public class FormSanPham extends JTablePanel {
         CategoryPanel.add(btnXoaLoaiSP);
         btnXoaLoaiSP.setBounds(310, 330, 130, 40);
 
-        taMota.setColumns(20);
-        taMota.setRows(5);
+        taMota.setEditable(false);
+        taMota.setFocusable(false);
+        taMota.setLineWrap(true);
+        taMota.setWrapStyleWord(true);
+        jScrollPane2.setBackground(Color.white);
+        jScrollPane2.setBorder(BorderFactory.createEmptyBorder());
+        jScrollPane2.setFocusable(false);
         jScrollPane2.setViewportView(taMota);
 
         CategoryPanel.add(jScrollPane2);
@@ -279,14 +282,16 @@ public class FormSanPham extends JTablePanel {
         lbDetailSPTitle.setBounds(130, 20, 290, 40);
 
         imagePanel.setLayout(null);
+        imagePanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         imgFileNameHolder = new JLabel();
         imgFileNameHolder.setFocusable(false);
         imgFileNameHolder.setEnabled(false);
         imgFileNameHolder.setVisible(false);
         imagePanel.add(imgFileNameHolder);
-        imgSP.setBounds(0, 0, 20, 20);
+        imgFileNameHolder.setBounds(0, 0, 20, 20);
 
+        imgSP.setCursor(new Cursor(Cursor.HAND_CURSOR));
         imgSP.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -299,8 +304,13 @@ public class FormSanPham extends JTablePanel {
         detailSPPanel.add(imagePanel);
         imagePanel.setBounds(30, 100, 170, 170);
 
-        taMotaSP.setColumns(20);
-        taMotaSP.setRows(5);
+        taMotaSP.setEditable(false);
+        taMotaSP.setFocusable(false);
+        taMotaSP.setLineWrap(true);
+        taMotaSP.setWrapStyleWord(true);
+        jScrollPane1.setBackground(Color.white);
+        jScrollPane1.setBorder(BorderFactory.createEmptyBorder());
+        jScrollPane1.setFocusable(false);
         jScrollPane1.setViewportView(taMotaSP);
 
         detailSPPanel.add(jScrollPane1);
@@ -550,9 +560,9 @@ public class FormSanPham extends JTablePanel {
         Integer idLoaiSP = null;
         Integer idNCC = null;
         try {
-            idSP = Integer.valueOf(txtMaSP.getText().replace("SP", ""));
-            idLoaiSP = loaiSPBUS.findByTenLoai(String.valueOf(cbLoaiSP.getSelectedItem())).getMaLoai();
             idNCC = Integer.valueOf(StringUtils.removeLetter(txtMaNCC.getText()));
+            idLoaiSP = loaiSPBUS.findByTenLoai(String.valueOf(cbLoaiSP.getSelectedItem())).getMaLoai();
+            idSP = Integer.valueOf(txtMaSP.getText().replace("SP", ""));
         } catch (NumberFormatException ignored) {}
 
         SanPhamDTO dto = new SanPhamDTO();
@@ -622,7 +632,7 @@ public class FormSanPham extends JTablePanel {
         ILoaiSPBUS iLoaiSPBUS = new LoaiSPBUS();
         try {
             LoaiSPDTO dto = getUserInputCT();
-            if (Validator.isValidName(dto.getTenLoai()))
+            if (!Validator.isValidName(dto.getTenLoai()))
                 throw new Exception("Tên loại sản phẩm không hợp lệ.");
             iLoaiSPBUS.save(dto);
         } catch (Exception e) {
@@ -700,7 +710,7 @@ public class FormSanPham extends JTablePanel {
         ILoaiSPBUS iLoaiSPBUS = new LoaiSPBUS();
         try {
             LoaiSPDTO newDto = getUserInputCT();
-            if (Validator.isValidName(newDto.getTenLoai()))
+            if (!Validator.isValidName(newDto.getTenLoai()))
                 throw new Exception("Tên loại sản phẩm không hợp lệ.");
             iLoaiSPBUS.update(newDto);
         } catch (Exception e) {
@@ -845,23 +855,25 @@ public class FormSanPham extends JTablePanel {
         cbLoaiSP.setSelectedItem(category != null ? category.getTenLoai() : "Chọn lọai");
         txtMaNCC.setText(supplier != null ? "NCC" + supplier.getMaNCC() + " - " + supplier.getTenNCC() : "Không xác định");
         txtTenSP.setText(dto.getTenSP());
-        txtDonGia.setText(currencyVN.format(dto.getDonGia()).replace(" ₫", ""));
+        txtDonGia.setText(currencyVN.format(dto.getDonGia()).replace(" ₫", "").replace(".",","));
         txtDonVi.setText(dto.getDonVi());
         txtSoLuong.setText(String.valueOf(dto.getSoLuong()));
 
         taMotaSP.setText(dto.getMoTa());
+        taMotaSP.setCaretPosition(0);
         try {
             Image productImg = new ImageIcon("bin/images/SanPham/" + dto.getHinhAnh()).getImage().getScaledInstance(imagePanel.getWidth(), imagePanel.getHeight(), Image.SCALE_SMOOTH);
             imgSP.setIcon(new ImageIcon(productImg));
             imgFileNameHolder.setText(dto.getHinhAnh());
         } catch (Exception ignored) {}
         detailSPPanel.setVisible(true);
-        CategoryPanel.setVisible(false);
+        pluginPanel.setVisible(false);
 
         if(category != null) {
             txtMaLoaiSP.setText("LSP" + category.getMaLoai());
             txtTenLoaiSP.setText(category.getTenLoai());
             taMota.setText(category.getMoTa());
+            taMota.setCaretPosition(0);
         }
 
         if (General.CURRENT_ROLE.isAdmin() && dto.getTinhTrang() == 0) {
@@ -891,8 +903,12 @@ public class FormSanPham extends JTablePanel {
         txtMaLoaiSP.setText("LSP" + dto.getMaLoai());
         txtTenLoaiSP.setText(dto.getTenLoai());
         taMota.setText(dto.getMoTa());
+        taMota.setCaretPosition(0);
         detailSPPanel.setVisible(false);
-        CategoryPanel.setVisible(true);
+        pluginPanel.setVisible(true);
+
+        int DEFAULT_LSP_ID = 2;
+        btnXoaLoaiSP.setEnabled(!(dto.getMaLoai() == DEFAULT_LSP_ID));
 
         onClickBtnResetListener();
     }

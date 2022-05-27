@@ -1,16 +1,10 @@
 package BUS;
 
 import BUS.Abstract.AbstractHistoricBUS;
-import BUS.Interfaces.ICT_HoaDonBUS;
-import BUS.Interfaces.IHoaDonBUS;
-import BUS.Interfaces.IKhachHangBUS;
-import BUS.Interfaces.INhanVienBUS;
+import BUS.Interfaces.*;
 import DAO.HoaDonDAO;
 import DAO.Interfaces.IHoaDonDAO;
-import DTO.CT_HoaDonDTO;
-import DTO.HoaDonDTO;
-import DTO.KhachHangDTO;
-import DTO.NhanVienDTO;
+import DTO.*;
 import Utils.StringUtils;
 
 import java.sql.Date;
@@ -143,6 +137,15 @@ public class HoaDonBUS extends AbstractHistoricBUS implements IHoaDonBUS {
     public void update(HoaDonDTO hoaDon) throws Exception {
         if (!isExist(hoaDon))
             throw new Exception("Không tồn tại hóa đơn (HD" + hoaDon.getMaHD() + ").");
+        int checkFlag = 0;
+        if (hoaDon.getTinhTrang() == 2) {
+            hoaDon.setTinhTrang(0);
+            checkFlag = 1;
+        }
+        if (hoaDon.getTinhTrang() == 3) {
+            hoaDon.setTinhTrang(1);
+            checkFlag = 2;
+        }
         if (!hoaDonDAO.update(hoaDon))
             throw new Exception("Phát sinh lỗi trong quá trình thêm hóa đơn.");
         hoaDon = hoaDonDAO.findByID(hoaDon.getMaHD());
@@ -150,11 +153,43 @@ public class HoaDonBUS extends AbstractHistoricBUS implements IHoaDonBUS {
             if (listHoaDon.get(i).getMaHD().equals(hoaDon.getMaHD()))
                 listHoaDon.set(i, hoaDon);
         }
+        if (checkFlag == 1) {
+            ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
+            ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+            for (CT_HoaDonDTO dto: ctHoaDonBUS.findByMaHD(hoaDon.getMaHD())) {
+                SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(dto.getMaSP());
+                int newSL = sanPhamDTO.getSoLuong() + dto.getSoLuong();
+                sanPhamDTO.setSoLuong(newSL);
+                sanPhamBUS.update(sanPhamDTO);
+            }
+        } else if (checkFlag == 2) {
+            ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
+            ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+            for (CT_HoaDonDTO dto: ctHoaDonBUS.findByMaHD(hoaDon.getMaHD())) {
+                SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(dto.getMaSP());
+                int newSL = sanPhamDTO.getSoLuong() - dto.getSoLuong();
+                sanPhamDTO.setSoLuong(newSL);
+                sanPhamBUS.update(sanPhamDTO);
+            }
+        }
         super.update(hoaDon);
     }
 
     @Override
     public void delete(int id) throws Exception {
+        Integer status = findByID(id).getTinhTrang();
+        if (status == null)
+            throw new Exception("Không thể xóa hóa đơn (HD" + id + ").");
+        if (status == 0) {
+            ICT_PhieuNhapBUS ctPhieuNhapBUS = new CT_PhieuNhapBUS();
+            ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+            for (CT_PhieuNhapDTO dto:ctPhieuNhapBUS.findByMaPN(id)) {
+                SanPhamDTO sanPhamDTO = sanPhamBUS.findByID(dto.getMaSP());
+                int newSL = sanPhamDTO.getSoLuong() - dto.getSoLuong();
+                sanPhamDTO.setSoLuong(newSL);
+                sanPhamBUS.update(sanPhamDTO);
+            }
+        }
         ICT_HoaDonBUS ctHoaDonBUS = new CT_HoaDonBUS();
         for (CT_HoaDonDTO dto:ctHoaDonBUS.findByMaHD(id))
             ctHoaDonBUS.delete(dto.getID());

@@ -4,11 +4,13 @@ import BUS.Abstract.AbstractHistoricBUS;
 import BUS.Interfaces.ICT_PhieuNhapBUS;
 import BUS.Interfaces.INhaCungCapBUS;
 import BUS.Interfaces.IPhieuNhapBUS;
+import BUS.Interfaces.ISanPhamBUS;
 import DAO.Interfaces.INhaCungCapDAO;
 import DAO.NhaCungCapDAO;
 import DTO.CT_PhieuNhapDTO;
 import DTO.NhaCungCapDTO;
 import DTO.PhieuNhapDTO;
+import DTO.SanPhamDTO;
 import Utils.StringUtils;
 
 import java.util.ArrayList;
@@ -115,11 +117,15 @@ public class NhaCungCapBUS extends AbstractHistoricBUS implements INhaCungCapBUS
     public void delete(int id) throws Exception {
         ICT_PhieuNhapBUS ctPhieuNhapBUS = new CT_PhieuNhapBUS();
         IPhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
-        ArrayList<PhieuNhapDTO> containerDto = phieuNhapBUS.findByNCC(id);
-        for (PhieuNhapDTO dto:containerDto) {
+        ISanPhamBUS sanPhamBUS = new SanPhamBUS();
+        for (PhieuNhapDTO dto:phieuNhapBUS.findByNCC(id)) {
             for (CT_PhieuNhapDTO child :ctPhieuNhapBUS.findByMaPN(dto.getMaPN()))
                 ctPhieuNhapBUS.delete(child.getID());
             phieuNhapBUS.delete(dto.getID());
+        }
+        for (SanPhamDTO dto:sanPhamBUS.findByNhaCungCap(id)) {
+            dto.setMaNCC(null);
+            sanPhamBUS.update(dto);
         }
         if (!nhaCungCapDAO.delete(id))
             throw new Exception("Không thể xóa nhà cung cấp (NCC" + id + ").");

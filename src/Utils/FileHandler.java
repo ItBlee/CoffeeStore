@@ -25,8 +25,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Properties;
 
 import static Utils.SystemConstant.*;
@@ -76,12 +78,11 @@ public class FileHandler {
 
         // Create row
         Row row = sheet.createRow(rowIndex);
-
         mapper.mapExcelHeader(cellStyle, row);
-        rowIndex++;
         for (E dto : list) {
-            mapper.mapExcelBody(dto, row);
             rowIndex++;
+            row = sheet.createRow(rowIndex);
+            mapper.mapExcelBody(dto, row);
         }
         int numberOfColumn = sheet.getRow(0).getPhysicalNumberOfCells();
         for (int columnIndex = 0; columnIndex < numberOfColumn; columnIndex++) {
@@ -124,6 +125,8 @@ public class FileHandler {
     }
 
     public static boolean exportPDFReport(String path, IEntity reportInstance, ArrayList<IDetailEntity> list) {
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         ISanPhamBUS sanPhamBUS = new SanPhamBUS();
         INhanVienBUS nhanVienBUS = new NhanVienBUS();
 
@@ -132,20 +135,19 @@ public class FileHandler {
         String cooperatorDetail;
         String employeeDetail;
         String timestamp;
-        String totalPrice;
-        String salePrice = null;
-        String payment = null;
+        Integer totalPrice;
+        Integer salePrice = null;
+        Integer payment = null;
 
         ArrayList<SanPhamDTO> productList = new ArrayList<SanPhamDTO>();
-        for (IDetailEntity entity:list) {
-            SanPhamDTO dto = sanPhamBUS.findByID(entity.getForeignID());
-            if (dto != null && dto.getTinhTrang() != 0) {
+        for (int i = 0; i < list.size(); i++) {
+            SanPhamDTO dto = sanPhamBUS.findByID(list.get(i).getForeignID());
+            if (dto != null) {
                 productList.add(dto);
             } else {
-                list.remove(entity);
+                list.remove(list.get(i));
             }
         }
-
 
         if (reportInstance instanceof HoaDonDTO) {
             HoaDonDTO hoaDon = (HoaDonDTO) reportInstance;
@@ -157,9 +159,9 @@ public class FileHandler {
             cooperatorLabel = "Khách hàng";
             cooperatorDetail = khachHang.getHoTen() + " - SĐT: " + khachHang.getSDT();
             timestamp = String.valueOf(hoaDon.getNgayLap());
-            totalPrice = String.valueOf(hoaDon.getTongTien());
-            salePrice = String.valueOf(hoaDon.getTienKhuyenMai());
-            payment = String.valueOf(hoaDon.getTienThanhToan());
+            totalPrice = hoaDon.getTongTien();
+            salePrice = hoaDon.getTienKhuyenMai();
+            payment = hoaDon.getTienThanhToan();
         }
         else if (reportInstance instanceof PhieuNhapDTO) {
             PhieuNhapDTO phieuNhap = (PhieuNhapDTO) reportInstance;
@@ -171,7 +173,7 @@ public class FileHandler {
             cooperatorLabel = "Nhà cung cấp";
             cooperatorDetail = nhaCungCap.getTenNCC() + " - SĐT: " + nhaCungCap.getSDT();
             timestamp = String.valueOf(phieuNhap.getNgayTao());
-            totalPrice = String.valueOf(phieuNhap.getTongTien());
+            totalPrice = phieuNhap.getTongTien();
         }
         else
             return false;
@@ -213,31 +215,31 @@ public class FileHandler {
             content.endText();
 
             content.beginText();
-            content.setFont(fontBold, 16);
+            content.setFont(fontBold, 14);
             content.newLineAtOffset(80, 540);
             content.showText("Mã");
             content.endText();
 
             content.beginText();
-            content.setFont(fontBold, 16);
+            content.setFont(fontBold, 14);
             content.newLineAtOffset(200, 540);
             content.showText("Sản phẩm");
             content.endText();
 
             content.beginText();
-            content.setFont(fontBold, 16);
+            content.setFont(fontBold, 14);
             content.newLineAtOffset(310, 540);
             content.showText("Số lượng");
             content.endText();
 
             content.beginText();
-            content.setFont(fontBold, 16);
+            content.setFont(fontBold, 14);
             content.newLineAtOffset(410, 540);
             content.showText("Đơn giá");
             content.endText();
 
             content.beginText();
-            content.setFont(fontBold, 16);
+            content.setFont(fontBold, 14);
             content.newLineAtOffset(510, 540);
             content.showText("Tổng");
             content.endText();
@@ -278,7 +280,7 @@ public class FileHandler {
             content.setLeading(20f);
             content.newLineAtOffset(410, 520);
             for (int i = 0; i < list.size(); i++) {
-                content.showText(list.get(i).getDonGia() + "/" + productList.get(i).getDonVi());
+                content.showText(currencyVN.format(list.get(i).getDonGia()) + "/" + productList.get(i).getDonVi());
                 content.newLine();
             }
             content.endText();
@@ -288,22 +290,22 @@ public class FileHandler {
             content.setLeading(20f);
             content.newLineAtOffset(510, 520);
             for (IDetailEntity entity : list) {
-                content.showText(String.valueOf(entity.getDonGia() * entity.getSoLuong()));
+                content.showText(currencyVN.format((long) entity.getDonGia() * entity.getSoLuong()));
                 content.newLine();
             }
             content.endText();
 
             content.beginText();
-            content.setFont(fontBold, 16);
+            content.setFont(fontBold, 14);
             content.newLineAtOffset(310, (500-(20*list.size())));
-            content.showText("Tổng tiền: " + totalPrice + " đồng");
+            content.showText("Tổng tiền: " + currencyVN.format(totalPrice) + " đồng");
             content.newLine();
             if (salePrice != null) {
-                content.showText("Giảm giá: " + salePrice + " đồng");
+                content.showText("Giảm giá: " + currencyVN.format(salePrice) + " đồng");
                 content.newLine();
             }
             if (payment != null) {
-                content.showText("Thành tiền: " + payment + " đồng");
+                content.showText("Thành tiền: " + currencyVN.format(payment) + " đồng");
                 content.endText();
             }
 

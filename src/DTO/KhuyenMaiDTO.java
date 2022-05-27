@@ -71,4 +71,12 @@ public class KhuyenMaiDTO implements IEntity {
     public void setTinhTrang(Integer tinhTrang) {
         TinhTrang = tinhTrang;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof KhuyenMaiDTO)) return false;
+        KhuyenMaiDTO that = (KhuyenMaiDTO) o;
+        return getMaKM().equals(that.getMaKM()) || getTieuDe().equals(that.getTieuDe());
+    }
 }

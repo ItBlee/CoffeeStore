@@ -7,12 +7,14 @@ import BUS.Interfaces.ISanPhamBUS;
 import BUS.KhuyenMaiBUS;
 import BUS.SanPhamBUS;
 import BUS.SearchMapper.KhuyenMaiSearchMapper;
+import BUS.SearchMapper.SanPhamSearchMapper;
 import DTO.CT_KhuyenMaiDTO;
 import DTO.Interface.IEntity;
 import DTO.KhuyenMaiDTO;
 import DTO.SanPhamDTO;
 import GUI.Form.Abstract.JTablePanel;
 import GUI.FrameSearch;
+import GUI.FrameSelect;
 import GUI.components.TableColumn;
 import Utils.General;
 import com.toedter.calendar.JDateChooser;
@@ -36,6 +38,7 @@ import java.util.Locale;
 public class FormKhuyenMai extends JTablePanel {
     public FormKhuyenMai() {
         initComponents();
+        fillTable();
     }
 
     public void fillTable() {
@@ -226,8 +229,7 @@ public class FormKhuyenMai extends JTablePanel {
 
         NumberFormat principleFormat = NumberFormat.getNumberInstance();
         txtKhuyenMai = new JFormattedTextField(principleFormat);
-        txtKhuyenMai.setBackground(new Color(245, 245, 245));
-        txtKhuyenMai.setEnabled(false);
+        txtKhuyenMai.setBackground(Color.white);
         ctKMPanel.add(txtKhuyenMai);
         txtKhuyenMai.setBounds(110, 100, 330, 35);
 
@@ -467,6 +469,18 @@ public class FormKhuyenMai extends JTablePanel {
     }
 
     private void onClickBtnSelectMaSPListener() {
+        try {
+            JFrame frame = new FrameSelect("sản phẩm", txtMaSP, new SanPhamSearchMapper(), FormSanPham.class, FormKhuyenMai.class);
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    frame.setVisible(true);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(FormKhuyenMai.this, e.getMessage(), "Không hợp lệ", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void fillSanPhamDetailListener() {
@@ -474,7 +488,6 @@ public class FormKhuyenMai extends JTablePanel {
         try {
             idSP = Integer.parseInt(txtMaSP.getText().replace("SP", ""));
         } catch (Exception e) {
-            txtMaSP.setText("Lỗi");
             return;
         }
         ISanPhamBUS sanPhamBUS = new SanPhamBUS();
@@ -504,19 +517,19 @@ public class FormKhuyenMai extends JTablePanel {
     }
 
     private CT_KhuyenMaiDTO getUserInputCT() {
-        Integer idKM = null;
+        Integer idCTKM = null;
         Integer idSP = null;
         try {
-            idKM = Integer.valueOf(txtMaKM.getText().replace("KM", ""));
             idSP = Integer.valueOf(txtMaSP.getText().replace("SP", ""));
+            idCTKM = Integer.valueOf(txtMaKM.getText().replace("KM", ""));
         } catch (NumberFormatException ignored) {}
 
         CT_KhuyenMaiDTO dto = new CT_KhuyenMaiDTO();
-        dto.setMaKM(idKM);
+        dto.setMaKM(idCTKM);
         dto.setMaSP(idSP);
         try {
-            dto.setMaCTKM(Integer.valueOf(idHolderCT.getText()));
             dto.setGiamGia(((Number) txtKhuyenMai.getValue()).intValue());
+            dto.setMaCTKM(Integer.valueOf(idHolderCT.getText()));
         } catch (Exception ignored) {}
         return dto;
     }
@@ -723,11 +736,11 @@ public class FormKhuyenMai extends JTablePanel {
     }
 
     private void onClickBtnResetCTListener() {
-        Integer idCTHD = null;
+        Integer idKM = null;
         try {
-            idCTHD = Integer.parseInt(idHolderCT.getText());
+            idKM = Integer.parseInt(txtMaKM.getText().replace("KM", ""));
         } catch (Exception ignored) {}
-        fillTableDetail(idCTHD);
+        fillTableDetail(idKM);
         for (Component component:ctKMPanel.getComponents()) {
             if (component instanceof JTextField)
                 ((JTextField) component).setText("");
@@ -739,8 +752,6 @@ public class FormKhuyenMai extends JTablePanel {
         int index = table.getSelectedRow();
         IKhuyenMaiBUS khuyenMaiBUS = new KhuyenMaiBUS();
         Locale localeVN = new Locale("vi", "VN");
-        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         int selectedID;
         try {
             selectedID = Integer.parseInt(((String) table.getValueAt(index, 0)).replace("KM", ""));
@@ -756,6 +767,7 @@ public class FormKhuyenMai extends JTablePanel {
         txtNgayBD.setDate(dto.getNgayBD());
         txtNgayKT.setDate(dto.getNgayKT());
         taNoiDung.setText(dto.getNoiDung());
+        fillTableDetail(dto.getMaKM());
 
         if (General.CURRENT_ROLE.isAdmin() && dto.getTinhTrang() == 0) {
             btnThem.setText("Kích hoạt");
@@ -775,12 +787,12 @@ public class FormKhuyenMai extends JTablePanel {
         NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
         int selectedID;
         try {
-            selectedID = Integer.parseInt(txtMaKM.getText());
+            selectedID = Integer.parseInt(txtMaKM.getText().replace("KM", ""));
         } catch (Exception e) {
             return;
         }
         ArrayList<CT_KhuyenMaiDTO> dtoList = ctKhuyenMaiBUS.findByMaKM(selectedID);
-        if (dtoList == null)
+        if (dtoList == null || index == -1)
             return;
         CT_KhuyenMaiDTO dto = dtoList.get(index);
         SanPhamDTO product = sanPhamBUS.findByID(dto.getMaSP());
@@ -788,7 +800,7 @@ public class FormKhuyenMai extends JTablePanel {
         txtMaKMCT.setText("KM" + dto.getMaKM());
         txtMaSP.setText("SP" + dto.getMaSP());
         txtSanPham.setText(product != null ? product.getTenSP() : "Không tìm thấy");
-        txtKhuyenMai.setText(currencyVN.format(dto.getGiamGia()).replace(" ₫", ""));
+        txtKhuyenMai.setText(currencyVN.format(dto.getGiamGia()).replace(" ₫", "").replace(".",","));
     }
 
     private String[] columnHeaderDetail;
