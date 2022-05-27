@@ -469,7 +469,7 @@ public class FormPhieuNhap extends JTablePanel {
         detailTablePanel.setBackground(new Color(255, 255, 255));
         detailTablePanel.setLayout(null);
 
-        btnReset1.setText("jButton3");
+        btnReset1.setIcon(new ImageIcon("bin/images/components/reset.png"));
         btnReset1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

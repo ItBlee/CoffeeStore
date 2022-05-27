@@ -7,16 +7,21 @@ import GUI.Form.Abstract.JTablePanel;
 import GUI.common.MyColor;
 import GUI.components.chart.Chart;
 import GUI.components.chart.ModelChart;
+import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Timestamp;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
@@ -37,6 +42,7 @@ public class FormThongKe extends JTablePanel {
             listByYear = new ArrayList<ThongKeDTO>();
         initComponents();
         fillFormByCurrentMonth();
+        rbSalesByMonth.setSelected(true);
     }
 
     private void fillFormByCurrentMonth() {
@@ -317,24 +323,59 @@ public class FormThongKe extends JTablePanel {
         salesPanel.setLayout(null);
 
         rbSalesByDay.setText("Theo ngày");
+        rbSalesByDay.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    applyDateSelector();
+                }
+            }
+        });
         salesPanel.add(rbSalesByDay);
-        rbSalesByDay.setBounds(760, 20, 104, 22);
+        rbSalesByDay.setBounds(740, 20, 104, 22);
 
         rbSalesByYear.setText("Theo năm");
+        rbSalesByYear.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    applyDateSelector();
+                }
+            }
+        });
         salesPanel.add(rbSalesByYear);
-        rbSalesByYear.setBounds(560, 20, 81, 22);
+        rbSalesByYear.setBounds(540, 20, 81, 22);
 
         rbSalesByMonth.setText("Theo tháng");
+        rbSalesByMonth.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    applyDateSelector();
+                }
+            }
+        });
         salesPanel.add(rbSalesByMonth);
-        rbSalesByMonth.setBounds(660, 20, 104, 22);
+        rbSalesByMonth.setBounds(640, 20, 104, 22);
 
         group.add(rbSalesByDay);
         group.add(rbSalesByMonth);
         group.add(rbSalesByYear);
 
-        cbSelectDate.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        salesPanel.add(cbSelectDate);
-        cbSelectDate.setBounds(860, 10, 110, 40);
+        dcSelectDate.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        dcSelectDate.setDateFormatString("dd/MM/yyyy");
+        dcSelectDate.setEnabled(false);
+        dcSelectDate.getCalendarButton().setEnabled(true);
+        dcSelectDate.setDate(new Date(System.currentTimeMillis()));
+        dcSelectDate.getDateEditor().addPropertyChangeListener( new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                if ("date".equals(e.getPropertyName()))
+                    applyDateSelector();
+            }
+        });
+        salesPanel.add(dcSelectDate);
+        dcSelectDate.setBounds(840, 10, 130, 40);
 
         lvSalesTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
         lvSalesTitle.setForeground(new Color(37, 57, 111));
@@ -342,17 +383,6 @@ public class FormThongKe extends JTablePanel {
         salesPanel.add(lvSalesTitle);
         lvSalesTitle.setBounds(10, 10, 190, 30);
 
-        Chart chart = new Chart();
-        chart.addLegend("Tổng thu", new Color(47, 168, 79));
-        chart.addLegend("Tông chi", new Color(234, 61, 47));
-        chart.addLegend("Doanh thu", new Color(54, 123, 245));
-        chart.addLegend("Khách hàng", new Color(243, 170, 24));
-        chart.addData(new ModelChart("January", new double[]{100, 150, 200, 500}));
-        chart.addData(new ModelChart("February", new double[]{600, 750, 300, 150}));
-        chart.addData(new ModelChart("March", new double[]{200, 350, 1000, 900}));
-        chart.addData(new ModelChart("April", new double[]{480, 150, 750, 700}));
-        chart.addData(new ModelChart("May", new double[]{350, 540, 300, 150}));
-        chart.addData(new ModelChart("June", new double[]{190, 500, 700, 1000}));
         salesPanel.add(chart);
         chart.setBounds(22, 60, 940, 350);
 
@@ -415,7 +445,7 @@ public class FormThongKe extends JTablePanel {
 
         bestSellSoldColumn1.setText("200");
         bestsellerBestRow.add(bestSellSoldColumn1);
-        bestSellSoldColumn1.setBounds(160, 10, 21, 18);
+        bestSellSoldColumn1.setBounds(160, 10, 100, 18);
 
         bestsellerPanel.add(bestsellerBestRow);
         bestsellerBestRow.setBounds(10, 130, 220, 40);
@@ -432,7 +462,7 @@ public class FormThongKe extends JTablePanel {
 
         bestSellSoldColumn2.setText("200");
         bestsellerRow1.add(bestSellSoldColumn2);
-        bestSellSoldColumn2.setBounds(160, 10, 21, 18);
+        bestSellSoldColumn2.setBounds(160, 10, 100, 18);
 
         bestsellerPanel.add(bestsellerRow1);
         bestsellerRow1.setBounds(10, 180, 220, 40);
@@ -449,7 +479,7 @@ public class FormThongKe extends JTablePanel {
 
         bestSellSoldColumn3.setText("200");
         bestsellerRow2.add(bestSellSoldColumn3);
-        bestSellSoldColumn3.setBounds(160, 10, 21, 18);
+        bestSellSoldColumn3.setBounds(160, 10, 100, 18);
 
         bestsellerPanel.add(bestsellerRow2);
         bestsellerRow2.setBounds(10, 230, 220, 40);
@@ -466,7 +496,7 @@ public class FormThongKe extends JTablePanel {
 
         bestSellSoldColumn4.setText("200");
         bestsellerRow3.add(bestSellSoldColumn4);
-        bestSellSoldColumn4.setBounds(160, 10, 21, 18);
+        bestSellSoldColumn4.setBounds(160, 10, 100, 18);
 
         bestsellerPanel.add(bestsellerRow3);
         bestsellerRow3.setBounds(10, 280, 220, 40);
@@ -623,6 +653,92 @@ public class FormThongKe extends JTablePanel {
     private void onClickBtnResetListener() {
         validate_Flag = true;
         fillFormByCurrentMonth();
+        dcSelectDate.setDate(new Date(System.currentTimeMillis()));
+        validate_Flag = false;
+    }
+
+    private void applyDateSelector() {
+        validate_Flag = true;
+        LocalDate date = dcSelectDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        salesPanel.remove(chart);
+        chart = new Chart();
+        chart.addLegend("Tổng thu", new Color(47, 168, 79));
+        chart.addLegend("Tông chi", new Color(234, 61, 47));
+        chart.addLegend("Doanh thu", new Color(54, 123, 245));
+
+        String label = "";
+        String[] dateStr = new String[5];
+        double[][] value = new double[5][3];
+        LocalDate[] dates = new LocalDate[5];
+        if (rbSalesByDay.isSelected()) {
+            label = "";
+            dates[0] = date.minusDays(2);
+            dates[1] = date.minusDays(1);
+            dates[2] = date;
+            dates[3] = date.plusDays(1);
+            dates[4] = date.plusDays(2);
+            for (int i = 0; i < 5; i++) {
+                dateStr[i] = dates[i].getDayOfMonth() + "/" + dates[i].getMonthValue() + "/" + dates[i].getYear();
+            }
+            ArrayList<ThongKeDTO> dtos = fillThongKeByDate(dates[0], dates[4].plusDays(1));
+            for (int i = 0; i < 5; i++) {
+                double income = dtos.get(i).getIncome();
+                double expenses = dtos.get(i).getExpenses();
+                double profit = dtos.get(i).getIncome() - dtos.get(i).getExpenses();
+                if (profit < 0)
+                    profit = 0;
+                value[i] = new double[] {income, expenses, profit};
+            }
+        } else if (rbSalesByMonth.isSelected()) {
+            label = "Tháng ";
+            dates[0] = date.minusMonths(2);
+            dates[1] = date.minusMonths(1);
+            dates[2] = date;
+            dates[3] = date.plusMonths(1);
+            dates[4] = date.plusMonths(2);
+            for (int i = 0; i < 5; i++) {
+                dateStr[i] = String.valueOf(dates[i].getMonthValue());
+            }
+            for (int i = 0; i < 5; i++) {
+                ThongKeDTO dto = fillThongKeByMonth(dates[i].getMonthValue(), dates[i].getYear());
+                if (dto == null)
+                    continue;
+                double income = dto.getIncome();
+                double expenses = dto.getExpenses();
+                double profit = dto.getIncome() - dto.getExpenses();
+                if (profit < 0)
+                    profit = 0;
+                value[i] = new double[] {income, expenses, profit};
+            }
+        } else if (rbSalesByYear.isSelected()) {
+            label = "";
+            dates[0] = date.minusYears(2);
+            dates[1] = date.minusYears(1);
+            dates[2] = date;
+            dates[3] = date.plusYears(1);
+            dates[4] = date.plusYears(2);
+            for (int i = 0; i < 5; i++) {
+                dateStr[i] = String.valueOf(dates[i].getYear());
+            }
+            for (int i = 0; i < 5; i++) {
+                ThongKeDTO dto = fillThongKeByYear(dates[i].getYear());
+                if (dto == null)
+                    continue;
+                double income = dto.getIncome();
+                double expenses = dto.getExpenses();
+                double profit = dto.getIncome() - dto.getExpenses();
+                if (profit < 0)
+                    profit = 0;
+                value[i] = new double[] {income, expenses, profit};
+            }
+        }
+
+        for (int i = 0; i < 5; i++)
+            chart.addData(new ModelChart(label + dateStr[i], value[i]));
+        salesPanel.add(chart);
+        chart.setBounds(22, 60, 940, 350);
+        salesPanel.revalidate();
+        salesPanel.repaint();
         validate_Flag = false;
     }
 
@@ -727,7 +843,9 @@ public class FormThongKe extends JTablePanel {
             HashMap<String, Integer> productSellList = new HashMap<String, Integer>();
 
             for (HoaDonDTO dto:hoaDonBUS.findAll()) {
-                if (dto.getNgayLap().equals(Timestamp.valueOf(date.atStartOfDay()))) {
+                LocalDate dtoDate = dto.getNgayLap().toLocalDateTime().toLocalDate();
+                if (dtoDate.getDayOfYear() == date.getDayOfYear()
+                        && dto.getTinhTrang() != 0) {
                     invoice++;
                     income += dto.getTienThanhToan();
                     sale += dto.getTienKhuyenMai();
@@ -735,14 +853,17 @@ public class FormThongKe extends JTablePanel {
                     for (CT_HoaDonDTO child:ctHoaDonBUS.findByMaHD(dto.getMaHD())) {
                         outProduct += child.getSoLuong();
                         SanPhamDTO sp = sanPhamBUS.findByID(child.getMaSP());
-                        if (!productSellList.containsKey(sp.getTenSP()))
+                        if (productSellList.containsKey(sp.getTenSP()))
                             productSellList.put(sp.getTenSP(), productSellList.get(sp.getTenSP()) + child.getSoLuong());
+                        else productSellList.put(sp.getTenSP(), child.getSoLuong());
                     }
                 }
             }
 
             for (PhieuNhapDTO dto:phieuNhapBUS.findAll()) {
-                if (dto.getNgayTao().equals(Timestamp.valueOf(date.atStartOfDay()))) {
+                LocalDate dtoDate = dto.getNgayTao().toLocalDateTime().toLocalDate();
+                if (dtoDate.getDayOfYear() == date.getDayOfYear()
+                        && dto.getTinhTrang() != 0) {
                     input++;
                     expenses += dto.getTongTien();
                     for (CT_PhieuNhapDTO child:ctPhieuNhapBUS.findByMaPN(dto.getMaPN()))
@@ -800,6 +921,8 @@ public class FormThongKe extends JTablePanel {
         }
         return null;
     }
+
+    private Chart chart = new Chart();
     private final JButton btnReset = new JButton();
     private final ButtonGroup group = new ButtonGroup();
     private final JPanel overviewPanel = new JPanel();
@@ -824,7 +947,7 @@ public class FormThongKe extends JTablePanel {
     private final JRadioButton rbSalesByDay = new JRadioButton();
     private final JRadioButton rbSalesByYear = new JRadioButton();
     private final JRadioButton rbSalesByMonth = new JRadioButton();
-    private final JComboBox<String> cbSelectDate = new JComboBox<>();
+    private JDateChooser dcSelectDate = new JDateChooser();
     private final JLabel lvSalesTitle = new JLabel();
     private final JPanel bestsellerPanel = new JPanel();
     private final JLabel lbBestSellTitle = new JLabel();
