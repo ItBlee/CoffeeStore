@@ -87,7 +87,7 @@ public class HoaDonBUS extends AbstractHistoricBUS implements IHoaDonBUS {
                 continue;
             }
             if ((hoaDonDTO.getNgayLap().after(tuNgay) && hoaDonDTO.getNgayLap().before(denNgay))
-                    || (tuNgay.equals(denNgay) && tuNgay.equals(new Date(hoaDonDTO.getNgayLap().getTime()))))
+                    || (tuNgay.equals(denNgay) && tuNgay.toLocalDate().getDayOfYear() == hoaDonDTO.getNgayLap().toLocalDateTime().toLocalDate().getDayOfYear()))
                 result.add(hoaDonDTO);
         }
         return result;

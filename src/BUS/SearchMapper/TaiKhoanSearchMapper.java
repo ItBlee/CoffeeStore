@@ -11,6 +11,12 @@ import java.util.Date;
 
 public class TaiKhoanSearchMapper implements ISearchMapper {
     @Override
+    public ArrayList<IEntity> searchAll() {
+        ITaiKhoanBUS bus = new TaiKhoanBUS();
+        return new ArrayList<IEntity>(bus.findAll());
+    }
+
+    @Override
     public ArrayList<IEntity> searchByIndex(Integer index, String value) {
         ITaiKhoanBUS bus = new TaiKhoanBUS();
         ArrayList<IEntity> result = new ArrayList<IEntity>();
@@ -72,8 +78,10 @@ public class TaiKhoanSearchMapper implements ISearchMapper {
     @Override
     public ArrayList<IEntity> searchByDate(Date from, Date to) {
         ITaiKhoanBUS bus = new TaiKhoanBUS();
-        java.sql.Date convertFrom = new java.sql.Date(from.getTime());
-        java.sql.Date convertTo = new java.sql.Date(to.getTime());
+        java.sql.Date convertFrom = null;
+        java.sql.Date convertTo = null;
+        if (from != null) convertFrom = new java.sql.Date(from.getTime());
+        if (to != null) convertTo = new java.sql.Date(to.getTime());
         return new ArrayList<IEntity>(bus.findByNgayTao(convertFrom, convertTo));
     }
 }

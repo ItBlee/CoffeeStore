@@ -11,6 +11,12 @@ import java.util.Date;
 
 public class NhaCungCapSearchMapper implements ISearchMapper {
     @Override
+    public ArrayList<IEntity> searchAll() {
+        INhaCungCapBUS bus = new NhaCungCapBUS();
+        return new ArrayList<IEntity>(bus.findAll());
+    }
+
+    @Override
     public ArrayList<IEntity> searchByIndex(Integer index, String value) {
         INhaCungCapBUS bus = new NhaCungCapBUS();
         ArrayList<IEntity> result = new ArrayList<IEntity>();

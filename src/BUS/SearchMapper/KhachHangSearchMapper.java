@@ -11,6 +11,12 @@ import java.util.Date;
 
 public class KhachHangSearchMapper implements ISearchMapper {
     @Override
+    public ArrayList<IEntity> searchAll() {
+        IKhachHangBUS bus = new KhachHangBUS();
+        return new ArrayList<IEntity>(bus.findAll());
+    }
+
+    @Override
     public ArrayList<IEntity> searchByIndex(Integer index, String value) {
         IKhachHangBUS bus = new KhachHangBUS();
         ArrayList<IEntity> result = new ArrayList<IEntity>();

@@ -76,7 +76,7 @@ public class NhanVienBUS extends AbstractHistoricBUS implements INhanVienBUS {
                 continue;
             }
             if ((nhanVienDTO.getNgaySinh().after(tuNgay) && nhanVienDTO.getNgaySinh().before(denNgay))
-                    || (tuNgay.equals(denNgay) && tuNgay.equals(new Date(nhanVienDTO.getNgaySinh().getTime()))))
+                    || (tuNgay.equals(denNgay) && tuNgay.toLocalDate().getDayOfYear() == nhanVienDTO.getNgaySinh().toLocalDate().getDayOfYear()))
                 result.add(nhanVienDTO);
         }
         return result;

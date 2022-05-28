@@ -214,7 +214,7 @@ public class FrameSearch extends MovableJFrame {
 
     private void onClickBtnSearchListener() {
         final int OR_OPERATOR = 1;
-        ArrayList<IEntity> searchList = new ArrayList<>();
+        ArrayList<IEntity> searchList = mapper.searchAll();
 
         if (!(General.frame instanceof FrameLayout))
             return;

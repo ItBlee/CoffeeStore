@@ -87,7 +87,7 @@ public class PhieuNhapBUS extends AbstractHistoricBUS implements IPhieuNhapBUS {
                 continue;
             }
             if ((phieuNhapDTO.getNgayTao().after(tuNgay) && phieuNhapDTO.getNgayTao().before(denNgay))
-                    || (tuNgay.equals(denNgay) && tuNgay.equals(new Date(phieuNhapDTO.getNgayTao().getTime()))))
+                    || (tuNgay.equals(denNgay) && tuNgay.toLocalDate().getDayOfYear() == phieuNhapDTO.getNgayTao().toLocalDateTime().toLocalDate().getDayOfYear()))
                 result.add(phieuNhapDTO);
         }
         return result;

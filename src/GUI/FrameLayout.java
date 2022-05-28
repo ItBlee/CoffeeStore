@@ -1,5 +1,8 @@
 package GUI;
 
+import BUS.Interfaces.ITaiKhoanBUS;
+import BUS.TaiKhoanBUS;
+import DTO.TaiKhoanDTO;
 import GUI.Form.*;
 import GUI.common.Language;
 import GUI.common.Theme;
@@ -8,6 +11,7 @@ import GUI.components.ChooserJDialog;
 import GUI.components.MovableJFrame;
 import Utils.FileHandler;
 import Utils.General;
+import Utils.Security;
 import Utils.SystemConstant;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes.FlatIJLookAndFeelInfo;
 
@@ -333,7 +337,7 @@ public class FrameLayout extends MovableJFrame {
 
 				JTextArea info = new JTextArea();
 				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-				info.setText("Mã NV: " + General.CURRENT_USER.getMaNV() + "\n\n" +
+				info.setText("Mã NV: NV" + General.CURRENT_USER.getMaNV() + "\n\n" +
 						"Mã TK: TK" + General.CURRENT_USER.getMaTK() + "\n\n" +
 						"Họ tên: " + General.CURRENT_USER.getHoTen() + "\n\n" +
 						"Ngày sinh: " + formatter.format(General.CURRENT_USER.getNgaySinh()) + "\n\n" +
@@ -351,12 +355,13 @@ public class FrameLayout extends MovableJFrame {
 				info.setForeground(Color.white);
 				info.setFont(new Font("Segoe UI Black", Font.PLAIN, 14));
 				infoPanel.add(info);
-				info.setBounds(0, 65, 170, 500);
+				info.setBounds(0, 65, 170, 300);
 
 				JButton btnBackInfo = new JButton(Language.LAYOUT_BUTTON_INFO_BACK);
+				btnBackInfo.setEnabled(true);
 				btnBackInfo.setFocusPainted(false);
-				btnBackInfo.setBackground(Color.white);
-				btnBackInfo.setForeground(new Color(37,37,37));
+				btnBackInfo.setBackground(new Color(60,63,65));
+				btnBackInfo.setForeground(Color.white);
 				btnBackInfo.setFont(new Font("Segoe UI Black", Font.BOLD, 14));
 				btnBackInfo.addActionListener(new ActionListener() {
 					@Override
@@ -366,6 +371,20 @@ public class FrameLayout extends MovableJFrame {
 				});
 				infoPanel.add(btnBackInfo);
 				btnBackInfo.setBounds(5, 575, 170, 40);
+
+				JButton btnChangePassord = new JButton(Language.LAYOUT_BUTTON_CHANGE_PASSWORD);
+				btnChangePassord.setFocusPainted(false);
+				btnChangePassord.setBackground(Color.white);
+				btnChangePassord.setForeground(new Color(37,37,37));
+				btnChangePassord.setFont(new Font("Segoe UI Black", Font.BOLD, 14));
+				btnChangePassord.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						onClickChangePassword();
+					}
+				});
+				infoPanel.add(btnChangePassord);
+				btnChangePassord.setBounds(5, 530, 170, 40);
 			}
 			menuPanel.add(infoPanel);
 			infoPanel.setBounds(0, 120, 180, 640);
@@ -643,6 +662,54 @@ public class FrameLayout extends MovableJFrame {
 
 	private void onClickBtnContact() {
 		JOptionPane.showMessageDialog(getContentPane(), Language.LAYOUT_MESSAGE_CONTACT, Language.LAYOUT_LABEL_CONTACT_TOOL_TIP_TEXT, JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	private void onClickChangePassword() {
+		JPasswordField xField = new JPasswordField();
+		JPasswordField yField = new JPasswordField();
+		JPasswordField zField = new JPasswordField();
+
+		JPanel myPanel = new JPanel();
+		myPanel.setLayout(new GridLayout(0, 2, 2, 2));
+		myPanel.add(new JLabel(Language.LAYOUT_BUTTON_CHANGE_PASSWORD_LABEL_OLD));
+		myPanel.add(xField);
+		myPanel.add(new JLabel(Language.LAYOUT_BUTTON_CHANGE_PASSWORD_LABEL_NEW));
+		myPanel.add(yField);
+		myPanel.add(new JLabel(Language.LAYOUT_BUTTON_CHANGE_PASSWORD_LABEL_CONFIRM));
+		myPanel.add(yField);
+
+		int result = JOptionPane.showConfirmDialog(FrameLayout.this, myPanel,
+				"Change password", JOptionPane.OK_CANCEL_OPTION);
+		if (result == JOptionPane.OK_OPTION) {
+			try {
+				String oldP = String.valueOf(xField.getPassword());
+				String newP = String.valueOf(yField.getPassword());
+				String confirmP = String.valueOf(yField.getPassword());
+				if (!newP.equals(confirmP))
+					throw new Exception("Mật khẩu không trùng khớp");
+				ITaiKhoanBUS taiKhoanBUS = new TaiKhoanBUS();
+				TaiKhoanDTO findTaiKhoan = null;
+				for (TaiKhoanDTO dto : taiKhoanBUS.findAll()) {
+					String hashPassword = Security.applySha256(oldP, dto.getMatKhauSalt());
+					if (dto.getMaTK().equals(General.CURRENT_USER.getMaTK())
+							&& dto.getMatKhauHash().equals(hashPassword)
+							&& dto.getTinhTrang() == 1) {
+						findTaiKhoan = dto;
+						break;
+					}
+				}
+				if (findTaiKhoan == null)
+					throw new Exception("Mật khẩu cũ không đúng.");
+				String newSalt = Security.getSalt();
+				String newHash = Security.applySha256(oldP, newSalt);
+				findTaiKhoan.setMatKhauSalt(newSalt);
+				findTaiKhoan.setMatKhauHash(newHash);
+				taiKhoanBUS.update(findTaiKhoan);
+				JOptionPane.showMessageDialog(FrameLayout.this, "Đổi mật khẩu thành công", "Hoàn tất", JOptionPane.INFORMATION_MESSAGE);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(FrameLayout.this, e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 
 	private void onClickBtnSetting() {

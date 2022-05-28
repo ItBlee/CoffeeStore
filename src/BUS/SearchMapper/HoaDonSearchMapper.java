@@ -11,6 +11,12 @@ import java.util.Date;
 
 public class HoaDonSearchMapper implements ISearchMapper {
     @Override
+    public ArrayList<IEntity> searchAll() {
+        IHoaDonBUS bus = new HoaDonBUS();
+        return new ArrayList<IEntity>(bus.findAll());
+    }
+
+    @Override
     public ArrayList<IEntity> searchByIndex(Integer index, String value) {
         IHoaDonBUS bus = new HoaDonBUS();
         ArrayList<IEntity> result = new ArrayList<IEntity>();
@@ -66,8 +72,10 @@ public class HoaDonSearchMapper implements ISearchMapper {
     @Override
     public ArrayList<IEntity> searchByDate(Date from, Date to) {
         IHoaDonBUS bus = new HoaDonBUS();
-        java.sql.Date convertFrom = new java.sql.Date(from.getTime());
-        java.sql.Date convertTo = new java.sql.Date(to.getTime());
+        java.sql.Date convertFrom = null;
+        java.sql.Date convertTo = null;
+        if (from != null) convertFrom = new java.sql.Date(from.getTime());
+        if (to != null) convertTo = new java.sql.Date(to.getTime());
         return new ArrayList<IEntity>(bus.findByNgayLap(convertFrom, convertTo));
     }
 }

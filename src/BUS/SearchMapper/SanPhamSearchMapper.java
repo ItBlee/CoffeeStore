@@ -11,6 +11,12 @@ import java.util.Date;
 
 public class SanPhamSearchMapper implements ISearchMapper {
     @Override
+    public ArrayList<IEntity> searchAll() {
+        ISanPhamBUS bus = new SanPhamBUS();
+        return new ArrayList<IEntity>(bus.findAll());
+    }
+
+    @Override
     public ArrayList<IEntity> searchByIndex(Integer index, String value) {
         ISanPhamBUS bus = new SanPhamBUS();
         ArrayList<IEntity> result = new ArrayList<IEntity>();

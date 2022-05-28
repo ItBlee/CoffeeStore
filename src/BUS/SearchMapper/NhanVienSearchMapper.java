@@ -11,6 +11,12 @@ import java.util.Date;
 
 public class NhanVienSearchMapper implements ISearchMapper {
     @Override
+    public ArrayList<IEntity> searchAll() {
+        INhanVienBUS bus = new NhanVienBUS();
+        return new ArrayList<IEntity>(bus.findAll());
+    }
+
+    @Override
     public ArrayList<IEntity> searchByIndex(Integer index, String value) {
         INhanVienBUS bus = new NhanVienBUS();
         ArrayList<IEntity> result = new ArrayList<IEntity>();
@@ -78,8 +84,10 @@ public class NhanVienSearchMapper implements ISearchMapper {
     @Override
     public ArrayList<IEntity> searchByDate(Date from, Date to) {
         INhanVienBUS bus = new NhanVienBUS();
-        java.sql.Date convertFrom = new java.sql.Date(from.getTime());
-        java.sql.Date convertTo = new java.sql.Date(to.getTime());
+        java.sql.Date convertFrom = null;
+        java.sql.Date convertTo = null;
+        if (from != null) convertFrom = new java.sql.Date(from.getTime());
+        if (to != null) convertTo = new java.sql.Date(to.getTime());
         return new ArrayList<IEntity>(bus.findByNgaySinh(convertFrom, convertTo));
     }
 }
