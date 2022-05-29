@@ -16,8 +16,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Stack;
 
 public class FrameSearch extends MovableJFrame {
@@ -286,10 +284,11 @@ public class FrameSearch extends MovableJFrame {
     }
 
     private ArrayList<IEntity> union(ArrayList<IEntity> list1, ArrayList<IEntity> list2) {
-        Set<IEntity> set = new HashSet<IEntity>();
-        set.addAll(list1);
-        set.addAll(list2);
-        return new ArrayList<IEntity>(set);
+        ArrayList<IEntity> list = new ArrayList<IEntity>(list1);
+        for (IEntity t : list2)
+            if(!list.contains(t))
+                list.add(t);
+        return list;
     }
 
     private ArrayList<IEntity> intersection(ArrayList<IEntity> list1, ArrayList<IEntity> list2) {
