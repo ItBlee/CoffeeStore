@@ -16,6 +16,7 @@
 ![Alt text](screenshots/qlkm.PNG?raw=true "Quản lý khuyến mãi")
 ![Alt text](screenshots/qlncc.PNG?raw=true "Quản lý nhà cung cấp")
 ![Alt text](screenshots/qlnv.PNG?raw=true "Quản lý nhân viên")
+![Alt text](screenshots/qltk.PNG?raw=true "Quản lý tài khoản")
 ![Alt text](screenshots/qlpn.PNG?raw=true "Quản lý phiếu nhập")
 ![Alt text](screenshots/setting.PNG?raw=true "Cài đặt mở rộng")
 
