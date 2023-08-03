@@ -257,7 +257,7 @@ CREATE TABLE `khachhang` (
   `MaKH` int(10) UNSIGNED NOT NULL,
   `Ho` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `Ten` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `SDT` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sdt` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `DiaChi` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `Email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `TinhTrang` tinyint(1) NOT NULL DEFAULT 1
@@ -267,7 +267,7 @@ CREATE TABLE `khachhang` (
 -- Đang đổ dữ liệu cho bảng `khachhang`
 --
 
-INSERT INTO `khachhang` (`MaKH`, `Ho`, `Ten`, `SDT`, `DiaChi`, `Email`, `TinhTrang`) VALUES
+INSERT INTO `khachhang` (`MaKH`, `Ho`, `Ten`, `sdt`, `DiaChi`, `Email`, `TinhTrang`) VALUES
 (101, 'Lê', 'Anh', '0930212039', 'Thành phố Đà Lạt, Lâm Đồng', 'leanh30@gmail.com', 1),
 (102, 'Nguyễn', 'Tú', '0909123412', 'Quận Thủ Đức, TP.HCM', 'tunguyen123@gmail.com', 1),
 (103, 'Lý', 'Thảo', '0928488428', 'Huyện Nam Đông, Thừa Thiên Huế', 'thaothaoly35@gmail.com', 1),
@@ -590,7 +590,7 @@ INSERT INTO `loaisp` (`MaLoai`, `TenLoai`, `MoTa`) VALUES
 CREATE TABLE `nhacungcap` (
   `MaNCC` int(10) UNSIGNED NOT NULL,
   `TenNCC` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `SDT` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sdt` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `DiaChi` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `SoTaiKhoan` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `TinhTrang` tinyint(1) NOT NULL
@@ -600,7 +600,7 @@ CREATE TABLE `nhacungcap` (
 -- Đang đổ dữ liệu cho bảng `nhacungcap`
 --
 
-INSERT INTO `nhacungcap` (`MaNCC`, `TenNCC`, `SDT`, `DiaChi`, `SoTaiKhoan`, `TinhTrang`) VALUES
+INSERT INTO `nhacungcap` (`MaNCC`, `TenNCC`, `sdt`, `DiaChi`, `SoTaiKhoan`, `TinhTrang`) VALUES
 (1, '90S Coffee', '0929 899 998', '20 Đường số 3, P. Trường Thọ, Q. Thủ Đức.', '45010003666916', 1),
 (2, 'Lăk Coffee', '0917 762 211', 'xã Quảng Hiệp, huyện Cư M’gar, tỉnh DakLak', '45071113676916', 1),
 (3, 'Chồn Vàng Coffee', '0907 330 011', 'Số 3, Ấp 1, Xã Tân Bửu, Huyện Bến Lức, Tỉnh Long An', '45071213126916', 1),
@@ -624,7 +624,7 @@ CREATE TABLE `nhanvien` (
   `Ho` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `Ten` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `NgaySinh` date NOT NULL,
-  `SDT` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sdt` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `Email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `GioiTinh` tinyint(1) NOT NULL,
   `Luong` int(20) UNSIGNED NOT NULL,
@@ -635,7 +635,7 @@ CREATE TABLE `nhanvien` (
 -- Đang đổ dữ liệu cho bảng `nhanvien`
 --
 
-INSERT INTO `nhanvien` (`MaNV`, `MaTK`, `Ho`, `Ten`, `NgaySinh`, `SDT`, `Email`, `GioiTinh`, `Luong`, `TinhTrang`) VALUES
+INSERT INTO `nhanvien` (`MaNV`, `MaTK`, `Ho`, `Ten`, `NgaySinh`, `sdt`, `Email`, `GioiTinh`, `Luong`, `TinhTrang`) VALUES
 (1, 1, 'Sếp', 'Tổng', '1999-01-12', '0913111222', 'crossingcoffee@gmail.com', 1, 50000000, 1),
 (2, 5, 'Trần Tuấn', 'Anh', '2001-05-02', '0397642331', 'trantuananh@gmail.com', 1, 5000000, 1),
 (3, 0, 'Trần Thúy', 'Vy', '2000-10-10', '0909382194', 'vyvytt@gmail.com', 0, 12000000, 1),
