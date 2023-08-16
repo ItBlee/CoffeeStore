@@ -1,4 +1,8 @@
 # CoffeeStore - The crossing coffee
+
+### Introduction 
+An coffee store management application capable of accurately handling sales statistics, effectively managing extensive data with advanced search and timeline tracking sales activities.
+
 ### Install:
 Create database "coffeestore" and import ./bin/database/coffeestore.sql.
 
@@ -6,21 +10,21 @@ Create database "coffeestore" and import ./bin/database/coffeestore.sql.
 ServiceLoader, Google Auto-Service, JDBC, JavaSwing, FlatLaf, Apache Pdfbox, Apache POI, iHarder filedrop, MySQL.
 
 ### List of features:
-* Management: Invoice, Receipt, Product, Customer, Account, Supplier, Employee
-    - Advanced search with multiple Options and Conditions
-    - Automatic calculation and statistics
+* **Management**: Invoice, Receipt, Product, Customer, Account, Supplier, Employee
+    - **Advanced search** with multiple Options and Conditions
+    - **Automatic calculation and statistics**
     - view info and details
-    - CRUD (Create, Delete, soft Delete)
+    - **CRUD** (Create, Delete, soft Delete)
     - Upload
-* Sales statistics
-* Promotion Campaigns
-* Timeline showing history changes
+* **Sales statistics**
+* **Promotion Campaigns**
+* **Timeline** showing history changes
 * Import/Export Data Excel
 * Print Invoice or Receipt report PDF
 * Language, Theme and Font control menu
 * Drag and drop file
-* Authentication: Login/Signup/Logout
-* Authorization with multipe role
+* Authentication
+* Authorization with **multipe role**
 * Storage and sync large amounts of data on data server
 
 
